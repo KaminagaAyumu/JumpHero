@@ -1,0 +1,207 @@
+﻿#include "GameScene.h"
+#include "../Input.h"
+#include "SceneController.h"
+#include "TitleScene.h"
+#include "ClearScene.h"
+#include "MissScene.h"
+#include "../Game.h"
+#include "../Game/Player.h"
+#include "../Game/Chest.h"
+#include "../Game/EnemyBase.h"
+#include "../Bg.h"
+#include "../Map.h"
+#include "../Camera.h"
+#include "../Game/ItemBase.h"
+#include "../GameManager.h"
+#include "../CollisionManager.h"
+#include "../Game/ChestManager.h"
+#include "../Game/ItemManager.h"
+#include <DxLib.h>
+
+namespace
+{
+	constexpr int kFadeInterval = 60; // フェード処理を行う時間
+	constexpr int kEnemyCount = 5; // 敵の数
+
+	constexpr int kSpaceChipNo = 79; // マップチップの透明部分
+	constexpr int kChestChipNo = 46; // マップチップの宝箱部分
+
+	constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
+}
+
+GameScene::GameScene(SceneController& controller) : SceneBase(controller),
+m_updateFunc(&GameScene::FadeInUpdate),
+m_drawFunc(&GameScene::FadeDraw),
+m_fadeColor(0x000000)
+{
+	m_frameCount = kFadeInterval;
+	m_chestOpenNum = 0;
+	m_player = std::make_shared<Player>();
+	m_player->Init();
+
+	m_pActors.push_back(m_player.get());
+
+	m_bg = std::make_shared<Bg>();
+	m_bg->Init();
+	m_pMap = std::make_shared<Map>();
+	m_pMap->Init();
+
+	m_pCamera = std::make_shared<Camera>();
+	m_pCamera->SetTarget(m_player.get());
+
+
+	m_pGameManager = std::make_shared<GameManager>(m_player.get());
+	m_pGameManager->Init();
+
+	m_pCollisionManager = std::make_unique<CollisionManager>();
+
+	m_pChestManager = std::make_unique<ChestManager>(m_pCamera.get());
+	m_pChestManager->SpawnChest(m_pMap.get());
+	m_pChestManager->PushActors(m_pActors);
+
+	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get());
+
+	m_player->SetMap(m_pMap.get());
+
+	// 全アクターにカメラをセット
+	for (auto& actor : m_pActors)
+	{
+		actor->SetCamera(m_pCamera.get());
+	}
+
+}
+
+GameScene::~GameScene()
+{
+}
+
+void GameScene::Update(Input& input)
+{
+	(this->*m_updateFunc)(input);
+}
+
+void GameScene::Draw()
+{
+	(this->*m_drawFunc)();
+}
+
+void GameScene::FadeInUpdate(Input& input)
+{
+	m_frameCount--;
+	if (m_frameCount <= 0)
+	{
+		// フェードイン完了
+		m_updateFunc = &GameScene::NormalUpdate;
+		m_drawFunc = &GameScene::NormalDraw;
+		return; // 念のため処理を抜ける
+	}
+}
+
+void GameScene::NormalUpdate(Input& input)
+{
+#ifdef _DEBUG
+	// プレイヤーと敵を初期化するコマンド(上入力しながらLボタン)
+	if (input.IsTriggered("LShift") && input.IsPressed("Up"))
+	{
+		clsDx();
+		printfDx(L"初期化コマンドを検知\n");
+		m_player->Init();
+	}
+#endif
+
+	m_pCamera->Update();
+	m_pChestManager->Update(input);
+	m_pItemManager->Update(input);
+	m_player->Update(input);
+
+	m_pActors.clear();
+	m_pActors.reserve(1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum());
+	m_pActors.push_back(m_player.get());
+	m_pChestManager->PushActors(m_pActors);
+	m_pItemManager->PushActors(m_pActors);
+
+	if (m_player->IsMiss())
+	{
+		m_player->Update(input);
+	}
+	else
+	{
+	}
+
+	m_pCollisionManager->CheckCollision(m_pActors);
+
+	m_bg->Update();
+	m_pMap->Update();
+	m_pGameManager->Update();
+
+	if (m_pGameManager->IsClear())
+	{
+		// 終了処理
+		m_fadeColor = 0xffffff; // フェードを白フェードにする
+		m_updateFunc = &GameScene::FadeOutUpdate;
+		m_drawFunc = &GameScene::FadeDraw;
+		return;
+	}
+
+}
+
+void GameScene::MissUpdate(Input&)
+{
+}
+
+void GameScene::FadeOutUpdate(Input& input)
+{
+	m_frameCount++;
+	if (m_frameCount >= kFadeInterval)
+	{
+		// フェードアウト完了
+		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
+		return; // 念のため処理を抜ける
+	}
+}
+
+void GameScene::NormalDraw()
+{
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
+
+	/*m_player->Draw();
+
+	for (auto& chest : m_chests)
+	{
+		chest->Draw();
+	}
+
+	for (auto& enemy : m_enemies)
+	{
+		enemy->Draw();
+	}
+	m_item->Draw();*/
+
+	for (auto& actor : m_pActors)
+	{
+		actor->Draw();
+	}
+
+	m_pGameManager->Draw();
+#ifdef _DEBUG
+	DrawString(0, 0, L"GameScene: NormalDraw", 0xffffff);
+#endif
+
+}
+
+void GameScene::FadeDraw()
+{
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
+
+	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
+	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_fadeColor, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+#ifdef _DEBUG
+	DrawString(0, 0, L"GameScene: FadeDraw", 0xffffff);
+#endif
+}
+

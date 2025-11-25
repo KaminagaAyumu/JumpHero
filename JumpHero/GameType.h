@@ -1,0 +1,38 @@
+﻿#pragma once
+
+class Actor;
+
+namespace Types
+{
+	/// <summary>
+	/// オブジェクトが何なのかを説明するための列挙体
+	/// </summary>
+	enum class ActorType
+	{
+		Player,
+		Enemy,
+		Chest,
+		Item
+	};
+
+	/// <summary>
+	/// 当たり判定が何なのかを説明するための列挙体
+	/// </summary>
+	enum class ColliderType
+	{
+		Rect,
+		Circle
+	};
+
+	/// <summary>
+	/// 当たり判定の内容を格納する構造体
+	/// </summary>
+	struct CollisionInfo
+	{
+		Actor* other; // 当たったオブジェクト
+		ActorType otherType; // 当たったオブジェクトの種類
+		ColliderType ownColliderType; // 自身の当たり判定のタイプ
+		ColliderType otherColliderType; // 当たったオブジェクトの当たり判定のタイプ
+	};
+
+}

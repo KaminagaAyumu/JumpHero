@@ -1,0 +1,58 @@
+﻿#include "ItemBase.h"
+#include <DxLib.h>
+#include "../Camera.h"
+
+namespace
+{
+	constexpr float kItemDefaultWidth = 45.0f;
+	constexpr float kItemDefaultHeight = 45.0f;
+}
+
+ItemBase::ItemBase() : 
+	Actor(Types::ActorType::Item),
+	m_isExist(true)
+{
+}
+
+ItemBase::ItemBase(float x, float y) : 
+	Actor(Types::ActorType::Item),
+	m_isExist(true)
+{
+	m_pos = { x,y };
+}
+
+ItemBase::~ItemBase()
+{
+}
+
+void ItemBase::Init()
+{
+	m_pos = { 500.0f,400.0f };
+	m_colRect = { {m_pos},kItemDefaultWidth,kItemDefaultHeight };
+	m_colCircle = { {m_pos},kItemDefaultWidth / 2 };
+}
+
+void ItemBase::Update(Input&)
+{
+	m_colCircle.pos = m_pos;
+}
+
+void ItemBase::Draw()
+{
+	int drawX = m_pos.x - m_pCamera->scroll.x;
+	int drawY = m_pos.y - m_pCamera->scroll.y;
+	if (m_isExist)
+	{
+		DrawCircle(drawX, drawY, m_colCircle.radius, 0xddffff, true);
+		m_colCircle.Draw(drawX,drawY);
+	}
+}
+
+void ItemBase::IsCollision(const Types::CollisionInfo& info)
+{
+	if (info.otherType == Types::ActorType::Player)
+	{
+		printfDx(L"Item : プレイヤーと衝突しました\n");
+		m_isExist = false;
+	}
+}
