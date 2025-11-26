@@ -10,8 +10,10 @@ class Map;
 class Player : public Actor
 {
 public:
-	// 入力情報を取得したいためInputの参照をコンストラクタで取得
+	// コンストラクタ
 	Player();
+
+	// デストラクタ
 	virtual ~Player();
 
 	void Init() override;
@@ -22,17 +24,17 @@ public:
 
 	
 	// 更新処理用関数群
-	void JumpUpdate(Input&);
-	void GroundUpdate(Input&);
-	void MissUpdate(Input&);
+	void JumpUpdate(Input&); // ジャンプ状態の時
+	void GroundUpdate(Input&); // 床についている時
+	void MissUpdate(Input&); // ミス処理の時
 	// 更新処理用関数ポインタの型定義
 	using UpdateFunc_t = void(Player::*)(Input&);
 	UpdateFunc_t m_update;
 
 	// 描画処理用関数軍
-	void JumpDraw();
-	void GroundDraw();
-	void MissDraw();
+	void JumpDraw(); // ジャンプ状態の時
+	void GroundDraw(); // 床についている時
+	void MissDraw(); // ミス処理の時
 	// 描画処理用関数ポインタの型定義
 	using DrawFunc_t = void(Player::*)();
 	DrawFunc_t m_draw;
@@ -77,7 +79,7 @@ private:
 	bool m_isGround; // 地面についているか
 	bool m_isHover; // ジャンプ中にボタンを押したかどうか
 	bool m_isMiss; // ミスになったかどうか
-	bool m_isOffsetX;
+	bool m_isOffsetX; // マップとの左右補正を行うかどうか(消去する可能性あり)
 	float m_currentFloorY; // 現在接地している床の座標
 
 	// マップの生ポインタ
