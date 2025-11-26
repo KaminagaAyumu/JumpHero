@@ -164,6 +164,7 @@
     <ClCompile Include="Scene\SceneController.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scene\TutorialScene.cpp" />
+    <ClCompile Include="Game\TransformEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\EnemyManager.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Scene\SceneController.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scene\TutorialScene.h" />
+    <ClInclude Include="Game\TransformEnemy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

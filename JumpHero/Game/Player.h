@@ -20,37 +20,6 @@ public:
 	void Update(Input&) override;
 	void Draw() override;
 
-	void IsCollision(const Types::CollisionInfo& info) override;
-
-	
-	// 更新処理用関数群
-	void EntryUpdate(Input&); // 登場状態の時
-	void JumpUpdate(Input&); // ジャンプ状態の時
-	void GroundUpdate(Input&); // 床についている時
-	void MissUpdate(Input&); // ミス処理の時
-	// 更新処理用関数ポインタの型定義
-	using UpdateFunc_t = void(Player::*)(Input&);
-	UpdateFunc_t m_update;
-
-	// 描画処理用関数軍
-	void EntryDraw(); // 登場状態の時
-	void JumpDraw(); // ジャンプ状態の時
-	void GroundDraw(); // 床についている時
-	void MissDraw(); // ミス処理の時
-	// 描画処理用関数ポインタの型定義
-	using DrawFunc_t = void(Player::*)();
-	DrawFunc_t m_draw;
-
-	/// <summary>
-	/// ジャンプ開始時の処理
-	/// </summary>
-	void JumpStart();
-
-	/// <summary>
-	/// ミスした瞬間の処理
-	/// </summary>
-	void MissStart();
-
 	/// <summary>
 	/// ミスしているかどうかを返す
 	/// </summary>
@@ -85,6 +54,40 @@ private:
 
 	// マップの生ポインタ
 	Map* m_pMap;
+
+	/// <summary>
+	/// 当たっているかどうか
+	/// </summary>
+	/// <param name="info"></param>
+	void IsCollision(const Types::CollisionInfo& info) override;
+
+	/// <summary>
+	/// ジャンプ開始時の処理
+	/// </summary>
+	void JumpStart();
+
+	/// <summary>
+	/// ミスした瞬間の処理
+	/// </summary>
+	void MissStart();
+
+	// 更新処理用関数群
+	void EntryUpdate(Input&); // 登場状態の時
+	void JumpUpdate(Input&); // ジャンプ状態の時
+	void GroundUpdate(Input&); // 床についている時
+	void MissUpdate(Input&); // ミス処理の時
+	// 更新処理用関数ポインタの型定義
+	using UpdateFunc_t = void(Player::*)(Input&);
+	UpdateFunc_t m_update;
+
+	// 描画処理用関数群
+	void EntryDraw(); // 登場状態の時
+	void JumpDraw(); // ジャンプ状態の時
+	void GroundDraw(); // 床についている時
+	void MissDraw(); // ミス処理の時
+	// 描画処理用関数ポインタの型定義
+	using DrawFunc_t = void(Player::*)();
+	DrawFunc_t m_draw;
 
 
 #ifdef _DEBUG

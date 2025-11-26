@@ -4,7 +4,6 @@
 #include "EnemyManager.h"
 #include "../Camera.h"
 #include "../GameManager.h"
-#include "../Input.h"
 #include "../Map.h"
 #include "Actor.h"
 #include "EnemyBase.h"
@@ -15,11 +14,11 @@ EnemyManager::EnemyManager(Camera* camera, GameManager* gameManager) :
 {
 }
 
-void EnemyManager::Update(Input& input)
+void EnemyManager::Update()
 {
 	for (auto& enemy : m_enemies)
 	{
-		enemy->Update(input);
+		enemy->Update();
 	}
 
 	// 宝箱に存在しないものがある場合削除

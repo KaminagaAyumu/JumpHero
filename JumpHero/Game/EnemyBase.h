@@ -7,35 +7,22 @@ class Map;
 
 /// <summary>
 /// 敵の基底クラス
+/// 純粋仮想関数が5つあります
 /// </summary>
 class EnemyBase : public Actor
 {
 public:
-	EnemyBase(Player*);
+	EnemyBase(Player* player, Map* map);
 	virtual ~EnemyBase();
-	virtual void Init() override;
-	virtual void Update(Input&) override;
-	virtual void Draw() override;
+	virtual void Init() abstract;
+	virtual void Update() abstract;
+	virtual void Draw() abstract;
 
-	virtual void IsCollision(const Types::CollisionInfo& info) override;
-
-	/// <summary>
-	/// マップとの当たり判定を取るためにMapクラスを受け取る
-	/// </summary>
-	/// <param name="map">Mapクラスのスマートポインタ</param>
-	/// <note>仮作成中(もう少しいいやり方があるかも)</note>
-	void SetBg(Map* map) { m_pMap = map; }
+	virtual void IsCollision(const Types::CollisionInfo& info) abstract;
 
 	bool IsDead()const { return m_isDead; }
 
-private:
-	enum class EnemyType
-	{
-		Normal,
-		PlayerSeeker,
-	};
-	EnemyType m_type;
-
+protected:
 	// プレイヤーの生ポインタ
 	// 座標を調べるためにしか使わないが、
 	// 更新処理で受け取るのが面倒なためコンストラクタで受け取る
@@ -44,19 +31,16 @@ private:
 	// マップと当たり判定を取る用(取得していいのかわからないがとりあえずこれでやってみる)
 	Map* m_pMap;
 
+	// 移動方向
 	Vector2 m_direction;
 
-	bool m_isHitPlayer;
-	bool m_isSeeking;
 	// 敵が死んだか
 	bool m_isDead;
-
-	int m_directionChangeCount;
 
 	/// <summary>
 	/// マップとの当たり判定を取り、座標補正をする
 	/// </summary>
-	void CheckHitMap();
+	virtual void CheckHitMap() abstract;
 
 };
 

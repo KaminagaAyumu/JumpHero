@@ -2,7 +2,6 @@
 
 class Camera;
 class GameManager;
-class Input;
 class Map;
 class Actor;
 class EnemyBase;
@@ -16,7 +15,7 @@ class EnemyManager
 public:
 	EnemyManager(Camera* camera, GameManager* gameManager);
 
-	void Update(Input& input);
+	void Update();
 
 	void Draw();
 
