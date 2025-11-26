@@ -67,7 +67,7 @@ public:
 
 
 protected:
-	Position2 m_pos; // 位置
+	Position2 m_pos; // 中心位置
 	Circle2D m_colCircle; // 当たり判定用の円
 	Rect2D m_colRect; // 当たり判定用の矩形
 	Types::ActorType m_type; // オブジェクトのタイプ

@@ -19,8 +19,16 @@ namespace
 	constexpr float kPlayerWidth = 45.0f;
 	constexpr float kPlayerHeight = 45.0f;
 
+	constexpr int kEntryTextDispTime = 60; // 登場テキストを表示する時間
+
 	constexpr int kMissFreezeTime = 10;
 	constexpr int kMissEndTime = 180;
+
+	// プレイヤーの登場の初期位置
+	// 複数マップになった際に使用しなくなるはず
+	inline const static Vector2 kFirstPos = { -10.0f,Game::kScreenHeight - 135.0f - kPlayerHeight / 2 };
+	// プレイヤーの登場の終了位置
+	inline const static Vector2 kEntryEndPos = { 90.0f, Game::kScreenHeight - 135.0f - kPlayerHeight / 2 };
 }
 
 Player::Player() : 
@@ -28,16 +36,15 @@ Player::Player() :
 	m_direction{},
 	m_velocity{},
 	m_graphHandle(-1),
-	m_jumpCount(0),
-	m_missCount(0),
+	m_frameCount(0),
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
 	m_isOffsetX(true),
 	m_currentFloorY(0.0f),
 	m_pMap(nullptr),
-	m_update(&Player::JumpUpdate),
-	m_draw(&Player::JumpDraw)
+	m_update(&Player::EntryUpdate),
+	m_draw(&Player::EntryDraw)
 {
 #ifdef _DEBUG
 	m_maxPosY = m_pos.y; 
@@ -52,20 +59,19 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_pos = {100.0f,300.0f};
+	m_pos = kFirstPos;
 	m_direction = {};
 	m_velocity = {};
 	m_graphHandle = LoadGraph(L"data/Idle.png");
 	m_colCircle = { m_pos,kGraphWidth * 0.5f };
 	m_colRect = { m_pos,kGraphWidth,kGraphHeight };
-	m_jumpCount = 0;
-	m_missCount = 0;
+	m_frameCount = 0;
 	m_isGround = false;
 	m_isHover = false;
 	m_isMiss = false;
 	m_currentFloorY = 0.0f;
-	m_update = &Player::JumpUpdate;
-	m_draw = &Player::JumpDraw;
+	m_update = &Player::EntryUpdate;
+	m_draw = &Player::EntryDraw;
 }
 
 void Player::Update(Input& input)
@@ -94,10 +100,29 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 	}
 }
 
+void Player::EntryUpdate(Input&)
+{
+	m_frameCount++;
+	if (m_frameCount < kEntryTextDispTime) // テキストを表示している間は動かない
+	{
+		return;
+	}
+	// 位置を初期位置から登場終了位置まで線形補完で動かす
+	m_pos = Geometry::LerpVec2(m_pos, kEntryEndPos, 0.05f);
+
+	if (m_pos.x >= kEntryEndPos.x - 1.0f) // 終了位置と大体同じになったら終了
+	{
+		m_pos = kEntryEndPos;
+		m_update = &Player::JumpUpdate;
+		m_draw = &Player::JumpDraw;
+		return;
+	}
+}
+
 void Player::JumpUpdate(Input& input)
 {
-	m_jumpCount++;
-	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_jumpCount * 0.5f;
+	m_frameCount++;
+	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
 
 	//m_velocity.y = kJumpPower;
 
@@ -121,7 +146,7 @@ void Player::JumpUpdate(Input& input)
 	{
 		m_isHover = true;
 		m_velocity.y = 0.0f;
-		m_jumpCount = 0;
+		m_frameCount = 0;
 	}
 
 	if (m_pos.y <= m_maxPosY)
@@ -173,7 +198,7 @@ void Player::JumpUpdate(Input& input)
 		// 再びジャンプボタンを押した際と同じ処理をする
 		m_isHover = true; 
 		m_velocity.y = 0.0f;
-		m_jumpCount = 0;
+		m_frameCount = 0;
 	}
 
 	
@@ -218,8 +243,6 @@ void Player::GroundUpdate(Input& input)
 	if (input.IsTriggered("Jump") && m_isGround) // ジャンプボタンが押されたとき
 	{
 		JumpStart();
-		m_update = &Player::JumpUpdate;
-		m_draw = &Player::JumpDraw;
 		return;
 	}
 
@@ -309,7 +332,7 @@ void Player::GroundUpdate(Input& input)
 	else // 地面についていない
 	{
 		m_isGround = false;
-		m_jumpCount = 0;
+		m_frameCount = 0;
 		m_update = &Player::JumpUpdate;
 		m_draw = &Player::JumpDraw;
 		//printfDx(L"床から空中へ\n");
@@ -328,15 +351,15 @@ void Player::GroundUpdate(Input& input)
 
 void Player::MissUpdate(Input&)
 {
-	m_missCount++;
+	m_frameCount++;
 	// 一定時間たつまで座標の更新を行わない(止まる)
-	if (m_missCount <= kMissFreezeTime)
+	if (m_frameCount <= kMissFreezeTime)
 	{
 		return;
 	}
 	
 
-	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_missCount * 0.5f;
+	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
 	
 	if (m_pos.y >= Game::kScreenHeight)
 	{
@@ -345,13 +368,37 @@ void Player::MissUpdate(Input&)
 	}
 
 
-	if (m_missCount >= kMissEndTime && m_isGround)
+	if (m_frameCount >= kMissEndTime && m_isGround)
 	{
 		Init();
 		return;
 	}
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
+}
+
+void Player::EntryDraw()
+{
+	
+
+	if (m_frameCount >= kEntryTextDispTime)
+	{
+		DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Ready、GO!", 0xff0000);
+	}
+	else
+	{
+		DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Ready、", 0xff0000);
+	}
+
+	int drawX = m_pos.x - m_pCamera->scroll.x;
+	int drawY = m_pos.y - m_pCamera->scroll.y;
+	DrawBox(drawX - 16, drawY - 16, drawX + 16, drawY + 16, 0x22ff00, true);
+	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+
+#ifdef _DEBUG
+	m_colCircle.Draw(drawX, drawY);
+	m_colRect.Draw(drawX, drawY);
+#endif
 }
 
 void Player::JumpDraw()
@@ -363,9 +410,6 @@ void Player::JumpDraw()
 
 
 #ifdef _DEBUG
-	/*Position2 drawPos = { drawX,drawY };
-	m_colCircle.pos = drawPos;
-	m_colRect.pos = drawPos;*/
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX,drawY);
 #endif
@@ -379,9 +423,6 @@ void Player::GroundDraw()
 	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 	
 #ifdef _DEBUG
-	/*Position2 drawPos = { drawX,drawY };
-	m_colCircle.pos = drawPos;
-	m_colRect.pos = drawPos;*/
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif
@@ -396,9 +437,6 @@ void Player::MissDraw()
 	
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Miss!", 0xffffff);
 #ifdef _DEBUG
-	/*Position2 drawPos = { drawX,drawY };
-	m_colCircle.pos = drawPos;
-	m_colRect.pos = drawPos;*/
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif
@@ -410,7 +448,9 @@ void Player::JumpStart()
 	m_velocity = { 0.0f, kJumpPower };
 	m_isHover = false;
 	m_isGround = false;
-	m_jumpCount = 0;
+	m_frameCount = 0;
+	m_update = &Player::JumpUpdate;
+	m_draw = &Player::JumpDraw;
 #ifdef _DEBUG
 	m_maxPosY = m_pos.y;
 #endif
@@ -423,8 +463,7 @@ void Player::MissStart()
 	m_isHover = false;
 	m_isGround = false;
 	m_isMiss = true;
-	m_jumpCount = 0;
-	m_missCount = 0;
+	m_frameCount = 0;
 	m_update = &Player::MissUpdate;
 	m_draw = &Player::MissDraw;
 }

@@ -24,6 +24,7 @@ public:
 
 	
 	// 更新処理用関数群
+	void EntryUpdate(Input&); // 登場状態の時
 	void JumpUpdate(Input&); // ジャンプ状態の時
 	void GroundUpdate(Input&); // 床についている時
 	void MissUpdate(Input&); // ミス処理の時
@@ -32,6 +33,7 @@ public:
 	UpdateFunc_t m_update;
 
 	// 描画処理用関数軍
+	void EntryDraw(); // 登場状態の時
 	void JumpDraw(); // ジャンプ状態の時
 	void GroundDraw(); // 床についている時
 	void MissDraw(); // ミス処理の時
@@ -74,8 +76,7 @@ private:
 
 	int m_graphHandle; // プレイヤーのグラフィックハンドル
 
-	int m_jumpCount; // ジャンプ中の時間
-	int m_missCount; // ミスしたときの時間カウンタ
+	int m_frameCount; // フレームカウンタ
 	bool m_isGround; // 地面についているか
 	bool m_isHover; // ジャンプ中にボタンを押したかどうか
 	bool m_isMiss; // ミスになったかどうか
