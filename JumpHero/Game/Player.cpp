@@ -86,6 +86,12 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 		printfDx(L"Player : 敵と衝突しました\n");
 		MissStart();
 	}
+
+	// 宝箱と衝突した時
+	if (info.otherType == Types::ActorType::Chest)
+	{
+		printfDx(L"Player : 宝箱と衝突しました\n");
+	}
 }
 
 void Player::JumpUpdate(Input& input)
