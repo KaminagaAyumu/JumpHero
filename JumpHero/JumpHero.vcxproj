@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\EnemyManager.cpp" />
     <ClCompile Include="Game\ChestManager.cpp" />
     <ClCompile Include="Game\ItemManager.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="Scene\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\EnemyManager.h" />
     <ClInclude Include="Game\ChestManager.h" />
     <ClInclude Include="GameType.h" />
     <ClInclude Include="Game\ItemManager.h" />

@@ -3,6 +3,9 @@
 
 class Input;
 
+/// <summary>
+/// アイテムの基底クラス
+/// </summary>
 class ItemBase : public Actor
 {
 public:

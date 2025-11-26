@@ -49,19 +49,15 @@ m_fadeColor(0x000000)
 	m_pCamera = std::make_shared<Camera>();
 	m_pCamera->SetTarget(m_player.get());
 
-
-	m_pGameManager = std::make_shared<GameManager>(m_player.get());
+	m_pGameManager = std::make_shared<GameManager>(m_player.get(),m_pCamera.get(),m_pMap.get(),m_pActors);
 	m_pGameManager->Init();
+	
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
-	m_pChestManager = std::make_unique<ChestManager>(m_pCamera.get());
-	m_pChestManager->SpawnChest(m_pMap.get());
-	m_pChestManager->PushActors(m_pActors);
-
-	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get());
-
 	m_player->SetMap(m_pMap.get());
+
+	
 
 	// 全アクターにカメラをセット
 	for (auto& actor : m_pActors)
@@ -110,29 +106,17 @@ void GameScene::NormalUpdate(Input& input)
 #endif
 
 	m_pCamera->Update();
-	m_pChestManager->Update(input);
-	m_pItemManager->Update(input);
-	m_player->Update(input);
+	m_pGameManager->Update(input);
 
 	m_pActors.clear();
-	m_pActors.reserve(1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum());
-	m_pActors.push_back(m_player.get());
-	m_pChestManager->PushActors(m_pActors);
-	m_pItemManager->PushActors(m_pActors);
+	m_pActors.reserve(m_pGameManager->GetActorNum());
+	m_pGameManager->PushActors(m_pActors);
 
-	if (m_player->IsMiss())
-	{
-		m_player->Update(input);
-	}
-	else
-	{
-	}
 
 	m_pCollisionManager->CheckCollision(m_pActors);
 
 	m_bg->Update();
 	m_pMap->Update();
-	m_pGameManager->Update();
 
 	if (m_pGameManager->IsClear())
 	{
@@ -164,19 +148,6 @@ void GameScene::NormalDraw()
 {
 	m_bg->Draw(m_pCamera);
 	m_pMap->Draw(m_pCamera);
-
-	/*m_player->Draw();
-
-	for (auto& chest : m_chests)
-	{
-		chest->Draw();
-	}
-
-	for (auto& enemy : m_enemies)
-	{
-		enemy->Draw();
-	}
-	m_item->Draw();*/
 
 	for (auto& actor : m_pActors)
 	{

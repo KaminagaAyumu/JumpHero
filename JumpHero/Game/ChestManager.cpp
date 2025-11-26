@@ -1,12 +1,10 @@
-﻿#include <memory>
-#include <list>
-#include <vector>
-#include "ChestManager.h"
+﻿#include "ChestManager.h"
 #include "Chest.h"
 #include "../Camera.h"
 #include "../Input.h"
 #include "../Map.h"
 #include "Actor.h"
+#include "../GameManager.h"
 
 namespace
 {
@@ -14,8 +12,9 @@ namespace
 }
 
 
-ChestManager::ChestManager(Camera* camera) : 
-	m_pCamera(camera)
+ChestManager::ChestManager(Camera* camera, GameManager* gameManager) :
+	m_pCamera(camera),
+	m_pGameManager(gameManager)
 {
 }
 
@@ -24,6 +23,10 @@ void ChestManager::Update(Input& input)
 	for (auto& chest : m_chests)
 	{
 		chest->Update(input);
+		if (chest->IsOpen())
+		{
+			m_pGameManager->ChestOpen(chest->GetPos().x, chest->GetPos().y);
+		}
 	}
 
 	// 宝箱に存在しないものがある場合削除
@@ -37,10 +40,10 @@ void ChestManager::Update(Input& input)
 
 void ChestManager::Draw()
 {
-	for (auto& chest : m_chests)
+	/*for (auto& chest : m_chests)
 	{
 		chest->Draw();
-	}
+	}*/
 }
 
 void ChestManager::PushActors(std::vector<Actor*>& actors)

@@ -55,7 +55,7 @@ void Chest::Draw()
 	if (m_isOpen)
 	{
 		//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_openGraphHandle, TRUE);
-		DrawString(drawX, drawY, L"アイテム", 0xffffff);
+		//DrawString(drawX, drawY, L"アイテム", 0xffffff);
 	}
 	else
 	{

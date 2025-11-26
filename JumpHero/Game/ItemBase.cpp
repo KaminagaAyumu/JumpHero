@@ -19,6 +19,8 @@ ItemBase::ItemBase(float x, float y) :
 	m_isExist(true)
 {
 	m_pos = { x,y };
+	m_colRect = { {m_pos},kItemDefaultWidth,kItemDefaultHeight };
+	m_colCircle = { {m_pos},kItemDefaultWidth / 2 };
 }
 
 ItemBase::~ItemBase()
@@ -34,6 +36,7 @@ void ItemBase::Init()
 
 void ItemBase::Update(Input&)
 {
+	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
 }
 
@@ -45,6 +48,7 @@ void ItemBase::Draw()
 	{
 		DrawCircle(drawX, drawY, m_colCircle.radius, 0xddffff, true);
 		m_colCircle.Draw(drawX,drawY);
+		m_colRect.Draw(drawX, drawY);
 	}
 }
 

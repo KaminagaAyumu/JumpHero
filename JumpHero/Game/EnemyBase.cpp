@@ -21,6 +21,7 @@ EnemyBase::EnemyBase(Player* player) :
 	m_direction{},
 	m_isHitPlayer(false),
 	m_isSeeking(false),
+	m_isDead(false),
 	m_directionChangeCount(0)
 {
 }

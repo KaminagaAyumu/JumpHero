@@ -5,6 +5,9 @@
 class Player;
 class Map;
 
+/// <summary>
+/// 敵の基底クラス
+/// </summary>
 class EnemyBase : public Actor
 {
 public:
@@ -22,6 +25,8 @@ public:
 	/// <param name="map">Mapクラスのスマートポインタ</param>
 	/// <note>仮作成中(もう少しいいやり方があるかも)</note>
 	void SetBg(Map* map) { m_pMap = map; }
+
+	bool IsDead()const { return m_isDead; }
 
 private:
 	enum class EnemyType
@@ -43,6 +48,8 @@ private:
 
 	bool m_isHitPlayer;
 	bool m_isSeeking;
+	// 敵が死んだか
+	bool m_isDead;
 
 	int m_directionChangeCount;
 

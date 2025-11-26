@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include "SceneBase.h"
+
+/// <summary>
+/// ゲームの基本操作を教える用のシーン
+/// </summary>
 class TutorialScene : public SceneBase
 {
 public:
