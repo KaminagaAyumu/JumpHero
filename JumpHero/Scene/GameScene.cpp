@@ -55,7 +55,7 @@ m_fadeColor(0x000000)
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
-	m_player->SetMap(m_pMap.get());
+	m_player->GetMap(m_pMap.get());
 
 	
 

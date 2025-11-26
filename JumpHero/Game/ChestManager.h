@@ -9,6 +9,7 @@ class Input;
 class Camera;
 class Chest;
 class GameManager;
+class Player;
 
 /// <summary>
 /// ゲーム中の宝箱を管理するクラス
@@ -17,7 +18,7 @@ class GameManager;
 class ChestManager
 {
 public:
-	ChestManager(Camera* camera, GameManager* gameManager);
+	ChestManager(Camera* camera, Player* player, GameManager* gameManager);
 
 	void Update(Input& input);
 
@@ -37,6 +38,7 @@ public:
 private:
 	
 	Camera* m_pCamera; // 宝箱で使うカメラを参照
+	Player* m_pPlayer; // 宝箱で使うプレイヤーを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
 	std::list<std::shared_ptr<Chest>> m_chests;
 

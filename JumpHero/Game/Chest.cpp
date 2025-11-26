@@ -1,8 +1,9 @@
 ﻿#include "Chest.h"
-#include <DxLib.h>
 #include "../Map.h"
 #include "../Camera.h"
+#include "Player.h"
 #include "ItemManager.h"
+#include <DxLib.h>
 
 
 namespace
@@ -15,17 +16,19 @@ namespace
 	constexpr int kSpaceChipNo = 79;
 }
 
-Chest::Chest() : 
+Chest::Chest() :
 	Actor(Types::ActorType::Chest),
 	m_isOpen(false),
 	m_pMap(nullptr),
+	m_pPlayer(nullptr),
 	m_chipPos{}
 {
 }
 
-Chest::Chest(int x, int y, Map* map) :
+Chest::Chest(int x, int y, Map* map, Player* player) :
 	Actor(Types::ActorType::Chest),
 	m_pMap(map),
+	m_pPlayer(player),
 	m_chipPos{x,y},
 	m_isOpen(false)
 {
@@ -72,7 +75,9 @@ void Chest::IsCollision(const Types::CollisionInfo& info)
 	if(info.otherType == Types::ActorType::Player)
 	{
 		printfDx(L"Chest : プレイヤーと衝突しました\n");
-		OpenChest(); // 仮で当たったら開くようにする
+		
+
+		//OpenChest(); // 仮で当たったら開くようにする
 	}
 }
 

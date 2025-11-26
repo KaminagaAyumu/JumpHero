@@ -32,19 +32,23 @@ public:
 	         //////当たり判定用関数//////
 	//////////////////////////////////////////////
 
-	Position2 GetPos() const { return m_pos; }
+	/// <summary>
+	/// 座標の情報を返す
+	/// </summary>
+	/// <returns>オブジェクトが持つ座標の情報</returns>
+	const Position2& GetPos() const { return m_pos; }
 
 	/// <summary>
 	/// 円の当たり判定の情報を返す
 	/// </summary>
 	/// <returns>オブジェクトが持つ円の情報</returns>
-	Circle2D GetColCircle() const { return m_colCircle; }
+	const Circle2D& GetColCircle() const { return m_colCircle; }
 
 	/// <summary>
 	/// 矩形の当たり判定の情報を返す
 	/// </summary>
 	/// <returns>オブジェクトが持つ矩形の情報</returns>
-	Rect2D GetColRect() const { return m_colRect; }
+	const Rect2D& GetColRect() const { return m_colRect; }
 
 	/// <summary>
 	/// オブジェクトの種類を返す

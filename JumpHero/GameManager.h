@@ -36,11 +36,11 @@ public:
 	bool IsClear()const { return m_isClear; }
 
 	/// <summary>
-	/// 宝箱を開けるという通知をChestManagerに送る関数
+	/// アイテムを生成するという通知をItemManagerに送る関数
 	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	void ChestOpen(int x, int y);
+	/// <param name="x">生成X座標</param>
+	/// <param name="y">生成Y座標</param>
+	void DropItem(int x, int y);
 
 	/// <summary>
 	/// ゲーム内に存在するオブジェクトの数を取得

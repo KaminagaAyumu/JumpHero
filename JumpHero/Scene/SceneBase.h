@@ -9,7 +9,13 @@ class Input; // 入力情報を取得できるように宣言
 class SceneBase
 {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="controller">シーン遷移に必要なコントローラー</param>
 	SceneBase(SceneController& controller);
+
+	virtual ~SceneBase() = default; // 特に使わないのでdefault
 
 	/// <summary>
 	/// シーンの更新処理
