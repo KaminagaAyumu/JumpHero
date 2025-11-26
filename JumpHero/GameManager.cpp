@@ -24,7 +24,7 @@ GameManager::GameManager(Player* player, Camera* camera, Map* map, std::vector<A
 	m_isClear(false)
 {
 	m_pPlayer = player;
-	m_pChestManager = std::make_unique<ChestManager>(camera,player,this);
+	m_pChestManager = std::make_unique<ChestManager>(camera,this);
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(camera);

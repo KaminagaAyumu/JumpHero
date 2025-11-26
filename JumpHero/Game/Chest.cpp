@@ -20,15 +20,13 @@ Chest::Chest() :
 	Actor(Types::ActorType::Chest),
 	m_isOpen(false),
 	m_pMap(nullptr),
-	m_pPlayer(nullptr),
 	m_chipPos{}
 {
 }
 
-Chest::Chest(int x, int y, Map* map, Player* player) :
+Chest::Chest(int x, int y, Map* map) :
 	Actor(Types::ActorType::Chest),
 	m_pMap(map),
-	m_pPlayer(player),
 	m_chipPos{x,y},
 	m_isOpen(false)
 {

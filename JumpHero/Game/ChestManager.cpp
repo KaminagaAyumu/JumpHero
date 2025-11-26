@@ -13,9 +13,8 @@ namespace
 }
 
 
-ChestManager::ChestManager(Camera* camera, Player* player, GameManager* gameManager) :
+ChestManager::ChestManager(Camera* camera, GameManager* gameManager) :
 	m_pCamera(camera),
-	m_pPlayer(player),
 	m_pGameManager(gameManager)
 {
 }
@@ -69,7 +68,7 @@ void ChestManager::SpawnChest(Map* map)
 		{
 			if (map->GetMapChipNum(x, y) == kChestChipNo)
 			{
-				auto chest = std::make_shared<Chest>(x, y, map, m_pPlayer);
+				auto chest = std::make_shared<Chest>(x, y, map);
 				chest->SetCamera(m_pCamera);
 				m_chests.push_back(chest);
 			}
