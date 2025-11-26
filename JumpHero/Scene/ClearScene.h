@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
+/// <summary>
+/// クリアシーン
+/// リザルト表示などを行う
+/// </summary>
 class ClearScene : public SceneBase
 {
 public:

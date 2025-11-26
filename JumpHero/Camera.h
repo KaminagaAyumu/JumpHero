@@ -3,6 +3,9 @@
 
 class Actor;
 
+/// <summary>
+/// ターゲットを基準にして描画位置を設定するカメラクラス
+/// </summary>
 class Camera
 {
 public:

@@ -8,6 +8,7 @@ class Camera;
 
 /// <summary>
 /// アイテム管理用クラス
+/// アイテムの生成、更新
 /// </summary>
 class ItemManager
 {

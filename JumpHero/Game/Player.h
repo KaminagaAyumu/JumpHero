@@ -4,6 +4,9 @@
 class Input;
 class Map;
 
+/// <summary>
+/// プレイヤークラス
+/// </summary>
 class Player : public Actor
 {
 public:

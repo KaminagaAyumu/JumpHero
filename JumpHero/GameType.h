@@ -2,6 +2,7 @@
 
 class Actor;
 
+// オブジェクト(Actor)の区別をつける列挙体など
 namespace Types
 {
 	/// <summary>

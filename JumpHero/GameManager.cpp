@@ -1,13 +1,21 @@
-﻿#include "GameManager.h"
+﻿#include <memory>
+#include <vector>
+#include "GameManager.h"
 #include <DxLib.h>
+#include "Game/Actor.h"
 #include "Game/Player.h"
+#include "Game/ChestManager.h"
+#include "Game/ItemManager.h"
+#include "Camera.h"
+#include "Input.h"
+#include "Map.h"
 
 namespace
 {
 	constexpr int kFirstLife = 3;
 }
 
-GameManager::GameManager(Player* player) :
+GameManager::GameManager(Player* player, Camera* camera, Map* map, std::vector<Actor*>& actors) :
 	m_score(0),
 	m_currentScore(0),
 	m_life(kFirstLife),
@@ -16,6 +24,10 @@ GameManager::GameManager(Player* player) :
 	m_isClear(false)
 {
 	m_pPlayer = player;
+	m_pChestManager = std::make_unique<ChestManager>(camera,this);
+	m_pChestManager->SpawnChest(map);
+	m_pChestManager->PushActors(actors);
+	m_pItemManager = std::make_unique<ItemManager>(camera);
 }
 
 GameManager::~GameManager()
@@ -30,7 +42,7 @@ void GameManager::Init()
 	m_isClear = false;
 }
 
-void GameManager::Update()
+void GameManager::Update(Input& input)
 {
 	// スコアの更新処理
 	if (m_score < m_currentScore) // スコアが現在のスコアより小さい場合
@@ -55,9 +67,23 @@ void GameManager::Update()
 	{
 		m_isClear = true;
 	}
+
+	// クリア状態かミス状態の時はプレイヤー以外の更新処理を行わない
+	if (m_isClear || m_pPlayer->IsMiss())
+	{
+		m_pPlayer->Update(input);
+	}
+	else
+	{
+		m_pChestManager->Update(input);
+		m_pItemManager->Update(input);
+		m_pPlayer->Update(input);
+	}
+	
+
 }
 
-void GameManager::Draw()
+void GameManager::Draw() const
 {
 	DrawFormatString(10, 80, 0xffffff, L"スコア:%d", m_score);
 	DrawFormatString(10, 100, 0xffffff, L"残機:%d", m_life);
@@ -65,7 +91,25 @@ void GameManager::Draw()
 	DrawFormatString(10, 140, 0xffffff, L"風船を取った数:%d", m_balloonNum);
 }
 
+void GameManager::PushActors(std::vector<Actor*>& actors)
+{
+	actors.push_back(m_pPlayer);
+	m_pChestManager->PushActors(actors);
+	m_pItemManager->PushActors(actors);
+}
+
 void GameManager::AddScore(int score)
 {
 	m_currentScore += score;
+}
+
+void GameManager::ChestOpen(int x, int y)
+{
+	m_pItemManager->SpawnItem(x, y);
+}
+
+const size_t& GameManager::GetActorNum() const
+{
+	// +1しているのはプレイヤーの数
+	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum();
 }

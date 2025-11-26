@@ -3,6 +3,9 @@
 
 class Map;
 
+/// <summary>
+/// プレイヤーのアクションでアイテムを生成する宝箱クラス
+/// </summary>
 class Chest : public Actor
 {
 public:
@@ -19,7 +22,7 @@ public:
 	bool IsOpen()const { return m_isOpen; }
 
 	/// <summary>
-	/// 宝箱が開いたときの処理
+	/// 宝箱が開いたときの処理 マップのデータを変える用
 	/// </summary>
 	void OpenChest();
 

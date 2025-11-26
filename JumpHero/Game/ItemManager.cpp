@@ -32,14 +32,14 @@ void ItemManager::Update(Input& input)
 
 void ItemManager::Draw()
 {
-	if (m_pItems.empty())
+	/*if (m_pItems.empty())
 	{
 		return;
 	}
 	for (auto& item : m_pItems)
 	{
 		item->Draw();
-	}
+	}*/
 }
 
 void ItemManager::SpawnItem(int x, int y)

@@ -4,6 +4,9 @@
 // プロトタイプ宣言
 class Bg;
 
+/// <summary>
+/// タイトルシーンクラス
+/// </summary>
 class TitleScene : public SceneBase
 {
 public:

@@ -1,30 +1,27 @@
 ﻿#pragma once
-#include <memory>
-#include <list>
-#include <vector>
 
-class Actor;
-class Map;
-class Input;
 class Camera;
-class Chest;
 class GameManager;
+class Input;
+class Map;
+class Actor;
+class EnemyBase;
 
 /// <summary>
-/// ゲーム中の宝箱を管理するクラス
-/// 宝箱の生成、表示を行う
+/// 敵管理用クラス
+/// 敵の生成、更新を行う
 /// </summary>
-class ChestManager
+class EnemyManager
 {
 public:
-	ChestManager(Camera* camera, GameManager* gameManager);
+	EnemyManager(Camera* camera, GameManager* gameManager);
 
 	void Update(Input& input);
 
 	void Draw();
 
 	// マップのデータを受け取って宝箱を生成
-	void SpawnChest(Map* map);
+	void SpawnEnemy(Map* map);
 
 	/// <summary>
 	/// ゲーム内オブジェクトに宝箱を追加する
@@ -35,10 +32,11 @@ public:
 	size_t GetChestNum();
 
 private:
-	
+
 	Camera* m_pCamera; // 宝箱で使うカメラを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
-	std::list<std::shared_ptr<Chest>> m_chests;
-
+	std::list<std::shared_ptr<EnemyBase>> m_enemies;
 };
+
+
 

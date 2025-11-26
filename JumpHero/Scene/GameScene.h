@@ -17,6 +17,9 @@ class CollisionManager;
 class ChestManager;
 class ItemManager;
 
+/// <summary>
+/// ゲームのメインとなるシーン
+/// </summary>
 class GameScene : public SceneBase
 {
 public:
@@ -73,9 +76,5 @@ private:
 	std::vector<Actor*> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
-
-	std::unique_ptr<ChestManager> m_pChestManager; // 宝箱管理クラス
-
-	std::unique_ptr<ItemManager> m_pItemManager; // アイテム管理クラス 
 };
 
