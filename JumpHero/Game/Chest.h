@@ -2,6 +2,7 @@
 #include "Actor.h"
 
 class Map;
+class Player;
 
 /// <summary>
 /// プレイヤーのアクションでアイテムを生成する宝箱クラス
@@ -10,7 +11,7 @@ class Chest : public Actor
 {
 public:
 	Chest();
-	Chest(int x, int y, Map* map);
+	Chest(int x, int y, Map* map, Player* player);
 	virtual ~Chest();
 	virtual void Init() override;
 	virtual void Update(Input&) override;
@@ -31,6 +32,7 @@ private:
 	bool m_isOpen;
 
 	Map* m_pMap; // マップのデータを変更できるようにポインタを取得
+	Player* m_pPlayer; // プレイヤーがどこにいるのかを取得するためのポインタを取得
 	Position2Int m_chipPos; // マップチップ位置 
 
 };

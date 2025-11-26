@@ -5,6 +5,7 @@
 #include "../Map.h"
 #include "Actor.h"
 #include "../GameManager.h"
+#include "Player.h"
 
 namespace
 {
@@ -12,8 +13,9 @@ namespace
 }
 
 
-ChestManager::ChestManager(Camera* camera, GameManager* gameManager) :
+ChestManager::ChestManager(Camera* camera, Player* player, GameManager* gameManager) :
 	m_pCamera(camera),
+	m_pPlayer(player),
 	m_pGameManager(gameManager)
 {
 }
@@ -25,7 +27,7 @@ void ChestManager::Update(Input& input)
 		chest->Update(input);
 		if (chest->IsOpen())
 		{
-			m_pGameManager->ChestOpen(chest->GetPos().x, chest->GetPos().y);
+			m_pGameManager->DropItem(chest->GetPos().x, chest->GetPos().y);
 		}
 	}
 
@@ -67,7 +69,7 @@ void ChestManager::SpawnChest(Map* map)
 		{
 			if (map->GetMapChipNum(x, y) == kChestChipNo)
 			{
-				auto chest = std::make_shared<Chest>(x, y, map);
+				auto chest = std::make_shared<Chest>(x, y, map, m_pPlayer);
 				chest->SetCamera(m_pCamera);
 				m_chests.push_back(chest);
 			}

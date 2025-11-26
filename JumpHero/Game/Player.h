@@ -64,7 +64,7 @@ public:
 	/// </summary>
 	/// <param name="bg">Bgクラスのスマートポインタ</param>
 	/// <note>仮作成中(もう少しいいやり方があるかも)</note>
-	void SetMap(Map* map) { m_pMap = map; }
+	void GetMap(Map* map) { m_pMap = map; }
 
 private:
 	Vector2 m_direction; // 進む方向
