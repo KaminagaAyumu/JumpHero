@@ -3,7 +3,7 @@
 #include "TitleScene.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
-#include <DxLib.h>
+#include "DxLib.h"
 
 namespace
 {

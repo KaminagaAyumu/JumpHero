@@ -1,7 +1,7 @@
 ﻿#include <memory>
 #include <vector>
 #include "GameManager.h"
-#include <DxLib.h>
+#include "DxLib.h"
 #include "Actor.h"
 #include "Player.h"
 #include "ChestManager.h"

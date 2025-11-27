@@ -1,11 +1,11 @@
 ﻿#include <memory>
 #include "TitleScene.h"
-#include <DxLib.h>
-#include "../Input.h"
+#include "DxLib.h"
+#include "../Utility/Input.h"
 #include "SceneController.h"
 #include "GameScene.h"
-#include "../Game.h"
-#include "../Bg.h"
+#include "../Utility/Game.h"
+#include "../Utility/Bg.h"
 
 namespace 
 {

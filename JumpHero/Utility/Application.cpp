@@ -1,10 +1,10 @@
 ﻿#include <memory>
-#include <DxLib.h>
+#include "DxLib.h"
 #include "Game.h"
 #include "Application.h"
 #include "Input.h"
-#include "Scene/SceneController.h"
-#include "Scene/TitleScene.h"
+#include "../Scene/SceneController.h"
+#include "../Scene/TitleScene.h"
 
 
 Application::Application()

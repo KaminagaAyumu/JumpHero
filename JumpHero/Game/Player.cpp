@@ -3,7 +3,7 @@
 #include "../Utility/Game.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
-#include <DxLib.h>
+#include "DxLib.h"
 #include <cassert>
 
 namespace

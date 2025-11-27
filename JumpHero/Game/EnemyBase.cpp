@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Map.h"
-#include <DxLib.h>
+#include "DxLib.h"
 #include <cmath>
 
 namespace

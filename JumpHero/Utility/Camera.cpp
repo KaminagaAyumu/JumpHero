@@ -1,6 +1,6 @@
 ﻿#include "Camera.h"
 #include "Game.h"
-#include "Game/Actor.h"
+#include "../Game/Actor.h"
 #include <cassert>
 
 namespace

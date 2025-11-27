@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "Game.h"
 #include <fstream>
-#include <DxLib.h>
+#include "DxLib.h"
 
 namespace
 {

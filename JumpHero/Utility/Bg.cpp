@@ -1,5 +1,5 @@
 ﻿#include "Bg.h"
-#include <DxLib.h>
+#include "DxLib.h"
 #include "Game.h"
 #include "Camera.h"
 

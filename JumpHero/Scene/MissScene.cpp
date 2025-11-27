@@ -1,6 +1,6 @@
 ﻿#include "MissScene.h"
 #include "SceneController.h"
-#include <DxLib.h>
+#include "DxLib.h"
 #include <string>
 
 namespace

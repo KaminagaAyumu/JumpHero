@@ -1,9 +1,9 @@
 ﻿#include "ClearScene.h"
 #include "SceneController.h"
 #include "TitleScene.h"
-#include "../Input.h"
-#include "../Game.h"
-#include <DxLib.h>
+#include "../Utility/Input.h"
+#include "../Utility/Game.h"
+#include "DxLib.h"
 
 
 namespace

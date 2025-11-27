@@ -1,7 +1,7 @@
 ﻿#include "Geometry.h"
 #include <cmath>
 #include <cassert>
-#include <DxLib.h>
+#include "DxLib.h"
 
 float Vector2::Magnitude()
 {
