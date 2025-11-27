@@ -1,6 +1,6 @@
 ﻿#include "Chest.h"
-#include "../Map.h"
-#include "../Camera.h"
+#include "../Utility/Map.h"
+#include "../Utility/Camera.h"
 #include "Player.h"
 #include "ItemManager.h"
 #include <DxLib.h>

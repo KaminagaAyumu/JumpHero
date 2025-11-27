@@ -1,6 +1,6 @@
 ﻿#include "CollisionManager.h"
-#include "Game/Actor.h"
-#include "GameType.h"
+#include "Actor.h"
+#include "../Utility/GameType.h"
 
 void CollisionManager::CheckCollision(const std::vector<Actor*>& actors)
 {

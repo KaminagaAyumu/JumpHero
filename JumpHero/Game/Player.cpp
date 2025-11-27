@@ -1,8 +1,8 @@
 ﻿#include "Player.h"
-#include "../Input.h"
-#include "../Game.h"
-#include "../Map.h"
-#include "../Camera.h"
+#include "../Utility/Input.h"
+#include "../Utility/Game.h"
+#include "../Utility/Map.h"
+#include "../Utility/Camera.h"
 #include <DxLib.h>
 #include <cassert>
 

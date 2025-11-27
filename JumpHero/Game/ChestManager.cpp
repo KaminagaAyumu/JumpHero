@@ -1,10 +1,10 @@
 ﻿#include "ChestManager.h"
 #include "Chest.h"
-#include "../Camera.h"
-#include "../Input.h"
-#include "../Map.h"
+#include "../Utility/Camera.h"
+#include "../Utility/Input.h"
+#include "../Utility/Map.h"
 #include "Actor.h"
-#include "../GameManager.h"
+#include "GameManager.h"
 #include "Player.h"
 
 namespace

@@ -1,6 +1,6 @@
 ﻿#include <DxLib.h>
-#include "Game.h"
-#include "Application.h"
+#include "Utility/Game.h"
+#include "Utility/Application.h"
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

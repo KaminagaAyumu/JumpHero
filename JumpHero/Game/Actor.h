@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "../Geometry.h"
-#include "../GameType.h"
+#include "../Utility/Geometry.h"
+#include "../Utility/GameType.h"
 
 class Input;
 class Camera;

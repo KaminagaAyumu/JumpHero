@@ -2,9 +2,9 @@
 #include <list>
 #include <memory>
 #include "EnemyManager.h"
-#include "../Camera.h"
-#include "../GameManager.h"
-#include "../Map.h"
+#include "../Utility/Camera.h"
+#include "GameManager.h"
+#include "../Utility/Map.h"
 #include "Actor.h"
 #include "EnemyBase.h"
 

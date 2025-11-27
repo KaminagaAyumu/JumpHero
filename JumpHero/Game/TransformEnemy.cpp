@@ -1,5 +1,5 @@
 ﻿#include "TransformEnemy.h"
-#include "../Camera.h"
+#include "../Utility/Camera.h"
 #include <DxLib.h>
 
 namespace

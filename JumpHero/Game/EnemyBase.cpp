@@ -1,7 +1,7 @@
 ﻿#include "EnemyBase.h"
 #include "Player.h"
-#include "../Camera.h"
-#include "../Map.h"
+#include "../Utility/Camera.h"
+#include "../Utility/Map.h"
 #include <DxLib.h>
 #include <cmath>
 

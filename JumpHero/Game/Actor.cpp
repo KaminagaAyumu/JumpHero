@@ -1,5 +1,5 @@
 ﻿#include "Actor.h"
-#include "../Camera.h"
+#include "../Utility/Camera.h"
 
 Actor::Actor(Types::ActorType t) :
 	m_pos{},

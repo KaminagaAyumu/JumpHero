@@ -2,13 +2,13 @@
 #include <vector>
 #include "GameManager.h"
 #include <DxLib.h>
-#include "Game/Actor.h"
-#include "Game/Player.h"
-#include "Game/ChestManager.h"
-#include "Game/ItemManager.h"
-#include "Camera.h"
-#include "Input.h"
-#include "Map.h"
+#include "Actor.h"
+#include "Player.h"
+#include "ChestManager.h"
+#include "ItemManager.h"
+#include "../Utility/Camera.h"
+#include "../Utility/Input.h"
+#include "../Utility/Map.h"
 
 namespace
 {

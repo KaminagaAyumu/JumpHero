@@ -2,7 +2,7 @@
 #include <vector>
 #include "ItemManager.h"
 #include "ItemBase.h"
-#include "../Input.h"
+#include "../Utility/Input.h"
 
 ItemManager::ItemManager(Camera* camera) : 
 	m_pCamera(camera)

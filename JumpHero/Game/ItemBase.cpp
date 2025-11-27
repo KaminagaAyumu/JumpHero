@@ -1,6 +1,6 @@
 ﻿#include "ItemBase.h"
 #include <DxLib.h>
-#include "../Camera.h"
+#include "../Utility/Camera.h"
 
 namespace
 {
