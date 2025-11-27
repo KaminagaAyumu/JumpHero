@@ -10,6 +10,10 @@
 class Input
 {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// 入力状態やキーやボタン等の割り振りを行う
+	/// </summary>
 	Input();
 
 	/// <summary>
