@@ -52,7 +52,7 @@ void TitleScene::FadeInUpdate(Input& input)
 void TitleScene::NormalUpdate(Input& input)
 {
 	// STARTボタンもしくはAボタンが押されたら
-	if (input.IsTriggered("OK") || input.IsTriggered("Jump"))
+	if (input.IsTriggered("OK"))
 	{
 		// フェードアウト後、ゲームシーンへ移行
 		m_updateFunc = &TitleScene::FadeOutUpdate;

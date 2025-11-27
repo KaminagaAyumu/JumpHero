@@ -4,7 +4,7 @@
 Input::Input()
 {
 	// ボタンのイベント名と入力の内容をここで初期化する
-	m_inputTable["OK"] = { { InputType::Keyboard, KEY_INPUT_RETURN }, { InputType::Pad, PAD_INPUT_R } }; // Enterキー、STARTボタン
+	m_inputTable["OK"] = { { InputType::Keyboard, KEY_INPUT_RETURN }, { InputType::Pad, PAD_INPUT_R | PAD_INPUT_A } }; // Enterキー、STARTボタンもしくはAボタン
 	m_inputTable["Up"] = { { InputType::Keyboard, KEY_INPUT_UP }, { InputType::Pad, PAD_INPUT_UP } };
 	m_inputTable["Down"] = { { InputType::Keyboard, KEY_INPUT_DOWN }, { InputType::Pad, PAD_INPUT_DOWN } };
 	m_inputTable["Left"] = { { InputType::Keyboard, KEY_INPUT_LEFT }, { InputType::Pad, PAD_INPUT_LEFT } };
