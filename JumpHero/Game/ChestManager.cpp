@@ -26,7 +26,7 @@ void ChestManager::Update(Input& input)
 		chest->Update(input);
 		if (chest->IsOpen())
 		{
-			m_pGameManager->DropItem(chest->GetPos().x, chest->GetPos().y);
+			m_pGameManager->DropItem(static_cast<int>(chest->GetPos().x), static_cast<int>(chest->GetPos().y));
 		}
 	}
 
