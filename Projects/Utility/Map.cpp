@@ -258,8 +258,8 @@ void Map::LoadMapdata(const std::string& fileName)
 		temp.push_back(row); // 列に要素を格納
 	}
 
-	m_height = temp.size(); // 列の要素数を取得
-	m_width = temp[0].size(); // 行の要素数を取得
+	m_height = static_cast<int>(temp.size()); // 列の要素数を取得
+	m_width = static_cast<int>(temp[0].size()); // 行の要素数を取得
 	m_chipData.resize(m_width * m_height); // 実際に格納するメンバ変数のサイズを取得
 
 	for (int y = 0; y < m_height; y++)

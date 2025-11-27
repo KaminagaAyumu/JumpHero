@@ -42,11 +42,11 @@ void ItemBase::Update(Input&)
 
 void ItemBase::Draw()
 {
-	int drawX = m_pos.x - m_pCamera->scroll.x;
-	int drawY = m_pos.y - m_pCamera->scroll.y;
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawCircle(drawX, drawY, m_colCircle.radius, 0xddffff, true);
+		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
 		m_colCircle.Draw(drawX,drawY);
 		m_colRect.Draw(drawX, drawY);
 	}

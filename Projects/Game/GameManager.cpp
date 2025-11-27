@@ -47,7 +47,7 @@ void GameManager::Update(Input& input)
 	// スコアの更新処理
 	if (m_score < m_currentScore) // スコアが現在のスコアより小さい場合
 	{
-		int add = (m_currentScore - m_score) * 0.2f; // 現在のスコアとの差分を計算
+		int add = static_cast<int>((m_currentScore - m_score) * 0.2f); // 現在のスコアとの差分を計算
 		if (add <= 0.9f)
 		{
 			m_score = m_currentScore; // スコアを現在のスコアに合わせる
