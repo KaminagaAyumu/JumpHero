@@ -7,6 +7,7 @@ class Player;
 class Camera;
 class ChestManager;
 class ItemManager;
+class EnemyManager;
 class Input;
 class Map;
 
@@ -61,6 +62,7 @@ private:
 	Player* m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;
+	std::unique_ptr<EnemyManager> m_pEnemyManager;
 
 };
 

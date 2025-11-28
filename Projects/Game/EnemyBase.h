@@ -4,6 +4,7 @@
 // プロトタイプ宣言
 class Player;
 class Map;
+class Input;
 
 /// <summary>
 /// 敵の基底クラス
@@ -15,7 +16,7 @@ public:
 	EnemyBase(Player* player, Map* map);
 	virtual ~EnemyBase();
 	virtual void Init() abstract;
-	virtual void Update() abstract;
+	virtual void Update(Input&) abstract;
 	virtual void Draw() abstract;
 
 	virtual void IsCollision(const Types::CollisionInfo& info) abstract;
@@ -38,9 +39,14 @@ protected:
 	bool m_isDead;
 
 	/// <summary>
-	/// マップとの当たり判定を取り、座標補正をする
+	/// マップX軸との当たり判定を取り、座標補正をする
 	/// </summary>
-	virtual void CheckHitMap() abstract;
+	virtual void CheckHitMapX() abstract;
+	
+	/// <summary>
+	/// マップY軸との当たり判定を取り、座標補正をする
+	/// </summary>
+	virtual void CheckHitMapY() abstract;
 
 };
 

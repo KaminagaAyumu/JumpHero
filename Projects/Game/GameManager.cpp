@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "ChestManager.h"
 #include "ItemManager.h"
+#include "EnemyManager.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Input.h"
 #include "../Utility/Map.h"
@@ -28,6 +29,8 @@ GameManager::GameManager(Player* player, Camera* camera, Map* map, std::vector<A
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(camera);
+	m_pEnemyManager = std::make_unique<EnemyManager>(camera, player, this);
+	m_pEnemyManager->SpawnEnemy(Position2{ 300.0f,300.0f }, map);
 }
 
 GameManager::~GameManager()
@@ -75,9 +78,10 @@ void GameManager::Update(Input& input)
 	}
 	else
 	{
+		m_pPlayer->Update(input);
 		m_pChestManager->Update(input);
 		m_pItemManager->Update(input);
-		m_pPlayer->Update(input);
+		m_pEnemyManager->Update(input);
 	}
 	
 
@@ -96,6 +100,7 @@ void GameManager::PushActors(std::vector<Actor*>& actors)
 	actors.push_back(m_pPlayer);
 	m_pChestManager->PushActors(actors);
 	m_pItemManager->PushActors(actors);
+	m_pEnemyManager->PushActors(actors);
 }
 
 void GameManager::AddScore(int score)
@@ -111,5 +116,5 @@ void GameManager::DropItem(int x, int y)
 const size_t& GameManager::GetActorNum() const
 {
 	// +1しているのはプレイヤーの数
-	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum();
+	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum() + m_pEnemyManager->GetEnemyNum();
 }

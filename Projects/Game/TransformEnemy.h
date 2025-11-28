@@ -3,6 +3,7 @@
 
 class Player;
 class Map;
+class Input;
 
 /// <summary>
 /// 変身する敵クラス
@@ -26,18 +27,17 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
+	/// <param name="player">敵の初期位置</param>
 	/// <param name="player">プレイヤーのポインタ</param>
 	/// <param name="map">マップのポインタ</param>
 	/// <param name="changeForm">変わる姿</param>
-	TransformEnemy(Player* player, Map* map, EnemyForm changeForm);
+	TransformEnemy(const Position2& pos,Player* player, Map* map, EnemyForm changeForm);
 	
 	// デストラクタ(今は特に使わないのでdefault)
 	virtual ~TransformEnemy() = default;
 	virtual void Init() override;
-	virtual void Update() override;
+	virtual void Update(Input&) override;
 	virtual void Draw() override;
-
-	
 
 
 private:
@@ -45,20 +45,22 @@ private:
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
 
 	// 更新処理用関数群
-	using UpdateFunc_t = void(TransformEnemy::*)(); // 更新処理用関数ポインタの型定義
+	using UpdateFunc_t = void(TransformEnemy::*)(Input&); // 更新処理用関数ポインタの型定義
 	UpdateFunc_t m_updateFunc; // 現在の更新処理用関数ポインタ
-	void NormalUpdate();
-	void SeekerUpdate();
-	void FireBallUpdate();
+	void NormalUpdate(Input&);
+	void SeekerUpdate(Input&);
+	void FireBallUpdate(Input&);
 
 	// 描画処理用関数群
-	using DrawFunc_t = UpdateFunc_t; // 関数の形式自体は更新処理と同じなので別名とする
+	using DrawFunc_t = void(TransformEnemy::*)(); // 関数の形式自体は更新処理と同じなので別名とする
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 	void NormalDraw();
 	void SeekerDraw();
 	void FireBallDraw();
 
-	virtual void CheckHitMap() override;
+	virtual void CheckHitMapX() override;
+
+	virtual void CheckHitMapY() override;
 
 	// 敵の状態管理用
 	EnemyForm m_currentForm; // 現在の敵の姿
@@ -70,8 +72,11 @@ private:
 	// 敵が折り返した回数をカウントする
 	int m_turnCount;
 
+	// 床にいるかどうか
+	bool m_isGround;
+
 	// 移動の力
 	Vector2 m_velocity;
-
+	
 };
 

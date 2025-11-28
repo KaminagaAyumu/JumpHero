@@ -14,8 +14,6 @@ class Camera;
 class ItemBase;
 class GameManager;
 class CollisionManager;
-class ChestManager;
-class ItemManager;
 
 /// <summary>
 /// ゲームのメインとなるシーン

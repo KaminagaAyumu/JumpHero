@@ -4,7 +4,9 @@ class Camera;
 class GameManager;
 class Map;
 class Actor;
+class Player;
 class EnemyBase;
+class Input;
 
 /// <summary>
 /// 敵管理用クラス
@@ -13,14 +15,14 @@ class EnemyBase;
 class EnemyManager
 {
 public:
-	EnemyManager(Camera* camera, GameManager* gameManager);
+	EnemyManager(Camera* camera,Player* player, GameManager* gameManager);
 
-	void Update();
+	void Update(Input&);
 
 	void Draw();
 
-	// マップのデータを受け取って宝箱を生成
-	void SpawnEnemy(Map* map);
+	// 座標のデータを受け取って敵を生成
+	void SpawnEnemy(const Position2& pos, Map* map);
 
 	/// <summary>
 	/// ゲーム内オブジェクトに宝箱を追加する
@@ -28,11 +30,12 @@ public:
 	/// <param name="actors">アクターコンテナの参照</param>
 	void PushActors(std::vector<Actor*>& actors);
 
-	size_t GetChestNum();
+	size_t GetEnemyNum();
 
 private:
 
-	Camera* m_pCamera; // 宝箱で使うカメラを参照
+	Camera* m_pCamera; // 敵が使うカメラを参照
+	Player* m_pPlayer; // 敵が使うプレイヤーを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
 	std::list<std::shared_ptr<EnemyBase>> m_enemies;
 };
