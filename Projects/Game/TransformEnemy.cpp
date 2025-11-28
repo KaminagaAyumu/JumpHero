@@ -24,7 +24,7 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_isGround(false),
 	m_velocity{}
 {
-	m_direction = { -1.0f,0.0f };
+	m_direction = { 1.0f,0.0f };
 	m_pos = pos;
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
@@ -64,7 +64,7 @@ void TransformEnemy::NormalUpdate(Input&)
 	m_pos.y += m_velocity.y;
 	m_colRect.pos = m_pos;
 	CheckHitMapY();
-
+	m_colCircle.pos = m_pos;
 }
 
 void TransformEnemy::SeekerUpdate(Input&)
@@ -121,6 +121,7 @@ void TransformEnemy::CheckHitMapX()
 
 		// 一旦x方向の速度を0にする
 		printfDx(L"x補正\n");
+		//m_direction.x = 0.0f;
 		m_velocity.x = 0.0f;
 	}
 }

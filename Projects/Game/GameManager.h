@@ -47,7 +47,7 @@ public:
 	/// ゲーム内に存在するオブジェクトの数を取得
 	/// </summary>
 	/// <returns>ゲーム内のオブジェクトの数</returns>
-	const size_t& GetActorNum()const;
+	const size_t GetActorNum()const;
 
 private:
 

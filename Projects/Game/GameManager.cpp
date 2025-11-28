@@ -30,7 +30,7 @@ GameManager::GameManager(Player* player, Camera* camera, Map* map, std::vector<A
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(camera);
 	m_pEnemyManager = std::make_unique<EnemyManager>(camera, player, this);
-	m_pEnemyManager->SpawnEnemy(Position2{ 400.0f,300.0f }, map);
+	m_pEnemyManager->SpawnEnemy(Position2{ 460.0f,300.0f }, map);
 }
 
 GameManager::~GameManager()
@@ -113,7 +113,7 @@ void GameManager::DropItem(int x, int y)
 	m_pItemManager->SpawnItem(x, y);
 }
 
-const size_t& GameManager::GetActorNum() const
+const size_t GameManager::GetActorNum() const
 {
 	// +1しているのはプレイヤーの数
 	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum() + m_pEnemyManager->GetEnemyNum();

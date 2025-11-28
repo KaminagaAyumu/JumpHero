@@ -26,7 +26,7 @@ namespace
 	constexpr int kSpaceChipNo = 79; // マップチップの透明部分
 	constexpr int kChestChipNo = 46; // マップチップの宝箱部分
 
-	constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
+	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 }
 
 GameScene::GameScene(SceneController& controller) : SceneBase(controller),
