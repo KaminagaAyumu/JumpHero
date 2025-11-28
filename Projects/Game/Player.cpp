@@ -8,21 +8,22 @@
 
 namespace
 {
-	constexpr float kGravity = 0.5f;
-	constexpr float kGroundY = 570.0f;
-	constexpr float kJumpPower = -15.0f;
-	constexpr float kMoveSpeed = 3.5f;
+	constexpr float kGravity			= 0.5f; // プレイヤーにかかる重力
+	constexpr float kGroundY			= 570.0f; // 床の座標
+	constexpr float kJumpPower			= -15.0f; // ジャンプ時の上に上がる力
+	constexpr float kMoveSpeed			= 3.5f; // 左右に動くスピード
 
-	constexpr int kGraphWidth = 45;
-	constexpr int kGraphHeight = 45;
+	constexpr int	kGraphWidth			= 45; // プレイヤー画像の幅
+	constexpr int	kGraphHeight		= 45; // プレイヤー画像の高さ
 
-	constexpr float kPlayerWidth = 45.0f;
-	constexpr float kPlayerHeight = 45.0f;
+	constexpr float kPlayerWidth		= 45.0f; // プレイヤーの実際の幅
+	constexpr float kPlayerHeight		= 45.0f; // プレイヤーの実際の高さ
 
-	constexpr int kEntryTextDispTime = 60; // 登場テキストを表示する時間
+	constexpr int	kEntryTextDispTime	= 60; // 登場テキストを表示する時間
+	constexpr float	kEntryMoveSpeed		= 0.05f; // プレイヤー登場のスピード
 
-	constexpr int kMissFreezeTime = 10;
-	constexpr int kMissEndTime = 180;
+	constexpr int	kMissFreezeTime		= 10; // ミスしたときに止まるフレーム数
+	constexpr int	kMissEndTime		= 180; // ミス処理が終わるフレーム数
 
 	// プレイヤーの登場の初期位置
 	// 複数マップになった際に使用しなくなるはず
@@ -108,7 +109,7 @@ void Player::EntryUpdate(Input&)
 		return;
 	}
 	// 位置を初期位置から登場終了位置まで線形補完で動かす
-	m_pos = Geometry::LerpVec2(m_pos, kEntryEndPos, 0.05f);
+	m_pos = Geometry::LerpVec2(m_pos, kEntryEndPos, kEntryMoveSpeed);
 
 	if (m_pos.x >= kEntryEndPos.x - 1.0f) // 終了位置と大体同じになったら終了
 	{
