@@ -51,9 +51,10 @@ private:
 	/// </summary>
 	enum class EnemyForm
 	{
-		Normal,
-		PlayerSeeker,
-		FireBall
+		Normal, // 原作のミイラ
+		PlayerSeeker, // 原作の鳥
+		FireBall, // 原作の火の玉
+		Skull, // 原作のどくろ
 	};
 
 	// 敵の状態管理用

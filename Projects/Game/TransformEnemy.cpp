@@ -4,10 +4,10 @@
 
 namespace
 {
-	constexpr float kEnemyWidth = 45.0f;
-	constexpr float kEnemyHeight = 45.0f;
+	constexpr float kEnemyWidth		= 45.0f;	// 敵の実際の幅
+	constexpr float kEnemyHeight	= 45.0f;	// 敵の実際の高さ
 
-	constexpr float kGravity = 0.5f;
+	constexpr float kGravity		= 0.5f;		// 敵にかかる重力
 }
 
 TransformEnemy::TransformEnemy(Player* player, Map* map) : 
