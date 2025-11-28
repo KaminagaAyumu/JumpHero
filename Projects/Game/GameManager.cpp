@@ -30,7 +30,7 @@ GameManager::GameManager(Player* player, Camera* camera, Map* map, std::vector<A
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(camera);
 	m_pEnemyManager = std::make_unique<EnemyManager>(camera, player, this);
-	m_pEnemyManager->SpawnEnemy(Position2{ 300.0f,300.0f }, map);
+	m_pEnemyManager->SpawnEnemy(Position2{ 400.0f,300.0f }, map);
 }
 
 GameManager::~GameManager()
