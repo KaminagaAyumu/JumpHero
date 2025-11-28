@@ -10,12 +10,26 @@ class Map;
 class TransformEnemy : public EnemyBase
 {
 public:
+
+	/// <summary>
+	/// 敵の状態を表す列挙型
+	/// </summary>
+	enum class EnemyForm
+	{
+		Normal, // 原作のミイラ
+		PlayerSeeker, // 原作の鳥
+		FireBall, // 原作の火の玉
+		Skull, // 原作のどくろ
+	};
+
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="player">プレイヤーのポインタ</param>
 	/// <param name="map">マップのポインタ</param>
-	TransformEnemy(Player* player, Map* map);
+	/// <param name="changeForm">変わる姿</param>
+	TransformEnemy(Player* player, Map* map, EnemyForm changeForm);
 	
 	// デストラクタ(今は特に使わないのでdefault)
 	virtual ~TransformEnemy() = default;
@@ -46,25 +60,18 @@ private:
 
 	virtual void CheckHitMap() override;
 
-	/// <summary>
-	/// 敵の状態を表す列挙型
-	/// </summary>
-	enum class EnemyForm
-	{
-		Normal, // 原作のミイラ
-		PlayerSeeker, // 原作の鳥
-		FireBall, // 原作の火の玉
-		Skull, // 原作のどくろ
-	};
-
 	// 敵の状態管理用
-	EnemyForm m_form;
+	EnemyForm m_currentForm; // 現在の敵の姿
+	EnemyForm m_nextForm; // 変わる姿
 
 	// 時間カウンタ
 	int m_frameCount;
 
 	// 敵が折り返した回数をカウントする
 	int m_turnCount;
+
+	// 移動の力
+	Vector2 m_velocity;
 
 };
 

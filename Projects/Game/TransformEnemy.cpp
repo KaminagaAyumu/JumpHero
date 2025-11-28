@@ -10,13 +10,15 @@ namespace
 	constexpr float kGravity		= 0.5f;		// 敵にかかる重力
 }
 
-TransformEnemy::TransformEnemy(Player* player, Map* map) : 
+TransformEnemy::TransformEnemy(Player* player, Map* map, EnemyForm changeForm) :
 	EnemyBase(player,map),
 	m_updateFunc(&TransformEnemy::NormalUpdate),
 	m_drawFunc(&TransformEnemy::NormalDraw),
-	m_form(EnemyForm::Normal),
+	m_currentForm(EnemyForm::Normal),
+	m_nextForm(changeForm),
 	m_frameCount(0),
-	m_turnCount(0)
+	m_turnCount(0),
+	m_velocity{}
 {
 }
 
