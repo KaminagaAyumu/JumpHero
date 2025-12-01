@@ -42,7 +42,7 @@ void EnemyManager::Draw()
 
 void EnemyManager::SpawnEnemy(const Position2& pos,Map* map)
 {
-	auto enemy = std::make_shared<TransformEnemy>(pos,m_pPlayer, map, TransformEnemy::EnemyForm::Normal);
+	auto enemy = std::make_shared<TransformEnemy>(pos,m_pPlayer, map, TransformEnemy::EnemyForm::PlayerSeeker);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }

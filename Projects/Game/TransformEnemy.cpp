@@ -107,6 +107,24 @@ void TransformEnemy::TransformUpdate(Input&)
 
 void TransformEnemy::SeekerUpdate(Input&)
 {
+	// 移動方向をプレイヤーに向かうようにする
+	m_direction = m_pPlayer->GetPos() - m_pos;
+	// プレイヤーからどちらの軸の座標のほうが遠いか計測
+	if (fabsf(m_direction.x) > fabsf(m_direction.y))
+	{
+		// x軸のほうが遠い時
+		m_direction.y = 0.0f;
+	}
+	else
+	{
+		// y軸のほうが遠い時
+		m_direction.x = 0.0f;
+	}
+	// 向きを正規化する
+	m_direction.Normalize();
+	m_pos += m_direction * kMoveSpeed;
+	m_colCircle.pos = m_pos;
+	m_colRect.pos = m_pos;
 }
 
 void TransformEnemy::FireBallUpdate(Input&)
@@ -133,7 +151,13 @@ void TransformEnemy::TransformDraw()
 
 void TransformEnemy::SeekerDraw()
 {
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
+#ifdef _DEBUG
+	m_colCircle.Draw(drawX, drawY);
+	m_colRect.Draw(drawX, drawY);
+#endif
 }
 
 void TransformEnemy::FireBallDraw()
