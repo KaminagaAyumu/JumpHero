@@ -68,8 +68,10 @@ void Map::Draw(Camera* camera)
 	int endX = static_cast<int>((scrollX + Game::kScreenWidth) / tileSize) + 1;
 	int endY = static_cast<int>((scrollY + Game::kScreenHeight) / tileSize) + 1;
 
+	// 画面左端にいる時
 	if (startX < 0) startX = 0;
 	if (startY < 0) startY = 0;
+	// 画面右端にいる時
 	if (endX > m_width) endX = m_width;
 	if (endY > m_height) endY = m_height;
 
