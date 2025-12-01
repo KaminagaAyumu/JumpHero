@@ -19,7 +19,6 @@ public:
 
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
 
-	void SetIsExist(bool isExist) { m_isExist = isExist; }
 	/// <summary>
 	/// アイテムの存在フラグ
 	/// </summary>

@@ -3,6 +3,7 @@
 #include "../Utility/Game.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
+#include "Chest.h"
 #include "DxLib.h"
 #include <cassert>
 
@@ -98,6 +99,14 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 	if (info.otherType == Types::ActorType::Chest)
 	{
 		printfDx(L"Player : 宝箱と衝突しました\n");
+		if (!m_isGround)
+		{
+			auto chest = dynamic_cast<Chest*>(info.other);
+			if (chest)
+			{
+				chest->OpenChest();
+			}
+		}
 	}
 }
 
