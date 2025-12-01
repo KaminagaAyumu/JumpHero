@@ -19,7 +19,7 @@ class Map;
 class GameManager
 {
 public:
-	GameManager(Camera* camera, Map* map, std::vector<Actor*>& actors);
+	GameManager(Map* map, std::vector<Actor*>& actors);
 	virtual ~GameManager();
 
 	void Init();

@@ -18,7 +18,7 @@ namespace
 	constexpr int kEnemySpawnTime = 600; // 敵がスポーンするまでの時間
 }
 
-GameManager::GameManager(Camera* camera,Map* map, std::vector<Actor*>& actors) :
+GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_frameCount(0),
 	m_score(0),
 	m_currentScore(0),

@@ -42,23 +42,10 @@ m_fadeColor(0x000000)
 	m_pMap = std::make_shared<Map>();
 	m_pMap->Init();
 
-	m_pCamera = std::make_shared<Camera>();
-	//m_pCamera->SetTarget(m_player.get());
-
-	m_pGameManager = std::make_shared<GameManager>(m_pCamera.get(),m_pMap.get(),m_pActors);
+	m_pGameManager = std::make_shared<GameManager>(m_pMap.get(),m_pActors);
 	m_pGameManager->Init();
 	
 	m_pCollisionManager = std::make_unique<CollisionManager>();
-
-
-	
-
-	// 全アクターにカメラをセット
-	for (auto& actor : m_pActors)
-	{
-		actor->SetCamera(m_pCamera.get());
-	}
-
 }
 
 GameScene::~GameScene()
