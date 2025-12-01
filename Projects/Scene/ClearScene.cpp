@@ -14,6 +14,8 @@ namespace
 
 	constexpr float kScoreAddRate = 0.15f; // スコア加算の割合
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
+
+	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 }
 
 ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager) :
@@ -119,7 +121,7 @@ void ClearScene::FadeDraw()
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_fadeColor, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 #ifdef _DEBUG

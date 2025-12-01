@@ -16,6 +16,8 @@ namespace
 	constexpr int kChestChipNo = 46; // マップチップの宝箱部分
 
 	constexpr float kMoveRangeMargin = 1.0f; // マップとの位置の補正用
+
+	constexpr float kLargeValue = 100000.0f; // 大きな値(初期化用)
 }
 
 Map::Map() : 
@@ -144,10 +146,10 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 	float retRectTop = rectCenter.y;
 	float retRectBottom = rectCenter.y;
 
-	float minLeftDist = 100000.0f;
-	float minRightDist = 100000.0f;
-	float minTopDist = 100000.0f;
-	float minBottomDist = 100000.0f;
+	float minLeftDist = kLargeValue;
+	float minRightDist = kLargeValue;
+	float minTopDist = kLargeValue;
+	float minBottomDist = kLargeValue;
 
 	// 矩形の上下左右の座標が設定されたかどうか
 	bool isLeftSet = false;

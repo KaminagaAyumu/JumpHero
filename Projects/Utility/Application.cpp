@@ -6,6 +6,10 @@
 #include "../Scene/SceneController.h"
 #include "../Scene/TitleScene.h"
 
+namespace
+{
+	constexpr int	kOneFrameNanoSec = 16667;
+}
 
 Application::Application()
 {
@@ -75,7 +79,7 @@ void Application::Run()
 		ScreenFlip();
 
 		// フレームレート60に固定
-		while (GetNowHiPerformanceCount() - start < 16667)
+		while (GetNowHiPerformanceCount() - start < kOneFrameNanoSec)
 		{
 
 		}

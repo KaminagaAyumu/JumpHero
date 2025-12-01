@@ -1,6 +1,11 @@
 ﻿#include "Input.h"
 #include "DxLib.h"
 
+namespace
+{
+	constexpr int kKeyNum = 256;
+}
+
 Input::Input()
 {
 	// ボタンのイベント名と入力の内容をここで初期化する
@@ -25,7 +30,7 @@ Input::Input()
 void Input::Update()
 {
 	// 現在の入力情報を取得
-	char keyState[256]; // キーボードの入力状態保存用配列
+	char keyState[kKeyNum]; // キーボードの入力状態保存用配列
 	GetHitKeyStateAll(keyState); // キーボードの入力状態を取得
 	// イベント名に対応する入力情報を取得
 	int padState = GetJoypadInputState(DX_INPUT_PAD1); // パッドの入力状態を取得

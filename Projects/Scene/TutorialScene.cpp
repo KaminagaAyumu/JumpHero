@@ -8,6 +8,7 @@
 namespace
 {
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
+	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 }
 
 TutorialScene::TutorialScene(SceneController& controller) : 
@@ -71,7 +72,7 @@ void TutorialScene::FadeDraw()
 {
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 #ifdef _DEBUG

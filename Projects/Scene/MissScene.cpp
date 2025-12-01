@@ -6,6 +6,7 @@
 namespace
 {
 	constexpr int kMaxFrame = 300;
+	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 }
 
 MissScene::MissScene(SceneController& controller) : SceneBase(controller)

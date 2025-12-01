@@ -26,6 +26,8 @@ namespace
 	constexpr int kSpaceChipNo = 79; // マップチップの透明部分
 	constexpr int kChestChipNo = 46; // マップチップの宝箱部分
 
+	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
+
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 }
 
@@ -154,7 +156,7 @@ void GameScene::FadeDraw()
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_fadeColor, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 #ifdef _DEBUG
