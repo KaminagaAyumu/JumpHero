@@ -13,14 +13,15 @@ namespace
 	constexpr float kNormalMoveSpeed = 0.5f;		// 通常時の左右移動の速さ
 	constexpr float kSeekerMoveSpeed = 0.8f;		// プレイヤーを追い続ける敵の移動の速さ
 
+	constexpr int	kAppearTime = 60;		// 敵の出現までの時間
 	constexpr int	kFormChangeWaitTime = 180;	// 敵の変身までの時間
 	constexpr int	kFormChangeTime = 30;		// 敵の変身準備までの時間
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
 	EnemyBase(player, map),
-	m_updateFunc(&TransformEnemy::NormalUpdate),
-	m_drawFunc(&TransformEnemy::NormalDraw),
+	m_updateFunc(&TransformEnemy::AppearUpdate),
+	m_drawFunc(&TransformEnemy::AppearDraw),
 	m_currentForm(EnemyForm::Normal),
 	m_nextForm(changeForm),
 	m_frameCount(0),
@@ -54,6 +55,19 @@ void TransformEnemy::Draw()
 
 void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 {
+}
+
+void TransformEnemy::AppearUpdate(Input&)
+{
+	// 一定時間たったら出現するようにする
+	if (m_frameCount >= kAppearTime)
+	{
+		// 敵の最初の状態の処理に変更
+		m_updateFunc = &TransformEnemy::NormalUpdate;
+		m_drawFunc = &TransformEnemy::NormalDraw;
+		m_frameCount = 0; // フレームカウントをリセット
+		return; // 念のためreturn
+	}
 }
 
 void TransformEnemy::NormalUpdate(Input&)
@@ -130,6 +144,17 @@ void TransformEnemy::SeekerUpdate(Input&)
 
 void TransformEnemy::FireBallUpdate(Input&)
 {
+}
+
+void TransformEnemy::AppearDraw()
+{
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	DrawString(drawX, drawY, L"敵が出てきます", 0xffffff);
+#ifdef _DEBUG
+	m_colCircle.Draw(drawX, drawY);
+	m_colRect.Draw(drawX, drawY);
+#endif
 }
 
 void TransformEnemy::NormalDraw()

@@ -47,6 +47,7 @@ private:
 	// 更新処理用関数群
 	using UpdateFunc_t = void(TransformEnemy::*)(Input&); // 更新処理用関数ポインタの型定義
 	UpdateFunc_t m_updateFunc; // 現在の更新処理用関数ポインタ
+	void AppearUpdate(Input&); // 出現の際の更新処理
 	void NormalUpdate(Input&); // デフォルト状態の更新処理
 	void TransformUpdate(Input&); // 変身中の更新処理
 	void SeekerUpdate(Input&); // プレイヤーを追い続ける更新処理
@@ -55,6 +56,7 @@ private:
 	// 描画処理用関数群
 	using DrawFunc_t = void(TransformEnemy::*)(); // 関数の形式自体は更新処理と同じなので別名とする
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
+	void AppearDraw();
 	void NormalDraw(); // デフォルト状態の描画処理
 	void TransformDraw(); // 変身中の描画処理
 	void SeekerDraw(); // プレイヤーを追い続ける時の描画処理
