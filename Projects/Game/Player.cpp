@@ -110,6 +110,11 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 	}
 }
 
+void Player::SetScoreFunc(std::function<void(int)> scoreFunc)
+{
+	m_scoreFunc = scoreFunc;
+}
+
 void Player::EntryUpdate(Input&)
 {
 	m_frameCount++;

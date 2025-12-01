@@ -19,7 +19,7 @@ class Map;
 class GameManager
 {
 public:
-	GameManager(Player* player, Camera* camera, Map* map, std::vector<Actor*>& actors);
+	GameManager(Camera* camera, Map* map, std::vector<Actor*>& actors);
 	virtual ~GameManager();
 
 	void Init();
@@ -63,7 +63,7 @@ private:
 
 	// 各オブジェクト管理クラスの参照用
 	Map* m_pMap;
-	Player* m_pPlayer;
+	std::unique_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;
 	std::unique_ptr<EnemyManager> m_pEnemyManager;

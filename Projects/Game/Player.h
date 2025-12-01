@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Actor.h"
+#include <functional>
 
 class Input;
 class Map;
@@ -37,7 +38,9 @@ public:
 	/// </summary>
 	/// <param name="bg">Bgクラスのスマートポインタ</param>
 	/// <note>仮作成中(もう少しいいやり方があるかも)</note>
-	void GetMap(Map* map) { m_pMap = map; }
+	void SetMap(Map* map) { m_pMap = map; }
+
+	void SetScoreFunc(std::function<void(int)> scoreFunc);
 
 private:
 	Vector2 m_direction; // 進む方向
@@ -88,6 +91,9 @@ private:
 	// 描画処理用関数ポインタの型定義
 	using DrawFunc_t = void(Player::*)();
 	DrawFunc_t m_draw;
+
+	// スコア更新用関数取得用
+	std::function<void(int)> m_scoreFunc;
 
 
 #ifdef _DEBUG
