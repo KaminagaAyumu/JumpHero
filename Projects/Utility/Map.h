@@ -38,6 +38,8 @@ public:
 	/// <returns>行動可能範囲</returns>
 	Rect2D GetCanMoveRange(const Rect2D& rect);
 
+
+
 	// ゲッター
 	int GetGraphChipNumX() const { return m_graphChipNumX; }
 	int GetGraphChipNumY() const { return m_graphChipNumY; }

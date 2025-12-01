@@ -25,6 +25,13 @@ public:
 	/// <param name="actor">ターゲットのポインタ</param>
 	void SetTarget(Actor* actor) { m_pTargetActor = actor; }
 
+	/// <summary>
+	/// 現在の画面の表示範囲を取得
+	/// 画面外処理などに使用
+	/// </summary>
+	/// <returns>画面の表示範囲</returns>
+	const Rect2D& GetNowScreenArea()const;
+
 private:
 	Position2 m_pos; // カメラの座標
 	Actor* m_pTargetActor; // カメラが見るターゲットオブジェクト

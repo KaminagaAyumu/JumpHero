@@ -23,6 +23,12 @@ public:
 
 	bool IsDead()const { return m_isDead; }
 
+	/// <summary>
+	/// 敵が画面内にいるかどうか
+	/// </summary>
+	/// <returns>true : 画面内にいる false : 画面外にいる</returns>
+	bool IsOnScreen()const;
+
 protected:
 	// プレイヤーの生ポインタ
 	// 座標を調べるためにしか使わないが、

@@ -39,7 +39,7 @@ void Camera::Update()
 	{
 		scroll.x = 0;
 	}
-	// カメラがスクロール開始位置より右にある時はスクロールする
+	// カメラがスクロール終了位置より右にある時はそれ以上スクロールさせない
 	if (scroll.x > kMapWidth - Game::kScreenWidth)
 	{
 		scroll.x = kMapWidth - Game::kScreenWidth;
@@ -50,9 +50,14 @@ void Camera::Update()
 	{
 		scroll.y = 0;
 	}
-	// カメラがスクロール開始位置より下にいるときはスクロールする
+	// カメラがスクロール終了位置より下にいるときはそれ以上スクロールさせない
 	if (scroll.y > kMapHeight - Game::kScreenHeight)
 	{
 		scroll.y = kMapHeight - Game::kScreenHeight;
 	}
+}
+
+const Rect2D& Camera::GetNowScreenArea() const
+{
+	return Rect2D{ scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenWidth };
 }

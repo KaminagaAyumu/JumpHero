@@ -39,7 +39,6 @@ public:
 	virtual void Update(Input&) override;
 	virtual void Draw() override;
 
-
 private:
 
 	virtual void IsCollision(const Types::CollisionInfo& info) override;

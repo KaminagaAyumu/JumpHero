@@ -48,7 +48,7 @@ void EnemyManager::Update(Input& input)
 	m_enemies.remove_if(
 		[](std::shared_ptr<EnemyBase> enemy)
 		{
-			return enemy->IsDead();
+			return enemy->IsDead() || !enemy ->IsOnScreen();
 		}
 	);
 }
