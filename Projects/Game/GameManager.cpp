@@ -76,7 +76,6 @@ void GameManager::Update(Input& input)
 		}
 		else
 		{
-			printfDx(L"加算中\n");
 			m_score += add; // スコアを更新
 		}
 		if (m_score > m_currentScore) // スコアが現在のスコアを超えた場合

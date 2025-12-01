@@ -66,6 +66,8 @@ private:
 
 	virtual void CheckHitMapY() override;
 
+	bool IsCanCollision()const;
+
 	// 敵の状態管理用
 	EnemyForm m_currentForm; // 現在の敵の姿
 	EnemyForm m_nextForm; // 変わる姿

@@ -6,6 +6,8 @@ namespace
 {
 	constexpr float kItemDefaultWidth = 45.0f;
 	constexpr float kItemDefaultHeight = 45.0f;
+
+	constexpr int kAddScore = 1000;
 }
 
 ItemBase::ItemBase() : 
@@ -47,8 +49,10 @@ void ItemBase::Draw()
 	if (m_isExist)
 	{
 		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
-		m_colCircle.Draw(drawX,drawY);
+#ifdef _DEBUG
+		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);
+#endif
 	}
 }
 
@@ -56,8 +60,7 @@ void ItemBase::IsCollision(const Types::CollisionInfo& info)
 {
 	if (info.otherType == Types::ActorType::Player)
 	{
-		printfDx(L"Item : プレイヤーと衝突しました\n");
-		m_scoreFunc(1000);
+		m_scoreFunc(kAddScore);
 		m_isExist = false;
 	}
 }

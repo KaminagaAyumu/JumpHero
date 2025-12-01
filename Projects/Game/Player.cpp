@@ -48,10 +48,6 @@ Player::Player() :
 	m_update(&Player::EntryUpdate),
 	m_draw(&Player::EntryDraw)
 {
-#ifdef _DEBUG
-	m_maxPosY = m_pos.y; 
-	m_lastMaxPos = {};
-#endif
 }
 
 Player::~Player()
@@ -91,14 +87,19 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 	// 敵と衝突したらミス処理を行う
 	if(info.otherType == Types::ActorType::Enemy && !m_isMiss)
 	{
+#ifdef _DEBUG
 		printfDx(L"Player : 敵と衝突しました\n");
-		MissStart();
+#endif 
+
+		//MissStart();
 	}
 
 	// 宝箱と衝突した時
 	if (info.otherType == Types::ActorType::Chest)
 	{
+#ifdef _DEBUG
 		printfDx(L"Player : 宝箱と衝突しました\n");
+#endif 
 		if (!m_isGround)
 		{
 			auto chest = dynamic_cast<Chest*>(info.other);
@@ -164,17 +165,6 @@ void Player::JumpUpdate(Input& input)
 		m_frameCount = 0;
 	}
 
-	if (m_pos.y <= m_maxPosY)
-	{
-		m_maxPosY = m_pos.y;
-	}
-	else // 最高点に達したら
-	{
-		m_lastMaxPos.x = m_pos.x;
-		m_lastMaxPos.y = m_maxPosY;
-	}
-
-	
 
 	bool movingLeft = input.IsPressed("Left");
 	bool movingRight = input.IsPressed("Right");
@@ -466,9 +456,6 @@ void Player::JumpStart()
 	m_frameCount = 0;
 	m_update = &Player::JumpUpdate;
 	m_draw = &Player::JumpDraw;
-#ifdef _DEBUG
-	m_maxPosY = m_pos.y;
-#endif
 }
 
 void Player::MissStart()

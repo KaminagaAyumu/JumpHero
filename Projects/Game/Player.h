@@ -34,6 +34,11 @@ public:
 	bool IsGround() const { return m_isGround; }
 
 	/// <summary>
+	/// ミスした瞬間の処理
+	/// </summary>
+	void MissStart();
+
+	/// <summary>
 	/// マップとの当たり判定を取るためにBgクラスを受け取る
 	/// </summary>
 	/// <param name="bg">Bgクラスのスマートポインタ</param>
@@ -69,11 +74,6 @@ private:
 	/// </summary>
 	void JumpStart();
 
-	/// <summary>
-	/// ミスした瞬間の処理
-	/// </summary>
-	void MissStart();
-
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時
 	void JumpUpdate(Input&); // ジャンプ状態の時
@@ -94,12 +94,6 @@ private:
 
 	// スコア更新用関数取得用
 	std::function<void(int)> m_scoreFunc;
-
-
-#ifdef _DEBUG
-	float m_maxPosY; // プレイヤーの最高点を記録
-	Position2 m_lastMaxPos; // 前回の最高点
-#endif
 
 };
 

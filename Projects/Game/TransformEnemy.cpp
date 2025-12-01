@@ -55,6 +55,13 @@ void TransformEnemy::Draw()
 
 void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 {
+	if (info.otherType == Types::ActorType::Player) // プレイヤーに当たっている時
+	{
+		if (IsCanCollision())
+		{
+			m_pPlayer->MissStart();
+		}
+	}
 }
 
 void TransformEnemy::AppearUpdate(Input&)
@@ -162,6 +169,10 @@ void TransformEnemy::NormalDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
+	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
+			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
+			0x0000ff, true);
+
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -172,6 +183,7 @@ void TransformEnemy::TransformDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+
 	DrawString(drawX, drawY, L"変身中です", 0xffffff);
 }
 
@@ -179,6 +191,10 @@ void TransformEnemy::SeekerDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+
+	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
+			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
+			0xff00ff, true);
 
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
@@ -255,6 +271,12 @@ void TransformEnemy::CheckHitMapY()
 		// 上下に物がないので空中にいるとする
 		m_isGround = false;
 	}
+}
+
+bool TransformEnemy::IsCanCollision() const
+{
+	// 出現中でないかつ変身中でない場合
+	return m_updateFunc != &TransformEnemy::AppearUpdate && m_updateFunc != &TransformEnemy::TransformUpdate;
 }
 
 

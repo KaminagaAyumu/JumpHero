@@ -72,8 +72,9 @@ void Chest::IsCollision(const Types::CollisionInfo& info)
 	// プレイヤーと衝突している時
 	if(info.otherType == Types::ActorType::Player)
 	{
+#ifdef _DEBUG
 		printfDx(L"Chest : プレイヤーと衝突しました\n");
-		
+#endif
 
 		//OpenChest(); // 仮で当たったら開くようにする
 	}

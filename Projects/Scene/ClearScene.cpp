@@ -67,7 +67,6 @@ void ClearScene::NormalUpdate(Input& input)
 		}
 		else
 		{
-			printfDx(L"加算中\n");
 			m_resultScore += add; // スコアを更新
 		}
 		if (m_resultScore > m_gameScore) // スコアが現在のスコアを超えた場合
