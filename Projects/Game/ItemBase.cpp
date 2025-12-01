@@ -57,6 +57,12 @@ void ItemBase::IsCollision(const Types::CollisionInfo& info)
 	if (info.otherType == Types::ActorType::Player)
 	{
 		printfDx(L"Item : プレイヤーと衝突しました\n");
+		m_scoreFunc(1000);
 		m_isExist = false;
 	}
+}
+
+void ItemBase::SetScoreFunc(std::function<void(int)> scoreFunc)
+{
+	m_scoreFunc = scoreFunc;
 }

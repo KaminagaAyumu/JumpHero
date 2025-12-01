@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <list>
+#include <functional>
 
 class Actor;
 class ItemBase;
@@ -29,7 +30,8 @@ public:
 	/// </summary>
 	/// <param name="x">X座標</param>
 	/// <param name="y">Y座標</param>
-	void SpawnItem(int x, int y);
+	/// <param name="scoreFunc">スコア関係の関数</param>
+	void SpawnItem(int x, int y, std::function<void(int)> scoreFunc);
 
 	/// <summary>
 	/// ゲーム内オブジェクトにアイテムを追加する

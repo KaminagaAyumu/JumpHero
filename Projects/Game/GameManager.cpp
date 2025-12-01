@@ -126,7 +126,7 @@ bool GameManager::IsSkipCollision() const
 
 void GameManager::DropItem(int x, int y)
 {
-	m_pItemManager->SpawnItem(x, y);
+	m_pItemManager->SpawnItem(x, y, [&](int score) { AddScore(score); });
 }
 
 const size_t GameManager::GetActorNum() const

@@ -4,7 +4,7 @@
 #include "ItemBase.h"
 #include "../Utility/Input.h"
 
-ItemManager::ItemManager(Camera* camera) : 
+ItemManager::ItemManager(Camera* camera) :
 	m_pCamera(camera)
 {
 	m_pItems.clear();
@@ -42,10 +42,11 @@ void ItemManager::Draw()
 	}*/
 }
 
-void ItemManager::SpawnItem(int x, int y)
+void ItemManager::SpawnItem(int x, int y, std::function<void(int)> scoreFunc)
 {
 	auto item = std::make_shared<ItemBase>(x, y);
 	item->SetCamera(m_pCamera);
+	item->SetScoreFunc(scoreFunc);
 	m_pItems.push_back(item);
 }
 

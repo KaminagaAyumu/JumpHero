@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include "Actor.h"
+#include <functional>
 
 class Input;
+class GameManager;
 
 /// <summary>
 /// アイテムの基底クラス
@@ -18,6 +20,8 @@ public:
 	virtual void Draw()override;
 
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
+
+	void SetScoreFunc(std::function<void(int)> scoreFunc);
 
 	/// <summary>
 	/// アイテムの存在フラグ
@@ -36,6 +40,9 @@ private:
 	};
 
 	bool m_isExist;
+
+	// スコア加算用関数(仮)
+	std::function<void(int)> m_scoreFunc;
 
 };
 
