@@ -55,9 +55,6 @@ private:
 	void FadeDraw(); // フェード中の描画処理
 	using DrawFunc_t = void (GameScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
-
-	// このあたりのポインタは一括でActorにする予定
-	std::shared_ptr<Player> m_player;
 	
 	// 背景画像を管理するクラスのポインタ
 	std::shared_ptr<Bg> m_bg;

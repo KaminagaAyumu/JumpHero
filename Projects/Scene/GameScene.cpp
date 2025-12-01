@@ -36,10 +36,6 @@ m_fadeColor(0x000000)
 {
 	m_frameCount = kFadeInterval;
 	m_chestOpenNum = 0;
-	m_player = std::make_shared<Player>();
-	m_player->Init();
-
-	m_pActors.push_back(m_player.get());
 
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
@@ -47,14 +43,13 @@ m_fadeColor(0x000000)
 	m_pMap->Init();
 
 	m_pCamera = std::make_shared<Camera>();
-	m_pCamera->SetTarget(m_player.get());
+	//m_pCamera->SetTarget(m_player.get());
 
 	m_pGameManager = std::make_shared<GameManager>(m_pCamera.get(),m_pMap.get(),m_pActors);
 	m_pGameManager->Init();
 	
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
-	m_player->SetMap(m_pMap.get());
 
 	
 
@@ -100,12 +95,9 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		clsDx();
 		printfDx(L"初期化コマンドを検知\n");
-		m_player->Init();
 	}
 #endif
 
-	// カメラの更新
-	m_pCamera->Update();
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
@@ -152,8 +144,8 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalDraw()
 {
-	m_bg->Draw(m_pCamera);
-	m_pMap->Draw(m_pCamera);
+	m_bg->Draw(m_pGameManager->GetCamera());
+	m_pMap->Draw(m_pGameManager->GetCamera());
 
 	for (auto& actor : m_pActors)
 	{
@@ -169,8 +161,8 @@ void GameScene::NormalDraw()
 
 void GameScene::FadeDraw()
 {
-	m_bg->Draw(m_pCamera);
-	m_pMap->Draw(m_pCamera);
+	m_bg->Draw(m_pGameManager->GetCamera());
+	m_pMap->Draw(m_pGameManager->GetCamera());
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);

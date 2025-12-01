@@ -53,7 +53,7 @@ void Map::Update()
 
 }
 
-void Map::Draw(std::shared_ptr<Camera> camera)
+void Map::Draw(Camera* camera)
 {
 	// 画面のスクロール量
 	float scrollX = camera->scroll.x;

@@ -51,6 +51,8 @@ public:
 	/// <returns>ゲーム内のオブジェクトの数</returns>
 	const size_t GetActorNum()const;
 
+	Camera* GetCamera()const { return m_pCamera.get(); }
+
 private:
 	int m_frameCount; // フレームカウンタ
 
@@ -63,6 +65,7 @@ private:
 
 	// 各オブジェクト管理クラスの参照用
 	Map* m_pMap;
+	std::unique_ptr<Camera> m_pCamera;
 	std::unique_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;

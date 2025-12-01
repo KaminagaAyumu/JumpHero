@@ -18,7 +18,7 @@ namespace
 	constexpr int kEnemySpawnTime = 600; // 敵がスポーンするまでの時間
 }
 
-GameManager::GameManager(Camera* camera, Map* map, std::vector<Actor*>& actors) :
+GameManager::GameManager(Camera* camera,Map* map, std::vector<Actor*>& actors) :
 	m_frameCount(0),
 	m_score(0),
 	m_currentScore(0),
@@ -28,16 +28,19 @@ GameManager::GameManager(Camera* camera, Map* map, std::vector<Actor*>& actors) 
 	m_isClear(false)
 {
 	m_pMap = map;
+	m_pCamera = std::make_unique<Camera>();
 	m_pPlayer = std::make_unique<Player>();
-	m_pPlayer->SetCamera(camera);
+	m_pPlayer->SetCamera(m_pCamera.get());
 	m_pPlayer->SetMap(map);
 	m_pPlayer->Init();
-	m_pChestManager = std::make_unique<ChestManager>(camera,this);
+	m_pChestManager = std::make_unique<ChestManager>(m_pCamera.get(), this);
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
-	m_pItemManager = std::make_unique<ItemManager>(camera);
-	m_pEnemyManager = std::make_unique<EnemyManager>(camera, m_pPlayer.get(), this);
+	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get());
+	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this);
 	m_pEnemyManager->SpawnEnemy(Position2{ 460.0f,300.0f }, map);
+	
+	m_pCamera->SetTarget(m_pPlayer.get());
 }
 
 GameManager::~GameManager()
@@ -55,6 +58,7 @@ void GameManager::Init()
 void GameManager::Update(Input& input)
 {
 	m_frameCount++;
+	m_pCamera->Update();
 	// スコアの更新処理
 	if (m_score < m_currentScore) // スコアが現在のスコアより小さい場合
 	{

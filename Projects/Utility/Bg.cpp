@@ -31,7 +31,7 @@ void Bg::Draw()
 }
 
 
-void Bg::Draw(std::shared_ptr<Camera> camera)
+void Bg::Draw(Camera* camera)
 {
 	Size bgSize = {};
 	GetGraphSize(m_bgHandle, &bgSize.x, &bgSize.y);
