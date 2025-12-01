@@ -12,6 +12,7 @@ namespace
 	constexpr float kGravity			= 0.5f; // プレイヤーにかかる重力
 	constexpr float kGroundY			= 570.0f; // 床の座標
 	constexpr float kJumpPower			= -15.0f; // ジャンプ時の上に上がる力
+	constexpr float kMissJumpPower = kJumpPower * 1.01f;
 	constexpr float kNormalMoveSpeed			= 3.5f; // 左右に動くスピード
 
 	constexpr int	kGraphWidth			= 45; // プレイヤー画像の幅
@@ -397,7 +398,7 @@ void Player::EntryDraw()
 
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(drawX - 16, drawY - 16, drawX + 16, drawY + 16, 0x22ff00, true);
+	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
 	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 
 #ifdef _DEBUG
@@ -410,7 +411,7 @@ void Player::JumpDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(drawX - 16, drawY - 16, drawX + 16, drawY + 16, 0xaaffff, true);
+	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xaaffff, true);
 	DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 
 
@@ -424,7 +425,7 @@ void Player::GroundDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(drawX - 16, drawY - 16, drawX + 16, drawY + 16, 0x22ff00, true);
+	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
 	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 	
 #ifdef _DEBUG
@@ -437,7 +438,7 @@ void Player::MissDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(drawX - 16, drawY - 16, drawX + 16, drawY + 16, 0xff00aa, true);
+	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xff00aa, true);
 	DrawRectRotaGraph(drawX, drawY, kGraphWidth, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 	
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Miss!", 0xffffff);
@@ -461,7 +462,7 @@ void Player::JumpStart()
 void Player::MissStart()
 {
 	m_direction = { 0.0f,1.0f };
-	m_velocity = { 0.0f, kJumpPower * 1.01f }; // 普通のジャンプより高い
+	m_velocity = { 0.0f, kMissJumpPower }; // 普通のジャンプより高い
 	m_isHover = false;
 	m_isGround = false;
 	m_isMiss = true;

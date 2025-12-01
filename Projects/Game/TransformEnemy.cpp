@@ -37,7 +37,6 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 
 void TransformEnemy::Init()
 {
-	m_pos = { 300.0f,300.0f };
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
 }

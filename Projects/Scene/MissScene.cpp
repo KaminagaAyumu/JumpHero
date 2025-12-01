@@ -31,10 +31,6 @@ void MissScene::Update(Input& input)
 
 void MissScene::Draw()
 {
-	//const int& life = Application::GetInstance().GetLife();
-
-	DrawBox(0, 0, 800, 600, 0x000000, true);
-	//DrawFormatString(300, 300, 0xffffff, L"残機: %d", life);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"MissScene: Draw", 0xFFFFFF);

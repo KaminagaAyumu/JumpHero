@@ -31,7 +31,6 @@ ItemBase::~ItemBase()
 
 void ItemBase::Init()
 {
-	m_pos = { 500.0f,400.0f };
 	m_colRect = { {m_pos},kItemDefaultWidth,kItemDefaultHeight };
 	m_colCircle = { {m_pos},kItemDefaultWidth / 2 };
 }

@@ -16,6 +16,9 @@ namespace
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
+
+	constexpr int kClearDispMargin = -30;
+	constexpr int kScoreDispMargin = -60;
 }
 
 ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager) :
@@ -99,10 +102,11 @@ void ClearScene::FadeOutUpdate(Input&)
 
 void ClearScene::NormalDraw()
 {
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 30, L"Clear!", 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kClearDispMargin, L"Clear!", 0xffffff);
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
-	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 60, 0xffffff, L"score : %d", m_resultScore);
+	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
 
+	// マップ遷移可能になったら消す
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 40);
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + 100, L"(本来は1画面マップへ遷移します)", 0xffffff);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -114,9 +118,9 @@ void ClearScene::NormalDraw()
 
 void ClearScene::FadeDraw()
 {
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 30, L"Clear!", 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kClearDispMargin, L"Clear!", 0xffffff);
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
-	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 60, 0xffffff, L"score : %d", m_resultScore);
+	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
 
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
