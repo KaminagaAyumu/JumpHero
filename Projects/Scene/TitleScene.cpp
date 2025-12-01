@@ -91,7 +91,7 @@ void TitleScene::NormalDraw()
 		Game::kScreenHeight / 2 + 50, L"※違います", 0xFFFFFF);
 #endif
 	DrawString(Game::kScreenWidth / 2,
-		Game::kScreenHeight / 2 + 50, L"STARTかAボタンでスタート", 0xFFFFFF);
+		Game::kScreenHeight / 2 + 100, L"STARTかAボタンでスタート", 0xFFFFFF);
 
 }
 

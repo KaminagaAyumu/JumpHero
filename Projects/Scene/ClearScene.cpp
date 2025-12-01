@@ -79,7 +79,9 @@ void ClearScene::NormalUpdate(Input& input)
 			m_resultScore = m_gameScore; // スコアを現在のスコアに合わせる
 		}
 	}
-	if (input.IsTriggered("OK"))
+
+	// 決定ボタンを押したときにスコアの加算表示が終わっていたら
+	if (input.IsTriggered("OK") && m_resultScore == m_gameScore)
 	{
 		// フェードイン完了
 		m_fadeColor = 0x000000;

@@ -103,14 +103,16 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 #ifdef _DEBUG
 		printfDx(L"Player : 宝箱と衝突しました\n");
 #endif 
-		if (!m_isGround)
+		if (!m_isGround && m_isOpenChest)
 		{
 			auto chest = dynamic_cast<Chest*>(info.other);
 			if (chest)
 			{
 				chest->OpenChest();
+				m_isOpenChest = false;
 			}
 		}
+		m_isOpenChest = true;
 	}
 }
 
