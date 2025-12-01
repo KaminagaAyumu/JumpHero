@@ -11,6 +11,9 @@ namespace
 
 	constexpr float kGravity = 0.5f;		// 敵にかかる重力
 	constexpr float kMoveSpeed = 0.5f;		// 左右移動の速さ
+
+	constexpr int	kFormChangeWaitTime = 300;	// 敵の変身までの時間
+	constexpr int	kFormChangeTime = 60;		// 敵の変身準備までの時間
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
@@ -39,6 +42,7 @@ void TransformEnemy::Init()
 
 void TransformEnemy::Update(Input& input)
 {
+	m_frameCount++; // フレーム数は常に更新し続ける
 	(this->*m_updateFunc)(input);
 }
 
@@ -53,7 +57,15 @@ void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 
 void TransformEnemy::NormalUpdate(Input&)
 {
-	m_frameCount++; // 使うタイミングは未定
+	// 時間経過で敵の姿が変わる(今後別の条件を増やす予定あり)
+	if (m_frameCount >= kFormChangeWaitTime)
+	{
+		// 敵の姿を変える間の処理に変更
+		m_updateFunc = &TransformEnemy::TransformUpdate;
+		m_drawFunc = &TransformEnemy::TransformDraw;
+		m_frameCount = 0; // フレームカウントをリセット
+		return; // 念のためreturn
+	}
 
 	m_velocity.x = kMoveSpeed * m_direction.x;
 	m_pos.x += m_velocity.x;
@@ -65,6 +77,32 @@ void TransformEnemy::NormalUpdate(Input&)
 	m_colRect.pos = m_pos;
 	CheckHitMapY();
 	m_colCircle.pos = m_pos;
+}
+
+void TransformEnemy::TransformUpdate(Input&)
+{
+	// 少し待ってから姿が変わるようにしている
+	if (m_frameCount >= kFormChangeTime)
+	{
+		// 最初に受け取った変身先によって処理を変更する
+		switch (m_nextForm)
+		{
+		case EnemyForm::PlayerSeeker:
+			m_updateFunc = &TransformEnemy::SeekerUpdate;
+			m_drawFunc = &TransformEnemy::SeekerDraw;
+			break;
+		case EnemyForm::FireBall:
+			m_updateFunc = &TransformEnemy::FireBallUpdate;
+			m_drawFunc = &TransformEnemy::FireBallDraw;
+			break;
+		default:
+			printfDx(L"変身不可\n");
+			break;
+		}
+
+		m_frameCount = 0; // フレームカウントをリセット
+		return; // 念のためreturn
+	}
 }
 
 void TransformEnemy::SeekerUpdate(Input&)
@@ -86,8 +124,16 @@ void TransformEnemy::NormalDraw()
 #endif
 }
 
+void TransformEnemy::TransformDraw()
+{
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	DrawString(drawX, drawY, L"変身中です", 0xffffff);
+}
+
 void TransformEnemy::SeekerDraw()
 {
+
 }
 
 void TransformEnemy::FireBallDraw()
@@ -120,7 +166,7 @@ void TransformEnemy::CheckHitMapX()
 		}
 
 		// 一旦x方向の速度を0にする
-		printfDx(L"x補正\n");
+		//printfDx(L"x補正\n");
 		//m_direction.x = 0.0f;
 		m_velocity.x = 0.0f;
 	}
@@ -151,7 +197,7 @@ void TransformEnemy::CheckHitMapY()
 		}
 
 		// 一旦y方向の速度を0にする
-		printfDx(L"y補正\n");
+		//printfDx(L"y補正\n");
 		m_velocity.y = 0.0f;
 	}
 	else
