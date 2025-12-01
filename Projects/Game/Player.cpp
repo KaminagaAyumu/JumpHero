@@ -44,6 +44,7 @@ Player::Player() :
 	m_isHover(false),
 	m_isMiss(false),
 	m_isOffsetX(true),
+	m_isOpenChest(false),
 	m_currentFloorY(0.0f),
 	m_pMap(nullptr),
 	m_update(&Player::EntryUpdate),
@@ -68,6 +69,7 @@ void Player::Init()
 	m_isGround = false;
 	m_isHover = false;
 	m_isMiss = false;
+	m_isOpenChest = false;
 	m_currentFloorY = 0.0f;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
