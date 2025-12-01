@@ -20,9 +20,6 @@ namespace
 	constexpr float kGoalPosX = 4250.5f;
 	constexpr float kGoalPosY = 157.5f;
 
-	// 敵スポーン位置(今後マップから取得など可変になる)
-	constexpr float kEnemySpawnPosY = 120.0f;
-
 	constexpr float	kScoreAddRate = 0.2f; // スコア加算の割合
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
 }
@@ -45,7 +42,7 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get());
-	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this);
+	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this, map);
 	
 	m_pCamera->SetTarget(m_pPlayer.get());
 }
@@ -83,14 +80,6 @@ void GameManager::Update(Input& input)
 			m_score = m_currentScore; // スコアを現在のスコアに合わせる
 		}
 	}
-
-	if (m_frameCount % kEnemySpawnTime == 0) // 敵のスポーン時間になったら
-	{
-		// スポーンをする(今後は細かく条件を作る)
-		m_pEnemyManager->SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - kEnemySpawnPosY }, m_pMap);
-	}
-
-	
 
 	// クリア状態かミス状態の時はプレイヤー以外の更新処理を行わない
 	if (IsClear() || m_pPlayer->IsMiss())
