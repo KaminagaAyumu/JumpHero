@@ -1,5 +1,4 @@
 ﻿#include <memory>
-#include <vector>
 #include "GameManager.h"
 #include "DxLib.h"
 #include "Actor.h"
@@ -16,6 +15,16 @@ namespace
 	constexpr int kFirstLife = 3; // プレイヤーの残機初期化用
 
 	constexpr int kEnemySpawnTime = 600; // 敵がスポーンするまでの時間
+
+	// ゴールフラグの位置(今後はマップから取得などにする)
+	constexpr float kGoalPosX = 4250.5f;
+	constexpr float kGoalPosY = 157.5f;
+
+	// 敵スポーン位置(今後マップから取得など可変になる)
+	constexpr float kEnemySpawnPosY = 120.0f;
+
+	constexpr float	kScoreAddRate = 0.2f; // スコア加算の割合
+	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
 }
 
 GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
@@ -24,8 +33,7 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_currentScore(0),
 	m_life(kFirstLife),
 	m_medalNum(0),
-	m_balloonNum(0),
-	m_isClear(false)
+	m_balloonNum(0)
 {
 	m_pMap = map;
 	m_pCamera = std::make_unique<Camera>();
@@ -38,7 +46,6 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get());
 	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this);
-	m_pEnemyManager->SpawnEnemy(Position2{ 460.0f,300.0f }, map);
 	
 	m_pCamera->SetTarget(m_pPlayer.get());
 }
@@ -52,23 +59,24 @@ void GameManager::Init()
 	m_life = kFirstLife;
 	m_medalNum = 0;
 	m_balloonNum = 0;
-	m_isClear = false;
 }
 
 void GameManager::Update(Input& input)
 {
 	m_frameCount++;
 	m_pCamera->Update();
+
 	// スコアの更新処理
 	if (m_score < m_currentScore) // スコアが現在のスコアより小さい場合
 	{
-		int add = static_cast<int>((m_currentScore - m_score) * 0.2f); // 現在のスコアとの差分を計算
-		if (add <= 0.9f)
+		int add = static_cast<int>((m_currentScore - m_score) * kScoreAddRate); // 現在のスコアとの差分を計算
+		if (add <= kScoreThreshold) // 加算の値が閾値を超えたら
 		{
 			m_score = m_currentScore; // スコアを現在のスコアに合わせる
 		}
 		else
 		{
+			printfDx(L"加算中\n");
 			m_score += add; // スコアを更新
 		}
 		if (m_score > m_currentScore) // スコアが現在のスコアを超えた場合
@@ -80,17 +88,13 @@ void GameManager::Update(Input& input)
 	if (m_frameCount % kEnemySpawnTime == 0) // 敵のスポーン時間になったら
 	{
 		// スポーンをする(今後は細かく条件を作る)
-		m_pEnemyManager->SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - 120.0f }, m_pMap);
+		m_pEnemyManager->SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - kEnemySpawnPosY }, m_pMap);
 	}
 
-	// プレイヤーがゴールの地点に来たら
-	if (m_pPlayer->GetPos().x >= 4250.5f && m_pPlayer->GetPos().y <= 157.5f)
-	{
-		m_isClear = true;
-	}
+	
 
 	// クリア状態かミス状態の時はプレイヤー以外の更新処理を行わない
-	if (m_isClear || m_pPlayer->IsMiss())
+	if (IsClear() || m_pPlayer->IsMiss())
 	{
 		m_pPlayer->Update(input);
 	}
@@ -101,8 +105,6 @@ void GameManager::Update(Input& input)
 		m_pItemManager->Update(input);
 		m_pEnemyManager->Update(input);
 	}
-	
-
 }
 
 void GameManager::Draw() const
@@ -128,7 +130,13 @@ void GameManager::AddScore(int score)
 
 bool GameManager::IsSkipCollision() const
 {
-	return m_isClear || m_pPlayer->IsMiss();
+	return IsClear() || m_pPlayer->IsMiss();
+}
+
+bool GameManager::IsClear() const
+{
+	// プレイヤーの座標がゴールの位置に来たら
+	return m_pPlayer->GetPos().x >= kGoalPosX && m_pPlayer->GetPos().y <= kGoalPosY;
 }
 
 void GameManager::DropItem(int x, int y)

@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
+
+class GameManager;
+
 /// <summary>
 /// クリアシーン
 /// リザルト表示などを行う
@@ -8,7 +11,7 @@
 class ClearScene : public SceneBase
 {
 public:
-	ClearScene(SceneController& controller);
+	ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager);
 	virtual ~ClearScene();
 
 	/// <summary>
@@ -37,6 +40,13 @@ private:
 	void FadeDraw(); // フェード中の描画処理
 	using DrawFunc_t = void (ClearScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
+
+	std::shared_ptr<GameManager> m_pGameManager;
+
+	// リザルト表示用スコア
+	int m_resultScore;
+	// ゲーム内のスコア
+	int m_gameScore;
 
 
 };

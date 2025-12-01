@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include <vector>
 
 // プロトタイプ宣言
 class Actor;
@@ -36,7 +36,7 @@ public:
 
 	bool IsSkipCollision()const;
 
-	bool IsClear()const { return m_isClear; }
+	bool IsClear()const;
 
 	/// <summary>
 	/// アイテムを生成するという通知をItemManagerに送る関数
@@ -53,6 +53,8 @@ public:
 
 	Camera* GetCamera()const { return m_pCamera.get(); }
 
+	const int GetScore()const { return m_currentScore; }
+
 private:
 	int m_frameCount; // フレームカウンタ
 
@@ -61,7 +63,6 @@ private:
 	int m_life; // 残機数
 	int m_medalNum; // 強化メダルの所持数
 	int m_balloonNum; // 風船をどれだけ取ったか
-	bool m_isClear; // クリア状態かどうか
 
 	// 各オブジェクト管理クラスの参照用
 	Map* m_pMap;

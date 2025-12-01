@@ -124,7 +124,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller,m_pGameManager));
 		return; // 念のため処理を抜ける
 	}
 }
@@ -150,6 +150,7 @@ void GameScene::FadeDraw()
 {
 	m_bg->Draw(m_pGameManager->GetCamera());
 	m_pMap->Draw(m_pGameManager->GetCamera());
+	m_pGameManager->Draw();
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
