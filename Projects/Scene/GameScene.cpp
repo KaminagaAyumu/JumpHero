@@ -52,7 +52,6 @@ m_fadeColor(0x000000)
 	m_pGameManager = std::make_shared<GameManager>(m_player.get(),m_pCamera.get(),m_pMap.get(),m_pActors);
 	m_pGameManager->Init();
 	
-
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
 	m_player->GetMap(m_pMap.get());
@@ -105,22 +104,29 @@ void GameScene::NormalUpdate(Input& input)
 	}
 #endif
 
+	// カメラの更新
 	m_pCamera->Update();
+	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
-	m_pActors.clear();
-	m_pActors.reserve(m_pGameManager->GetActorNum());
-	m_pGameManager->PushActors(m_pActors);
+	// 次のフレームのためにゲーム内オブジェクトを更新
+	m_pActors.clear(); // オブジェクトをリセット
+	m_pActors.reserve(m_pGameManager->GetActorNum()); // 現在のオブジェクトの総数分要素を確保 
+	m_pGameManager->PushActors(m_pActors); // ゲームマネージャーからオブジェクトを受け取る
 
+	// 当たり判定を行う
+	if (!m_pGameManager->IsSkipCollision()) // 当たり判定をスキップしない場合
+	{
+		m_pCollisionManager->CheckCollision(m_pActors);
+	}
 
-	m_pCollisionManager->CheckCollision(m_pActors);
-
+	// 背景とマップの更新(現在何もやっていない)
 	m_bg->Update();
 	m_pMap->Update();
 
-	if (m_pGameManager->IsClear())
+	if (m_pGameManager->IsClear()) // ゲームマネージャーがクリアと判定したら
 	{
-		// 終了処理
+		// このシーンの終了処理
 		m_fadeColor = 0xffffff; // フェードを白フェードにする
 		m_updateFunc = &GameScene::FadeOutUpdate;
 		m_drawFunc = &GameScene::FadeDraw;

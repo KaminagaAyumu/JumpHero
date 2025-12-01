@@ -72,7 +72,8 @@ void GameManager::Update(Input& input)
 
 	if (m_frameCount % kEnemySpawnTime == 0) // 敵のスポーン時間になったら
 	{
-		m_pEnemyManager->SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y + 60.0f }, m_pMap);
+		// スポーンをする(今後は細かく条件を作る)
+		m_pEnemyManager->SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - 120.0f }, m_pMap);
 	}
 
 	// プレイヤーがゴールの地点に来たら
@@ -116,6 +117,11 @@ void GameManager::PushActors(std::vector<Actor*>& actors)
 void GameManager::AddScore(int score)
 {
 	m_currentScore += score;
+}
+
+bool GameManager::IsSkipCollision() const
+{
+	return m_isClear || m_pPlayer->IsMiss();
 }
 
 void GameManager::DropItem(int x, int y)

@@ -29,7 +29,7 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_isGround(false),
 	m_velocity{}
 {
-	m_direction = { 1.0f,0.0f };
+	m_direction = {};
 	m_pos = pos;
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };

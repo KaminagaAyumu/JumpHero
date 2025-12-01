@@ -34,6 +34,8 @@ public:
 	/// <param name="score">加算するスコアの値</param>
 	void AddScore(int score);
 
+	bool IsSkipCollision()const;
+
 	bool IsClear()const { return m_isClear; }
 
 	/// <summary>
