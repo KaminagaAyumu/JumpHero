@@ -50,7 +50,8 @@ private:
 	void NormalUpdate(Input&); // デフォルト状態の更新処理
 	void TransformUpdate(Input&); // 変身中の更新処理
 	void SeekerUpdate(Input&); // プレイヤーを追い続ける更新処理
-	void FireBallUpdate(Input&); // プレイヤーの横座標を追い続ける更新処理
+	void FireBallUpdate(Input&); // プレイヤーの縦座標を追い続ける更新処理
+	void SkullUpdate(Input&); // プレイヤーの横座標を追い続ける更新処理
 
 	// 描画処理用関数群
 	using DrawFunc_t = void(TransformEnemy::*)(); // 関数の形式自体は更新処理と同じなので別名とする
@@ -59,7 +60,8 @@ private:
 	void NormalDraw(); // デフォルト状態の描画処理
 	void TransformDraw(); // 変身中の描画処理
 	void SeekerDraw(); // プレイヤーを追い続ける時の描画処理
-	void FireBallDraw(); // プレイヤーの横座標を追い続ける時の描画処理
+	void FireBallDraw(); // プレイヤーの縦座標を追い続ける時の描画処理
+	void SkullDraw(); // プレイヤーの横座標を追い続けるときの描画処理
 
 	virtual void CheckHitMapX() override;
 

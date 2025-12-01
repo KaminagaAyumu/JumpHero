@@ -120,6 +120,10 @@ void TransformEnemy::TransformUpdate(Input&)
 			m_updateFunc = &TransformEnemy::FireBallUpdate;
 			m_drawFunc = &TransformEnemy::FireBallDraw;
 			break;
+		case EnemyForm::Skull:
+			m_updateFunc = &TransformEnemy::SkullUpdate;
+			m_drawFunc = &TransformEnemy::SkullDraw;
+			break;
 		default:
 			printfDx(L"変身不可\n");
 			break;
@@ -161,6 +165,20 @@ void TransformEnemy::FireBallUpdate(Input&)
 	m_direction.y = yComp;
 	m_direction.Normalize();
 	
+	m_pos += m_direction * kSeekerMoveSpeed;
+	m_colCircle.pos = m_pos;
+	m_colRect.pos = m_pos;
+}
+
+void TransformEnemy::SkullUpdate(Input&)
+{
+	// プレイヤーの横方向だけ追い続ける
+	float toPlayerX = m_pPlayer->GetPos().x - m_pos.x; // 敵からプレイヤーに向かうベクトルのX座標
+	float xComp = std::clamp(toPlayerX * kDirectionMagnification, -kMaxDirectionValue, kMaxDirectionValue); // -1から1までの間で向きを変える
+	m_direction.y = kMaxDirectionValue;
+	m_direction.x = xComp;
+	m_direction.Normalize();
+
 	m_pos += m_direction * kSeekerMoveSpeed;
 	m_colCircle.pos = m_pos;
 	m_colRect.pos = m_pos;
@@ -223,6 +241,21 @@ void TransformEnemy::FireBallDraw()
 	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
 			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
 			0xff0066, true);
+
+#ifdef _DEBUG
+	m_colCircle.Draw(drawX, drawY);
+	m_colRect.Draw(drawX, drawY);
+#endif
+}
+
+void TransformEnemy::SkullDraw()
+{
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+
+	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
+			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
+			0x22bb22, true);
 
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);

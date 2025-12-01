@@ -61,7 +61,7 @@ void EnemyManager::Draw()
 
 void EnemyManager::SpawnEnemy(const Position2& pos)
 {
-	auto enemy = std::make_shared<TransformEnemy>(pos,m_pPlayer, m_pMap, TransformEnemy::EnemyForm::FireBall);
+	auto enemy = std::make_shared<TransformEnemy>(pos,m_pPlayer, m_pMap, TransformEnemy::EnemyForm::Skull);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }
