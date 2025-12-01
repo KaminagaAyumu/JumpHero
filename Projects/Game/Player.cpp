@@ -11,7 +11,7 @@ namespace
 	constexpr float kGravity			= 0.5f; // プレイヤーにかかる重力
 	constexpr float kGroundY			= 570.0f; // 床の座標
 	constexpr float kJumpPower			= -15.0f; // ジャンプ時の上に上がる力
-	constexpr float kMoveSpeed			= 3.5f; // 左右に動くスピード
+	constexpr float kNormalMoveSpeed			= 3.5f; // 左右に動くスピード
 
 	constexpr int	kGraphWidth			= 45; // プレイヤー画像の幅
 	constexpr int	kGraphHeight		= 45; // プレイヤー画像の高さ
@@ -167,11 +167,11 @@ void Player::JumpUpdate(Input& input)
 
 	if (movingLeft)
 	{
-		m_pos.x -= kMoveSpeed;
+		m_pos.x -= kNormalMoveSpeed;
 	}
 	if (movingRight)
 	{
-		m_pos.x += kMoveSpeed;
+		m_pos.x += kNormalMoveSpeed;
 	}
 
 	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
@@ -255,11 +255,11 @@ void Player::GroundUpdate(Input& input)
 
 	if (movingLeft)
 	{
-		m_pos.x -= kMoveSpeed;
+		m_pos.x -= kNormalMoveSpeed;
 	}
 	if (movingRight)
 	{
-		m_pos.x += kMoveSpeed;
+		m_pos.x += kNormalMoveSpeed;
 	}
 
 	m_velocity.y += kGravity;

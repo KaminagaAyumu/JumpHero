@@ -50,6 +50,7 @@ public:
 	const size_t GetActorNum()const;
 
 private:
+	int m_frameCount; // フレームカウンタ
 
 	int m_score; // 表示用のスコア
 	int m_currentScore; // ゲーム内のスコア
@@ -59,6 +60,7 @@ private:
 	bool m_isClear; // クリア状態かどうか
 
 	// 各オブジェクト管理クラスの参照用
+	Map* m_pMap;
 	Player* m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;

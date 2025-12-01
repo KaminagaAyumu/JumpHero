@@ -10,10 +10,11 @@ namespace
 	constexpr float kEnemyHeight = 45.0f;	// 敵の実際の高さ
 
 	constexpr float kGravity = 0.5f;		// 敵にかかる重力
-	constexpr float kMoveSpeed = 0.5f;		// 左右移動の速さ
+	constexpr float kNormalMoveSpeed = 0.5f;		// 通常時の左右移動の速さ
+	constexpr float kSeekerMoveSpeed = 0.8f;		// プレイヤーを追い続ける敵の移動の速さ
 
-	constexpr int	kFormChangeWaitTime = 300;	// 敵の変身までの時間
-	constexpr int	kFormChangeTime = 60;		// 敵の変身準備までの時間
+	constexpr int	kFormChangeWaitTime = 180;	// 敵の変身までの時間
+	constexpr int	kFormChangeTime = 30;		// 敵の変身準備までの時間
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
@@ -67,7 +68,7 @@ void TransformEnemy::NormalUpdate(Input&)
 		return; // 念のためreturn
 	}
 
-	m_velocity.x = kMoveSpeed * m_direction.x;
+	m_velocity.x = kNormalMoveSpeed * m_direction.x;
 	m_pos.x += m_velocity.x;
 	m_colRect.pos = m_pos;
 	CheckHitMapX();
@@ -122,7 +123,7 @@ void TransformEnemy::SeekerUpdate(Input&)
 	}
 	// 向きを正規化する
 	m_direction.Normalize();
-	m_pos += m_direction * kMoveSpeed;
+	m_pos += m_direction * kSeekerMoveSpeed;
 	m_colCircle.pos = m_pos;
 	m_colRect.pos = m_pos;
 }

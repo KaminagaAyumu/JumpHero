@@ -13,10 +13,13 @@
 
 namespace
 {
-	constexpr int kFirstLife = 3;
+	constexpr int kFirstLife = 3; // プレイヤーの残機初期化用
+
+	constexpr int kEnemySpawnTime = 600; // 敵がスポーンするまでの時間
 }
 
 GameManager::GameManager(Player* player, Camera* camera, Map* map, std::vector<Actor*>& actors) :
+	m_frameCount(0),
 	m_score(0),
 	m_currentScore(0),
 	m_life(kFirstLife),
@@ -24,6 +27,7 @@ GameManager::GameManager(Player* player, Camera* camera, Map* map, std::vector<A
 	m_balloonNum(0),
 	m_isClear(false)
 {
+	m_pMap = map;
 	m_pPlayer = player;
 	m_pChestManager = std::make_unique<ChestManager>(camera,this);
 	m_pChestManager->SpawnChest(map);
@@ -47,6 +51,7 @@ void GameManager::Init()
 
 void GameManager::Update(Input& input)
 {
+	m_frameCount++;
 	// スコアの更新処理
 	if (m_score < m_currentScore) // スコアが現在のスコアより小さい場合
 	{
@@ -63,6 +68,11 @@ void GameManager::Update(Input& input)
 		{
 			m_score = m_currentScore; // スコアを現在のスコアに合わせる
 		}
+	}
+
+	if (m_frameCount % kEnemySpawnTime == 0) // 敵のスポーン時間になったら
+	{
+		m_pEnemyManager->SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y + 60.0f }, m_pMap);
 	}
 
 	// プレイヤーがゴールの地点に来たら
