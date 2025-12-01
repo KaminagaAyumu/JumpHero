@@ -48,6 +48,7 @@ void EnemyManager::Update(Input& input)
 	m_enemies.remove_if(
 		[](std::shared_ptr<EnemyBase> enemy)
 		{
+			// 死んだもしくは画面外にいるときに削除
 			return enemy->IsDead() || !enemy ->IsOnScreen();
 		}
 	);
@@ -60,7 +61,7 @@ void EnemyManager::Draw()
 
 void EnemyManager::SpawnEnemy(const Position2& pos)
 {
-	auto enemy = std::make_shared<TransformEnemy>(pos,m_pPlayer, m_pMap, TransformEnemy::EnemyForm::PlayerSeeker);
+	auto enemy = std::make_shared<TransformEnemy>(pos,m_pPlayer, m_pMap, TransformEnemy::EnemyForm::FireBall);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }

@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "../Utility/Map.h"
 #include "Player.h"
+#include <algorithm>
 
 namespace
 {
@@ -16,6 +17,9 @@ namespace
 	constexpr int	kAppearTime = 60;		// 敵の出現までの時間
 	constexpr int	kFormChangeWaitTime = 180;	// 敵の変身までの時間
 	constexpr int	kFormChangeTime = 30;		// 敵の変身準備までの時間
+
+	constexpr float kMaxDirectionValue = 1.0f; // 向きの最大値(大きさ)
+	constexpr float kDirectionMagnification = 0.01f; // 向きの倍率
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
@@ -150,6 +154,16 @@ void TransformEnemy::SeekerUpdate(Input&)
 
 void TransformEnemy::FireBallUpdate(Input&)
 {
+	// プレイヤーの縦方向だけ追い続ける
+	float toPlayerY = m_pPlayer->GetPos().y - m_pos.y; // 敵からプレイヤーに向かうベクトルのY座標
+	float yComp = std::clamp(toPlayerY * kDirectionMagnification, -kMaxDirectionValue, kMaxDirectionValue); // -1から1までの間で向きを変える
+	m_direction.x = kMaxDirectionValue;
+	m_direction.y = yComp;
+	m_direction.Normalize();
+	
+	m_pos += m_direction * kSeekerMoveSpeed;
+	m_colCircle.pos = m_pos;
+	m_colRect.pos = m_pos;
 }
 
 void TransformEnemy::AppearDraw()
@@ -203,6 +217,17 @@ void TransformEnemy::SeekerDraw()
 
 void TransformEnemy::FireBallDraw()
 {
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+
+	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
+			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
+			0xff0066, true);
+
+#ifdef _DEBUG
+	m_colCircle.Draw(drawX, drawY);
+	m_colRect.Draw(drawX, drawY);
+#endif
 }
 
 void TransformEnemy::CheckHitMapX()
