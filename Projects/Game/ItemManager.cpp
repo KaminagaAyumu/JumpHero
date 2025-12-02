@@ -4,6 +4,7 @@
 #include "ItemBase.h"
 #include "Coin.h"
 #include "Balloon.h"
+#include "UpgradeMedal.h"
 #include "../Utility/Input.h"
 
 ItemManager::ItemManager(Camera* camera, GameManager* gameManager) :
@@ -52,7 +53,7 @@ void ItemManager::Draw()
 void ItemManager::SpawnItem(int x, int y)
 {
 	Position2 pos = { x,y };
-	auto item = std::make_shared<Balloon>(pos);
+	auto item = std::make_shared<UpgradeMedal>(pos);
 	item->SetCamera(m_pCamera);
 	m_pItems.push_back(item);
 }

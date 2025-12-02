@@ -144,6 +144,7 @@
     <ClCompile Include="Game\EnemyManager.cpp" />
     <ClCompile Include="Game\ChestManager.cpp" />
     <ClCompile Include="Game\ItemManager.cpp" />
+    <ClCompile Include="Game\UpgradeMedal.cpp" />
     <ClCompile Include="Utility\Map.cpp" />
     <ClCompile Include="Scene\ClearScene.cpp" />
     <ClCompile Include="Game\EnemyBase.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Game\Coin.h" />
     <ClInclude Include="Game\EnemyManager.h" />
     <ClInclude Include="Game\ChestManager.h" />
+    <ClInclude Include="Game\UpgradeMedal.h" />
     <ClInclude Include="Utility\GameType.h" />
     <ClInclude Include="Game\ItemManager.h" />
     <ClInclude Include="Utility\Map.h" />

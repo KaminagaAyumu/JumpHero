@@ -1,4 +1,4 @@
-﻿#include "Balloon.h"
+﻿#include "UpgradeMedal.h"
 #include "../Utility/Camera.h"
 #include "GameManager.h"
 #include "../Utility/GameType.h"
@@ -6,31 +6,31 @@
 
 namespace
 {
-	constexpr float kBalloonDefaultWidth = 30.0f;
-	constexpr float kBalloonDefaultHeight = 30.0f;
+	constexpr float kMedalDefaultWidth = 40.0f;
+	constexpr float kMedalDefaultHeight = 40.0f;
 
 	constexpr int kAddScore = 1000;
 }
 
-Balloon::Balloon(const Position2& pos)
+UpgradeMedal::UpgradeMedal(const Position2& pos)
 {
 	m_pos = pos;
-	m_colRect = { {m_pos},kBalloonDefaultWidth,kBalloonDefaultHeight };
-	m_colCircle = { {m_pos},kBalloonDefaultWidth / 2 };
+	m_colRect = { {m_pos},kMedalDefaultWidth,kMedalDefaultHeight };
+	m_colCircle = { {m_pos},kMedalDefaultWidth / 2 };
 }
 
-void Balloon::Init()
+void UpgradeMedal::Init()
 {
 
 }
 
-void Balloon::Update(Input&)
+void UpgradeMedal::Update(Input&)
 {
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
 }
 
-void Balloon::Draw()
+void UpgradeMedal::Draw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
@@ -44,13 +44,13 @@ void Balloon::Draw()
 	}
 }
 
-void Balloon::OnCollected(GameManager& gameManager)
+void UpgradeMedal::OnCollected(GameManager& gameManager)
 {
 	// 風船が取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::Balloon);
+	gameManager.OnItemCollected(Types::ItemType::UpgradeMedal);
 }
 
-void Balloon::IsCollision(const Types::CollisionInfo& info)
+void UpgradeMedal::IsCollision(const Types::CollisionInfo& info)
 {
 	if (info.otherType == Types::ActorType::Player)
 	{
