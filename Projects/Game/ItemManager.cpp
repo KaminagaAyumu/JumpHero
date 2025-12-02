@@ -55,7 +55,7 @@ void ItemManager::Draw()
 void ItemManager::SpawnItem(int x, int y)
 {
 	Position2 pos = { x,y };
-	auto item = std::make_shared<ChangeToCoin>(pos);
+	auto item = std::make_shared<UpgradeMedal>(pos);
 	item->SetCamera(m_pCamera);
 	m_pItems.push_back(item);
 }

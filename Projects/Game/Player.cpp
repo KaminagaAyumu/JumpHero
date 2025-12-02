@@ -30,6 +30,8 @@ namespace
 
 	constexpr int	kJumpAddScore		= 10;				// ジャンプしたときの加算スコア
 
+	constexpr int	kMaxLevel			= 2;				// パワーアップ最大値
+
 	// プレイヤーの登場の初期位置
 	// 複数マップになった際に使用しなくなるはず
 	inline const static Vector2 kFirstPos = { -10.0f,Game::kScreenHeight - 135.0f - kPlayerHeight / 2 };
@@ -43,6 +45,7 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_velocity{},
 	m_graphHandle(-1),
 	m_frameCount(0),
+	m_level(0),
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
@@ -70,6 +73,7 @@ void Player::Init()
 	m_colCircle = { m_pos,kGraphWidth * 0.5f };
 	m_colRect = { m_pos,kGraphWidth,kGraphHeight };
 	m_frameCount = 0;
+	m_level = 0;
 	m_isGround = false;
 	m_isHover = false;
 	m_isMiss = false;
@@ -249,6 +253,11 @@ void Player::JumpUpdate(Input& input)
 
 void Player::GroundUpdate(Input& input)
 {
+	if (input.IsTriggered("PowerUp")) // パワーアップボタンが押されたとき
+	{
+		// パワーアップ処理を行う
+		m_pGameManager->PowerUpPlayer();
+	}
 	if (input.IsTriggered("Jump") && m_isGround) // ジャンプボタンが押されたとき
 	{
 		JumpStart(); // ジャンプする際の処理を行う
@@ -479,4 +488,19 @@ void Player::MissStart()
 	m_frameCount = 0; // 時間経過をリセット
 	m_update = &Player::MissUpdate; // 更新処理をミス状態に
 	m_draw = &Player::MissDraw;// 描画処理をミス状態に
+}
+
+bool Player::PowerUp()
+{
+	// レベルが最大値だったら
+	if (m_level >= kMaxLevel)
+	{
+#ifdef _DEBUG
+		printfDx(L"強化状態はマックスです\n");
+#endif
+		return false; // パワーアップできないのでfalseを返す
+	}
+	printfDx(L"プレイヤーの強化に成功\n");
+	m_level++; // レベルを1増やす
+	return true; // パワーアップできたのでtrueを返す
 }

@@ -17,6 +17,7 @@ Input::Input()
 	m_inputTable["Jump"] = { { InputType::Keyboard, KEY_INPUT_Z }, { InputType::Pad, PAD_INPUT_A } }; // Zキー、Aボタン
 	m_inputTable["LShift"] = { { InputType::Keyboard, KEY_INPUT_LSHIFT }, { InputType::Pad, PAD_INPUT_Y } }; // Lシフトキー、Lボタン
 	m_inputTable["RShift"] = { { InputType::Keyboard, KEY_INPUT_RSHIFT }, { InputType::Pad, PAD_INPUT_Z } }; // Rシフトキー、Rボタン
+	m_inputTable["PowerUp"] = { { InputType::Keyboard, KEY_INPUT_X }, { InputType::Pad, PAD_INPUT_B } }; // Xキー、Bボタン
 
 	// 入力データの初期化
 	// 入力種別ごとにすべてのボタンが押されていないとする

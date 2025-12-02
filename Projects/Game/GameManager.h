@@ -74,6 +74,11 @@ public:
 	void DropItem(int x, int y);
 
 	/// <summary>
+	/// プレイヤーを強化する
+	/// </summary>
+	void PowerUpPlayer();
+
+	/// <summary>
 	/// ゲーム内に存在するオブジェクトの数を取得
 	/// </summary>
 	/// <returns>ゲーム内のオブジェクトの数</returns>

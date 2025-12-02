@@ -38,6 +38,12 @@ public:
 	/// </summary>
 	void MissStart();
 
+	/// <summary>
+	/// プレイヤーをパワーアップする
+	/// </summary>
+	/// <returns>true : パワーアップできる false : パワーアップできない</returns>
+	bool PowerUp();
+
 private:
 	Vector2 m_direction; // 進む方向
 	Vector2 m_velocity; // 進む速度
@@ -45,6 +51,7 @@ private:
 	int m_graphHandle; // プレイヤーのグラフィックハンドル
 
 	int m_frameCount; // フレームカウンタ
+	int m_level; // プレイヤーの強化状態
 	bool m_isGround; // 地面についているか
 	bool m_isHover; // ジャンプ中にボタンを押したかどうか
 	bool m_isMiss; // ミスになったかどうか
@@ -86,7 +93,5 @@ private:
 	// 描画処理用関数ポインタの型定義
 	using DrawFunc_t = void(Player::*)();
 	DrawFunc_t m_draw;
-
-
 };
 

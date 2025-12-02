@@ -180,6 +180,29 @@ void GameManager::DropItem(int x, int y)
 	m_pItemManager->SpawnItem(x, y);
 }
 
+void GameManager::PowerUpPlayer()
+{
+	// メダルを持っていれば強化を行う
+	if (m_medalNum > 0)
+	{
+		if (m_pPlayer->PowerUp()) // プレイヤーの強化ができれば
+		{
+			m_medalNum--; // メダルを一つ減らす
+		}
+		else // 強化が出来なければ
+		{
+			// 何もしない
+		}
+	}
+	else // メダルを持っていなければ
+	{
+		// 何もしない
+#ifdef _DEBUG
+		printfDx(L"メダルがないので強化できない\n");
+#endif
+	}
+}
+
 const size_t GameManager::GetActorNum() const
 {
 	// +1しているのはプレイヤーの数
