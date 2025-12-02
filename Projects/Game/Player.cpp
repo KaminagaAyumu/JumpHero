@@ -98,7 +98,6 @@ void Player::Update(Input& input)
 
 void Player::Draw()
 { 
-	printfDx(L"Level : %d\n", m_level);
 	(this->*m_draw)();
 }
 
@@ -137,7 +136,9 @@ void Player::PowerDown()
 {
 	if (m_jumpCount <= 0 && !m_isLevelDown) // ジャンプカウンタが0の時
 	{
+#ifdef _DEBUG
 		printfDx(L"レベルが下がった\n");
+#endif
 		m_level--; // レベルダウン
 		if (m_level == kPowerUpLevelOne) // レベルダウンした結果レベルが1になったら
 		{
@@ -539,7 +540,9 @@ bool Player::PowerUp()
 #endif
 		return false; // パワーアップできないのでfalseを返す
 	}
+#ifdef _DEBUG
 	printfDx(L"プレイヤーの強化に成功\n");
+#endif
 	m_level++; // レベルを1増やす
 	if (m_level == kPowerUpLevelOne) // 1段階目なら
 	{
@@ -548,6 +551,7 @@ bool Player::PowerUp()
 	else if (m_level == kPowerUpLevelMax) // 2段階目なら
 	{
 		m_jumpCount = kJumpLimitNumLevelMax; // 25回ジャンプするまでパワーアップ継続
+		m_pGameManager->ChangeEnemyToCoin(); // 敵をアイテムに変える処理を呼ぶ
 	}
 	m_isLevelDown = false; // レベルが下がったかどうかの判定を可能にする
 
