@@ -36,4 +36,14 @@ namespace Types
 		ColliderType otherColliderType; // 当たったオブジェクトの当たり判定のタイプ
 	};
 
+	/// <summary>
+	/// アイテムの種類
+	/// </summary>
+	enum class ItemType
+	{
+		Balloon, // 風船
+		UpgradeMedal, // 強化メダル
+		LifeUp, // 1UP
+		Coin, // スコア加算用コイン
+	};
 }

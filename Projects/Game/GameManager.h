@@ -1,5 +1,8 @@
 ﻿#pragma once
 #include <vector>
+#include <unordered_map>
+#include <functional>
+#include "../Utility/GameType.h"
 
 // プロトタイプ宣言
 class Actor;
@@ -7,6 +10,7 @@ class Player;
 class Camera;
 class ChestManager;
 class ItemManager;
+class ItemBase;
 class EnemyManager;
 class Input;
 class Map;
@@ -38,6 +42,8 @@ public:
 
 	bool IsClear()const;
 
+	void OnItemCollected(const Types::ItemType& type);
+
 	/// <summary>
 	/// アイテムを生成するという通知をItemManagerに送る関数
 	/// </summary>
@@ -58,11 +64,14 @@ public:
 private:
 	int m_frameCount; // フレームカウンタ
 
+	// ゲーム内データ関連
 	int m_score; // 表示用のスコア
 	int m_currentScore; // ゲーム内のスコア
 	int m_life; // 残機数
 	int m_medalNum; // 強化メダルの所持数
 	int m_balloonNum; // 風船をどれだけ取ったか
+
+	std::unordered_map<Types::ItemType, std::function<void()>> m_itemCollectFunc;
 
 	// 各オブジェクト管理クラスの参照用
 	Map* m_pMap;

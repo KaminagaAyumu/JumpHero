@@ -128,6 +128,11 @@ bool GameManager::IsClear() const
 	return m_pPlayer->GetPos().x >= kGoalPosX && m_pPlayer->GetPos().y <= kGoalPosY;
 }
 
+void GameManager::OnItemCollected(const Types::ItemType& type)
+{
+
+}
+
 void GameManager::DropItem(int x, int y)
 {
 	m_pItemManager->SpawnItem(x, y, [&](int score) { AddScore(score); });

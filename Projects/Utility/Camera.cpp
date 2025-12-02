@@ -59,5 +59,5 @@ void Camera::Update()
 
 const Rect2D& Camera::GetNowScreenArea() const
 {
-	return Rect2D{ scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenWidth };
+	return { scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenWidth };
 }

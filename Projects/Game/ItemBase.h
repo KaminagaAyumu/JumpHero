@@ -14,17 +14,6 @@ public:
 	ItemBase();
 	virtual ~ItemBase();
 
-	/// <summary>
-	/// アイテムの種類
-	/// </summary>
-	enum class ItemType
-	{
-		Balloon, // 風船
-		UpgradeMedal, // 強化メダル
-		LifeUp, // 1UP
-		Coin, // スコア加算用コイン
-	};
-
 	virtual void Init()abstract;
 	virtual void Update(Input&)abstract;
 	virtual void Draw()abstract;
