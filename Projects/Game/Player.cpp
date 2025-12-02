@@ -3,29 +3,32 @@
 #include "../Utility/Game.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
+#include "GameManager.h"
 #include "Chest.h"
 #include "DxLib.h"
 #include <cassert>
 
 namespace
 {
-	constexpr float kGravity			= 0.5f; // プレイヤーにかかる重力
-	constexpr float kGroundY			= 570.0f; // 床の座標
-	constexpr float kJumpPower			= -15.0f; // ジャンプ時の上に上がる力
-	constexpr float kMissJumpPower = kJumpPower * 1.01f;
-	constexpr float kNormalMoveSpeed			= 3.5f; // 左右に動くスピード
+	constexpr float kGravity			= 0.5f;				// プレイヤーにかかる重力
+	constexpr float kGroundY			= 570.0f;			// 床の座標
+	constexpr float kJumpPower			= -15.0f;			// ジャンプ時の上に上がる力
+	constexpr float kMissJumpPower = kJumpPower * 1.01f;	// ミスしたときの上に上がる力
+	constexpr float kNormalMoveSpeed			= 3.5f;		// 左右に動くスピード
 
-	constexpr int	kGraphWidth			= 45; // プレイヤー画像の幅
-	constexpr int	kGraphHeight		= 45; // プレイヤー画像の高さ
+	constexpr int	kGraphWidth			= 45;				// プレイヤー画像の幅
+	constexpr int	kGraphHeight		= 45;				// プレイヤー画像の高さ
 
-	constexpr float kPlayerWidth		= 45.0f; // プレイヤーの実際の幅
-	constexpr float kPlayerHeight		= 45.0f; // プレイヤーの実際の高さ
+	constexpr float kPlayerWidth		= 45.0f;			// プレイヤーの実際の幅
+	constexpr float kPlayerHeight		= 45.0f;			// プレイヤーの実際の高さ
 
-	constexpr int	kEntryTextDispTime	= 60; // 登場テキストを表示する時間
-	constexpr float	kEntryMoveSpeed		= 0.05f; // プレイヤー登場のスピード
+	constexpr int	kEntryTextDispTime	= 60;				// 登場テキストを表示する時間
+	constexpr float	kEntryMoveSpeed		= 0.05f;			// プレイヤー登場のスピード
 
-	constexpr int	kMissFreezeTime		= 10; // ミスしたときに止まるフレーム数
-	constexpr int	kMissEndTime		= 180; // ミス処理が終わるフレーム数
+	constexpr int	kMissFreezeTime		= 10;				// ミスしたときに止まるフレーム数
+	constexpr int	kMissEndTime		= 180;				// ミス処理が終わるフレーム数
+
+	constexpr int	kJumpAddScore		= 10;				// ジャンプしたときの加算スコア
 
 	// プレイヤーの登場の初期位置
 	// 複数マップになった際に使用しなくなるはず
@@ -34,7 +37,7 @@ namespace
 	inline const static Vector2 kEntryEndPos = { 90.0f, Game::kScreenHeight - 135.0f - kPlayerHeight / 2 };
 }
 
-Player::Player() : 
+Player::Player(Map* map, GameManager* gameManager) :
 	Actor(Types::ActorType::Player),
 	m_direction{},
 	m_velocity{},
@@ -46,7 +49,8 @@ Player::Player() :
 	m_isOffsetX(true),
 	m_isOpenChest(false),
 	m_currentFloorY(0.0f),
-	m_pMap(nullptr),
+	m_pMap(map),
+	m_pGameManager(gameManager),
 	m_update(&Player::EntryUpdate),
 	m_draw(&Player::EntryDraw)
 {
@@ -114,11 +118,6 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 		}
 		m_isOpenChest = true;
 	}
-}
-
-void Player::SetScoreFunc(std::function<void(int)> scoreFunc)
-{
-	m_scoreFunc = scoreFunc;
 }
 
 void Player::EntryUpdate(Input&)
@@ -252,28 +251,27 @@ void Player::GroundUpdate(Input& input)
 {
 	if (input.IsTriggered("Jump") && m_isGround) // ジャンプボタンが押されたとき
 	{
-		JumpStart();
+		JumpStart(); // ジャンプする際の処理を行う
 		return;
 	}
-
-
 	
-
+	// 左右移動フラグの設定
 	bool movingLeft = input.IsPressed("Left");
 	bool movingRight = input.IsPressed("Right");
 
-	if (movingLeft)
+	if (movingLeft) // 左に移動している場合
 	{
-		m_pos.x -= kNormalMoveSpeed;
+		m_pos.x -= kNormalMoveSpeed; // 左に力を加える
 	}
-	if (movingRight)
+	if (movingRight) // 右に移動している場合
 	{
-		m_pos.x += kNormalMoveSpeed;
+		m_pos.x += kNormalMoveSpeed; // 右に力を加える
 	}
 
-	m_velocity.y += kGravity;
-	m_pos.y += m_velocity.y;
+	m_velocity.y += kGravity; // 重力をかける
+	m_pos.y += m_velocity.y; // Y座標の更新
 
+	// プレイヤーの下、左、右端座標を定義(上端座標は使わないので定義していない)
 	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
 	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
 	float playerBottom = m_pos.y + kPlayerHeight / 2.0f;
@@ -287,7 +285,9 @@ void Player::GroundUpdate(Input& input)
 	//	m_pos.x += 3.5f;
 	//}
 
+	// マップが取得できていない場合止める
 	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
+	// 移動可能範囲の矩形を取得
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
 
 	//
@@ -322,11 +322,13 @@ void Player::GroundUpdate(Input& input)
 	{
 		if (movingLeft && playerLeft < moveRange.GetLeft())
 		{
+			// 移動可能範囲の左端座標からプレイヤーの幅の半分左にずらしたところに補正
 			m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
 			//printfDx(L"床の左右補正です");
 		}
 		if (movingRight && playerRight > moveRange.GetRight())
 		{
+			// 移動可能範囲の右端座標からプレイヤーの幅の半分右にずらしたところに補正
 			m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
 			//printfDx(L"床の左右補正です");
 		}
@@ -335,28 +337,27 @@ void Player::GroundUpdate(Input& input)
 	// 地面に接している時
 	if (playerBottom >= moveRange.GetBottom())
 	{
+		// 移動可能範囲の下端座標からプレイヤーの高さの半分上にあげたところに補正
 		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
-		m_velocity.y = 0.0f;
-		m_isGround = true;
+		m_velocity.y = 0.0f; // 地面にいるのでY方向の力をなくす
+		m_isGround = true; // 地面についている
 	}
-	else // 地面についていない
+	else // 地面についていない時
 	{
-		m_isGround = false;
-		m_frameCount = 0;
-		m_update = &Player::JumpUpdate;
-		m_draw = &Player::JumpDraw;
+		// ジャンプはしないが、空中でのUpdateに変更
+		m_isGround = false; // 地面についていない
+		m_frameCount = 0; // 時間経過をリセット
+		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
+		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 		//printfDx(L"床から空中へ\n");
 		return;
 	}
-	
-	m_isOffsetX = true;
-	
-	Rect2D t = {};
-	m_pMap->IsCollision(m_colRect, t);
-	
 
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
+	// 次のフレームからは左右の補正を行えるようにする 
+	m_isOffsetX = true;
+
+	m_colRect.pos = m_pos; // 矩形の座標更新
+	m_colCircle.pos = m_pos; // 円の座標更新
 }
 
 void Player::MissUpdate(Input&)
@@ -367,36 +368,40 @@ void Player::MissUpdate(Input&)
 	{
 		return;
 	}
-	
 
+	// 重力とジャンプの速度を加える
 	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
 	
+	// プレイヤーの中心Y座標が画面下を超えたら
 	if (m_pos.y >= Game::kScreenHeight)
 	{
+		// Y座標を画面下+プレイヤーの大きさの半分の場所に固定
 		m_pos.y = Game::kScreenHeight + kPlayerHeight / 2;
+		// 床にいるフラグをtrueにする
 		m_isGround = true;
 	}
 
-
+	// 地面についたかつミス状態が終わる時間になったら
 	if (m_frameCount >= kMissEndTime && m_isGround)
 	{
-		Init();
+		Init(); // 初期化処理を行う
 		return;
 	}
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
+	m_colRect.pos = m_pos; // 矩形の座標更新
+	m_colCircle.pos = m_pos; // 円の座標更新
 }
 
 void Player::EntryDraw()
 {
-	
-
+	// 経過時間が登場時間を超えたら
 	if (m_frameCount >= kEntryTextDispTime)
 	{
+		// ReadyとGOを表示する
 		DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Ready、GO!", 0xff0000);
 	}
-	else
+	else // 登場準備中なら
 	{
+		// Readyを表示する
 		DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Ready、", 0xff0000);
 	}
 
@@ -454,23 +459,24 @@ void Player::MissDraw()
 
 void Player::JumpStart()
 {
-	m_direction = { 0.0f,1.0f };
-	m_velocity = { 0.0f, kJumpPower };
-	m_isHover = false;
-	m_isGround = false;
-	m_frameCount = 0;
-	m_update = &Player::JumpUpdate;
-	m_draw = &Player::JumpDraw;
+	m_direction = { 0.0f,1.0f }; // ジャンプの方向を上向きにする
+	m_velocity = { 0.0f, kJumpPower }; // ジャンプの力を加える
+	m_isHover = false; // 空中で浮いたかどうかをリセット
+	m_isGround = false; // ジャンプしたので地面についていないとする
+	m_frameCount = 0; // 時間経過をリセット
+	m_pGameManager->AddScore(kJumpAddScore); // スコアを加算
+	m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
+	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 }
 
 void Player::MissStart()
 {
-	m_direction = { 0.0f,1.0f };
-	m_velocity = { 0.0f, kMissJumpPower }; // 普通のジャンプより高い
-	m_isHover = false;
-	m_isGround = false;
-	m_isMiss = true;
-	m_frameCount = 0;
-	m_update = &Player::MissUpdate;
-	m_draw = &Player::MissDraw;
+	m_direction = { 0.0f,1.0f }; // ジャンプの方向を上向きにする
+	m_velocity = { 0.0f, kMissJumpPower }; // 普通のジャンプより高い力を加える
+	m_isHover = false; // 空中で浮いたかどうかをリセット
+	m_isGround = false; // 一応ジャンプするので地面についていないとする
+	m_isMiss = true; // ミスフラグをtrueにする
+	m_frameCount = 0; // 時間経過をリセット
+	m_update = &Player::MissUpdate; // 更新処理をミス状態に
+	m_draw = &Player::MissDraw;// 描画処理をミス状態に
 }

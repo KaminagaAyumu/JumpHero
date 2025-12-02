@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "Actor.h"
-#include <functional>
 
 class Input;
 class Map;
+class GameManager;
 
 /// <summary>
 /// プレイヤークラス
@@ -12,7 +12,7 @@ class Player : public Actor
 {
 public:
 	// コンストラクタ
-	Player();
+	Player(Map* map, GameManager* gameManager);
 
 	// デストラクタ
 	virtual ~Player();
@@ -38,15 +38,6 @@ public:
 	/// </summary>
 	void MissStart();
 
-	/// <summary>
-	/// マップとの当たり判定を取るためにBgクラスを受け取る
-	/// </summary>
-	/// <param name="bg">Bgクラスのスマートポインタ</param>
-	/// <note>仮作成中(もう少しいいやり方があるかも)</note>
-	void SetMap(Map* map) { m_pMap = map; }
-
-	void SetScoreFunc(std::function<void(int)> scoreFunc);
-
 private:
 	Vector2 m_direction; // 進む方向
 	Vector2 m_velocity; // 進む速度
@@ -63,6 +54,9 @@ private:
 
 	// マップの生ポインタ
 	Map* m_pMap;
+
+	// ゲームマネージャーの生ポインタ
+	GameManager* m_pGameManager;
 
 	/// <summary>
 	/// 当たっているかどうか
@@ -93,8 +87,6 @@ private:
 	using DrawFunc_t = void(Player::*)();
 	DrawFunc_t m_draw;
 
-	// スコア更新用関数取得用
-	std::function<void(int)> m_scoreFunc;
 
 };
 
