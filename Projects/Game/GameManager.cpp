@@ -1,6 +1,5 @@
 ﻿#include <memory>
 #include "GameManager.h"
-#include "DxLib.h"
 #include "Actor.h"
 #include "Player.h"
 #include "ChestManager.h"
@@ -9,6 +8,8 @@
 #include "../Utility/Camera.h"
 #include "../Utility/Input.h"
 #include "../Utility/Map.h"
+#include "DxLib.h"
+#include <cassert>
 
 namespace
 {
@@ -22,6 +23,8 @@ namespace
 
 	constexpr float	kScoreAddRate = 0.2f; // スコア加算の割合
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
+
+	constexpr int kCoinAddScore = 1000; // コイン取得時のスコア
 }
 
 GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
@@ -43,8 +46,32 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get());
 	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this, map);
-	
+
 	m_pCamera->SetTarget(m_pPlayer.get());
+
+	// アイテムを取った際のラムダ式定義
+	// 風船を取った時
+	m_itemCollectFunc[Types::ItemType::Balloon] = [this]()
+		{
+			m_balloonNum++; // 風船の数を加算
+		};
+	// 強化メダルを取った時
+	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this]()
+		{
+			m_medalNum++; // メダルの数を加算
+		};
+	// 1UPを取った時
+	m_itemCollectFunc[Types::ItemType::LifeUp] = [this]()
+		{
+			m_life++; // 残機を加算
+		};
+	// コインを取った時
+	m_itemCollectFunc[Types::ItemType::Coin] = [this]()
+		{
+			AddScore(kCoinAddScore); // スコアを加算
+		};
+
+
 }
 
 GameManager::~GameManager()
@@ -130,7 +157,14 @@ bool GameManager::IsClear() const
 
 void GameManager::OnItemCollected(const Types::ItemType& type)
 {
-
+	if (m_itemCollectFunc.contains(type))
+	{
+		m_itemCollectFunc[type];
+	}
+	else
+	{
+		assert(false && L"アイテムを取った際の関数が見つかりませんでした");
+	}
 }
 
 void GameManager::DropItem(int x, int y)

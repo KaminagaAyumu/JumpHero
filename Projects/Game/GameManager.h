@@ -30,6 +30,10 @@ public:
 	void Update(Input& input);
 	void Draw() const;
 
+	/// <summary>
+	/// ゲームシーンが持っているオブジェクトコンテナに派生クラスを入れる
+	/// </summary>
+	/// <param name="actors">ゲームシーン内オブジェクトコンテナ</param>
 	void PushActors(std::vector<Actor*>& actors);
 
 	/// <summary>
@@ -38,10 +42,22 @@ public:
 	/// <param name="score">加算するスコアの値</param>
 	void AddScore(int score);
 
+	/// <summary>
+	/// 当たり判定を行わないかどうか
+	/// </summary>
+	/// <returns>true : 行わない false : 行う</returns>
 	bool IsSkipCollision()const;
 
+	/// <summary>
+	/// クリア状態になっているか
+	/// </summary>
+	/// <returns>true : クリア状態 false : クリア状態ではない</returns>
 	bool IsClear()const;
 
+	/// <summary>
+	/// アイテムを取得した際、アイテムに対応したラムダ式を行う処理
+	/// </summary>
+	/// <param name="type">アイテムの種類</param>
 	void OnItemCollected(const Types::ItemType& type);
 
 	/// <summary>
@@ -57,8 +73,18 @@ public:
 	/// <returns>ゲーム内のオブジェクトの数</returns>
 	const size_t GetActorNum()const;
 
+	/// <summary>
+	/// カメラを取得させる
+	/// </summary>
+	/// <returns>カメラポインタ</returns>
+	/// <note>背景とマップはゲームシーンが管理しているので一旦こうしておく</note>
 	Camera* GetCamera()const { return m_pCamera.get(); }
 
+	/// <summary>
+	/// 現在のスコアを取得する
+	/// リザルト用
+	/// </summary>
+	/// <returns>スコア</returns>
 	const int GetScore()const { return m_currentScore; }
 
 private:
