@@ -87,3 +87,11 @@ size_t EnemyManager::GetEnemyNum()
 	}
 	return m_enemies.size();
 }
+
+void EnemyManager::ChangeToItemAll()
+{
+	for (auto& enemy : m_enemies)
+	{
+		enemy->ChangeToItem();
+	}
+}

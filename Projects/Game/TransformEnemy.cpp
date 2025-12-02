@@ -18,6 +18,8 @@ namespace
 	constexpr int	kFormChangeWaitTime = 180;	// 敵の変身までの時間
 	constexpr int	kFormChangeTime = 30;		// 敵の変身準備までの時間
 
+	constexpr int	kItemChangeTime = 480;		// 敵がアイテム化中の時間
+
 	constexpr float kMaxDirectionValue = 1.0f; // 向きの最大値(大きさ)
 	constexpr float kDirectionMagnification = 0.01f; // 向きの倍率
 }
@@ -56,13 +58,23 @@ void TransformEnemy::Draw()
 	(this->*m_drawFunc)();
 }
 
+void TransformEnemy::ChangeToItem()
+{
+	m_updateFunc = &TransformEnemy::ItemUpdate;
+	m_drawFunc = &TransformEnemy::ItemDraw;
+	m_frameCount = 0; // フレームカウントをリセット
+	return; // 念のためreturn
+}
+
 void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 {
 	if (info.otherType == Types::ActorType::Player) // プレイヤーに当たっている時
 	{
-		if (IsCanCollision())
+		if (IsCanCollision()) // 当たり判定を行えるなら
 		{
-			m_pPlayer->MissStart();
+			// プレイヤーが判定するとしたらダウンキャストするやり方しかわからないため
+			// 敵がプレイヤーを持っているので一旦それを使う
+			m_pPlayer->MissStart(); // プレイヤーをミスにさせる
 		}
 	}
 }
@@ -115,14 +127,17 @@ void TransformEnemy::TransformUpdate(Input&)
 		case EnemyForm::PlayerSeeker:
 			m_updateFunc = &TransformEnemy::SeekerUpdate;
 			m_drawFunc = &TransformEnemy::SeekerDraw;
+			m_currentForm = m_nextForm; // 現在の状態を更新
 			break;
 		case EnemyForm::FireBall:
 			m_updateFunc = &TransformEnemy::FireBallUpdate;
 			m_drawFunc = &TransformEnemy::FireBallDraw;
+			m_currentForm = m_nextForm; // 現在の状態を更新
 			break;
 		case EnemyForm::Skull:
 			m_updateFunc = &TransformEnemy::SkullUpdate;
 			m_drawFunc = &TransformEnemy::SkullDraw;
+			m_currentForm = m_nextForm; // 現在の状態を更新
 			break;
 		default:
 			printfDx(L"変身不可\n");
@@ -186,6 +201,36 @@ void TransformEnemy::SkullUpdate(Input&)
 
 void TransformEnemy::ItemUpdate(Input&)
 {
+	if (m_frameCount >= kItemChangeTime)
+	{
+		// 元の状態によって処理を変更する
+		// ※TransformUpdateの途中でItemに遷移した際の処理をどうするか未定
+		switch (m_currentForm)
+		{
+		case EnemyForm::Normal:
+			m_updateFunc = &TransformEnemy::NormalUpdate;
+			m_drawFunc = &TransformEnemy::NormalDraw;
+			break;
+		case EnemyForm::PlayerSeeker:
+			m_updateFunc = &TransformEnemy::SeekerUpdate;
+			m_drawFunc = &TransformEnemy::SeekerDraw;
+			break;
+		case EnemyForm::FireBall:
+			m_updateFunc = &TransformEnemy::FireBallUpdate;
+			m_drawFunc = &TransformEnemy::FireBallDraw;
+			break;
+		case EnemyForm::Skull:
+			m_updateFunc = &TransformEnemy::SkullUpdate;
+			m_drawFunc = &TransformEnemy::SkullDraw;
+			break;
+		default:
+			printfDx(L"変身不可\n");
+			break;
+		}
+
+		m_frameCount = 0; // フレームカウントをリセット(仮)
+		return; // 念のためreturn
+	}
 }
 
 void TransformEnemy::AppearDraw()
@@ -269,6 +314,18 @@ void TransformEnemy::SkullDraw()
 
 void TransformEnemy::ItemDraw()
 {
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+
+	// フレーム数がアイテム化時間の75%を超えたら
+	if (m_frameCount >= kItemChangeTime * 0.75f)
+	{
+		DrawString(drawX, drawY, L"もうすぐ敵に戻ります", 0xffffff);
+	}
+	else // それ以前なら
+	{
+		DrawString(drawX, drawY, L"アイテムに変化中", 0xffffff);
+	}
 }
 
 void TransformEnemy::CheckHitMapX()
@@ -340,8 +397,12 @@ void TransformEnemy::CheckHitMapY()
 
 bool TransformEnemy::IsCanCollision() const
 {
-	// 出現中でないかつ変身中でない場合
-	return m_updateFunc != &TransformEnemy::AppearUpdate && m_updateFunc != &TransformEnemy::TransformUpdate;
+	// 出現中、変身中、アイテム化中は当たり判定を行わない
+	if (m_updateFunc == &TransformEnemy::AppearUpdate || m_updateFunc == &TransformEnemy::TransformUpdate || m_updateFunc == &TransformEnemy::ItemUpdate)
+	{
+		return false;
+	}
+	return true;
 }
 
 

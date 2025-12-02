@@ -29,6 +29,11 @@ public:
 	/// <returns>true : 画面内にいる false : 画面外にいる</returns>
 	bool IsOnScreen()const;
 
+	/// <summary>
+	/// 敵をアイテムに変える
+	/// </summary>
+	virtual void ChangeToItem()abstract;
+
 protected:
 	// プレイヤーの生ポインタ
 	// 座標を調べるためにしか使わないが、

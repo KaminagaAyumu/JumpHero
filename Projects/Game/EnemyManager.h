@@ -29,6 +29,11 @@ public:
 
 	size_t GetEnemyNum();
 
+	/// <summary>
+	/// 敵をアイテムに変える処理
+	/// </summary>
+	void ChangeToItemAll();
+
 private:
 
 	// 座標のデータを受け取って敵を生成

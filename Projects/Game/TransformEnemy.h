@@ -40,6 +40,11 @@ public:
 	virtual void Update(Input&) override;
 	virtual void Draw() override;
 
+	/// <summary>
+	/// 敵をアイテムに変える
+	/// </summary>
+	virtual void ChangeToItem()override;
+
 private:
 
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
@@ -70,6 +75,10 @@ private:
 
 	virtual void CheckHitMapY() override;
 
+	/// <summary>
+	/// 当たり判定を行うかどうか
+	/// </summary>
+	/// <returns>true : 行う false : 行わない</returns>
 	bool IsCanCollision()const;
 
 	// 敵の状態管理用

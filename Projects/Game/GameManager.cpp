@@ -150,7 +150,7 @@ void GameManager::AddScore(int score)
 
 void GameManager::ChangeEnemyToCoin()
 {
-	printfDx(L"敵をアイテムにします\n");
+	m_pEnemyManager->ChangeToItemAll();
 }
 
 bool GameManager::IsSkipCollision() const
