@@ -8,8 +8,6 @@ namespace
 {
 	constexpr float kBalloonDefaultWidth = 30.0f;
 	constexpr float kBalloonDefaultHeight = 30.0f;
-
-	constexpr int kAddScore = 1000;
 }
 
 Balloon::Balloon(const Position2& pos)

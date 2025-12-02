@@ -20,7 +20,9 @@ namespace
 	constexpr float kEnemySpawnPosY = 120.0f;
 
 	// 敵のアイテム化時間
-	constexpr int kChangeToItemTime = 420;
+	constexpr int kChangeToItemTime = 360;
+	
+	constexpr int kEnemyCoinAddScore = 1000;
 }
 
 EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameManager, Map* map) :
@@ -44,7 +46,9 @@ void EnemyManager::Update(Input& input)
 	{
 		if (IsChangeToItem()) // アイテム化状態の場合
 		{
+#ifdef _DEBUG
 			printfDx(L"アイテム化中のため敵が生成できない\n");
+#endif
 		}
 		else
 		{
@@ -61,7 +65,7 @@ void EnemyManager::Update(Input& input)
 		{
 			if(enemy->IsDead()) // アイテム化で取得されたら
 			{
-				m_pGameManager->AddScore(1000); // コインを取った時と同じ処理をする
+				m_pGameManager->AddScore(kEnemyCoinAddScore); // コインを取った時と同じ処理をする
 			}
 		}
 	}

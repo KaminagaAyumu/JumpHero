@@ -8,8 +8,6 @@ namespace
 {
 	constexpr float kLifeUpDefaultWidth = 40.0f;
 	constexpr float kLifeUpDefaultHeight = 40.0f;
-
-	constexpr int kAddScore = 1000;
 }
 
 LifeUp::LifeUp(const Position2& pos)

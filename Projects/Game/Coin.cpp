@@ -8,8 +8,6 @@ namespace
 {
 	constexpr float kCoinDefaultWidth = 30.0f;
 	constexpr float kCoinDefaultHeight = 30.0f;
-
-	constexpr int kAddScore = 1000;
 }
 
 Coin::Coin(const Position2& pos)

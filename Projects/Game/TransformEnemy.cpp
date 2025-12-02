@@ -7,26 +7,29 @@
 
 namespace
 {
-	constexpr float kEnemyWidth = 45.0f;	// 敵の実際の幅
-	constexpr float kEnemyHeight = 45.0f;	// 敵の実際の高さ
+	// 描画関連
+	constexpr float kEnemyWidth				= 45.0f;	// 敵の実際の幅
+	constexpr float kEnemyHeight			= 45.0f;	// 敵の実際の高さ
 
-	constexpr float kGravity = 0.5f;		// 敵にかかる重力
-	constexpr float kNormalMoveSpeed = 0.5f;		// 通常時の左右移動の速さ
-	constexpr float kSeekerMoveSpeed = 0.8f;		// プレイヤーを追い続ける敵の移動の速さ
+	constexpr float kEnemyCoinWidth			= 30.0f;	// 敵がコイン化した際の幅
+	constexpr float kEnemyCoinHeight		= 30.0f;	// 敵がコイン化した際の高さ
 
-	constexpr int	kAppearTime = 60;		// 敵の出現までの時間
-	constexpr int	kFormChangeWaitTime = 180;	// 敵の変身までの時間
-	constexpr int	kFormChangeTime = 30;		// 敵の変身準備までの時間
+	// 更新処理関連
+	constexpr float kGravity				= 0.5f;		// 敵にかかる重力
+	constexpr float kNormalMoveSpeed		= 0.5f;		// 通常時の左右移動の速さ
+	constexpr float kSeekerMoveSpeed		= 0.8f;		// プレイヤーを追い続ける敵の移動の速さ
 
-	constexpr float	kItemWarningRate = 0.15f;	// アイテム化が終わりそうなことを示す時間の割合
+	constexpr int	kAppearTime				= 60;		// 敵の出現までの時間
+	constexpr int	kFormChangeWaitTime		= 180;		// 敵の変身までの時間
+	constexpr int	kFormChangeTime			= 30;		// 敵の変身準備までの時間
 
-	constexpr float kMaxDirectionValue = 1.0f; // 向きの最大値(大きさ)
-	constexpr float kDirectionMagnification = 0.01f; // 向きの倍率
-
-	constexpr float kEnemyCoinWidth = 30.0f;
-	constexpr float kEnemyCoinHeight = 30.0f;
-
-	constexpr int kAddScore = 1000;
+	constexpr float kMaxDirectionValue		= 1.0f;		// 向きの最大値(大きさ)
+	constexpr float kDirectionMagnification = 0.01f;	// 向きの倍率
+	
+	// 演出関連
+	constexpr float	kItemWarningRate		= 0.20f;	// アイテム化が終わりそうなことを示す時間の割合
+	constexpr float kWarningFrashCycle		= 0.30f;	// 点滅の周期
+	constexpr int	kMaxFadeRate			= 255;		// フェード率の最大値
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
@@ -93,7 +96,7 @@ void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 			// 敵がプレイヤーを持っているので一旦それを使う
 			m_pPlayer->MissStart(); // プレイヤーをミスにさせる
 		}
-		else if (m_updateFunc == &TransformEnemy::ItemUpdate) // 敵がアイテム化している場合
+		else if (IsItemMode()) // 敵がアイテム化している場合
 		{
 			m_isDead = true;
 		}
@@ -347,14 +350,20 @@ void TransformEnemy::ItemDraw()
 	// 残り時間が75%消費されたら
 	if (m_itemFormTime < m_maxItemFormTime * kItemWarningRate)
 	{
-		DrawString(drawX, drawY, L"もうすぐ敵に戻ります", 0xffffff);
+		// フェード率の計算 開始時: 0.0f  終了時: 1.0f
+		auto sinRate = 1.0f - sinf(m_itemFormTime / (m_maxItemFormTime * kItemWarningRate * kWarningFrashCycle) * DX_PI_F * 2);
+		auto rate = static_cast<float>(m_itemFormTime) / (m_maxItemFormTime * kItemWarningRate) / 2;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * sinRate));
+		DrawString(drawX, drawY, L"もうすぐ敵に戻ります", 0xff0000);
+		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else // それ以前なら
 	{
-		DrawString(drawX, drawY, L"アイテムに変化中", 0xffffff);
+		DrawString(drawX, drawY, L"アイテムに変化中", 0xff0000);
+		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
 	}
 
-	DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);

@@ -8,8 +8,6 @@ namespace
 {
 	constexpr float kMedalDefaultWidth = 40.0f;
 	constexpr float kMedalDefaultHeight = 40.0f;
-
-	constexpr int kAddScore = 1000;
 }
 
 UpgradeMedal::UpgradeMedal(const Position2& pos)
