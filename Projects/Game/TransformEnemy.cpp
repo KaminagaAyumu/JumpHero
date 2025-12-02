@@ -22,6 +22,11 @@ namespace
 
 	constexpr float kMaxDirectionValue = 1.0f; // 向きの最大値(大きさ)
 	constexpr float kDirectionMagnification = 0.01f; // 向きの倍率
+
+	constexpr float kEnemyCoinWidth = 30.0f;
+	constexpr float kEnemyCoinHeight = 30.0f;
+
+	constexpr int kAddScore = 1000;
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
@@ -69,6 +74,8 @@ void TransformEnemy::Draw()
 
 void TransformEnemy::ChangeToItem(int time)
 {
+	m_colRect = { m_pos,kEnemyCoinWidth,kEnemyCoinHeight };
+	m_colCircle = { m_pos,kEnemyCoinWidth / 2 };
 	m_updateFunc = &TransformEnemy::ItemUpdate;
 	m_drawFunc = &TransformEnemy::ItemDraw;
 	m_itemFormTime = time;
@@ -85,6 +92,10 @@ void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 			// プレイヤーが判定するとしたらダウンキャストするやり方しかわからないため
 			// 敵がプレイヤーを持っているので一旦それを使う
 			m_pPlayer->MissStart(); // プレイヤーをミスにさせる
+		}
+		else if (m_updateFunc == &TransformEnemy::ItemUpdate) // 敵がアイテム化している場合
+		{
+			m_isDead = true;
 		}
 	}
 }
@@ -189,7 +200,7 @@ void TransformEnemy::FireBallUpdate(Input&)
 	m_direction.x = kMaxDirectionValue;
 	m_direction.y = yComp;
 	m_direction.Normalize();
-	
+
 	m_pos += m_direction * kSeekerMoveSpeed;
 	m_colCircle.pos = m_pos;
 	m_colRect.pos = m_pos;
@@ -215,7 +226,7 @@ void TransformEnemy::ItemUpdate(Input&)
 	if (--m_itemFormTime <= 0)
 	{
 		// 元の状態によって処理を変更する
-		// ※TransformUpdateの途中でItemに遷移した際の処理をどうするか未定
+		// ※出現や変身の途中でItemに遷移した際の処理をどうするか未定
 		switch (m_currentForm)
 		{
 		case EnemyForm::Normal:
@@ -239,8 +250,12 @@ void TransformEnemy::ItemUpdate(Input&)
 			break;
 		}
 
+		// 当たり判定を元に戻す
+		m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
+		m_colCircle = { m_pos,kEnemyWidth / 2 };
+
 		m_itemFormTime = 0; // アイテム化時間を0にする
-		m_maxItemFormTime = 0; // 最大時間も0にする
+		m_maxItemFormTime = 0; // アイテム化最大時間を0にする
 		return; // 念のためreturn
 	}
 }
@@ -338,6 +353,13 @@ void TransformEnemy::ItemDraw()
 	{
 		DrawString(drawX, drawY, L"アイテムに変化中", 0xffffff);
 	}
+
+	DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+#ifdef _DEBUG
+	m_colCircle.Draw(drawX, drawY);
+	m_colRect.Draw(drawX, drawY);
+#endif
+
 }
 
 void TransformEnemy::CheckHitMapX()

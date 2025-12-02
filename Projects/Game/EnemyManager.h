@@ -52,6 +52,13 @@ private:
 	std::list<std::shared_ptr<EnemyBase>> m_enemies;
 
 	int m_frameCount; // フレーム数をカウント
+	int m_itemTime; // アイテム状態の時間
+
+	/// <summary>
+	/// 敵がアイテム化状態になっているか
+	/// </summary>
+	/// <returns>true : アイテム状態 false : アイテム状態以外</returns>
+	bool IsChangeToItem();
 };
 
 
