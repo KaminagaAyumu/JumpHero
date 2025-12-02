@@ -51,12 +51,14 @@ private:
 	int m_graphHandle; // プレイヤーのグラフィックハンドル
 
 	int m_frameCount; // フレームカウンタ
+	int m_jumpCount; // ジャンプカウンタ(プレイヤーの強化状態で使用)
 	int m_level; // プレイヤーの強化状態
 	bool m_isGround; // 地面についているか
 	bool m_isHover; // ジャンプ中にボタンを押したかどうか
 	bool m_isMiss; // ミスになったかどうか
 	bool m_isOffsetX; // マップとの左右補正を行うかどうか(消去する可能性あり)
 	bool m_isOpenChest; // 宝箱を開けられるかどうか(消去する可能性あり)
+	bool m_isLevelDown; // レベルダウンしたかどうか
 	float m_currentFloorY; // 現在接地している床の座標
 
 	// マップの生ポインタ
@@ -75,6 +77,11 @@ private:
 	/// ジャンプ開始時の処理
 	/// </summary>
 	void JumpStart();
+
+	/// <summary>
+	/// プレイヤーのパワーダウンをする
+	/// </summary>
+	void PowerDown();
 
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時

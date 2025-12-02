@@ -10,27 +10,31 @@
 
 namespace
 {
-	constexpr float kGravity			= 0.5f;				// プレイヤーにかかる重力
-	constexpr float kGroundY			= 570.0f;			// 床の座標
-	constexpr float kJumpPower			= -15.0f;			// ジャンプ時の上に上がる力
-	constexpr float kMissJumpPower = kJumpPower * 1.01f;	// ミスしたときの上に上がる力
-	constexpr float kNormalMoveSpeed			= 3.5f;		// 左右に動くスピード
+	constexpr float kGravity				= 0.5f;					// プレイヤーにかかる重力
+	constexpr float kGroundY				= 570.0f;				// 床の座標
+	constexpr float kJumpPower				= -15.0f;				// ジャンプ時の上に上がる力
+	constexpr float kMissJumpPower			= kJumpPower * 1.01f;	// ミスしたときの上に上がる力
+	constexpr float kNormalMoveSpeed		= 3.5f;					// 左右に動くスピード
 
-	constexpr int	kGraphWidth			= 45;				// プレイヤー画像の幅
-	constexpr int	kGraphHeight		= 45;				// プレイヤー画像の高さ
+	constexpr int	kGraphWidth				= 45;					// プレイヤー画像の幅
+	constexpr int	kGraphHeight			= 45;					// プレイヤー画像の高さ
 
-	constexpr float kPlayerWidth		= 45.0f;			// プレイヤーの実際の幅
-	constexpr float kPlayerHeight		= 45.0f;			// プレイヤーの実際の高さ
+	constexpr float kPlayerWidth			= 45.0f;				// プレイヤーの実際の幅
+	constexpr float kPlayerHeight			= 45.0f;				// プレイヤーの実際の高さ
 
-	constexpr int	kEntryTextDispTime	= 60;				// 登場テキストを表示する時間
-	constexpr float	kEntryMoveSpeed		= 0.05f;			// プレイヤー登場のスピード
+	constexpr int	kEntryTextDispTime		= 60;					// 登場テキストを表示する時間
+	constexpr float	kEntryMoveSpeed			= 0.05f;				// プレイヤー登場のスピード
 
-	constexpr int	kMissFreezeTime		= 10;				// ミスしたときに止まるフレーム数
-	constexpr int	kMissEndTime		= 180;				// ミス処理が終わるフレーム数
+	constexpr int	kMissFreezeTime			= 10;					// ミスしたときに止まるフレーム数
+	constexpr int	kMissEndTime			= 180;					// ミス処理が終わるフレーム数
 
-	constexpr int	kJumpAddScore		= 10;				// ジャンプしたときの加算スコア
+	constexpr int	kJumpAddScore			= 10;					// ジャンプしたときの加算スコア
 
-	constexpr int	kMaxLevel			= 2;				// パワーアップ最大値
+	constexpr int	kPowerUpLevelOne		= 1;					// パワーアップ1段階目
+	constexpr int	kJumpLimitNumLevelOne	= 20;					// パワーアップが解除されるまでのジャンプ回数
+
+	constexpr int	kPowerUpLevelMax		= 2;					// パワーアップ最大値
+	constexpr int	kJumpLimitNumLevelMax	= 25;					// パワーアップが解除されるまでのジャンプ回数
 
 	// プレイヤーの登場の初期位置
 	// 複数マップになった際に使用しなくなるはず
@@ -45,12 +49,14 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_velocity{},
 	m_graphHandle(-1),
 	m_frameCount(0),
+	m_jumpCount(0),
 	m_level(0),
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
 	m_isOffsetX(true),
 	m_isOpenChest(false),
+	m_isLevelDown(false),
 	m_currentFloorY(0.0f),
 	m_pMap(map),
 	m_pGameManager(gameManager),
@@ -73,11 +79,13 @@ void Player::Init()
 	m_colCircle = { m_pos,kGraphWidth * 0.5f };
 	m_colRect = { m_pos,kGraphWidth,kGraphHeight };
 	m_frameCount = 0;
+	m_jumpCount = 0;
 	m_level = 0;
 	m_isGround = false;
 	m_isHover = false;
 	m_isMiss = false;
 	m_isOpenChest = false;
+	m_isLevelDown = false;
 	m_currentFloorY = 0.0f;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
@@ -90,6 +98,7 @@ void Player::Update(Input& input)
 
 void Player::Draw()
 { 
+	printfDx(L"Level : %d\n", m_level);
 	(this->*m_draw)();
 }
 
@@ -124,6 +133,24 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 	}
 }
 
+void Player::PowerDown()
+{
+	if (m_jumpCount <= 0 && !m_isLevelDown) // ジャンプカウンタが0の時
+	{
+		printfDx(L"レベルが下がった\n");
+		m_level--; // レベルダウン
+		if (m_level == kPowerUpLevelOne) // レベルダウンした結果レベルが1になったら
+		{
+			m_jumpCount = kJumpLimitNumLevelOne;
+		}
+		else // レベルが0になったら
+		{
+			m_jumpCount = 0; // ジャンプカウンタをそれ以上下がらないようにする
+			m_isLevelDown = true; // レベルが0になったのでここを通らないようにする
+		}
+	}
+}
+
 void Player::EntryUpdate(Input&)
 {
 	m_frameCount++;
@@ -148,6 +175,11 @@ void Player::JumpUpdate(Input& input)
 	m_frameCount++;
 	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
 
+	if (m_level > 0) // レベルが上がっている時
+	{
+		PowerDown();
+	}
+
 	//m_velocity.y = kJumpPower;
 
 	if (m_isHover)
@@ -164,6 +196,12 @@ void Player::JumpUpdate(Input& input)
 		{
 			m_velocity.y = kJumpPower + 0.5f;
 		}
+	}
+
+	if (input.IsTriggered("PowerUp")) // パワーアップボタンが押されたとき
+	{
+		// パワーアップ処理を行う
+		m_pGameManager->PowerUpPlayer();
 	}
 
 	if (input.IsTriggered("Jump")) // 再びジャンプボタンが押されたら
@@ -473,6 +511,7 @@ void Player::JumpStart()
 	m_isHover = false; // 空中で浮いたかどうかをリセット
 	m_isGround = false; // ジャンプしたので地面についていないとする
 	m_frameCount = 0; // 時間経過をリセット
+	m_jumpCount--; // ジャンプ回数を減らす
 	m_pGameManager->AddScore(kJumpAddScore); // スコアを加算
 	m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
@@ -493,7 +532,7 @@ void Player::MissStart()
 bool Player::PowerUp()
 {
 	// レベルが最大値だったら
-	if (m_level >= kMaxLevel)
+	if (m_level >= kPowerUpLevelMax)
 	{
 #ifdef _DEBUG
 		printfDx(L"強化状態はマックスです\n");
@@ -502,5 +541,15 @@ bool Player::PowerUp()
 	}
 	printfDx(L"プレイヤーの強化に成功\n");
 	m_level++; // レベルを1増やす
+	if (m_level == kPowerUpLevelOne) // 1段階目なら
+	{
+		m_jumpCount = kJumpLimitNumLevelOne; // 20回ジャンプするまでパワーアップ継続
+	}
+	else if (m_level == kPowerUpLevelMax) // 2段階目なら
+	{
+		m_jumpCount = kJumpLimitNumLevelMax; // 25回ジャンプするまでパワーアップ継続
+	}
+	m_isLevelDown = false; // レベルが下がったかどうかの判定を可能にする
+
 	return true; // パワーアップできたのでtrueを返す
 }
