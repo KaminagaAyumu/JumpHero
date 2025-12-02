@@ -5,8 +5,9 @@
 #include "Coin.h"
 #include "../Utility/Input.h"
 
-ItemManager::ItemManager(Camera* camera) :
-	m_pCamera(camera)
+ItemManager::ItemManager(Camera* camera, GameManager* gameManager) :
+	m_pCamera(camera),
+	m_pGameManager(gameManager)
 {
 	m_pItems.clear();
 }
@@ -20,6 +21,10 @@ void ItemManager::Update(Input& input)
 	for (auto& item : m_pItems)
 	{
 		item->Update(input);
+		if (!item->IsExist())
+		{
+			item->OnCollected(*m_pGameManager);
+		}
 	}
 
 	// アイテムに存在しないものがある場合削除
@@ -43,10 +48,10 @@ void ItemManager::Draw()
 	}*/
 }
 
-void ItemManager::SpawnItem(int x, int y, std::function<void(int)> scoreFunc)
+void ItemManager::SpawnItem(int x, int y)
 {
 	Position2 pos = { x,y };
-	auto item = std::make_shared<Coin>(pos, scoreFunc);
+	auto item = std::make_shared<Coin>(pos);
 	item->SetCamera(m_pCamera);
 	m_pItems.push_back(item);
 }

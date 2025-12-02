@@ -1,6 +1,8 @@
 ﻿#include <functional>
 #include "Coin.h"
 #include "../Utility/Camera.h"
+#include "GameManager.h"
+#include "../Utility/GameType.h"
 #include "DxLib.h"
 
 namespace
@@ -11,8 +13,7 @@ namespace
 	constexpr int kAddScore = 1000;
 }
 
-Coin::Coin(const Position2& pos, std::function<void(int)> scoreFunc) : 
-	m_scoreFunc(scoreFunc)
+Coin::Coin(const Position2& pos)
 {
 	m_pos = pos;
 	m_colRect = { {m_pos},kCoinDefaultWidth,kCoinDefaultHeight };
@@ -44,11 +45,16 @@ void Coin::Draw()
 	}
 }
 
+void Coin::OnCollected(GameManager& gameManager)
+{
+	// コインが取得された際の処理を行わせる
+	gameManager.OnItemCollected(Types::ItemType::Coin);
+}
+
 void Coin::IsCollision(const Types::CollisionInfo& info)
 {
 	if (info.otherType == Types::ActorType::Player)
 	{
-		m_scoreFunc(kAddScore);
 		m_isExist = false;
 	}
 }

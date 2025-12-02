@@ -1,5 +1,4 @@
-﻿#include <memory>
-#include "GameManager.h"
+﻿#include "GameManager.h"
 #include "Actor.h"
 #include "Player.h"
 #include "ChestManager.h"
@@ -44,7 +43,7 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_pChestManager = std::make_unique<ChestManager>(m_pCamera.get(), this);
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
-	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get());
+	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get(),this);
 	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this, map);
 
 	m_pCamera->SetTarget(m_pPlayer.get());
@@ -159,7 +158,7 @@ void GameManager::OnItemCollected(const Types::ItemType& type)
 {
 	if (m_itemCollectFunc.contains(type))
 	{
-		m_itemCollectFunc[type];
+		m_itemCollectFunc[type]();
 	}
 	else
 	{
@@ -169,7 +168,7 @@ void GameManager::OnItemCollected(const Types::ItemType& type)
 
 void GameManager::DropItem(int x, int y)
 {
-	m_pItemManager->SpawnItem(x, y, [&](int score) { AddScore(score); });
+	m_pItemManager->SpawnItem(x, y);
 }
 
 const size_t GameManager::GetActorNum() const
