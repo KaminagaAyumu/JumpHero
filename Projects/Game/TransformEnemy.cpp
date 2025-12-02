@@ -184,6 +184,10 @@ void TransformEnemy::SkullUpdate(Input&)
 	m_colRect.pos = m_pos;
 }
 
+void TransformEnemy::ItemUpdate(Input&)
+{
+}
+
 void TransformEnemy::AppearDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
@@ -261,6 +265,10 @@ void TransformEnemy::SkullDraw()
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif
+}
+
+void TransformEnemy::ItemDraw()
+{
 }
 
 void TransformEnemy::CheckHitMapX()

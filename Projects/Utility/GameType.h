@@ -45,5 +45,6 @@ namespace Types
 		UpgradeMedal, // 強化メダル
 		LifeUp, // 1UP
 		Coin, // スコア加算用コイン
+		ChangeToCoin, // 敵をコインに変える
 	};
 }

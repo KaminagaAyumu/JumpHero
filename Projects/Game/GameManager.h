@@ -44,6 +44,11 @@ public:
 	void AddScore(int score);
 
 	/// <summary>
+	/// 敵をアイテムに変える
+	/// </summary>
+	void ChangeEnemyToCoin();
+
+	/// <summary>
 	/// 当たり判定を行わないかどうか
 	/// </summary>
 	/// <returns>true : 行わない false : 行う</returns>

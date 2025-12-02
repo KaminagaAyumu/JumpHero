@@ -1,20 +1,19 @@
 ﻿#pragma once
 #include "ItemBase.h"
 
-
 /// <summary>
-/// アイテム : 風船クラス
+/// アイテム : 敵をコインに変えるアイテムクラス
 /// </summary>
-class Balloon : public ItemBase
+class ChangeToCoin : public ItemBase
 {
 public:
-	
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="pos">生成位置</param>
-	Balloon(const Position2& pos);
-	virtual ~Balloon() = default;
+	ChangeToCoin(const Position2& pos);
+	virtual ~ChangeToCoin() = default;
 
 	virtual void Init()override;
 	virtual void Update(Input&)override;

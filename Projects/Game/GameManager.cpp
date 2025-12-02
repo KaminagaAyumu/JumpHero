@@ -69,6 +69,11 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 		{
 			AddScore(kCoinAddScore); // スコアを加算
 		};
+	// 敵をコインに変えるアイテムを取った時
+	m_itemCollectFunc[Types::ItemType::ChangeToCoin] = [this]()
+		{
+			ChangeEnemyToCoin(); // 敵をすべてアイテム化
+		};
 
 
 }
@@ -141,6 +146,11 @@ void GameManager::PushActors(std::vector<Actor*>& actors)
 void GameManager::AddScore(int score)
 {
 	m_currentScore += score;
+}
+
+void GameManager::ChangeEnemyToCoin()
+{
+	printfDx(L"敵をアイテムにします\n");
 }
 
 bool GameManager::IsSkipCollision() const

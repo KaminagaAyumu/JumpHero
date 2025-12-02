@@ -46,7 +46,7 @@ void LifeUp::Draw()
 
 void LifeUp::OnCollected(GameManager& gameManager)
 {
-	// 風船が取得された際の処理を行わせる
+	// 1UPが取得された際の処理を行わせる
 	gameManager.OnItemCollected(Types::ItemType::LifeUp);
 }
 

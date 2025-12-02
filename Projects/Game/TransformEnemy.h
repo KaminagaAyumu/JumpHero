@@ -21,6 +21,7 @@ public:
 		PlayerSeeker, // 原作の鳥
 		FireBall, // 原作の火の玉
 		Skull, // 原作のどくろ
+		Item, // アイテム化状態
 	};
 
 
@@ -52,6 +53,7 @@ private:
 	void SeekerUpdate(Input&); // プレイヤーを追い続ける更新処理
 	void FireBallUpdate(Input&); // プレイヤーの縦座標を追い続ける更新処理
 	void SkullUpdate(Input&); // プレイヤーの横座標を追い続ける更新処理
+	void ItemUpdate(Input&); // 敵がアイテム化中の更新処理
 
 	// 描画処理用関数群
 	using DrawFunc_t = void(TransformEnemy::*)(); // 関数の形式自体は更新処理と同じなので別名とする
@@ -62,6 +64,7 @@ private:
 	void SeekerDraw(); // プレイヤーを追い続ける時の描画処理
 	void FireBallDraw(); // プレイヤーの縦座標を追い続ける時の描画処理
 	void SkullDraw(); // プレイヤーの横座標を追い続けるときの描画処理
+	void ItemDraw(); // 敵がアイテム化中の描画処理
 
 	virtual void CheckHitMapX() override;
 
