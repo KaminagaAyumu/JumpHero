@@ -119,6 +119,9 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 #ifdef _DEBUG
 		printfDx(L"Player : 宝箱と衝突しました\n");
 #endif 
+		// どこから当たったか、プレイヤーが横から開けるかを判定
+
+
 		if (!m_isGround && m_isOpenChest)
 		{
 			auto chest = dynamic_cast<Chest*>(info.other);
@@ -132,7 +135,7 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 	}
 }
 
-void Player::PowerDown()
+void Player::CheckPowerDown()
 {
 	if (m_jumpCount <= 0 && !m_isLevelDown) // ジャンプカウンタが0の時
 	{
@@ -164,9 +167,9 @@ void Player::EntryUpdate(Input&)
 
 	if (m_pos.x >= kEntryEndPos.x - 1.0f) // 終了位置と大体同じになったら終了
 	{
-		m_pos = kEntryEndPos;
-		m_update = &Player::JumpUpdate;
-		m_draw = &Player::JumpDraw;
+		m_pos = kEntryEndPos; // プレイヤーの位置を終了位置に動かす
+		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
+		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 		return;
 	}
 }
@@ -178,17 +181,19 @@ void Player::JumpUpdate(Input& input)
 
 	if (m_level > 0) // レベルが上がっている時
 	{
-		PowerDown();
+		CheckPowerDown(); // プレイヤーのパワーダウンをするかどうか判定する
 	}
 
 	//m_velocity.y = kJumpPower;
 
-	if (m_isHover)
+	// 空中で浮いたかどうかの判定
+	if (m_isHover) // すでに浮いている場合
 	{
-
+		// 何もしない
 	}
-	else
+	else // 浮いていない場合
 	{
+		// ジャンプの高さを上下に調整できる
 		if (input.IsPressed("Up")) // 上ボタンが押されたとき
 		{
 			m_velocity.y = kJumpPower - 0.5f;
@@ -503,6 +508,12 @@ void Player::MissDraw()
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif
+}
+
+bool Player::IsOpenChestX() const
+{
+	// レベルが1以上なら宝箱が横から開けられる
+	return m_level <= kPowerUpLevelOne;
 }
 
 void Player::JumpStart()

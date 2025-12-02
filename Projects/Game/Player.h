@@ -79,9 +79,9 @@ private:
 	void JumpStart();
 
 	/// <summary>
-	/// プレイヤーのパワーダウンをする
+	/// プレイヤーのパワーダウンを判定する
 	/// </summary>
-	void PowerDown();
+	void CheckPowerDown();
 
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時
@@ -100,5 +100,7 @@ private:
 	// 描画処理用関数ポインタの型定義
 	using DrawFunc_t = void(Player::*)();
 	DrawFunc_t m_draw;
+
+	bool IsOpenChestX()const;
 };
 
