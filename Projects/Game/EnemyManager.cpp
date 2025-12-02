@@ -17,6 +17,9 @@ namespace
 
 	// 敵スポーン位置(今後はプレイヤーとマップ基準で可変になる)
 	constexpr float kEnemySpawnPosY = 120.0f;
+
+	// 敵のアイテム化時間
+	constexpr int kChangeToItemTime = 420;
 }
 
 EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameManager, Map* map) :
@@ -92,6 +95,6 @@ void EnemyManager::ChangeToItemAll()
 {
 	for (auto& enemy : m_enemies)
 	{
-		enemy->ChangeToItem();
+		enemy->ChangeToItem(kChangeToItemTime);
 	}
 }

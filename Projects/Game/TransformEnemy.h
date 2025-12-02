@@ -43,7 +43,8 @@ public:
 	/// <summary>
 	/// 敵をアイテムに変える
 	/// </summary>
-	virtual void ChangeToItem()override;
+	/// <param name="time">アイテムに変える時間</param>
+	virtual void ChangeToItem(int time)override;
 
 private:
 
@@ -81,12 +82,23 @@ private:
 	/// <returns>true : 行う false : 行わない</returns>
 	bool IsCanCollision()const;
 
+	/// <summary>
+	/// アイテム状態かどうか
+	/// </summary>
+	/// <returns>true : アイテム状態 false : アイテム状態ではない</returns>
+	bool IsItemMode()const;
+
 	// 敵の状態管理用
 	EnemyForm m_currentForm; // 現在の敵の姿
 	EnemyForm m_nextForm; // 変わる姿
 
 	// 時間カウンタ(状態が変わるごとにリセットする)
 	int m_frameCount;
+
+	// アイテム化状態の時間
+	int m_itemFormTime;
+	// 最大時間(残り時間を判定する用)
+	int m_maxItemFormTime;
 
 	// 敵が折り返した回数をカウントする
 	int m_turnCount;

@@ -32,7 +32,8 @@ public:
 	/// <summary>
 	/// 敵をアイテムに変える
 	/// </summary>
-	virtual void ChangeToItem()abstract;
+	/// <param name="time">アイテムに変える時間</param>
+	virtual void ChangeToItem(int time)abstract;
 
 protected:
 	// プレイヤーの生ポインタ

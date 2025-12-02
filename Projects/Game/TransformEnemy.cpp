@@ -18,7 +18,7 @@ namespace
 	constexpr int	kFormChangeWaitTime = 180;	// 敵の変身までの時間
 	constexpr int	kFormChangeTime = 30;		// 敵の変身準備までの時間
 
-	constexpr int	kItemChangeTime = 480;		// 敵がアイテム化中の時間
+	constexpr float	kItemWarningRate = 0.15f;	// アイテム化が終わりそうなことを示す時間の割合
 
 	constexpr float kMaxDirectionValue = 1.0f; // 向きの最大値(大きさ)
 	constexpr float kDirectionMagnification = 0.01f; // 向きの倍率
@@ -31,6 +31,8 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_currentForm(EnemyForm::Normal),
 	m_nextForm(changeForm),
 	m_frameCount(0),
+	m_itemFormTime(0),
+	m_maxItemFormTime(0),
 	m_turnCount(0),
 	m_isGround(false),
 	m_velocity{}
@@ -49,7 +51,14 @@ void TransformEnemy::Init()
 
 void TransformEnemy::Update(Input& input)
 {
-	m_frameCount++; // フレーム数は常に更新し続ける
+	if (IsItemMode())
+	{
+		// フレーム数の更新を行わない
+	}
+	else
+	{
+		m_frameCount++; // フレーム数は常に更新し続ける
+	}
 	(this->*m_updateFunc)(input);
 }
 
@@ -58,11 +67,12 @@ void TransformEnemy::Draw()
 	(this->*m_drawFunc)();
 }
 
-void TransformEnemy::ChangeToItem()
+void TransformEnemy::ChangeToItem(int time)
 {
 	m_updateFunc = &TransformEnemy::ItemUpdate;
 	m_drawFunc = &TransformEnemy::ItemDraw;
-	m_frameCount = 0; // フレームカウントをリセット
+	m_itemFormTime = time;
+	m_maxItemFormTime = time;
 	return; // 念のためreturn
 }
 
@@ -201,7 +211,8 @@ void TransformEnemy::SkullUpdate(Input&)
 
 void TransformEnemy::ItemUpdate(Input&)
 {
-	if (m_frameCount >= kItemChangeTime)
+	// アイテム化時間を減らしていって、時間に達したら
+	if (--m_itemFormTime <= 0)
 	{
 		// 元の状態によって処理を変更する
 		// ※TransformUpdateの途中でItemに遷移した際の処理をどうするか未定
@@ -228,7 +239,8 @@ void TransformEnemy::ItemUpdate(Input&)
 			break;
 		}
 
-		m_frameCount = 0; // フレームカウントをリセット(仮)
+		m_itemFormTime = 0; // アイテム化時間を0にする
+		m_maxItemFormTime = 0; // 最大時間も0にする
 		return; // 念のためreturn
 	}
 }
@@ -317,8 +329,8 @@ void TransformEnemy::ItemDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	// フレーム数がアイテム化時間の75%を超えたら
-	if (m_frameCount >= kItemChangeTime * 0.75f)
+	// 残り時間が75%消費されたら
+	if (m_itemFormTime < m_maxItemFormTime * kItemWarningRate)
 	{
 		DrawString(drawX, drawY, L"もうすぐ敵に戻ります", 0xffffff);
 	}
@@ -402,7 +414,14 @@ bool TransformEnemy::IsCanCollision() const
 	{
 		return false;
 	}
+	// それ以外は当たり判定可能
 	return true;
+}
+
+bool TransformEnemy::IsItemMode() const
+{
+	// 更新処理がアイテム状態の場合
+	return m_updateFunc == &TransformEnemy::ItemUpdate;
 }
 
 
