@@ -1,18 +1,20 @@
 ﻿#pragma once
 #include "ItemBase.h"
 
+
 /// <summary>
-/// アイテム : コインクラス
+/// アイテム : 風船クラス
 /// </summary>
-class Coin : public ItemBase
+class Balloon : public ItemBase
 {
 public:
+	
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="pos">生成位置</param>
-	Coin(const Position2& pos);
-	virtual ~Coin() = default;
+	Balloon(const Position2& pos);
+	virtual ~Balloon() = default;
 
 	virtual void Init()override;
 	virtual void Update(Input&)override;
@@ -28,6 +30,7 @@ public:
 private:
 
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
+
 
 };
 

@@ -1,4 +1,4 @@
-﻿#include "Coin.h"
+﻿#include "Balloon.h"
 #include "../Utility/Camera.h"
 #include "GameManager.h"
 #include "../Utility/GameType.h"
@@ -12,25 +12,25 @@ namespace
 	constexpr int kAddScore = 1000;
 }
 
-Coin::Coin(const Position2& pos)
+Balloon::Balloon(const Position2& pos)
 {
 	m_pos = pos;
 	m_colRect = { {m_pos},kCoinDefaultWidth,kCoinDefaultHeight };
 	m_colCircle = { {m_pos},kCoinDefaultWidth / 2 };
 }
 
-void Coin::Init()
+void Balloon::Init()
 {
-	
+
 }
 
-void Coin::Update(Input&)
+void Balloon::Update(Input&)
 {
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
 }
 
-void Coin::Draw()
+void Balloon::Draw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
@@ -44,13 +44,13 @@ void Coin::Draw()
 	}
 }
 
-void Coin::OnCollected(GameManager& gameManager)
+void Balloon::OnCollected(GameManager& gameManager)
 {
-	// コインが取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::Coin);
+	// 風船が取得された際の処理を行わせる
+	gameManager.OnItemCollected(Types::ItemType::Balloon);
 }
 
-void Coin::IsCollision(const Types::CollisionInfo& info)
+void Balloon::IsCollision(const Types::CollisionInfo& info)
 {
 	if (info.otherType == Types::ActorType::Player)
 	{
