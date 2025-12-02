@@ -12,16 +12,22 @@ class ItemBase : public Actor
 {
 public:
 	ItemBase();
-	ItemBase(float x, float y);
 	virtual ~ItemBase();
 
-	virtual void Init()override;
-	virtual void Update(Input&)override;
-	virtual void Draw()override;
+	/// <summary>
+	/// アイテムの種類
+	/// </summary>
+	enum class ItemType
+	{
+		Balloon, // 風船
+		UpgradeMedal, // 強化メダル
+		LifeUp, // 1UP
+		Coin, // スコア加算用コイン
+	};
 
-	virtual void IsCollision(const Types::CollisionInfo& info) override;
-
-	void SetScoreFunc(std::function<void(int)> scoreFunc);
+	virtual void Init()abstract;
+	virtual void Update(Input&)abstract;
+	virtual void Draw()abstract;
 
 	/// <summary>
 	/// アイテムの存在フラグ
@@ -29,20 +35,12 @@ public:
 	/// <returns>true : 存在する false : 存在しない</returns>
 	bool IsExist() const { return m_isExist; }
 
-private:
+protected:
 
-	enum class ItemType
-	{
-		Balloon,
-		UpgradeMedal,
-		LifeUp,
-		Coin
-	};
-
+	// 存在フラグ
 	bool m_isExist;
 
-	// スコア加算用関数(仮)
-	std::function<void(int)> m_scoreFunc;
+	virtual void IsCollision(const Types::CollisionInfo& info) abstract;
 
 };
 

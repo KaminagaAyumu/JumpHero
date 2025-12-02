@@ -2,6 +2,7 @@
 #include <vector>
 #include "ItemManager.h"
 #include "ItemBase.h"
+#include "Coin.h"
 #include "../Utility/Input.h"
 
 ItemManager::ItemManager(Camera* camera) :
@@ -44,9 +45,9 @@ void ItemManager::Draw()
 
 void ItemManager::SpawnItem(int x, int y, std::function<void(int)> scoreFunc)
 {
-	auto item = std::make_shared<ItemBase>(x, y);
+	Position2 pos = { x,y };
+	auto item = std::make_shared<Coin>(pos, scoreFunc);
 	item->SetCamera(m_pCamera);
-	item->SetScoreFunc(scoreFunc);
 	m_pItems.push_back(item);
 }
 
