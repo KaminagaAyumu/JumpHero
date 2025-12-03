@@ -111,7 +111,7 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 			float posX = x * kChipSize * kChipScale + kChipSize * 0.5f;
 			float posY = y * kChipSize * kChipScale + kChipSize * 0.5f;
 
-			Rect2D chipRect = { {posX,posY},kChipSize,kChipSize };
+			Rect2D chipRect = { {posX,posY},kChipSize * kChipScale,kChipSize * kChipScale };
 			if (chipRect.GetLeft() > rect.GetRight())
 			{
 				continue;

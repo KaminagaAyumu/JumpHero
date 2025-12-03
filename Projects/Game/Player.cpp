@@ -119,14 +119,17 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 #ifdef _DEBUG
 		printfDx(L"Player : 宝箱と衝突しました\n");
 #endif 
-		// どこから当たったか、プレイヤーが横から開けるかを判定
-
 
 		if (!m_isGround && m_isOpenChest)
 		{
+			// 当たっている宝箱を取得
 			auto chest = dynamic_cast<Chest*>(info.other);
-			if (chest)
+			if (chest) // 宝箱が存在したら
 			{
+				// どこから当たったか、プレイヤーが横から開けるかを判定
+				// chest->GetColRect(); // 宝箱の矩形を取得
+
+
 				chest->OpenChest();
 				m_isOpenChest = false;
 			}
