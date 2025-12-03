@@ -10,8 +10,8 @@ namespace
 {
 	constexpr float kDefaultWidth = 45.0f;
 	constexpr float kDefaultHeight = 45.0f;
-	constexpr float kChipSize = 45.0f;
-	constexpr float kChipScale = 1.0f;
+	constexpr int	kChipSize = 32; // マップ1つの大きさ
+	constexpr float kChipScale = 1.40625f; // マップの拡大率
 
 	constexpr int kSpaceChipNo = 79;
 }

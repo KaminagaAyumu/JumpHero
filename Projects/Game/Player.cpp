@@ -345,7 +345,7 @@ void Player::GroundUpdate(Input& input)
 	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
 	// 移動可能範囲の矩形を取得
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-
+	
 	//
 	//// 問題点その1
 	//// こっちの場合、常にジャンプ状態に更新されてしまう
@@ -479,8 +479,11 @@ void Player::JumpDraw()
 	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xaaffff, true);
 	DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 
-
 #ifdef _DEBUG
+
+	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
+	moveRange.Draw();
+
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX,drawY);
 #endif
@@ -493,7 +496,19 @@ void Player::GroundDraw()
 	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
 	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 	
+
 #ifdef _DEBUG
+
+	// 当たっているマップチップを表示(スクロールは考えない)
+	Rect2D collisionMapChip = {};
+	if (m_pMap->IsCollision(m_colRect, collisionMapChip))
+	{
+		collisionMapChip.Draw();
+	}
+
+	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
+	moveRange.Draw();
+
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif

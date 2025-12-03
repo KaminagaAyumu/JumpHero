@@ -152,12 +152,15 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 				continue; // マップチップの透明部分は当たり判定をしないようにする
 			}
 
+			// 1マスの描画サイズ
+			float tileSize = kChipSize * kChipScale;
+
 			// 当たり判定を表示する座標
 			// xとyは当たり判定の左端なので中央に補正
-			float posX = x * kChipSize * kChipScale + kChipSize * 0.5f;
-			float posY = y * kChipSize * kChipScale + kChipSize * 0.5f;
+			float posX = x * tileSize + tileSize * 0.5f;
+			float posY = y * tileSize + tileSize * 0.5f;
 
-			Rect2D chipRect = { {posX,posY},kChipSize * kChipScale,kChipSize * kChipScale };
+			Rect2D chipRect = { {posX,posY},tileSize,tileSize };
 			if (chipRect.GetLeft() > rect.GetRight())
 			{
 				continue;
@@ -213,45 +216,48 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 				continue; // マップチップの透明部分は当たり判定をしないようにする
 			}
 
+			// 1マスの描画サイズ
+			float tileSize = kChipSize * kChipScale;
+
 			// マップの判定の座標を設定
 			// xとyは当たり判定の左端なので中央に補正
-			float posX = x * kChipSize * kChipScale + kChipSize * 0.5f;
-			float posY = y * kChipSize * kChipScale + kChipSize * 0.5f;
+			float posX = x * tileSize + tileSize * 0.5f;
+			float posY = y * tileSize + tileSize * 0.5f;
 
 			// x軸の距離が近い時(大体縦並びになっているとき)
-			if (abs(posX - rectCenter.x) <= (rect.width / 2 + kChipSize / 2))
+			if (abs(posX - rectCenter.x) <= (rect.width / 2 + tileSize / 2))
 			{
 				float distY = abs(posY - rectCenter.y);
 				// マップが矩形より下にある時かつ矩形と一番近い時
 				if (posY > rectCenter.y && distY < minBottomDist)
 				{
 					// 返す矩形の下端の座標をセット
-					retRectBottom = posY - kChipSize * kChipScale * 0.5f + kMoveRangeMargin;
+					retRectBottom = posY - tileSize * 0.5f + kMoveRangeMargin;
 
 					// 矩形との最短距離を設定
 					minBottomDist = distY;
 				}
 				else if (posY < rectCenter.y && distY < minTopDist) // マップが矩形より上にある時
 				{
-					retRectTop = posY + kChipSize * kChipScale * 0.5f - kMoveRangeMargin;
+					retRectTop = posY + tileSize * 0.5f - kMoveRangeMargin;
 
 					minTopDist = distY;
 				}
 			}
 
 			// y軸との距離が近いとき(大体横並びになっているとき)
-			if (abs(posY - rectCenter.y) <= (rect.height / 2 + kChipSize / 2))
+			if (abs(posY - rectCenter.y) <= (rect.height / 2 + tileSize / 2))
 			{
 				float distX = abs(posX - rectCenter.x);
 				if (posX > rectCenter.x && distX < minRightDist)
 				{
-					retRectRight = posX - kChipSize * kChipScale * 0.5f - kMoveRangeMargin;
+					retRectRight = posX - tileSize * 0.5f - kMoveRangeMargin;
 
 					minRightDist = distX;
 				}
 				else if (posX < rectCenter.x && distX < minLeftDist)
 				{
-					retRectLeft = posX + kChipSize * kChipScale * 0.5f + kMoveRangeMargin;
+					retRectLeft = posX + tileSize * 0.5f + kMoveRangeMargin;
 
 					minLeftDist = distX;
 				}

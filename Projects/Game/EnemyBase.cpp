@@ -14,8 +14,8 @@ namespace
 	constexpr int kGraphHeight = 45;
 
 	// この定数はマップから取得できるようにするかもしれない
-	constexpr int kChipSize = 45; // マップ1つの大きさ
-	constexpr float kChipScale = 1.0f; // マップの拡大率
+	constexpr int kChipSize = 32; // マップ1つの大きさ
+	constexpr float kChipScale = 1.40625f; // マップの拡大率
 }
 
 EnemyBase::EnemyBase(Player* player, Map* map) :
