@@ -188,28 +188,28 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 
 Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 {
+	// 引数の矩形の位置く
 	Position2 rectCenter = rect.pos;
-	// 返す矩形の上下左右の座標
+	// 返り値の矩形の上下左右の座標
+	// 初期化のため一旦引数の矩形の位置に設定
 	float retRectLeft = rectCenter.x;
 	float retRectRight = rectCenter.x;
 	float retRectTop = rectCenter.y;
 	float retRectBottom = rectCenter.y;
 
+	// 引数の矩形からマップチップまでの距離
+	// 初期化ではとにかく遠くしておく
 	float minLeftDist = kLargeValue;
 	float minRightDist = kLargeValue;
 	float minTopDist = kLargeValue;
 	float minBottomDist = kLargeValue;
 
-	// 矩形の上下左右の座標が設定されたかどうか
-	bool isLeftSet = false;
-	bool isRightSet = false;
-	bool isTopSet = false;
-	bool isBottomSet = false;
+	// すべてのマップチップとの距離を判定
 	for (int y = 0; y < m_height; y++)
 	{
 		for (int x = 0; x < m_width; x++)
 		{
-			//int chipNo = m_chipData[y * m_width + x];
+			// マップチップの番号(判定しないものを探すためのもの)
 			int chipNo = m_layerMapData[0][y * m_width + x];
 			if (chipNo == kSpaceChipNo)
 			{
@@ -245,7 +245,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 				}
 			}
 
-			// y軸との距離が近いとき(大体横並びになっているとき)
+			// y軸との距離が近い時(大体横並びになっているとき)
 			if (abs(posY - rectCenter.y) <= (rect.height / 2 + tileSize / 2))
 			{
 				float distX = abs(posX - rectCenter.x);
@@ -261,10 +261,6 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 
 					minLeftDist = distX;
 				}
-			}
-			if (isLeftSet && isRightSet && isTopSet && isBottomSet)
-			{
-				break;
 			}
 		}
 	}

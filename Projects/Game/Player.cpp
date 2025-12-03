@@ -482,7 +482,7 @@ void Player::JumpDraw()
 #ifdef _DEBUG
 
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	moveRange.Draw();
+	moveRange.Draw(drawX, drawY);
 
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX,drawY);
@@ -507,7 +507,7 @@ void Player::GroundDraw()
 	}
 
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	moveRange.Draw();
+	moveRange.Draw(drawX,drawY);
 
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
