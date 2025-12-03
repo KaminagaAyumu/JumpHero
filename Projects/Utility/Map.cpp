@@ -10,13 +10,13 @@ namespace
 	constexpr int kChipNumX = 97;
 	constexpr int kChipNumY = 16;
 
-	constexpr int kChipSize = 45; // マップ1つの大きさ
-	constexpr float kChipScale = 1.0f; // マップの拡大率
+	constexpr int kChipSize = 32; // マップ1つの大きさ
+	constexpr float kChipScale = 1.40625f; // マップの拡大率
 
-	constexpr int kSpaceChipNo = 79; // マップチップの透明部分
-	//constexpr int kSpaceChipNo = 0; // マップチップの透明部分
-	constexpr int kChestChipNo = 46; // マップチップの宝箱部分
-	//constexpr int kChestChipNo = 106; // マップチップの宝箱部分
+	//constexpr int kSpaceChipNo = 79; // マップチップの透明部分
+	constexpr int kSpaceChipNo = 0; // マップチップの透明部分
+	//constexpr int kChestChipNo = 46; // マップチップの宝箱部分
+	constexpr int kChestChipNo = 106; // マップチップの宝箱部分
 
 	constexpr float kMoveRangeMargin = 1.0f; // マップとの位置の補正用
 
@@ -62,8 +62,8 @@ Map::Map() :
 	m_graphChipNumX(0),
 	m_graphChipNumY(0)
 {
-	//m_mapHandle = LoadGraph(L"data/gameData.png");
-	m_mapHandle = LoadGraph(L"data/mapChip_default.png");
+	m_mapHandle = LoadGraph(L"data/gameData.png");
+	//m_mapHandle = LoadGraph(L"data/mapChip_default.png");
 
 	// マップのデータと画像の切り取り位置を合わせるための処理
 	int graphW = 0;
@@ -75,8 +75,8 @@ Map::Map() :
 	m_graphChipNumY = graphH / kChipSize;
 
 	// マップの初期データをロード
-	LoadMapdata("data/map_new.csv");
-	//LoadStageData(1);
+	//LoadMapdata("data/map_new.csv");
+	LoadStageData(1);
 }
 
 Map::~Map()
@@ -120,16 +120,21 @@ void Map::Draw(Camera* camera)
 	{
 		for (int x = startX; x < endX; x++)
 		{
-			float posX = x * tileSize - scrollX;
-			float posY = y * tileSize - scrollY;
+			// 表示したい画像の範囲
+			const float dstLeft = x * tileSize - scrollX; // 左端
+			const float dstTop = y * tileSize - scrollY; // 上端
+			const float dstRight = dstLeft + tileSize; // 右端
+			const float dstBottom = dstTop + tileSize; // 下端
 
-			int chipNo = m_chipData[y * m_width + x];
-			//int chipNo = m_layerMapData[0][y * m_width + x];
+			//const int chipNo = m_chipData[y * m_width + x];
+			const int chipNo = m_layerMapData[0][y * m_width + x]; // レイヤーの番号
+			const int srcX = kChipSize * (chipNo % m_graphChipNumX); // どこの行かを座標に変換
+			const int srcY = kChipSize * (chipNo / m_graphChipNumX); // どこの列かを座標に変換
 
-			int srcX = kChipSize * (chipNo % m_graphChipNumX);
-			int srcY = kChipSize * (chipNo / m_graphChipNumX);
-
-			DrawRectRotaGraph(static_cast<int>(posX + tileSize * 0.5f), static_cast<int>(posY + tileSize * 0.5f), srcX, srcY, kChipSize, kChipSize, kChipScale, 0.0f, m_mapHandle, true);
+			DrawRectExtendGraph(static_cast<int>(dstLeft), static_cast<int>(dstTop),
+				static_cast<int>(dstRight), static_cast<int>(dstBottom),
+				srcX, srcY,
+				kChipSize, kChipSize, m_mapHandle, true);
 		}
 	}
 }
@@ -140,8 +145,8 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 	{
 		for (int x = 0; x < m_width; x++)
 		{
-			int chipNo = m_chipData[y * m_width + x];
-			//int chipNo = m_layerMapData[0][y * m_width + x];
+			//int chipNo = m_chipData[y * m_width + x];
+			int chipNo = m_layerMapData[0][y * m_width + x];
 			if (chipNo == kSpaceChipNo)
 			{
 				continue; // マップチップの透明部分は当たり判定をしないようにする
@@ -201,8 +206,8 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 	{
 		for (int x = 0; x < m_width; x++)
 		{
-			int chipNo = m_chipData[y * m_width + x];
-			//int chipNo = m_layerMapData[0][y * m_width + x];
+			//int chipNo = m_chipData[y * m_width + x];
+			int chipNo = m_layerMapData[0][y * m_width + x];
 			if (chipNo == kSpaceChipNo)
 			{
 				continue; // マップチップの透明部分は当たり判定をしないようにする
@@ -276,14 +281,14 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 
 int Map::GetMapChipNum(int x, int y)
 {
-	return m_chipData[y * m_width + x];
-	//return m_layerMapData[0][y * m_width + x];
+	//return m_chipData[y * m_width + x];
+	return m_layerMapData[0][y * m_width + x];
 }
 
 void Map::SetMapChip(int x, int y, int value)
 {
-	m_chipData[y * m_width + x] = value;
-	//m_layerMapData[0][y * m_width + x] = value;
+	//m_chipData[y * m_width + x] = value;
+	m_layerMapData[0][y * m_width + x] = value;
 }
 
 void Map::LoadMapdata(const std::string& fileName)
@@ -423,13 +428,12 @@ bool Map::LoadStageData(int stageNo)
 		const uint8_t* begin = rawData.data() + static_cast<size_t>(layer * layerSize);
 		// 8ビットの要素を16ビットに変換
 		const uint16_t* data = reinterpret_cast<const uint16_t*>(begin);
-		for (size_t i = 0; i < headerWidth; i++)
+		// データを上から格納
+		for (size_t i = 0; i < headerWidth * headerHeight; i++)
 		{
 			m_layerMapData[layer][i] = data[i];
 		}
 	}
-
-
 	// データの読み込みに成功したらtrueを返す
 	return true;
 }
