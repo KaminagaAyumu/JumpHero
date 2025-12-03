@@ -12,8 +12,11 @@ namespace
 
 	constexpr int kChipSize = 45; // マップ1つの大きさ
 	constexpr float kChipScale = 1.0f; // マップの拡大率
+
 	constexpr int kSpaceChipNo = 79; // マップチップの透明部分
+	//constexpr int kSpaceChipNo = 0; // マップチップの透明部分
 	constexpr int kChestChipNo = 46; // マップチップの宝箱部分
+	//constexpr int kChestChipNo = 106; // マップチップの宝箱部分
 
 	constexpr float kMoveRangeMargin = 1.0f; // マップとの位置の補正用
 
@@ -55,9 +58,11 @@ namespace
 
 Map::Map() : 
 	m_chipData{},
+	m_layerMapData{},
 	m_graphChipNumX(0),
 	m_graphChipNumY(0)
 {
+	//m_mapHandle = LoadGraph(L"data/gameData.png");
 	m_mapHandle = LoadGraph(L"data/mapChip_default.png");
 
 	// マップのデータと画像の切り取り位置を合わせるための処理
@@ -71,6 +76,7 @@ Map::Map() :
 
 	// マップの初期データをロード
 	LoadMapdata("data/map_new.csv");
+	//LoadStageData(1);
 }
 
 Map::~Map()
@@ -118,6 +124,7 @@ void Map::Draw(Camera* camera)
 			float posY = y * tileSize - scrollY;
 
 			int chipNo = m_chipData[y * m_width + x];
+			//int chipNo = m_layerMapData[0][y * m_width + x];
 
 			int srcX = kChipSize * (chipNo % m_graphChipNumX);
 			int srcY = kChipSize * (chipNo / m_graphChipNumX);
@@ -134,6 +141,7 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 		for (int x = 0; x < m_width; x++)
 		{
 			int chipNo = m_chipData[y * m_width + x];
+			//int chipNo = m_layerMapData[0][y * m_width + x];
 			if (chipNo == kSpaceChipNo)
 			{
 				continue; // マップチップの透明部分は当たり判定をしないようにする
@@ -194,6 +202,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		for (int x = 0; x < m_width; x++)
 		{
 			int chipNo = m_chipData[y * m_width + x];
+			//int chipNo = m_layerMapData[0][y * m_width + x];
 			if (chipNo == kSpaceChipNo)
 			{
 				continue; // マップチップの透明部分は当たり判定をしないようにする
@@ -212,14 +221,14 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 				if (posY > rectCenter.y && distY < minBottomDist)
 				{
 					// 返す矩形の下端の座標をセット
-					retRectBottom = posY - kChipSize * 0.5f + kMoveRangeMargin;
+					retRectBottom = posY - kChipSize * kChipScale * 0.5f + kMoveRangeMargin;
 
 					// 矩形との最短距離を設定
 					minBottomDist = distY;
 				}
 				else if (posY < rectCenter.y && distY < minTopDist) // マップが矩形より上にある時
 				{
-					retRectTop = posY + kChipSize * 0.5f - kMoveRangeMargin;
+					retRectTop = posY + kChipSize * kChipScale * 0.5f - kMoveRangeMargin;
 
 					minTopDist = distY;
 				}
@@ -231,13 +240,13 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 				float distX = abs(posX - rectCenter.x);
 				if (posX > rectCenter.x && distX < minRightDist)
 				{
-					retRectRight = posX - kChipSize * 0.5f - kMoveRangeMargin;
+					retRectRight = posX - kChipSize * kChipScale * 0.5f - kMoveRangeMargin;
 
 					minRightDist = distX;
 				}
 				else if (posX < rectCenter.x && distX < minLeftDist)
 				{
-					retRectLeft = posX + kChipSize * 0.5f + kMoveRangeMargin;
+					retRectLeft = posX + kChipSize * kChipScale * 0.5f + kMoveRangeMargin;
 
 					minLeftDist = distX;
 				}
@@ -268,11 +277,13 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 int Map::GetMapChipNum(int x, int y)
 {
 	return m_chipData[y * m_width + x];
+	//return m_layerMapData[0][y * m_width + x];
 }
 
 void Map::SetMapChip(int x, int y, int value)
 {
 	m_chipData[y * m_width + x] = value;
+	//m_layerMapData[0][y * m_width + x] = value;
 }
 
 void Map::LoadMapdata(const std::string& fileName)
