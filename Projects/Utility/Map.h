@@ -62,7 +62,9 @@ private:
 
 	int m_width; // マップの横幅(マップチップ数)
 	int m_height; // マップの縦幅(マップチップ数)
+	int m_layerCount; // マップレイヤーの数
 	std::vector<int> m_chipData; // マップチップのデータを格納する配列
+	std::vector<std::vector<int>> m_layerMapData; // レイヤーごとのデータを格納する配列
 
 	// マップチップを描画する画像を区切った縦横の数
 	int m_graphChipNumX;
@@ -75,6 +77,13 @@ private:
 	/// マップデータを読み込む(マップ番号を配列に格納)
 	/// </summary>
 	void LoadMapdata(const std::string& fileName);
+
+	/// <summary>
+	/// ステージ別のデータを読み込む
+	/// </summary>
+	/// <param name="stageNo">ステージ番号</param>
+	/// <returns>true : 読み込み成功 false : 読み込みに失敗</returns>
+	bool LoadStageData(int stageNo);
 
 };
 

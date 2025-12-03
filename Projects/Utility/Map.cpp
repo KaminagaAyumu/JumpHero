@@ -18,6 +18,39 @@ namespace
 	constexpr float kMoveRangeMargin = 1.0f; // マップとの位置の補正用
 
 	constexpr float kLargeValue = 100000.0f; // 大きな値(初期化用)
+
+	constexpr int kFilePathSize = 64; // ファイルのパスの最大サイズ
+	constexpr int kMapDataBitCount = 16; // マップデータのファイルのビットカウント
+
+	// FMFファイルのデータ構造
+	// 
+	//	+ 0	identifier[U4]	// ファイル識別子 'FMF_' (0x5F464D46) 4バイト
+	//	+ 4	size[U4]	// ヘッダを除いたデータサイズ 4バイト
+	//	+ 8	mapWidth[U4]	// マップの横幅 4バイト
+	//	+ 12	mapHeight[U4]	// マップの縦幅 4バイト
+	//	+ 16	chipHeight[U1]	// パーツの横幅 1バイト
+	//	+ 17	chipHeight[U1]	// パーツの縦幅 1バイト
+	//	+ 18	layerCount[U1]	// レイヤー数 1バイト
+	//	+ 19	bitCount[U1]	// レイヤーデータのビットカウント(8/16) 1バイト
+	// 計20バイト
+
+	struct DataSetting // マップのデータを読み込む際に使う
+	{
+		uint8_t chipW; // マップチップの横幅(今回は使わない)
+		uint8_t chipH; // マップチップの縦幅(今回は使わない)
+		uint8_t layerCount; // レイヤーの数
+		uint8_t bitCount; // 8ビットか16ビットか(今回は使わない)
+	};
+
+	struct DataHeader // マップのデータを読み込む構造体
+	{
+		char identifier[4]; // ファイル識別子 FMF_
+		uint32_t size; // ヘッダを除いたデータサイズ
+		uint32_t width; // マップの幅
+		uint32_t height; // マップの高さ
+		DataSetting setting; // パーツデータやレイヤー数、ビットカウントを取得
+	};
+
 }
 
 Map::Map() : 
@@ -273,4 +306,119 @@ void Map::LoadMapdata(const std::string& fileName)
 			m_chipData[y * m_width + x] = temp[y][x];
 		}
 	}
+}
+
+bool Map::LoadStageData(int stageNo)
+{
+	// 読み込むステージデータのパスを取得するための変数
+	wchar_t filePath[kFilePathSize];
+	// ステージの番号に対応したパスを取得する
+	std::swprintf(filePath, kFilePathSize, L"data/stage%dData.fmf", stageNo);
+
+	// パスに対応したステージデータのファイルを開く
+	const int handle = FileRead_open(filePath);
+	if (handle <= 0) // ファイルが読み込めていなかった場合
+	{
+		return false; // ロード失敗
+	}
+
+	// ヘッダを読み込む
+	DataHeader header;
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//ファイルの読み込み
+	/////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 読み込んだファイルのサイズがヘッダのサイズと一致していなければ
+	if (FileRead_read(&header, sizeof(header), handle) != static_cast<int>(sizeof(header)))
+	{
+		FileRead_close(handle); // ファイルを閉じる
+		return false; // ロード失敗
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//ファイルのチェック
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+	// ファイル識別子がFMF_でなければロード失敗とする
+	if (std::memcmp(header.identifier, "FMF_", 4) != 0)
+	{
+		FileRead_close(handle); // ファイルを閉じる
+		return false; // ロード失敗
+	}
+
+	// マップデータを取得
+	const uint8_t layerCount = header.setting.layerCount;
+	const uint8_t bitCount = header.setting.bitCount;
+	const uint32_t headerWidth = header.width;
+	const uint32_t headerHeight = header.height;
+
+	// 16ビットではない、もしくはマップデータが入っていなければ
+	if (bitCount != kMapDataBitCount || layerCount == 0 || headerWidth == 0 || headerHeight == 0)
+	{
+		FileRead_close(handle); // ファイルを閉じる
+		return false; // ロード失敗
+	}
+
+	// レイヤーのバイトサイズ類
+	const size_t elemSize = sizeof(uint16_t); // 16ビットのバイトサイズ(2バイト)
+	const size_t layerSize = static_cast<size_t>(headerWidth * headerHeight * elemSize); // 1つのレイヤーのバイト数
+	const size_t totalSize = layerSize * layerCount; // すべてのレイヤーのバイトサイズ
+
+	// ヘッダのサイズがレイヤー全体のバイト数と違った場合
+	if (header.size != totalSize)
+	{
+		FileRead_close(handle); // ファイルを閉じる
+		return false; // ロード失敗
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//データの読み込み
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+	// 行の読み込み
+	std::vector<uint8_t> rawData(totalSize);
+	if (FileRead_read(rawData.data(), static_cast<int>(totalSize), handle) != static_cast<int>(totalSize))
+	{
+		FileRead_close(handle);
+		return false;
+	}
+
+	// 読み込みが終わったのでファイルを閉じる
+	FileRead_close(handle);
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//データをクラスのメンバに代入
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+	// マップ情報を代入
+	m_width = headerWidth;
+	m_height = headerHeight;
+	m_layerCount = layerCount;
+
+	// マップのデータを代入
+	m_layerMapData.clear(); // 初期化
+	m_layerMapData.resize(layerCount); // レイヤーの数分配列を確保
+	for (auto& layer : m_layerMapData) // レイヤーごとに配列をループしている
+	{
+		// レイヤーごとにマップのデータを確保
+		layer.resize(static_cast<size_t>(headerWidth) * headerHeight);
+	}
+
+	// レイヤーの数分ループ
+	for (uint8_t layer = 0; layer < layerCount; layer++)
+	{
+		// 8ビットの要素
+		const uint8_t* begin = rawData.data() + static_cast<size_t>(layer * layerSize);
+		// 8ビットの要素を16ビットに変換
+		const uint16_t* data = reinterpret_cast<const uint16_t*>(begin);
+		for (size_t i = 0; i < headerWidth; i++)
+		{
+			m_layerMapData[layer][i] = data[i];
+		}
+	}
+
+
+	// データの読み込みに成功したらtrueを返す
+	return true;
 }
