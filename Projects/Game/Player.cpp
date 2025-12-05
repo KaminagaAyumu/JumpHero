@@ -10,31 +10,31 @@
 
 namespace
 {
-	constexpr float kGravity				= 0.5f;					// プレイヤーにかかる重力
-	constexpr float kGroundY				= 570.0f;				// 床の座標
-	constexpr float kJumpPower				= -15.0f;				// ジャンプ時の上に上がる力
-	constexpr float kMissJumpPower			= kJumpPower * 1.01f;	// ミスしたときの上に上がる力
-	constexpr float kNormalMoveSpeed		= 3.5f;					// 左右に動くスピード
+	constexpr float kGravity = 0.5f;					// プレイヤーにかかる重力
+	constexpr float kGroundY = 570.0f;				// 床の座標
+	constexpr float kJumpPower = -15.0f;				// ジャンプ時の上に上がる力
+	constexpr float kMissJumpPower = kJumpPower * 1.01f;	// ミスしたときの上に上がる力
+	constexpr float kNormalMoveSpeed = 3.5f;					// 左右に動くスピード
 
-	constexpr int	kGraphWidth				= 45;					// プレイヤー画像の幅
-	constexpr int	kGraphHeight			= 45;					// プレイヤー画像の高さ
+	constexpr int	kGraphWidth = 45;					// プレイヤー画像の幅
+	constexpr int	kGraphHeight = 45;					// プレイヤー画像の高さ
 
-	constexpr float kPlayerWidth			= 45.0f;				// プレイヤーの実際の幅
-	constexpr float kPlayerHeight			= 45.0f;				// プレイヤーの実際の高さ
+	constexpr float kPlayerWidth = 45.0f;				// プレイヤーの実際の幅
+	constexpr float kPlayerHeight = 45.0f;				// プレイヤーの実際の高さ
 
-	constexpr int	kEntryTextDispTime		= 60;					// 登場テキストを表示する時間
-	constexpr float	kEntryMoveSpeed			= 0.05f;				// プレイヤー登場のスピード
+	constexpr int	kEntryTextDispTime = 60;					// 登場テキストを表示する時間
+	constexpr float	kEntryMoveSpeed = 0.05f;				// プレイヤー登場のスピード
 
-	constexpr int	kMissFreezeTime			= 10;					// ミスしたときに止まるフレーム数
-	constexpr int	kMissEndTime			= 180;					// ミス処理が終わるフレーム数
+	constexpr int	kMissFreezeTime = 10;					// ミスしたときに止まるフレーム数
+	constexpr int	kMissEndTime = 180;					// ミス処理が終わるフレーム数
 
-	constexpr int	kJumpAddScore			= 10;					// ジャンプしたときの加算スコア
+	constexpr int	kJumpAddScore = 10;					// ジャンプしたときの加算スコア
 
-	constexpr int	kPowerUpLevelOne		= 1;					// パワーアップ1段階目
-	constexpr int	kJumpLimitNumLevelOne	= 20;					// パワーアップが解除されるまでのジャンプ回数
+	constexpr int	kPowerUpLevelOne = 1;					// パワーアップ1段階目
+	constexpr int	kJumpLimitNumLevelOne = 20;					// パワーアップが解除されるまでのジャンプ回数
 
-	constexpr int	kPowerUpLevelMax		= 2;					// パワーアップ最大値
-	constexpr int	kJumpLimitNumLevelMax	= 25;					// パワーアップが解除されるまでのジャンプ回数
+	constexpr int	kPowerUpLevelMax = 2;					// パワーアップ最大値
+	constexpr int	kJumpLimitNumLevelMax = 25;					// パワーアップが解除されるまでのジャンプ回数
 
 	// プレイヤーの登場の初期位置
 	// 複数マップになった際に使用しなくなるはず
@@ -54,7 +54,6 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
-	m_isOffsetX(true),
 	m_isOpenChest(false),
 	m_isLevelDown(false),
 	m_currentFloorY(0.0f),
@@ -97,14 +96,14 @@ void Player::Update(Input& input)
 }
 
 void Player::Draw()
-{ 
+{
 	(this->*m_draw)();
 }
 
 void Player::IsCollision(const Types::CollisionInfo& info)
 {
 	// 敵と衝突したらミス処理を行う
-	if(info.otherType == Types::ActorType::Enemy && !m_isMiss)
+	if (info.otherType == Types::ActorType::Enemy && !m_isMiss)
 	{
 #ifdef _DEBUG
 		printfDx(L"Player : 敵と衝突しました\n");
@@ -248,20 +247,25 @@ void Player::JumpUpdate(Input& input)
 	//}
 
 	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
+
+	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	
+
+	bool isYCorrected = false;
 
 	// 天井に着いた時の処理
 	if (playerTop < moveRange.GetTop())
 	{
 		m_pos.y = moveRange.GetTop() + kPlayerHeight / 2.0f;
 		// 再びジャンプボタンを押した際と同じ処理をする
-		m_isHover = true; 
+		m_isHover = true;
 		m_velocity.y = 0.0f;
 		m_frameCount = 0;
+		isYCorrected = true;
 	}
 
-	
+	playerBottom = m_pos.y + kPlayerHeight / 2.0f;
 
 	// 床に着地した時の処理
 	if (playerBottom > moveRange.GetBottom())
@@ -273,28 +277,51 @@ void Player::JumpUpdate(Input& input)
 		//m_currentFloorY = moveRange.GetBottom();
 		m_update = &Player::GroundUpdate;
 		m_draw = &Player::GroundDraw;
-		m_isOffsetX = false;
+		isYCorrected = true;
 		//printfDx(L"空中から床へ");
+		m_colCircle.pos = m_pos;
+		m_colRect.pos = m_pos;
+
 		return;
 	}
 
+	if (!isYCorrected)
+	{
+		if (movingLeft)
+		{
+			playerLeft = m_pos.x - kPlayerWidth / 2.0f;
+			if (playerLeft < moveRange.GetLeft())
+			{
+				m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
+			}
+		}
+		if (movingRight)
+		{
+			playerRight = m_pos.x + kPlayerWidth / 2.0f;
+			if (playerRight > moveRange.GetRight())
+			{
+				m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
+			}
+		}
+	}
+
 	// 左右の壁判定
-	if (movingLeft && playerLeft < moveRange.GetLeft())
-	{
-		m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
-		//printfDx(L"空中の左右補正です");
-	}
-	if (movingRight && playerRight > moveRange.GetRight())
-	{
-		m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
-		//printfDx(L"空中の左右補正です");
-	}
-	
+	//if (movingLeft && playerLeft < moveRange.GetLeft())
+	//{
+	//	m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
+	//	//printfDx(L"空中の左右補正です");
+	//}
+	//if (movingRight && playerRight > moveRange.GetRight())
+	//{
+	//	m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
+	//	//printfDx(L"空中の左右補正です");
+	//}
+
 
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
 
-	
+
 	//m_velocity.y * m_direction.y + kGravity * m_jumpCount * 0.5f;
 }
 
@@ -310,7 +337,7 @@ void Player::GroundUpdate(Input& input)
 		JumpStart(); // ジャンプする際の処理を行う
 		return;
 	}
-	
+
 	// 左右移動フラグの設定
 	bool movingLeft = input.IsPressed("Left");
 	bool movingRight = input.IsPressed("Right");
@@ -344,8 +371,12 @@ void Player::GroundUpdate(Input& input)
 	// マップが取得できていない場合止める
 	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
 	// 移動可能範囲の矩形を取得
+	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	
+
+	bool yCorrected = false;
+
 	//
 	//// 問題点その1
 	//// こっちの場合、常にジャンプ状態に更新されてしまう
@@ -373,23 +404,6 @@ void Player::GroundUpdate(Input& input)
 	////m_pos.y += m_velocity.y * m_direction.y + kGravity * m_jumpCount * 0.5f;
 	//m_currentFloorY = moveRange.GetBottom(); // 現在の床を記録
 
-	// 左右の壁判定
-	if (m_isOffsetX)
-	{
-		if (movingLeft && playerLeft < moveRange.GetLeft())
-		{
-			// 移動可能範囲の左端座標からプレイヤーの幅の半分左にずらしたところに補正
-			m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
-			//printfDx(L"床の左右補正です");
-		}
-		if (movingRight && playerRight > moveRange.GetRight())
-		{
-			// 移動可能範囲の右端座標からプレイヤーの幅の半分右にずらしたところに補正
-			m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
-			//printfDx(L"床の左右補正です");
-		}
-	}
-
 	// 地面に接している時
 	if (playerBottom >= moveRange.GetBottom())
 	{
@@ -397,6 +411,7 @@ void Player::GroundUpdate(Input& input)
 		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
 		m_velocity.y = 0.0f; // 地面にいるのでY方向の力をなくす
 		m_isGround = true; // 地面についている
+		yCorrected = true;
 	}
 	else // 地面についていない時
 	{
@@ -405,12 +420,31 @@ void Player::GroundUpdate(Input& input)
 		m_frameCount = 0; // 時間経過をリセット
 		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
+		m_colRect.pos = m_pos;
+		m_colCircle.pos = m_pos;
 		//printfDx(L"床から空中へ\n");
 		return;
 	}
 
-	// 次のフレームからは左右の補正を行えるようにする 
-	m_isOffsetX = true;
+	if (!yCorrected)
+	{
+		if (movingLeft)
+		{
+			playerLeft = m_pos.x - kPlayerWidth / 2.0f;
+			if (playerLeft < moveRange.GetLeft())
+			{
+				m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
+			}
+		}
+		if (movingRight)
+		{
+			playerRight = m_pos.x + kPlayerWidth / 2.0f;
+			if (playerRight > moveRange.GetRight())
+			{
+				m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
+			}
+		}
+	}
 
 	m_colRect.pos = m_pos; // 矩形の座標更新
 	m_colCircle.pos = m_pos; // 円の座標更新
@@ -427,7 +461,7 @@ void Player::MissUpdate(Input&)
 
 	// 重力とジャンプの速度を加える
 	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
-	
+
 	// プレイヤーの中心Y座標が画面下を超えたら
 	if (m_pos.y >= Game::kScreenHeight)
 	{
@@ -490,7 +524,7 @@ void Player::JumpDraw()
 
 
 	m_colCircle.Draw(drawX, drawY);
-	m_colRect.Draw(drawX,drawY);
+	m_colRect.Draw(drawX, drawY);
 #endif
 }
 
@@ -500,7 +534,7 @@ void Player::GroundDraw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
 	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-	
+
 
 #ifdef _DEBUG
 
@@ -529,7 +563,7 @@ void Player::MissDraw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xff00aa, true);
 	DrawRectRotaGraph(drawX, drawY, kGraphWidth, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-	
+
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Miss!", 0xffffff);
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);

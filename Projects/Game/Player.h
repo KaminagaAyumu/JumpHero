@@ -56,7 +56,6 @@ private:
 	bool m_isGround; // 地面についているか
 	bool m_isHover; // ジャンプ中にボタンを押したかどうか
 	bool m_isMiss; // ミスになったかどうか
-	bool m_isOffsetX; // マップとの左右補正を行うかどうか(消去する可能性あり)
 	bool m_isOpenChest; // 宝箱を開けられるかどうか(消去する可能性あり)
 	bool m_isLevelDown; // レベルダウンしたかどうか
 	float m_currentFloorY; // 現在接地している床の座標
