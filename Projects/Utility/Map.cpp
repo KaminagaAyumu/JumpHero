@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <fstream>
 #include "DxLib.h"
+#include <algorithm>
 
 namespace
 {
@@ -188,158 +189,133 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 
 Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 {
-	// 引数の矩形の位置
-	Position2 rectCenter = rect.pos;
-	// 返り値の矩形の上下左右の座標
-	// 初期化のため一旦引数の矩形の位置に設定
-	float retRectLeft = rectCenter.x;
-	float retRectRight = rectCenter.x;
-	float retRectTop = rectCenter.y;
-	float retRectBottom = rectCenter.y;
-
-	// 引数の矩形からマップチップまでの距離
-	// 初期化ではとにかく遠くしておく
-	float minLeftDist = kLargeValue;
-	float minRightDist = kLargeValue;
-	float minTopDist = kLargeValue;
-	float minBottomDist = kLargeValue;
-
-	// 引数の矩形がマップのどの場所にいるかの判定
-	int rectTileX = static_cast<int>((rectCenter.x - rect.width * 0.5f) / (kChipSize * kChipScale));
-	int rectTileY = static_cast<int>((rectCenter.y - rect.height * 0.5f) / (kChipSize * kChipScale));
-
 	// 1マスの描画サイズ
-	float tileSize = kChipSize * kChipScale;
+	const float tileSize = kChipSize * kChipScale;
 
-	// 引数の矩形の現在の座標から左側のマップチップを探す
-	for (int x = rectTileX - 1; x >= 0; x--)
+	// 引数の矩形の上下左右の座標
+	const float rectLeft = rect.pos.x - rect.width * 0.5f; // 矩形の左端
+	const float rectRight = rect.pos.x + rect.width * 0.5f; // 矩形の右端
+	const float rectTop = rect.pos.y - rect.height * 0.5f; // 矩形の上端
+	const float rectBottom = rect.pos.y + rect.height * 0.5f; // 矩形の下端
+
+	// 引数の矩形の座標をマップの座標基準に変換
+	// (マップの座標基準でどこにいるか)
+	int topTileY = std::clamp(WorldPosToMapPos(rectTop,tileSize), 0, m_height - 1);
+	int bottomTileY = std::clamp(WorldPosToMapPos(rectBottom, tileSize), 0, m_height - 1);
+	int leftTileX = std::clamp(WorldPosToMapPos(rectLeft, tileSize), 0, m_width - 1);
+	int rightTileX = std::clamp(WorldPosToMapPos(rectRight, tileSize), 0, m_width - 1);
+
+	// 移動可能範囲の矩形の初期化
+	// 初期状態ではマップ全体とする
+	float retRectLeft = 0.0f; // マップの左端
+	float retRectRight = m_width * tileSize; // マップの右端
+	float retRectTop = 0.0f; // マップの上端
+	float retRectBottom = m_height * tileSize; // マップの下端
+
+	// 左側を見る
+	// Y座標は矩形が当たる範囲分ループ
+	for (int y = topTileY; y <= bottomTileY; ++y)
 	{
-		int chipNo = m_layerMapData[0][rectTileY * m_width + x];
-		
-		// チップが空白でなければ
-		if (chipNo != kSpaceChipNo)
+		// X座標は矩形の左端からマップの左端に到達するまでループ
+		for (int x = leftTileX; x >= 0; --x)
 		{
-			// 返す矩形の左端を設定
-			retRectLeft = (x + 1) * tileSize;
-			break;
+			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
+			{
+				// マップチップの座標は左端基準なので
+				// 見つかったマップチップから1つ右側の座標が右端となる
+				float tileRight = (x + 1) * tileSize;
+				// 返り値にする矩形の左端座標を設定
+				// 左端座標がすでに設定されているものより大きかったら更新、
+				// それより小さいなら更新しない
+				retRectLeft = max(retRectLeft, tileRight);
+				break;
+			}
 		}
 	}
 
-	// 引数の矩形の現在の座標から右側のマップチップを探す
-	for (int x = rectTileX + 1; x < m_width; x++)
+	// 右側を見る
+	// Y座標は矩形が当たる範囲分ループ
+	for (int y = topTileY; y <= bottomTileY; ++y)
 	{
-		int chipNo = m_layerMapData[0][rectTileY * m_width + x];
-		
-		// チップが空白でなければ
-		if (chipNo != kSpaceChipNo)
+		// X座標は矩形の左端からマップの左端に到達するまでループ
+		for (int x = rightTileX; x < m_width; ++x)
 		{
-			// 返す矩形の右端を設定
-			retRectRight = x * tileSize;
-			break;
+			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
+			{
+				// マップチップの座標は左端基準なので
+				// 見つかったマップチップの座標が左端となる
+				float tileLeft = x * tileSize;
+				// 返り値にする矩形の右端座標を設定
+				// 右端座標がすでに設定されているものより大きかったら更新、
+				// それより小さいなら更新しない
+				retRectRight = min(retRectRight, tileLeft);
+				break;
+			}
 		}
 	}
 
-	// 引数の矩形の現在の座標から上側のマップチップを探す
-	for (int y = rectTileY - 1; y >= 0; y--)
+	// --- 上方向：プレイヤー上端の外側へ、各列をスキャン ---
+	for (int x = leftTileX; x <= rightTileX; ++x)
 	{
-		int chipNo = m_layerMapData[0][y * m_width + rectTileX];
-		
-		// チップが空白でなければ
-		if (chipNo != kSpaceChipNo)
+		for (int y = topTileY; y >= 0; --y)
 		{
-			// 返す矩形の上端を設定
-			retRectTop = (y + 1) * tileSize;
-			break;
+			int chipNo = m_layerMapData[0][y * m_width + x];
+			if (chipNo != kSpaceChipNo)
+			{
+				// 壁タイルの下端が実境界
+				float tileBottom = (y + 1) * tileSize;
+				retRectTop = max(retRectTop, tileBottom);
+				break;
+			}
 		}
 	}
 
-	// 引数の矩形の現在の座標から下側のマップチップを探す
-	for (int y = rectTileY + 1; y < m_height; y++)
+	// --- 下方向：プレイヤー下端の外側へ、各列をスキャン ---
+	for (int x = leftTileX; x <= rightTileX; ++x)
 	{
-		int chipNo = m_layerMapData[0][y * m_width + rectTileX];
-
-		// チップが空白でなければ
-		if (chipNo != kSpaceChipNo)
+		for (int y = bottomTileY; y < m_height; ++y)
 		{
-			// 返す矩形の下端を設定
-			retRectBottom = y * tileSize;
-			break;
+			int chipNo = m_layerMapData[0][y * m_width + x];
+			if (chipNo != kSpaceChipNo)
+			{
+				// 壁タイルの上端が実境界
+				float tileTop = y * tileSize;
+				retRectBottom = min(retRectBottom, tileTop);
+				break;
+			}
 		}
 	}
 
-	// すべてのマップチップとの距離を判定
-	//for (int y = 0; y < m_height; y++)
-	//{
-	//	for (int x = 0; x < m_width; x++)
-	//	{
-	//		// マップチップの番号(判定しないものを探すためのもの)
-	//		int chipNo = m_layerMapData[0][y * m_width + x];
-	//		if (chipNo == kSpaceChipNo)
-	//		{
-	//			continue; // マップチップの透明部分は当たり判定をしないようにする
-	//		}
+	// 極小マージン（押し出し後のわずかな離隔）
+	const float eps = kMoveRangeMargin; // 例: 0.1f
+	retRectLeft += eps;
+	retRectRight -= eps;
+	retRectTop += eps;
+	retRectBottom -= eps;
 
-	//		// 1マスの描画サイズ
-	//		float tileSize = kChipSize * kChipScale;
+	// 上下左右の座標が逆になっている場合は補正
+	// 左の座標が右の座標よりも大きくなっている場合
+	if (retRectLeft > retRectRight) {
+		float mid = (retRectLeft + retRectRight) * 0.5f;
+		retRectLeft = mid - 0.5f;
+		retRectRight = mid + 0.5f;
+	}
+	// 上の座標が下の座標よりも大きくなっている場合
+	if (retRectTop > retRectBottom) {
+		float mid = (retRectTop + retRectBottom) * 0.5f;
+		retRectTop = mid - 0.5f;
+		retRectBottom = mid + 0.5f;
+	}
 
-	//		// マップの判定の座標を設定
-	//		// xとyは当たり判定の左端なので中央に補正
-	//		float posX = x * tileSize + tileSize * 0.5f;
-	//		float posY = y * tileSize + tileSize * 0.5f;
-
-	//		// x軸の距離が近い時(大体縦並びになっているとき)
-	//		if (abs(posX - rectCenter.x) <= (rect.width / 2 + tileSize / 2))
-	//		{
-	//			float distY = abs(posY - rectCenter.y);
-	//			// マップが矩形より下にある時かつ矩形と一番近い時
-	//			if (posY > rectCenter.y && distY < minBottomDist)
-	//			{
-	//				// 返す矩形の下端の座標をセット
-	//				retRectBottom = posY - tileSize * 0.5f + kMoveRangeMargin;
-
-	//				// 矩形との最短距離を設定
-	//				minBottomDist = distY;
-	//			}
-	//			else if (posY < rectCenter.y && distY < minTopDist) // マップが矩形より上にある時
-	//			{
-	//				retRectTop = posY + tileSize * 0.5f - kMoveRangeMargin;
-
-	//				minTopDist = distY;
-	//			}
-	//		}
-
-	//		// y軸との距離が近い時(大体横並びになっているとき)
-	//		if (abs(posY - rectCenter.y) <= (rect.height / 2 + tileSize / 2))
-	//		{
-	//			float distX = abs(posX - rectCenter.x);
-	//			if (posX > rectCenter.x && distX < minRightDist)
-	//			{
-	//				retRectRight = posX - tileSize * 0.5f - kMoveRangeMargin;
-
-	//				minRightDist = distX;
-	//			}
-	//			else if (posX < rectCenter.x && distX < minLeftDist)
-	//			{
-	//				retRectLeft = posX + tileSize * 0.5f + kMoveRangeMargin;
-
-	//				minLeftDist = distX;
-	//			}
-	//		}
-	//	}
-	//}
-
-	/*retRectLeft += kMoveRangeMargin;
-	retRectRight -= kMoveRangeMargin;
-	retRectTop += kMoveRangeMargin;
-	retRectBottom -= kMoveRangeMargin;*/
-
+	// 中心＋幅高さに戻す（元のインターフェース踏襲）
 	Position2 newPos = {
-		(retRectLeft + retRectRight) / 2.0f,
-		(retRectTop + retRectBottom) / 2.0f
+		(retRectLeft + retRectRight) * 0.5f,
+		(retRectTop + retRectBottom) * 0.5f
 	};
 	float newWidth = retRectRight - retRectLeft;
 	float newHeight = retRectBottom - retRectTop;
-
 
 	return Rect2D(newPos, newWidth, newHeight);
 }
@@ -501,4 +477,14 @@ bool Map::LoadStageData(int stageNo)
 	}
 	// データの読み込みに成功したらtrueを返す
 	return true;
+}
+
+int Map::WorldPosToMapPos(float pos, float tileSize)
+{
+	// 座標が負の値の場合
+	if (pos < 0)
+	{
+		pos = 0; // 座標を0とする(マップの座標は0以下にならないため)
+	}
+	return static_cast<int>(std::floor(pos / tileSize));
 }

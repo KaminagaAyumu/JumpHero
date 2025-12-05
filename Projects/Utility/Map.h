@@ -85,5 +85,13 @@ private:
 	/// <returns>true : 読み込み成功 false : 読み込みに失敗</returns>
 	bool LoadStageData(int stageNo);
 
+	/// <summary>
+	/// ゲーム内座標をマップ基準の座標に変換
+	/// </summary>
+	/// <param name="pos">変換したい座標</param>
+	/// <param name="tileSize">マップチップ1枚の大きさ</param>
+	/// <returns>マップチップ座標</returns>
+	int WorldPosToMapPos(float pos, float tileSize);
+
 };
 
