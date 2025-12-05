@@ -188,7 +188,7 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 
 Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 {
-	// 引数の矩形の位置く
+	// 引数の矩形の位置
 	Position2 rectCenter = rect.pos;
 	// 返り値の矩形の上下左右の座標
 	// 初期化のため一旦引数の矩形の位置に設定
@@ -204,71 +204,134 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 	float minTopDist = kLargeValue;
 	float minBottomDist = kLargeValue;
 
-	// すべてのマップチップとの距離を判定
-	for (int y = 0; y < m_height; y++)
+	// 引数の矩形がマップのどの場所にいるかの判定
+	int rectTileX = static_cast<int>((rectCenter.x - rect.width * 0.5f) / (kChipSize * kChipScale));
+	int rectTileY = static_cast<int>((rectCenter.y - rect.height * 0.5f) / (kChipSize * kChipScale));
+
+	// 1マスの描画サイズ
+	float tileSize = kChipSize * kChipScale;
+
+	// 引数の矩形の現在の座標から左側のマップチップを探す
+	for (int x = rectTileX - 1; x >= 0; x--)
 	{
-		for (int x = 0; x < m_width; x++)
+		int chipNo = m_layerMapData[0][rectTileY * m_width + x];
+		
+		// チップが空白でなければ
+		if (chipNo != kSpaceChipNo)
 		{
-			// マップチップの番号(判定しないものを探すためのもの)
-			int chipNo = m_layerMapData[0][y * m_width + x];
-			if (chipNo == kSpaceChipNo)
-			{
-				continue; // マップチップの透明部分は当たり判定をしないようにする
-			}
-
-			// 1マスの描画サイズ
-			float tileSize = kChipSize * kChipScale;
-
-			// マップの判定の座標を設定
-			// xとyは当たり判定の左端なので中央に補正
-			float posX = x * tileSize + tileSize * 0.5f;
-			float posY = y * tileSize + tileSize * 0.5f;
-
-			// x軸の距離が近い時(大体縦並びになっているとき)
-			if (abs(posX - rectCenter.x) <= (rect.width / 2 + tileSize / 2))
-			{
-				float distY = abs(posY - rectCenter.y);
-				// マップが矩形より下にある時かつ矩形と一番近い時
-				if (posY > rectCenter.y && distY < minBottomDist)
-				{
-					// 返す矩形の下端の座標をセット
-					retRectBottom = posY - tileSize * 0.5f + kMoveRangeMargin;
-
-					// 矩形との最短距離を設定
-					minBottomDist = distY;
-				}
-				else if (posY < rectCenter.y && distY < minTopDist) // マップが矩形より上にある時
-				{
-					retRectTop = posY + tileSize * 0.5f - kMoveRangeMargin;
-
-					minTopDist = distY;
-				}
-			}
-
-			// y軸との距離が近い時(大体横並びになっているとき)
-			if (abs(posY - rectCenter.y) <= (rect.height / 2 + tileSize / 2))
-			{
-				float distX = abs(posX - rectCenter.x);
-				if (posX > rectCenter.x && distX < minRightDist)
-				{
-					retRectRight = posX - tileSize * 0.5f - kMoveRangeMargin;
-
-					minRightDist = distX;
-				}
-				else if (posX < rectCenter.x && distX < minLeftDist)
-				{
-					retRectLeft = posX + tileSize * 0.5f + kMoveRangeMargin;
-
-					minLeftDist = distX;
-				}
-			}
+			// 返す矩形の左端を設定
+			retRectLeft = (x + 1) * tileSize;
+			break;
 		}
 	}
 
-	retRectLeft += kMoveRangeMargin;
+	// 引数の矩形の現在の座標から右側のマップチップを探す
+	for (int x = rectTileX + 1; x < m_width; x++)
+	{
+		int chipNo = m_layerMapData[0][rectTileY * m_width + x];
+		
+		// チップが空白でなければ
+		if (chipNo != kSpaceChipNo)
+		{
+			// 返す矩形の右端を設定
+			retRectRight = x * tileSize;
+			break;
+		}
+	}
+
+	// 引数の矩形の現在の座標から上側のマップチップを探す
+	for (int y = rectTileY - 1; y >= 0; y--)
+	{
+		int chipNo = m_layerMapData[0][y * m_width + rectTileX];
+		
+		// チップが空白でなければ
+		if (chipNo != kSpaceChipNo)
+		{
+			// 返す矩形の上端を設定
+			retRectTop = (y + 1) * tileSize;
+			break;
+		}
+	}
+
+	// 引数の矩形の現在の座標から下側のマップチップを探す
+	for (int y = rectTileY + 1; y < m_height; y++)
+	{
+		int chipNo = m_layerMapData[0][y * m_width + rectTileX];
+
+		// チップが空白でなければ
+		if (chipNo != kSpaceChipNo)
+		{
+			// 返す矩形の下端を設定
+			retRectBottom = y * tileSize;
+			break;
+		}
+	}
+
+	// すべてのマップチップとの距離を判定
+	//for (int y = 0; y < m_height; y++)
+	//{
+	//	for (int x = 0; x < m_width; x++)
+	//	{
+	//		// マップチップの番号(判定しないものを探すためのもの)
+	//		int chipNo = m_layerMapData[0][y * m_width + x];
+	//		if (chipNo == kSpaceChipNo)
+	//		{
+	//			continue; // マップチップの透明部分は当たり判定をしないようにする
+	//		}
+
+	//		// 1マスの描画サイズ
+	//		float tileSize = kChipSize * kChipScale;
+
+	//		// マップの判定の座標を設定
+	//		// xとyは当たり判定の左端なので中央に補正
+	//		float posX = x * tileSize + tileSize * 0.5f;
+	//		float posY = y * tileSize + tileSize * 0.5f;
+
+	//		// x軸の距離が近い時(大体縦並びになっているとき)
+	//		if (abs(posX - rectCenter.x) <= (rect.width / 2 + tileSize / 2))
+	//		{
+	//			float distY = abs(posY - rectCenter.y);
+	//			// マップが矩形より下にある時かつ矩形と一番近い時
+	//			if (posY > rectCenter.y && distY < minBottomDist)
+	//			{
+	//				// 返す矩形の下端の座標をセット
+	//				retRectBottom = posY - tileSize * 0.5f + kMoveRangeMargin;
+
+	//				// 矩形との最短距離を設定
+	//				minBottomDist = distY;
+	//			}
+	//			else if (posY < rectCenter.y && distY < minTopDist) // マップが矩形より上にある時
+	//			{
+	//				retRectTop = posY + tileSize * 0.5f - kMoveRangeMargin;
+
+	//				minTopDist = distY;
+	//			}
+	//		}
+
+	//		// y軸との距離が近い時(大体横並びになっているとき)
+	//		if (abs(posY - rectCenter.y) <= (rect.height / 2 + tileSize / 2))
+	//		{
+	//			float distX = abs(posX - rectCenter.x);
+	//			if (posX > rectCenter.x && distX < minRightDist)
+	//			{
+	//				retRectRight = posX - tileSize * 0.5f - kMoveRangeMargin;
+
+	//				minRightDist = distX;
+	//			}
+	//			else if (posX < rectCenter.x && distX < minLeftDist)
+	//			{
+	//				retRectLeft = posX + tileSize * 0.5f + kMoveRangeMargin;
+
+	//				minLeftDist = distX;
+	//			}
+	//		}
+	//	}
+	//}
+
+	/*retRectLeft += kMoveRangeMargin;
 	retRectRight -= kMoveRangeMargin;
 	retRectTop += kMoveRangeMargin;
-	retRectBottom -= kMoveRangeMargin;
+	retRectBottom -= kMoveRangeMargin;*/
 
 	Position2 newPos = {
 		(retRectLeft + retRectRight) / 2.0f,
