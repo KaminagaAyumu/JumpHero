@@ -9,7 +9,7 @@
 
 namespace
 {
-	constexpr int kChestChipNo = 46;
+	constexpr int kChestChipNo = 106;
 }
 
 
@@ -66,7 +66,7 @@ void ChestManager::SpawnChest(Map* map)
 	{
 		for (int x = 0; x < map->GetMapWidth(); x++)
 		{
-			if (map->GetMapChipNum(x, y) == kChestChipNo)
+			if (map->GetChestPosToMap(x, y) == kChestChipNo)
 			{
 				auto chest = std::make_shared<Chest>(x, y, map);
 				chest->SetCamera(m_pCamera);

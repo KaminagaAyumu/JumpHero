@@ -346,6 +346,11 @@ int Map::GetMapChipNum(int x, int y)
 	return m_layerMapData[0][y * m_width + x];
 }
 
+int Map::GetChestPosToMap(int x, int y)
+{
+	return m_layerMapData[1][y * m_width + x];
+}
+
 void Map::SetMapChip(int x, int y, int value)
 {
 	//m_chipData[y * m_width + x] = value;

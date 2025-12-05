@@ -13,7 +13,7 @@ namespace
 	constexpr int	kChipSize = 32; // マップ1つの大きさ
 	constexpr float kChipScale = 1.40625f; // マップの拡大率
 
-	constexpr int kSpaceChipNo = 79;
+	constexpr int kSpaceChipNo = 0;
 }
 
 Chest::Chest() :

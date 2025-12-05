@@ -38,8 +38,6 @@ public:
 	/// <returns>行動可能範囲</returns>
 	Rect2D GetCanMoveRange(const Rect2D& rect);
 
-
-
 	// ゲッター
 	int GetGraphChipNumX() const { return m_graphChipNumX; }
 	int GetGraphChipNumY() const { return m_graphChipNumY; }
@@ -48,6 +46,7 @@ public:
 	int GetMapHeight() const { return m_height; }
 	Size GetMapSize() const;
 	int GetMapChipNum(int x, int y);
+	int GetChestPosToMap(int x, int y);
 
 	/// <summary>
 	/// マップチップの指定の座標のデータを変更する
