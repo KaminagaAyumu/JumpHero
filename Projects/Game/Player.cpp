@@ -482,7 +482,12 @@ void Player::JumpDraw()
 #ifdef _DEBUG
 
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	moveRange.Draw(drawX, drawY);
+	//moveRange.Draw(drawX, drawY);
+	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetLeft(), moveRange.GetBottom(), 0xff0000);
+	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetTop(), 0xff0000);
+	DrawLine(moveRange.GetRight(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
+	DrawLine(moveRange.GetLeft(), moveRange.GetBottom(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
+
 
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX,drawY);
@@ -507,7 +512,11 @@ void Player::GroundDraw()
 	}
 
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	moveRange.Draw(drawX,drawY);
+	//moveRange.Draw(drawX,drawY);
+	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetLeft(), moveRange.GetBottom(), 0xff0000);
+	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetTop(), 0xff0000);
+	DrawLine(moveRange.GetRight(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
+	DrawLine(moveRange.GetLeft(), moveRange.GetBottom(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
 
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
