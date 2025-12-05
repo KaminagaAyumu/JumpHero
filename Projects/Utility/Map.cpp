@@ -19,7 +19,7 @@ namespace
 	//constexpr int kChestChipNo = 46; // マップチップの宝箱部分
 	constexpr int kChestChipNo = 106; // マップチップの宝箱部分
 
-	constexpr float kMoveRangeMargin = 1.0f; // マップとの位置の補正用
+	constexpr float kMoveRangeMargin = 0.1f; // マップとの位置の補正用
 
 	constexpr float kLargeValue = 100000.0f; // 大きな値(初期化用)
 
@@ -248,75 +248,90 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 				// 見つかったマップチップの座標が左端となる
 				float tileLeft = x * tileSize;
 				// 返り値にする矩形の右端座標を設定
-				// 右端座標がすでに設定されているものより大きかったら更新、
-				// それより小さいなら更新しない
+				// 右端座標がすでに設定されているものより小さかったら更新、
+				// それより大きいなら更新しない
 				retRectRight = min(retRectRight, tileLeft);
 				break;
 			}
 		}
 	}
 
-	// --- 上方向：プレイヤー上端の外側へ、各列をスキャン ---
+	// 上側を見る
+	// X座標は矩形が当たる範囲分ループ
 	for (int x = leftTileX; x <= rightTileX; ++x)
 	{
+		// Y座標は矩形の上端からマップの上端に到達するまでループ
 		for (int y = topTileY; y >= 0; --y)
 		{
-			int chipNo = m_layerMapData[0][y * m_width + x];
-			if (chipNo != kSpaceChipNo)
+			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
 			{
-				// 壁タイルの下端が実境界
+				// マップチップの座標は左端基準なので
+				// 見つかったマップチップの座標から1つ下側の座標が下端となる
 				float tileBottom = (y + 1) * tileSize;
+				// 返り値にする矩形の上端座標を設定
+				// 上端座標がすでに設定されているものより大きかったら更新、
+				// それより小さいなら更新しない
 				retRectTop = max(retRectTop, tileBottom);
 				break;
 			}
 		}
 	}
 
-	// --- 下方向：プレイヤー下端の外側へ、各列をスキャン ---
+	// 下側を見る
+	// X座標は矩形が当たる範囲分ループ
 	for (int x = leftTileX; x <= rightTileX; ++x)
 	{
+		// Y座標は矩形の上端からマップの上端に到達するまでループ
 		for (int y = bottomTileY; y < m_height; ++y)
 		{
-			int chipNo = m_layerMapData[0][y * m_width + x];
-			if (chipNo != kSpaceChipNo)
+			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
 			{
-				// 壁タイルの上端が実境界
+				// マップチップの座標は左端基準なので
+				// 見つかったマップチップの座標が上端となる
 				float tileTop = y * tileSize;
+				// 返り値にする矩形の下端座標を設定
+				// 下端座標がすでに設定されているものより小さかったら更新、
+				// それより大きいなら更新しない
 				retRectBottom = min(retRectBottom, tileTop);
 				break;
 			}
 		}
 	}
 
-	// 極小マージン（押し出し後のわずかな離隔）
-	const float eps = kMoveRangeMargin; // 例: 0.1f
-	retRectLeft += eps;
-	retRectRight -= eps;
-	retRectTop += eps;
-	retRectBottom -= eps;
+	retRectLeft += kMoveRangeMargin;
+	retRectRight -= kMoveRangeMargin;
+	retRectTop += kMoveRangeMargin;
+	retRectBottom -= kMoveRangeMargin;
 
-	// 上下左右の座標が逆になっている場合は補正
+	// 上下左右の座標が逆になっている場合は
+	// 返す矩形の範囲をリセットする(1.0の大きさの矩形にする)
 	// 左の座標が右の座標よりも大きくなっている場合
 	if (retRectLeft > retRectRight) {
+		// 左右の距離の中心を取得
 		float mid = (retRectLeft + retRectRight) * 0.5f;
-		retRectLeft = mid - 0.5f;
-		retRectRight = mid + 0.5f;
+		retRectLeft = mid - 0.5f; // 中心から0.5引いた座標
+		retRectRight = mid + 0.5f; // 中心から0.5足した座標
 	}
 	// 上の座標が下の座標よりも大きくなっている場合
 	if (retRectTop > retRectBottom) {
+		// 上下の距離の中心を取得
 		float mid = (retRectTop + retRectBottom) * 0.5f;
-		retRectTop = mid - 0.5f;
-		retRectBottom = mid + 0.5f;
+		retRectTop = mid - 0.5f; // 中心から0.5引いた座標
+		retRectBottom = mid + 0.5f; // 中心から0.5足した座標
 	}
 
-	// 中心＋幅高さに戻す（元のインターフェース踏襲）
+	// 返す矩形の中心座標を設定
 	Position2 newPos = {
-		(retRectLeft + retRectRight) * 0.5f,
-		(retRectTop + retRectBottom) * 0.5f
+		(retRectLeft + retRectRight) * 0.5f, // 左右の座標を足して2で割ると中央になる
+		(retRectTop + retRectBottom) * 0.5f  // 上下の座標を足して2で割ると中央になる
 	};
-	float newWidth = retRectRight - retRectLeft;
-	float newHeight = retRectBottom - retRectTop;
 
+	float newWidth = retRectRight - retRectLeft; // 右端座標から左端座標を引いた値が幅となる
+	float newHeight = retRectBottom - retRectTop; // 下端座標から上端座標を引いた値が高さとなる
+
+	// 設定した矩形を返す
 	return Rect2D(newPos, newWidth, newHeight);
 }
 
