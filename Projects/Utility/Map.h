@@ -46,6 +46,7 @@ public:
 
 	int GetMapWidth() const { return m_width; }
 	int GetMapHeight() const { return m_height; }
+	Size GetMapSize() const;
 	int GetMapChipNum(int x, int y);
 
 	/// <summary>

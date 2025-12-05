@@ -35,7 +35,7 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_balloonNum(0)
 {
 	m_pMap = map;
-	m_pCamera = std::make_unique<Camera>();
+	m_pCamera = std::make_unique<Camera>(m_pMap->GetMapSize());
 	m_pPlayer = std::make_unique<Player>(map,this);
 	m_pPlayer->SetCamera(m_pCamera.get());
 	m_pPlayer->Init();

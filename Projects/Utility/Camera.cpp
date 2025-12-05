@@ -5,15 +5,13 @@
 
 namespace
 {
-	constexpr int kMapWidth = 4365;
-	constexpr int kMapHeight = 720;
-
 	constexpr float kLerpSpeed = 0.05f;
 }
 
-Camera::Camera() :
+Camera::Camera(const Size& size) :
 	scroll{},
 	m_pos{},
+	m_mapSize(size),
 	m_pTargetActor(nullptr)
 {
 }
@@ -40,9 +38,9 @@ void Camera::Update()
 		scroll.x = 0;
 	}
 	// カメラがスクロール終了位置より右にある時はそれ以上スクロールさせない
-	if (scroll.x > kMapWidth - Game::kScreenWidth)
+	if (scroll.x > m_mapSize.x - Game::kScreenWidth)
 	{
-		scroll.x = kMapWidth - Game::kScreenWidth;
+		scroll.x = m_mapSize.x - Game::kScreenWidth;
 	}
 
 	// カメラがスクロール開始位置より上にいるときはスクロールさせない
@@ -51,9 +49,9 @@ void Camera::Update()
 		scroll.y = 0;
 	}
 	// カメラがスクロール終了位置より下にいるときはそれ以上スクロールさせない
-	if (scroll.y > kMapHeight - Game::kScreenHeight)
+	if (scroll.y > m_mapSize.y - Game::kScreenHeight)
 	{
-		scroll.y = kMapHeight - Game::kScreenHeight;
+		scroll.y = m_mapSize.y - Game::kScreenHeight;
 	}
 }
 

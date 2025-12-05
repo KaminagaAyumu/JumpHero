@@ -335,6 +335,11 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 	return Rect2D(newPos, newWidth, newHeight);
 }
 
+Size Map::GetMapSize() const
+{
+	return { static_cast<int>(m_width * kChipSize * kChipScale),static_cast<int>(m_height * kChipSize * kChipScale) };
+}
+
 int Map::GetMapChipNum(int x, int y)
 {
 	//return m_chipData[y * m_width + x];

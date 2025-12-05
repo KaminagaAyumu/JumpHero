@@ -9,7 +9,7 @@ class Actor;
 class Camera
 {
 public:
-	Camera();
+	Camera(const Size& size);
 	virtual ~Camera();
 
 	/// <summary>
@@ -34,6 +34,7 @@ public:
 
 private:
 	Position2 m_pos; // カメラの座標
+	Size m_mapSize; // マップのサイズ
 	Actor* m_pTargetActor; // カメラが見るターゲットオブジェクト
 
 };
