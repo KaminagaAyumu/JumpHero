@@ -62,10 +62,10 @@ void Chest::Draw()
 	}
 	else
 	{
+		DrawRotaGraph(drawX, drawY, kChipScale, 0.0f, m_graphHandle, true);
 #ifdef _DEBUG
 		m_colRect.Draw(drawX, drawY);
 #endif
-		DrawRotaGraph(drawX, drawY, kChipScale, 0.0f, m_graphHandle, true);
 	}
 }
 

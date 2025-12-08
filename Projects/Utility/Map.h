@@ -12,7 +12,7 @@ class Camera;
 class Map
 {
 public:
-	Map();
+	Map(int stageNo);
 	virtual ~Map();
 
 	void Init();

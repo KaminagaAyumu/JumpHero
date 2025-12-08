@@ -68,7 +68,7 @@ namespace
 
 }
 
-Map::Map() : 
+Map::Map(int stageNo) : 
 	m_chipData{},
 	m_layerMapData{},
 	m_graphChipNumX(0),
@@ -88,7 +88,7 @@ Map::Map() :
 
 	// マップの初期データをロード
 	//LoadMapdata("data/map_new.csv");
-	LoadStageData(1);
+	LoadStageData(stageNo);
 }
 
 Map::~Map()
