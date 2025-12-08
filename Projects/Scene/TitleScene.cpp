@@ -4,6 +4,7 @@
 #include "../Utility/Input.h"
 #include "SceneController.h"
 #include "GameScene.h"
+#include "SelectScene.h"
 #include "../Utility/Game.h"
 #include "../Utility/Bg.h"
 
@@ -69,7 +70,7 @@ void TitleScene::FadeOutUpdate(Input& input)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
 		return; // 念のため処理を抜ける
 	}
 }

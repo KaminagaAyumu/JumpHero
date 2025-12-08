@@ -25,7 +25,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="controller">シーン管理用クラス(継承元で取得しなければならない)</param>
-	GameScene(SceneController& controller);
+	GameScene(SceneController& controller, int stageNo);
 	virtual ~GameScene();
 	/// <summary>
 	/// シーンの更新処理

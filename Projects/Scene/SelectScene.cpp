@@ -18,9 +18,10 @@ SelectScene::SelectScene(SceneController& controller) :
 	SceneBase(controller),
 	m_updateFunc(&SelectScene::FadeInUpdate),
 	m_drawFunc(&SelectScene::FadeDraw),
-	m_fadeColor(0xffffff),
+	m_fadeColor(0x000000),
 	m_selectIndex(0)
 {
+	m_frameCount = kFadeInterval;
 }
 
 SelectScene::~SelectScene()
@@ -66,6 +67,15 @@ void SelectScene::NormalUpdate(Input& input)
 		}
 	}
 
+	if (input.IsTriggered("OK"))
+	{
+		// フェードイン完了
+		m_fadeColor = 0x000000;
+		m_updateFunc = &SelectScene::FadeOutUpdate;
+		m_drawFunc = &SelectScene::FadeDraw;
+		return; // 念のため処理を抜ける
+	}
+
 }
 
 void SelectScene::FadeOutUpdate(Input&)
@@ -74,20 +84,26 @@ void SelectScene::FadeOutUpdate(Input&)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller,m_selectIndex + 1));
 		return; // 念のため処理を抜ける
 	}
 }
 
 void SelectScene::NormalDraw()
 {
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
+	DrawBox(20, m_selectIndex * 50 + 100, 300, m_selectIndex * 50 + 150, 0xff5500, TRUE);
+
 #ifdef _DEBUG
 	DrawString(0, 0, L"SelectScene: NormalDraw", 0xffffff);
+	DrawFormatString(0, 30,0xffffff, L"stage : %d",m_selectIndex + 1);
 #endif
 }
 
 void SelectScene::FadeDraw()
 {
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
+
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));
