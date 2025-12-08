@@ -58,13 +58,11 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_isMiss(false),
 	m_isOpenChest(false),
 	m_isLevelDown(false),
-	m_currentFloorY(0.0f),
 	m_pMap(map),
 	m_pGameManager(gameManager),
 	m_update(&Player::EntryUpdate),
 	m_draw(&Player::EntryDraw)
 {
-	m_colFlags = {};
 }
 
 Player::~Player()
@@ -88,10 +86,8 @@ void Player::Init()
 	m_isMiss = false;
 	m_isOpenChest = false;
 	m_isLevelDown = false;
-	m_currentFloorY = 0.0f;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
-	m_colFlags = { };
 }
 
 void Player::Update(Input& input)
@@ -139,82 +135,6 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 		}
 		m_isOpenChest = true;
 	}
-}
-
-void Player::CheckHitMap(Input& input)
-{
-	const float kHalfWidth = kPlayerWidth / 2.0f;
-	const float kHalfHeight = kPlayerHeight / 2.0f;
-
-	float playerLeft = m_pos.x - kHalfWidth;
-	float playerRight = m_pos.x + kHalfWidth;
-	float playerTop = m_pos.y - kHalfHeight;
-	float playerBottom = m_pos.y + kHalfHeight;
-
-	bool isVerticalFirst = !m_isGround; // 空中にいるときは縦判定を先に行う
-
-	bool movingLeft = input.IsPressed("Left");
-	bool movingRight = input.IsPressed("Right");
-
-	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-
-	auto CorrectX = [&]() {
-		playerLeft = m_pos.x - kHalfWidth;
-		playerRight = m_pos.x + kHalfWidth;
-
-		if (!movingLeft || playerLeft >= moveRange.GetLeft() - kMapColMargin)
-		{
-
-		}
-		else
-		{
-			m_pos.x = moveRange.GetLeft() + kHalfWidth;
-			m_colFlags.hitLeft = true;
-		}
-
-		if( !movingRight || playerRight <= moveRange.GetRight() + kMapColMargin)
-		{
-		}
-		else
-		{
-			m_pos.x = moveRange.GetRight() - kHalfWidth;
-			m_colFlags.hitRight = true;
-		}
-
-		};
-
-	auto CorrectY = [&]() {
-		playerTop = m_pos.y - kHalfHeight;
-		playerBottom = m_pos.y + kHalfHeight;
-
-		if (m_velocity.y < -kMapColMargin && playerTop < moveRange.GetTop() - kMapColMargin)
-		{
-			m_pos.y = moveRange.GetTop() + kHalfHeight;
-			m_velocity.y = 0.0f;
-			m_colFlags.hitTop = true;
-		}
-
-		playerBottom = m_pos.y + kHalfHeight;
-		if (m_velocity.y > kMapColMargin && playerBottom > moveRange.GetBottom() + kMapColMargin)
-		{
-			m_pos.y = moveRange.GetBottom() - kHalfHeight;
-			m_velocity.y = 0.0f;
-			m_colFlags.hitBottom = true;
-		}
-		
-		};
-
-	if (isVerticalFirst)
-		{
-		CorrectY();
-		CorrectX();
-	}
-	else
-	{
-		CorrectX();
-		CorrectY();
-	}
-
 }
 
 void Player::CheckPowerDown()
@@ -266,8 +186,6 @@ void Player::JumpUpdate(Input& input)
 		CheckPowerDown(); // プレイヤーのパワーダウンをするかどうか判定する
 	}
 
-	//m_velocity.y = kJumpPower;
-
 	// 空中で浮いたかどうかの判定
 	if (m_isHover) // すでに浮いている場合
 	{
@@ -298,7 +216,6 @@ void Player::JumpUpdate(Input& input)
 		m_velocity.y = 0.0f;
 		m_frameCount = 0;
 	}
-
 
 	bool movingLeft = input.IsPressed("Left");
 	bool movingRight = input.IsPressed("Right");
@@ -354,7 +271,6 @@ void Player::JumpUpdate(Input& input)
 		m_velocity = {};
 		m_direction = {};
 		m_isGround = true;
-		//m_currentFloorY = moveRange.GetBottom();
 		m_update = &Player::GroundUpdate;
 		m_draw = &Player::GroundDraw;
 		isYCorrected = true;
@@ -385,24 +301,8 @@ void Player::JumpUpdate(Input& input)
 		}
 	}
 
-	// 左右の壁判定
-	//if (movingLeft && playerLeft < moveRange.GetLeft())
-	//{
-	//	m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
-	//	//printfDx(L"空中の左右補正です");
-	//}
-	//if (movingRight && playerRight > moveRange.GetRight())
-	//{
-	//	m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
-	//	//printfDx(L"空中の左右補正です");
-	//}
-
-
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
-
-
-	//m_velocity.y * m_direction.y + kGravity * m_jumpCount * 0.5f;
 }
 
 void Player::GroundUpdate(Input& input)
@@ -439,15 +339,6 @@ void Player::GroundUpdate(Input& input)
 	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
 	float playerBottom = m_pos.y + kPlayerHeight / 2.0f;
 
-	//if (input.IsPressed("Left")) // 左入力の時
-	//{
-	//	m_pos.x -= 3.5f;
-	//}
-	//if (input.IsPressed("Right")) // 右入力の時
-	//{
-	//	m_pos.x += 3.5f;
-	//}
-
 	// マップが取得できていない場合止める
 	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
 	// 移動可能範囲の矩形を取得
@@ -455,34 +346,7 @@ void Player::GroundUpdate(Input& input)
 	m_colCircle.pos = m_pos;
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
 
-	bool yCorrected = false;
-
-	//
-	//// 問題点その1
-	//// こっちの場合、常にジャンプ状態に更新されてしまう
-	////if (playerBottom > m_currentFloorY - 1.0f)
-	//// こっちの場合、そもそもここを通らない
-	//if (playerBottom > m_currentFloorY + 1.0f)
-	//{
-	//	m_jumpCount = 0;
-	//	m_isGround = false;
-	//	m_isLandingCheck = false;
-	//	m_update = &Player::JumpUpdate;
-	//	m_draw = &Player::JumpDraw;
-	//	return;
-	//}
-	//else
-	//{
-	//	m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
-	//	m_isGround = true;
-	//	m_currentFloorY = moveRange.GetBottom(); // 現在の床を記録
-	//}
-
-	//// 問題点その2
-	//// 位置更新
-	//m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
-	////m_pos.y += m_velocity.y * m_direction.y + kGravity * m_jumpCount * 0.5f;
-	//m_currentFloorY = moveRange.GetBottom(); // 現在の床を記録
+	bool isYCorrected = false;
 
 	// 地面に接している時
 	if (playerBottom >= moveRange.GetBottom())
@@ -491,7 +355,7 @@ void Player::GroundUpdate(Input& input)
 		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
 		m_velocity.y = 0.0f; // 地面にいるのでY方向の力をなくす
 		m_isGround = true; // 地面についている
-		yCorrected = true;
+		isYCorrected = true;
 	}
 	else // 地面についていない時
 	{
@@ -506,7 +370,7 @@ void Player::GroundUpdate(Input& input)
 		return;
 	}
 
-	if (!yCorrected)
+	if (!isYCorrected)
 	{
 		if (movingLeft)
 		{
