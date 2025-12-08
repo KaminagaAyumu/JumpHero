@@ -169,6 +169,7 @@ void Player::EntryUpdate(Input&)
 	if (m_pos.x >= m_entryEndPos.x - 1.0f) // 終了位置と大体同じになったら終了
 	{
 		m_pos = m_entryEndPos; // プレイヤーの位置を終了位置に動かす
+		m_frameCount = 0; // フレームカウントをリセット
 		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 		return;
