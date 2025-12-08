@@ -11,7 +11,7 @@ namespace
 {
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
 
-	constexpr int kDescriptionInterval = 60; // 説明の表示を行う時間
+	constexpr int kDescriptionInterval = 10; // 説明の表示を行う時間
 	constexpr int kDescriptionBorderMargin = 50; // 説明表示の上下の余白
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
@@ -63,13 +63,25 @@ void MiniGameScene::DescriptionUpdate(Input& input)
 		m_frameCount = kDescriptionInterval; // 枠表示用にカウンタを最大値に固定
 		if (input.IsTriggered("OK"))
 		{
-			m_updateFunc = &MiniGameScene::NormalUpdate;
-			m_drawFunc = &MiniGameScene::NormalDraw;
-			m_frameCount = 0; // フェードアウト用にカウンタを0に設定
+			m_updateFunc = &MiniGameScene::DescriptionEndUpdate;
+			m_frameCount = kDescriptionInterval; // 説明終了で使うためカウンタの値をリセット
 			return; // 念のため処理を抜ける
 		}
 	}
 	
+}
+
+void MiniGameScene::DescriptionEndUpdate(Input& input)
+{
+	m_frameCount--;
+	if (m_frameCount <= 0)
+	{
+		// 説明終了
+		m_updateFunc = &MiniGameScene::NormalUpdate;
+		m_drawFunc = &MiniGameScene::NormalDraw;
+		m_frameCount = 0; // 念のためカウンタの値をリセット
+		return; // 念のため処理を抜ける
+	}
 }
 
 void MiniGameScene::NormalUpdate(Input& input)
