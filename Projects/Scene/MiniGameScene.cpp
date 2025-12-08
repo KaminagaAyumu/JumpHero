@@ -1,8 +1,11 @@
-﻿#include <memory>
-#include "MiniGameScene.h"
+﻿#include "MiniGameScene.h"
 #include "SceneController.h"
 #include "ClearScene.h"
 #include "../Game/GameManager.h"
+#include "../Game/CollisionManager.h"
+#include "../Game/Actor.h"
+#include "../Utility/Bg.h"
+#include "../Utility/Map.h"
 #include "../Utility/Game.h"
 #include "../Utility/Input.h"
 #include "DxLib.h"
@@ -26,6 +29,17 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pGameManager(gameManager)
 {
 	m_frameCount = kFadeInterval;
+
+	m_bg = std::make_shared<Bg>();
+	m_bg->Init();
+	// マップの初期化方法模索中
+	m_pMap = std::make_shared<Map>(1);
+	m_pMap->Init();
+
+	m_pGameManager->Init(m_pMap.get());
+
+	m_pCollisionManager = std::make_unique<CollisionManager>();
+
 }
 
 MiniGameScene::~MiniGameScene()
@@ -86,7 +100,25 @@ void MiniGameScene::DescriptionEndUpdate(Input& input)
 
 void MiniGameScene::NormalUpdate(Input& input)
 {
-	if (input.IsTriggered("OK"))
+	// ゲームマネージャーの更新
+	m_pGameManager->Update(input);
+
+	// 次のフレームのためにゲーム内オブジェクトを更新
+	m_pActors.clear(); // オブジェクトをリセット
+	m_pActors.reserve(m_pGameManager->GetActorNum()); // 現在のオブジェクトの総数分要素を確保 
+	m_pGameManager->PushActors(m_pActors); // ゲームマネージャーからオブジェクトを受け取る
+
+	// 当たり判定を行う
+	if (!m_pGameManager->IsSkipCollision()) // 当たり判定をスキップしない場合
+	{
+		m_pCollisionManager->CheckCollision(m_pActors);
+	}
+
+	// 背景とマップの更新(現在何もやっていない)
+	m_bg->Update();
+	m_pMap->Update();
+
+	if (m_pGameManager->IsClear()) // ゲームマネージャーがクリアと判定したら
 	{
 		// シーンの終了へ
 		m_fadeColor = 0xffffff; // 白でフェードアウト

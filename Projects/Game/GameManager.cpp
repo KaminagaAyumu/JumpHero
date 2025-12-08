@@ -88,6 +88,11 @@ void GameManager::Init()
 	m_balloonNum = 0;
 }
 
+void GameManager::Init(Map* map)
+{
+	m_pMap = map;
+}
+
 void GameManager::Update(Input& input)
 {
 #ifdef _DEBUG

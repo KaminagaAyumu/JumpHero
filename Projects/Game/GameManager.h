@@ -28,6 +28,7 @@ public:
 	virtual ~GameManager();
 
 	void Init();
+	void Init(Map* map); // 一旦マップを取得するだけで使う
 	void Update(Input& input);
 	void Draw() const;
 

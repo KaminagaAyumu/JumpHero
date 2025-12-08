@@ -4,6 +4,7 @@
 #include <fstream>
 #include "DxLib.h"
 #include <algorithm>
+#include <cassert>
 
 namespace
 {
@@ -88,7 +89,10 @@ Map::Map(int stageNo) :
 
 	// マップの初期データをロード
 	//LoadMapdata("data/map_new.csv");
-	LoadStageData(stageNo);
+	if (!LoadStageData(stageNo))
+	{
+		assert(false && "ステージデータの読み込みに失敗しました");
+	}
 }
 
 Map::~Map()

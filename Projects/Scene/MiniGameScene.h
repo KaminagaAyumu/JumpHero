@@ -1,7 +1,13 @@
 ﻿#pragma once
 #include "SceneBase.h"
+#include <memory>
+#include <vector>
 
+class Bg;
 class GameManager;
+class Map;
+class Actor;
+class CollisionManager;
 
 /// <summary>
 /// ミニゲーム用シーン
@@ -44,6 +50,17 @@ private:
 
 	bool IsEndDescription() const; // 説明が終了したかどうかを取得する関数
 
-	std::shared_ptr<GameManager> m_pGameManager; // ゲーム管理クラスへのポインタ
+	// 背景画像を管理するクラスのポインタ
+	std::shared_ptr<Bg> m_bg;
+
+	// ゲームシーン内の状態管理用ポインタ
+	std::shared_ptr<GameManager> m_pGameManager;
+
+	// マップのデータを取得するポインタ
+	std::shared_ptr<Map> m_pMap;
+
+	std::vector<Actor*> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
+
+	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 };
 
