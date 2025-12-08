@@ -38,17 +38,15 @@ namespace
 	constexpr int	kPowerUpLevelMax = 2;					// パワーアップ最大値
 	constexpr int	kJumpLimitNumLevelMax = 25;					// パワーアップが解除されるまでのジャンプ回数
 
-	// プレイヤーの登場の初期位置
-	// 複数マップになった際に使用しなくなるはず
-	inline const static Vector2 kFirstPos = { -10.0f,Game::kScreenHeight - 135.0f - kPlayerHeight / 2 };
-	// プレイヤーの登場の終了位置
-	inline const static Vector2 kEntryEndPos = { 90.0f, Game::kScreenHeight - 135.0f - kPlayerHeight / 2 };
+	constexpr float kEntryEndXOffset = 100.0f;			// プレイヤー登場終了位置のXオフセット
+
 }
 
 Player::Player(Map* map, GameManager* gameManager) :
 	Actor(Types::ActorType::Player),
 	m_direction{},
 	m_velocity{},
+	m_entryEndPos{},
 	m_graphHandle(-1),
 	m_frameCount(0),
 	m_jumpCount(0),
@@ -72,7 +70,8 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_pos = kFirstPos;
+	m_pos = m_pMap->GetStartPosToMap();
+	m_entryEndPos = m_pos + Vector2{ kEntryEndXOffset,0.0f };
 	m_direction = {};
 	m_velocity = {};
 	m_graphHandle = LoadGraph(L"data/Idle.png");
@@ -165,11 +164,11 @@ void Player::EntryUpdate(Input&)
 		return;
 	}
 	// 位置を初期位置から登場終了位置まで線形補完で動かす
-	m_pos = Geometry::LerpVec2(m_pos, kEntryEndPos, kEntryMoveSpeed);
+	m_pos = Geometry::LerpVec2(m_pos, m_entryEndPos, kEntryMoveSpeed);
 
-	if (m_pos.x >= kEntryEndPos.x - 1.0f) // 終了位置と大体同じになったら終了
+	if (m_pos.x >= m_entryEndPos.x - 1.0f) // 終了位置と大体同じになったら終了
 	{
-		m_pos = kEntryEndPos; // プレイヤーの位置を終了位置に動かす
+		m_pos = m_entryEndPos; // プレイヤーの位置を終了位置に動かす
 		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 		return;

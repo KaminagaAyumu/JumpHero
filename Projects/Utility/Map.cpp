@@ -19,6 +19,14 @@ namespace
 	//constexpr int kChestChipNo = 46; // マップチップの宝箱部分
 	constexpr int kChestChipNo = 106; // マップチップの宝箱部分
 
+	constexpr int kStartChipNoUp = 188; // マップチップのスタート地点上部
+	constexpr int kStartChipNoDown = 208;// マップチップのスタート地点下部
+	
+	constexpr int kGoalChipNoUp = 191; // マップチップのゴール地点上部
+	constexpr int kGoalChipNoDown = 211;// マップチップのゴール地点下部
+
+
+
 	constexpr float kMoveRangeMargin = 0.1f; // マップとの位置の補正用
 
 	constexpr float kLargeValue = 100000.0f; // 大きな値(初期化用)
@@ -77,7 +85,7 @@ Map::Map() :
 
 	// マップの初期データをロード
 	//LoadMapdata("data/map_new.csv");
-	LoadStageData(1);
+	LoadStageData(2);
 }
 
 Map::~Map()
@@ -349,6 +357,25 @@ int Map::GetMapChipNum(int x, int y)
 int Map::GetChestPosToMap(int x, int y)
 {
 	return m_layerMapData[1][y * m_width + x];
+}
+
+Position2 Map::GetStartPosToMap()
+{
+	Position2 startPos = Position2();
+		for (int y = 0; y < m_height; y++)
+		{
+			for (int x = 0; x < m_width; x++)
+			{
+				int chipNo = m_layerMapData[2][y * m_width + x];
+				if (chipNo == kStartChipNoUp)
+				{
+					startPos.x = x * kChipSize * kChipScale - (kChipSize * kChipScale) / 2.0f;
+					startPos.y = y * kChipSize * kChipScale + (kChipSize * kChipScale);
+					return startPos;
+				}
+			}
+		}
+	return Position2();
 }
 
 void Map::SetMapChip(int x, int y, int value)

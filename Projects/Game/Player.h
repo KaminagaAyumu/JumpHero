@@ -47,6 +47,7 @@ public:
 private:
 	Vector2 m_direction; // 進む方向
 	Vector2 m_velocity; // 進む速度
+	Position2 m_entryEndPos;
 
 	int m_graphHandle; // プレイヤーのグラフィックハンドル
 
