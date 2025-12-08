@@ -3,6 +3,7 @@
 #include "SceneController.h"
 #include "TitleScene.h"
 #include "ClearScene.h"
+#include "MiniGameScene.h"
 #include "MissScene.h"
 #include "../Utility/Game.h"
 #include "../Game/Player.h"
@@ -126,7 +127,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller,m_pGameManager));
+		m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller,m_pGameManager));
 		return; // 念のため処理を抜ける
 	}
 }
