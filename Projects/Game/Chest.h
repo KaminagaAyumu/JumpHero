@@ -10,7 +10,7 @@ class Chest : public Actor
 {
 public:
 	Chest();
-	Chest(int x, int y, Map* map);
+	Chest(int x, int y, Map* map, int handle);
 	virtual ~Chest();
 	virtual void Init() override;
 	virtual void Update(Input&) override;
@@ -27,8 +27,9 @@ public:
 	void OpenChest();
 
 private:
+	int m_graphHandle; // 画像ハンドル
 
-	bool m_isOpen;
+	bool m_isOpen; // 開いているかどうか
 
 	Map* m_pMap; // マップのデータを変更できるようにポインタを取得
 	Position2Int m_chipPos; // マップチップ位置 

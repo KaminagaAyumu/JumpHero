@@ -6,6 +6,7 @@
 #include "Actor.h"
 #include "GameManager.h"
 #include "Player.h"
+#include "DxLib.h"
 
 namespace
 {
@@ -17,6 +18,12 @@ ChestManager::ChestManager(Camera* camera, GameManager* gameManager) :
 	m_pCamera(camera),
 	m_pGameManager(gameManager)
 {
+	m_chestGraphHandle = LoadGraph(L"data/chest.png");
+}
+
+ChestManager::~ChestManager()
+{
+	DeleteGraph(m_chestGraphHandle);
 }
 
 void ChestManager::Update(Input& input)
@@ -68,7 +75,7 @@ void ChestManager::SpawnChest(Map* map)
 		{
 			if (map->GetChestPosToMap(x, y) == kChestChipNo)
 			{
-				auto chest = std::make_shared<Chest>(x, y, map);
+				auto chest = std::make_shared<Chest>(x, y, map,m_chestGraphHandle);
 				chest->SetCamera(m_pCamera);
 				m_chests.push_back(chest);
 			}

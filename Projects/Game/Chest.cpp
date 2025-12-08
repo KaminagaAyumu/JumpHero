@@ -18,13 +18,14 @@ namespace
 
 Chest::Chest() :
 	Actor(Types::ActorType::Chest),
+	m_graphHandle(-1),
 	m_isOpen(false),
 	m_pMap(nullptr),
 	m_chipPos{}
 {
 }
 
-Chest::Chest(int x, int y, Map* map) :
+Chest::Chest(int x, int y, Map* map, int handle) :
 	Actor(Types::ActorType::Chest),
 	m_pMap(map),
 	m_chipPos{x,y},
@@ -33,6 +34,7 @@ Chest::Chest(int x, int y, Map* map) :
 	float tileSize = kChipSize * kChipScale;
 	m_pos = { static_cast<float>(m_chipPos.x) * tileSize + tileSize * 0.5f,static_cast<float>(m_chipPos.y) * tileSize + tileSize * 0.5f };
 	m_colRect = { m_pos,kDefaultWidth,kDefaultHeight };
+	m_graphHandle = handle;
 }
 
 Chest::~Chest()
@@ -63,7 +65,7 @@ void Chest::Draw()
 #ifdef _DEBUG
 		m_colRect.Draw(drawX, drawY);
 #endif
-		//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_closeGraphHandle, TRUE);
+		DrawRotaGraph(drawX, drawY, kChipScale, 0.0f, m_graphHandle, true);
 	}
 }
 

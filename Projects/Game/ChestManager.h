@@ -18,6 +18,7 @@ class ChestManager
 {
 public:
 	ChestManager(Camera* camera, GameManager* gameManager);
+	virtual ~ChestManager();
 
 	void Update(Input& input);
 
@@ -36,6 +37,8 @@ public:
 
 private:
 	
+	int m_chestGraphHandle; // 宝箱の画像ハンドル
+
 	Camera* m_pCamera; // 宝箱で使うカメラを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
 	std::list<std::shared_ptr<Chest>> m_chests;
