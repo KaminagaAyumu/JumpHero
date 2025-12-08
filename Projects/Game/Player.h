@@ -18,6 +18,7 @@ public:
 	virtual ~Player();
 
 	void Init() override;
+	void InitMap(Map* map);
 	void Update(Input&) override;
 	void Draw() override;
 

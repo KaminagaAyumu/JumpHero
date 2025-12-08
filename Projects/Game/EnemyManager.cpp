@@ -36,6 +36,12 @@ EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameMana
 	m_enemies.clear(); // 敵リストを初期化
 }
 
+void EnemyManager::Init(Map* map)
+{
+	m_pMap = map;
+	m_enemies.clear(); // 敵リストを初期化
+}
+
 void EnemyManager::Update(Input& input)
 {
 	m_frameCount++;

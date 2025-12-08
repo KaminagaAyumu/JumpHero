@@ -91,6 +91,9 @@ void GameManager::Init()
 void GameManager::Init(Map* map)
 {
 	m_pMap = map;
+	m_pCamera->Init(m_pMap->GetMapSize());
+	m_pPlayer->InitMap(map);
+	m_pEnemyManager->Init(map);
 }
 
 void GameManager::Update(Input& input)

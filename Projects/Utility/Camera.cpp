@@ -20,6 +20,11 @@ Camera::~Camera()
 {
 }
 
+void Camera::Init(const Size& size)
+{
+	m_mapSize = size;
+}
+
 void Camera::Update()
 {
 	assert(m_pTargetActor != nullptr && L"カメラのターゲット取得失敗");

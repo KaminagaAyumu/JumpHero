@@ -17,6 +17,8 @@ class EnemyManager
 public:
 	EnemyManager(Camera* camera,Player* player, GameManager* gameManager, Map* map);
 
+	void Init(Map* map);
+
 	void Update(Input&);
 
 	void Draw();

@@ -89,6 +89,11 @@ void Player::Init()
 	m_draw = &Player::EntryDraw;
 }
 
+void Player::InitMap(Map* map)
+{
+	m_pMap = map;
+}
+
 void Player::Update(Input& input)
 {
 	(this->*m_update)(input);

@@ -13,6 +13,11 @@ public:
 	virtual ~Camera();
 
 	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="size">マップのサイズ</param>
+	void Init(const Size& size);
+	/// <summary>
 	/// ターゲットの座標を基準にして画面のスクロール量を計算する処理
 	/// </summary>
 	void Update();
