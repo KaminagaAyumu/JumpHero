@@ -49,6 +49,7 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_pos = pos;
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
+	m_direction.x = 1.0f; // 最初は右向きにする
 }
 
 void TransformEnemy::Init()
@@ -127,17 +128,24 @@ void TransformEnemy::NormalUpdate(Input&)
 		m_frameCount = 0; // フレームカウントをリセット
 		return; // 念のためreturn
 	}
+	m_pos.y += m_velocity.y;
 
-	m_velocity.x = kNormalMoveSpeed * m_direction.x;
+	if(!m_isGround) // 空中にいるなら重力をかける
+	{
+		m_velocity.y += kGravity;
+	}
+
+	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
+	CheckHitMapY();
+
 	m_pos.x += m_velocity.x;
 	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
 	CheckHitMapX();
 
-	m_velocity.y += kGravity;
-	m_pos.y += m_velocity.y;
-	m_colRect.pos = m_pos;
-	CheckHitMapY();
-	m_colCircle.pos = m_pos;
+	m_velocity.x = kNormalMoveSpeed * m_direction.x;
+
 }
 
 void TransformEnemy::TransformUpdate(Input&)

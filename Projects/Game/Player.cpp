@@ -229,19 +229,8 @@ void Player::JumpUpdate(Input& input)
 		m_pos.x += kNormalMoveSpeed;
 	}
 
-	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
-	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
 	float playerTop = m_pos.y - kPlayerHeight / 2.0f;
 	float playerBottom = m_pos.y + kPlayerHeight / 2.0f;
-
-	//if (input.IsPressed("Left")) // 左入力の時
-	//{
-	//	m_pos.x -= 3.5f;
-	//}
-	//if (input.IsPressed("Right")) // 右入力の時
-	//{
-	//	m_pos.x += 3.5f;
-	//}
 
 	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
 
@@ -249,7 +238,6 @@ void Player::JumpUpdate(Input& input)
 	m_colCircle.pos = m_pos;
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
 
-	bool isYCorrected = false;
 
 	// 天井に着いた時の処理
 	if (playerTop < moveRange.GetTop())
@@ -259,7 +247,6 @@ void Player::JumpUpdate(Input& input)
 		m_isHover = true;
 		m_velocity.y = 0.0f;
 		m_frameCount = 0;
-		isYCorrected = true;
 	}
 
 	playerBottom = m_pos.y + kPlayerHeight / 2.0f;
@@ -273,32 +260,25 @@ void Player::JumpUpdate(Input& input)
 		m_isGround = true;
 		m_update = &Player::GroundUpdate;
 		m_draw = &Player::GroundDraw;
-		isYCorrected = true;
-		//printfDx(L"空中から床へ");
 		m_colCircle.pos = m_pos;
 		m_colRect.pos = m_pos;
 
 		return;
 	}
 
-	if (!isYCorrected)
+	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
+	moveRange = m_pMap->GetCanMoveRange(m_colRect);
+	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
+	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
+
+	if (movingLeft && playerLeft < moveRange.GetLeft())
 	{
-		if (movingLeft)
-		{
-			playerLeft = m_pos.x - kPlayerWidth / 2.0f;
-			if (playerLeft < moveRange.GetLeft())
-			{
-				m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
-			}
-		}
-		if (movingRight)
-		{
-			playerRight = m_pos.x + kPlayerWidth / 2.0f;
-			if (playerRight > moveRange.GetRight())
-			{
-				m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
-			}
-		}
+		m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f + 1;
+	}
+	if (movingRight && playerRight > moveRange.GetRight())
+	{
+		m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f - 1;
 	}
 
 	m_colRect.pos = m_pos;
@@ -335,8 +315,6 @@ void Player::GroundUpdate(Input& input)
 	m_pos.y += m_velocity.y; // Y座標の更新
 
 	// プレイヤーの下、左、右端座標を定義(上端座標は使わないので定義していない)
-	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
-	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
 	float playerBottom = m_pos.y + kPlayerHeight / 2.0f;
 
 	// マップが取得できていない場合止める
@@ -346,7 +324,6 @@ void Player::GroundUpdate(Input& input)
 	m_colCircle.pos = m_pos;
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
 
-	bool isYCorrected = false;
 
 	// 地面に接している時
 	if (playerBottom >= moveRange.GetBottom())
@@ -355,7 +332,6 @@ void Player::GroundUpdate(Input& input)
 		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
 		m_velocity.y = 0.0f; // 地面にいるのでY方向の力をなくす
 		m_isGround = true; // 地面についている
-		isYCorrected = true;
 	}
 	else // 地面についていない時
 	{
@@ -366,27 +342,27 @@ void Player::GroundUpdate(Input& input)
 		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 		m_colRect.pos = m_pos;
 		m_colCircle.pos = m_pos;
-		//printfDx(L"床から空中へ\n");
 		return;
 	}
 
-	if (!isYCorrected)
+	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
+	moveRange = m_pMap->GetCanMoveRange(m_colRect);
+	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
+	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
+
+	if (movingLeft)
 	{
-		if (movingLeft)
+		if (playerLeft < moveRange.GetLeft())
 		{
-			playerLeft = m_pos.x - kPlayerWidth / 2.0f;
-			if (playerLeft < moveRange.GetLeft())
-			{
-				m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
-			}
+			m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
 		}
-		if (movingRight)
+	}
+	if (movingRight)
+	{
+		if (playerRight > moveRange.GetRight())
 		{
-			playerRight = m_pos.x + kPlayerWidth / 2.0f;
-			if (playerRight > moveRange.GetRight())
-			{
-				m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
-			}
+			m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
 		}
 	}
 
