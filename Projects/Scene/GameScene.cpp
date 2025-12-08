@@ -29,6 +29,8 @@ namespace
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
+	constexpr int kMiniGameStageNo = 1; // ミニゲーム用ステージ番号
+
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 }
 
@@ -42,7 +44,7 @@ m_fadeColor(0x000000)
 
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
-	m_pMap = std::make_shared<Map>(stageNo);
+	m_pMap = std::make_shared<Map>(stageNo,false);
 	m_pMap->Init();
 
 	m_pGameManager = std::make_shared<GameManager>(m_pMap.get(),m_pActors);
@@ -119,7 +121,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller,m_pGameManager));
+		m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller,m_pGameManager, kMiniGameStageNo));
 		return; // 念のため処理を抜ける
 	}
 }

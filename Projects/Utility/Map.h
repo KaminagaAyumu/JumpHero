@@ -12,7 +12,7 @@ class Camera;
 class Map
 {
 public:
-	Map(int stageNo);
+	Map(int stageNo, bool isMiniGame);
 	virtual ~Map();
 
 	void Init();
@@ -84,8 +84,9 @@ private:
 	/// ステージ別のデータを読み込む
 	/// </summary>
 	/// <param name="stageNo">ステージ番号</param>
+	/// /// <param name="isMiniGame">true : ミニゲーム用マップ false : ゲームマップ</param>
 	/// <returns>true : 読み込み成功 false : 読み込みに失敗</returns>
-	bool LoadStageData(int stageNo);
+	bool LoadStageData(int stageNo, bool isMiniGame);
 
 	/// <summary>
 	/// ゲーム内座標をマップ基準の座標に変換

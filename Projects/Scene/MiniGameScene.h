@@ -16,7 +16,7 @@ class CollisionManager;
 class MiniGameScene : public SceneBase
 {
 public:
-	MiniGameScene(SceneController& controller, std::shared_ptr<GameManager> gameManager);
+	MiniGameScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo);
 	virtual ~MiniGameScene();
 
 	/// <summary>

@@ -21,7 +21,7 @@ namespace
 
 }
 
-MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameManager> gameManager) :
+MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo) :
 	SceneBase(controller),
 	m_fadeColor(0xffffff),
 	m_updateFunc(&MiniGameScene::FadeInUpdate),
@@ -33,7 +33,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
 	// マップの初期化方法模索中
-	m_pMap = std::make_shared<Map>(1);
+	m_pMap = std::make_shared<Map>(stageNo,true);
 	m_pMap->Init();
 
 	m_pGameManager->Init(m_pMap.get());

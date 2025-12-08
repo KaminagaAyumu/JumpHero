@@ -69,7 +69,7 @@ namespace
 
 }
 
-Map::Map(int stageNo) : 
+Map::Map(int stageNo, bool isMiniGame) :
 	m_chipData{},
 	m_layerMapData{},
 	m_graphChipNumX(0),
@@ -89,7 +89,7 @@ Map::Map(int stageNo) :
 
 	// マップの初期データをロード
 	//LoadMapdata("data/map_new.csv");
-	if (!LoadStageData(stageNo))
+	if (!LoadStageData(stageNo, isMiniGame))
 	{
 		assert(false && "ステージデータの読み込みに失敗しました");
 	}
@@ -443,12 +443,19 @@ void Map::LoadMapdata(const std::string& fileName)
 	}
 }
 
-bool Map::LoadStageData(int stageNo)
+bool Map::LoadStageData(int stageNo, bool isMiniGame)
 {
 	// 読み込むステージデータのパスを取得するための変数
 	wchar_t filePath[kFilePathSize];
 	// ステージの番号に対応したパスを取得する
-	std::swprintf(filePath, kFilePathSize, L"data/stage%dData.fmf", stageNo);
+	if (isMiniGame)
+	{
+		std::swprintf(filePath, kFilePathSize, L"data/minigame%d.fmf", stageNo);
+	}
+	else
+	{
+		std::swprintf(filePath, kFilePathSize, L"data/stage%dData.fmf", stageNo);
+	}
 
 	// パスに対応したステージデータのファイルを開く
 	const int handle = FileRead_open(filePath);
