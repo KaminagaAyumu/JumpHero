@@ -20,6 +20,8 @@ public:
 	ChestManager(Camera* camera, GameManager* gameManager);
 	virtual ~ChestManager();
 
+	void Init();
+
 	void Update(Input& input);
 
 	void Draw();

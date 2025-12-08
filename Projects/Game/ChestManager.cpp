@@ -26,6 +26,11 @@ ChestManager::~ChestManager()
 	DeleteGraph(m_chestGraphHandle);
 }
 
+void ChestManager::Init()
+{
+	m_chests.clear();
+}
+
 void ChestManager::Update(Input& input)
 {
 	for (auto& chest : m_chests)

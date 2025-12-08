@@ -141,6 +141,15 @@ void MiniGameScene::FadeOutUpdate(Input&)
 
 void MiniGameScene::NormalDraw()
 {
+	m_bg->Draw(m_pGameManager->GetCamera());
+	m_pMap->Draw(m_pGameManager->GetCamera());
+
+	for (auto& actor : m_pActors)
+	{
+		actor->Draw();
+	}
+
+	m_pGameManager->Draw();
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"MiniGameScene: NormalDraw", 0xffffff);
