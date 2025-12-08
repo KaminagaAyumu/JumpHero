@@ -25,6 +25,9 @@ namespace
 	constexpr int kGoalChipNoUp = 191; // マップチップのゴール地点上部
 	constexpr int kGoalChipNoDown = 211;// マップチップのゴール地点下部
 
+	constexpr int kThroughChipNoLeft = 264;
+	constexpr int kThroughChipNoCenter = 265;
+	constexpr int kThroughChipNoRight = 266;
 
 
 	constexpr float kMoveRangeMargin = 0.1f; // マップとの位置の補正用
@@ -85,7 +88,7 @@ Map::Map() :
 
 	// マップの初期データをロード
 	//LoadMapdata("data/map_new.csv");
-	LoadStageData(2);
+	LoadStageData(1);
 }
 
 Map::~Map()
@@ -272,7 +275,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		for (int y = topTileY; y >= 0; --y)
 		{
 			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
-			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
+			if (chipNo != kSpaceChipNo && chipNo != kThroughChipNoLeft && chipNo != kThroughChipNoCenter && chipNo != kThroughChipNoRight) // マップチップが空白でなければ
 			{
 				// マップチップの座標は左端基準なので
 				// 見つかったマップチップの座標から1つ下側の座標が下端となる
@@ -375,6 +378,25 @@ Position2 Map::GetStartPosToMap()
 				}
 			}
 		}
+	return Position2();
+}
+
+Position2 Map::GetGoalPosToMap()
+{
+	Position2 goalPos = Position2();
+	for (int y = 0; y < m_height; y++)
+	{
+		for (int x = 0; x < m_width; x++)
+		{
+			int chipNo = m_layerMapData[2][y * m_width + x];
+			if (chipNo == kGoalChipNoUp)
+			{
+				goalPos.x = x * kChipSize * kChipScale - (kChipSize * kChipScale) / 2.0f;
+				goalPos.y = y * kChipSize * kChipScale + (kChipSize * kChipScale);
+				return goalPos;
+			}
+		}
+	}
 	return Position2();
 }
 

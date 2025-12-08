@@ -160,7 +160,8 @@ bool GameManager::IsSkipCollision() const
 bool GameManager::IsClear() const
 {
 	// プレイヤーの座標がゴールの位置に来たら
-	return m_pPlayer->GetPos().x >= kGoalPosX && m_pPlayer->GetPos().y <= kGoalPosY;
+	Position2 goalPos = m_pMap->GetGoalPosToMap();
+	return m_pPlayer->GetPos().x >= goalPos.x && m_pPlayer->GetPos().y <= goalPos.y;
 }
 
 void GameManager::OnItemCollected(const Types::ItemType& type)

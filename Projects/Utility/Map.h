@@ -48,6 +48,7 @@ public:
 	int GetMapChipNum(int x, int y);
 	int GetChestPosToMap(int x, int y);
 	Position2 GetStartPosToMap();
+	Position2 GetGoalPosToMap();
 
 	/// <summary>
 	/// マップチップの指定の座標のデータを変更する

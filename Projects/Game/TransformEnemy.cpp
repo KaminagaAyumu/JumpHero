@@ -49,7 +49,7 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_pos = pos;
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
-	m_direction.x = 1.0f; // 最初は右向きにする
+	//m_direction.x = 1.0f; // 最初は右向きにする
 }
 
 void TransformEnemy::Init()
