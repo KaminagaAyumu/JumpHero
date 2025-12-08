@@ -90,6 +90,13 @@ void GameManager::Init()
 
 void GameManager::Update(Input& input)
 {
+#ifdef _DEBUG
+	// printfを初期化するコマンド(上入力しながらLボタン)
+	if (input.IsTriggered("LShift") && input.IsPressed("Up"))
+	{
+		clsDx();
+	}
+#endif
 	m_frameCount++;
 	m_pCamera->Update();
 

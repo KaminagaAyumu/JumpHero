@@ -41,6 +41,8 @@ private:
 	using DrawFunc_t = void (MiniGameScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
+	bool IsEndDescription() const; // 説明が終了したかどうかを取得する関数
+
 	std::shared_ptr<GameManager> m_pGameManager; // ゲーム管理クラスへのポインタ
 };
 

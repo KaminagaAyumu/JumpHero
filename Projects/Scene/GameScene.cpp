@@ -79,14 +79,6 @@ void GameScene::FadeInUpdate(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
-#ifdef _DEBUG
-	// プレイヤーと敵を初期化するコマンド(上入力しながらLボタン)
-	if (input.IsTriggered("LShift") && input.IsPressed("Up"))
-	{
-		clsDx();
-		printfDx(L"初期化コマンドを検知\n");
-	}
-#endif
 
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
