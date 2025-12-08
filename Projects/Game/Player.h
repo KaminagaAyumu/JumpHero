@@ -45,6 +45,15 @@ public:
 	bool PowerUp();
 
 private:
+	struct CollectionFlags
+	{
+		bool hitLeft = false;
+		bool hitRight = false;
+		bool hitTop = false;
+		bool hitBottom = false;
+	};
+
+
 	Vector2 m_direction; // 進む方向
 	Vector2 m_velocity; // 進む速度
 
@@ -71,6 +80,11 @@ private:
 	/// </summary>
 	/// <param name="info"></param>
 	void IsCollision(const Types::CollisionInfo& info) override;
+
+	/// <summary>
+	/// マップとの当たり判定を行う
+	/// </summary>
+	void CheckHitMap(Input& input);
 
 	/// <summary>
 	/// ジャンプ開始時の処理
@@ -101,5 +115,7 @@ private:
 	DrawFunc_t m_draw;
 
 	bool IsOpenChestX()const;
+
+	CollectionFlags m_colFlags; // 当たり判定フラグ
 };
 

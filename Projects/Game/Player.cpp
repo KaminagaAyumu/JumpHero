@@ -22,6 +22,8 @@ namespace
 	constexpr float kPlayerWidth = 45.0f;				// プレイヤーの実際の幅
 	constexpr float kPlayerHeight = 45.0f;				// プレイヤーの実際の高さ
 
+	constexpr float kMapColMargin = 0.01f;				// マップとの当たり判定のマージン
+
 	constexpr int	kEntryTextDispTime = 60;					// 登場テキストを表示する時間
 	constexpr float	kEntryMoveSpeed = 0.05f;				// プレイヤー登場のスピード
 
@@ -62,6 +64,7 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_update(&Player::EntryUpdate),
 	m_draw(&Player::EntryDraw)
 {
+	m_colFlags = {};
 }
 
 Player::~Player()
@@ -88,6 +91,7 @@ void Player::Init()
 	m_currentFloorY = 0.0f;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
+	m_colFlags = { };
 }
 
 void Player::Update(Input& input)
@@ -135,6 +139,82 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 		}
 		m_isOpenChest = true;
 	}
+}
+
+void Player::CheckHitMap(Input& input)
+{
+	const float kHalfWidth = kPlayerWidth / 2.0f;
+	const float kHalfHeight = kPlayerHeight / 2.0f;
+
+	float playerLeft = m_pos.x - kHalfWidth;
+	float playerRight = m_pos.x + kHalfWidth;
+	float playerTop = m_pos.y - kHalfHeight;
+	float playerBottom = m_pos.y + kHalfHeight;
+
+	bool isVerticalFirst = !m_isGround; // 空中にいるときは縦判定を先に行う
+
+	bool movingLeft = input.IsPressed("Left");
+	bool movingRight = input.IsPressed("Right");
+
+	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
+
+	auto CorrectX = [&]() {
+		playerLeft = m_pos.x - kHalfWidth;
+		playerRight = m_pos.x + kHalfWidth;
+
+		if (!movingLeft || playerLeft >= moveRange.GetLeft() - kMapColMargin)
+		{
+
+		}
+		else
+		{
+			m_pos.x = moveRange.GetLeft() + kHalfWidth;
+			m_colFlags.hitLeft = true;
+		}
+
+		if( !movingRight || playerRight <= moveRange.GetRight() + kMapColMargin)
+		{
+		}
+		else
+		{
+			m_pos.x = moveRange.GetRight() - kHalfWidth;
+			m_colFlags.hitRight = true;
+		}
+
+		};
+
+	auto CorrectY = [&]() {
+		playerTop = m_pos.y - kHalfHeight;
+		playerBottom = m_pos.y + kHalfHeight;
+
+		if (m_velocity.y < -kMapColMargin && playerTop < moveRange.GetTop() - kMapColMargin)
+		{
+			m_pos.y = moveRange.GetTop() + kHalfHeight;
+			m_velocity.y = 0.0f;
+			m_colFlags.hitTop = true;
+		}
+
+		playerBottom = m_pos.y + kHalfHeight;
+		if (m_velocity.y > kMapColMargin && playerBottom > moveRange.GetBottom() + kMapColMargin)
+		{
+			m_pos.y = moveRange.GetBottom() - kHalfHeight;
+			m_velocity.y = 0.0f;
+			m_colFlags.hitBottom = true;
+		}
+		
+		};
+
+	if (isVerticalFirst)
+		{
+		CorrectY();
+		CorrectX();
+	}
+	else
+	{
+		CorrectX();
+		CorrectY();
+	}
+
 }
 
 void Player::CheckPowerDown()
