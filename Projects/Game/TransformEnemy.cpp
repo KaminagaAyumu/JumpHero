@@ -463,6 +463,11 @@ bool TransformEnemy::IsItemMode() const
 	return m_updateFunc == &TransformEnemy::ItemUpdate;
 }
 
+void TransformEnemy::MoveOperation()
+{
+
+}
+
 
 //void TransformEnemy::CheckHitMap()
 //{

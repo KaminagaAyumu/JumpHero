@@ -204,14 +204,14 @@ void Player::MoveOperation(Input& input)
 	if (leftX < rangeX.GetLeft())
 	{
 		tryPosX.x = rangeX.GetLeft() + kPlayerWidth * 0.5f + margin;
-		frags.hitLeft = true;
+		frags.isHitLeft = true;
 		// 速度を抑える(問題があれば0にする)
 		dx = tryPosX.x - m_pos.x;
 	}
 	else if (rightX > rangeX.GetRight())
 	{
 		tryPosX.x = rangeX.GetRight() - kPlayerWidth * 0.5f - margin;
-		frags.hitRight = true;
+		frags.isHitRight = true;
 		// 速度を抑える(問題があれば0にする)
 		dx = tryPosX.x - m_pos.x;
 	}
@@ -233,7 +233,7 @@ void Player::MoveOperation(Input& input)
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
 	{
 		tryPosY.y = rangeY.GetBottom() - kPlayerHeight * 0.5f;
-		frags.onGround = true;
+		frags.isHitGround = true;
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		m_frameCount = 0; // 時間経過をリセット
@@ -241,7 +241,7 @@ void Player::MoveOperation(Input& input)
 	else if(dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
 	{
 		tryPosY.y = rangeY.GetTop() + kPlayerHeight * 0.5f;
-		frags.hitCeil = true;
+		frags.isHitCeil = true;
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		// 再びジャンプボタンを押した際と同じ処理をする
@@ -253,7 +253,7 @@ void Player::MoveOperation(Input& input)
 	m_pos.y = tryPosY.y;
 
 	// 状態の更新
-	m_isGround = frags.onGround;
+	m_isGround = frags.isHitGround;
 	if(m_isGround)
 	{
 		m_update = &Player::GroundUpdate; // 更新処理を地面についている時に

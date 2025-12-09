@@ -88,6 +88,11 @@ private:
 	/// <returns>true : アイテム状態 false : アイテム状態ではない</returns>
 	bool IsItemMode()const;
 
+	/// <summary>
+	/// 座標更新関連の処理
+	/// </summary>
+	void MoveOperation();
+
 	// 敵の状態管理用
 	EnemyForm m_currentForm; // 現在の敵の姿
 	EnemyForm m_nextForm; // 変わる姿

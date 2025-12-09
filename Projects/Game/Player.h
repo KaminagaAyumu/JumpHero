@@ -48,10 +48,10 @@ public:
 private:
 	struct ContactFrags
 	{
-		bool hitLeft = false;
-		bool hitRight = false;
-		bool hitCeil = false;
-		bool onGround = false;
+		bool isHitLeft = false;
+		bool isHitRight = false;
+		bool isHitCeil = false;
+		bool isHitGround = false;
 	};
 
 	Vector2 m_direction; // 進む方向
