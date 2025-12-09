@@ -282,14 +282,12 @@ void Player::MoveOperation(Input& input)
 void Player::CheckHitToChest(Input& input)
 {
 	// 宝箱の位置を調べる
-	bool isOnTop = false;
 	bool isRightSide = false;
 	bool isLeftSide = false;
 	// 宝箱が見つかった際に見つかった座標を指定できるようにするための変数
 	int chestX = -1;
 	int chestY = -1;
 	float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
-
 
 	const float top = m_pos.y - kPlayerHeight * 0.5f; // プレイヤーの上端のY座標
 	const float bottom = m_pos.y + kPlayerHeight * 0.5f; // プレイヤーの下端のY座標
@@ -300,29 +298,6 @@ void Player::CheckHitToChest(Input& input)
 	int bottomY = m_pMap->WorldPosToMapPos(bottom, tileSize); // プレイヤーの下端のマップ座標Y
 	int leftX = m_pMap->WorldPosToMapPos(left, tileSize); // プレイヤーの左端のマップ座標X
 	int rightX = m_pMap->WorldPosToMapPos(right, tileSize); // プレイヤーの右端のマップ座標X
-
-	// プレイヤーの下端の少し下のマップチップを取得
-	const float foot = bottom + kChestConfirmRange; // プレイヤーの下端の少し下のY座標
-	int footY = m_pMap->WorldPosToMapPos(foot, tileSize); // プレイヤーの下端の少し下のマップ座標Y
-
-	for(int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
-	{
-		int chipNo = m_pMap->GetMapChipNum(x, footY);
-		if (chipNo == kChestChipNo)
-		{
-			isOnTop = true;
-			chestX = x;
-			chestY = footY;
-			printfDx(L"Player: 宝箱の上にいる\n");
-			
-			if (input.IsTriggered("Jump")) // ジャンプボタンが押されたとき
-			{
-				// 宝箱を開ける(現在ここが通らない)
-				m_pGameManager->OpenChestToPosition(chestX, chestY);
-			}
-			
-		}
-	}
 
 	const float leftProbe = left - kChestConfirmRange; // プレイヤーの左端の少し左のX座標
 	int leftProbeX = m_pMap->WorldPosToMapPos(leftProbe, tileSize);
@@ -448,7 +423,17 @@ void Player::GroundUpdate(Input& input)
 	if (input.IsTriggered("Jump") && m_isGround) // ジャンプボタンが押されたとき
 	{
 		JumpStart(); // ジャンプする際の処理を行う
+		Position2Int chestPos;
+		if (IsOnChestTop(chestPos)) // 宝箱の上にいる時
+		{
+			// 宝箱を開ける
+			m_pGameManager->OpenChestToPosition(chestPos.x, chestPos.y);
+		}
 		return;
+	}
+	else
+	{
+		m_isJumpStart = false;
 	}
 
 	MoveOperation(input); // 移動処理を行う
@@ -573,6 +558,40 @@ void Player::MissDraw()
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif
+}
+
+bool Player::IsOnChestTop(Position2Int& chestPos)
+{
+	// 宝箱が見つかった際に見つかった座標を指定できるようにするための変数
+	int chestX = -1;
+	int chestY = -1;
+	float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
+
+	const float bottom = m_pos.y + kPlayerHeight * 0.5f; // プレイヤーの下端のY座標
+	const float left = m_pos.x - kPlayerWidth * 0.5f; // プレイヤーの左端のX座標
+	const float right = m_pos.x + kPlayerWidth * 0.5f; // プレイヤーの右端のX座標
+
+	int bottomY = m_pMap->WorldPosToMapPos(bottom, tileSize); // プレイヤーの下端のマップ座標Y
+	int leftX = m_pMap->WorldPosToMapPos(left, tileSize); // プレイヤーの左端のマップ座標X
+	int rightX = m_pMap->WorldPosToMapPos(right, tileSize); // プレイヤーの右端のマップ座標X
+
+	// プレイヤーの下端の少し下のマップチップを取得
+	const float foot = bottom + kChestConfirmRange; // プレイヤーの下端の少し下のY座標
+	int footY = m_pMap->WorldPosToMapPos(foot, tileSize); // プレイヤーの下端の少し下のマップ座標Y
+
+	for (int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
+	{
+		int chipNo = m_pMap->GetMapChipNum(x, footY);
+		if (chipNo == kChestChipNo)
+		{
+			chestX = x;
+			chestY = footY;
+			chestPos = { chestX,chestY };
+			printfDx(L"Player: 宝箱の上にいる\n");
+			return true;
+		}
+	}
+	return false;
 }
 
 bool Player::IsOpenChestX() const

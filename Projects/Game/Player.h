@@ -46,6 +46,7 @@ public:
 	bool PowerUp();
 
 private:
+	// マップとの当たり判定を行う際の構造体
 	struct ContactFrags
 	{
 		bool isHitLeft = false;
@@ -119,6 +120,17 @@ private:
 	using DrawFunc_t = void(Player::*)();
 	DrawFunc_t m_draw;
 
+	/// <summary>
+	/// プレイヤーが宝箱の上にいるかどうかを判定する
+	/// </summary>
+	/// <param name="chestPos">プレイヤーが乗っている宝箱の座標</param>
+	/// <returns>true : 宝箱の上にいる false : 宝箱の上にいない</returns>
+	bool IsOnChestTop(Position2Int& chestPos);
+
+	/// <summary>
+	/// 宝箱を横から開けられるかどうかを判定する
+	/// </summary>
+	/// <returns>true : 横から開けられる false : 横から開けられない</returns>
 	bool IsOpenChestX()const;
 };
 
