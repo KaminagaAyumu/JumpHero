@@ -16,11 +16,11 @@ namespace
 
 	// 更新処理関連
 	constexpr float kGravity				= 0.5f;		// 敵にかかる重力
-	constexpr float kNormalMoveSpeed		= 0.5f;		// 通常時の左右移動の速さ
+	constexpr float kNormalMoveSpeed		= 0.9f;		// 通常時の左右移動の速さ
 	constexpr float kSeekerMoveSpeed		= 0.8f;		// プレイヤーを追い続ける敵の移動の速さ
 
 	constexpr int	kAppearTime				= 60;		// 敵の出現までの時間
-	constexpr int	kFormChangeWaitTime		= 1380;		// 敵の変身までの時間
+	constexpr int	kFormChangeWaitTime		= 180;		// 敵の変身までの時間
 	constexpr int	kFormChangeTime			= 30;		// 敵の変身準備までの時間
 
 	constexpr float kMaxDirectionValue		= 1.0f;		// 向きの最大値(大きさ)

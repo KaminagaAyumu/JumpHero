@@ -21,8 +21,8 @@ namespace
 	constexpr int	kGraphWidth = 45;					// プレイヤー画像の幅
 	constexpr int	kGraphHeight = 45;					// プレイヤー画像の高さ
 
-	constexpr float kPlayerWidth = 45.0f;				// プレイヤーの実際の幅
-	constexpr float kPlayerHeight = 45.0f;				// プレイヤーの実際の高さ
+	constexpr float kPlayerWidth = 40.0f;				// プレイヤーの実際の幅
+	constexpr float kPlayerHeight = 40.0f;				// プレイヤーの実際の高さ
 
 	constexpr float kMapColMargin = 0.5f;				// マップとの当たり判定のマージン
 
