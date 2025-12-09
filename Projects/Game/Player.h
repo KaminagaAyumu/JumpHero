@@ -92,9 +92,9 @@ private:
 	void CheckPowerDown();
 
 	/// <summary>
-	/// マップとの当たり判定を行う
+	/// プレイヤーの位置更新とマップとの当たり判定を行う
 	/// </summary>
-	void CheckHitMap(Input& input);
+	void MoveOperation(Input& input);
 
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時

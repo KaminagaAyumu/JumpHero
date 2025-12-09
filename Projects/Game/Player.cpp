@@ -10,9 +10,9 @@
 
 namespace
 {
-	constexpr float kGravity = 0.5f;					// プレイヤーにかかる重力
+	constexpr float kGravity = 0.50f;					// プレイヤーにかかる重力
 	constexpr float kGroundY = 570.0f;				// 床の座標
-	constexpr float kJumpPower = -15.0f;				// ジャンプ時の上に上がる力
+	constexpr float kJumpPower = -20.0f;				// ジャンプ時の上に上がる力
 	constexpr float kMissJumpPower = kJumpPower * 1.01f;	// ミスしたときの上に上がる力
 	constexpr float kNormalMoveSpeed = 3.5f;					// 左右に動くスピード
 
@@ -161,7 +161,7 @@ void Player::CheckPowerDown()
 	}
 }
 
-void Player::CheckHitMap(Input& input)
+void Player::MoveOperation(Input& input)
 {
 	float dx = 0.0f; // X軸の移動量
 	const bool movingLeft = input.IsPressed("Left");
@@ -236,6 +236,7 @@ void Player::CheckHitMap(Input& input)
 		frags.onGround = true;
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
+		m_frameCount = 0; // 時間経過をリセット
 	}
 	else if(dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
 	{
@@ -290,9 +291,6 @@ void Player::EntryUpdate(Input&)
 
 void Player::JumpUpdate(Input& input)
 {
-	m_frameCount++;
-	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
-
 	if (m_level > 0) // レベルが上がっている時
 	{
 		CheckPowerDown(); // プレイヤーのパワーダウンをするかどうか判定する
@@ -308,11 +306,9 @@ void Player::JumpUpdate(Input& input)
 		// ジャンプの高さを上下に調整できる
 		if (input.IsPressed("Up")) // 上ボタンが押されたとき
 		{
-			m_velocity.y = kJumpPower - 0.5f;
 		}
 		if (input.IsPressed("Down")) // 下ボタンが押されたとき
 		{
-			m_velocity.y = kJumpPower + 0.5f;
 		}
 	}
 
@@ -329,75 +325,7 @@ void Player::JumpUpdate(Input& input)
 		m_frameCount = 0;
 	}
 
-	bool movingLeft = input.IsPressed("Left");
-	bool movingRight = input.IsPressed("Right");
-
-	if (movingLeft)
-	{
-		m_pos.x -= kNormalMoveSpeed;
-	}
-	if (movingRight)
-	{
-		m_pos.x += kNormalMoveSpeed;
-	}
-
-	float playerTop = m_pos.y - kPlayerHeight / 2.0f;
-	float playerBottom = m_pos.y + kPlayerHeight / 2.0f;
-
-	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
-
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
-	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-
-
-	// 天井に着いた時の処理
-	if (playerTop < moveRange.GetTop())
-	{
-		m_pos.y = moveRange.GetTop() + kPlayerHeight / 2.0f;
-		// 再びジャンプボタンを押した際と同じ処理をする
-		m_isHover = true;
-		m_velocity.y = 0.0f;
-		m_frameCount = 0;
-	}
-
-	playerBottom = m_pos.y + kPlayerHeight / 2.0f;
-
-	// 床に着地した時の処理
-	if (playerBottom > moveRange.GetBottom())
-	{
-		printfDx(L"床着地\n");
-		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
-		m_velocity = {};
-		m_direction = {};
-		m_isGround = true;
-		m_update = &Player::GroundUpdate;
-		m_draw = &Player::GroundDraw;
-		m_colCircle.pos = m_pos;
-		m_colRect.pos = m_pos;
-
-		return;
-	}
-
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
-	moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
-	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
-
-	if (movingLeft && playerLeft < moveRange.GetLeft())
-	{
-		//printfDx(L"左から壁に当たった\n");
-		m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f + 1;
-	}
-	if (movingRight && playerRight > moveRange.GetRight())
-	{
-		//printfDx(L"右から壁に当たった\n");
-		m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f - 1;
-	}
-
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
+	MoveOperation(input); // 移動処理を行う
 }
 
 void Player::GroundUpdate(Input& input)
@@ -413,89 +341,7 @@ void Player::GroundUpdate(Input& input)
 		return;
 	}
 
-	// 左右移動フラグの設定
-	bool movingLeft = input.IsPressed("Left");
-	bool movingRight = input.IsPressed("Right");
-
-	if (movingLeft) // 左に移動している場合
-	{
-		m_pos.x -= kNormalMoveSpeed; // 左に力を加える
-	}
-	if (movingRight) // 右に移動している場合
-	{
-		m_pos.x += kNormalMoveSpeed; // 右に力を加える
-	}
-
-	m_velocity.y += kGravity; // 重力をかける
-	m_pos.y += m_velocity.y; // Y座標の更新
-
-	float playerTop = m_pos.y - kPlayerHeight / 2.0f;
-	// プレイヤーの下、左、右端座標を定義(上端座標は使わないので定義していない)
-	float playerBottom = m_pos.y + kPlayerHeight / 2.0f;
-
-	// マップが取得できていない場合止める
-	assert(m_pMap != nullptr && L"Player:マップの取得ができていません");
-	// 移動可能範囲の矩形を取得
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
-	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-
-	// 天井に着いた時の処理
-	if (playerTop < moveRange.GetTop())
-	{
-		m_pos.y = moveRange.GetTop() + kPlayerHeight / 2.0f;
-		m_velocity.y = 0.0f;
-	}
-
-	playerBottom = m_pos.y + kPlayerHeight / 2.0f;
-
-	// 地面に接している時
-	if (playerBottom >= moveRange.GetBottom())
-	{
-		printfDx(L"床判定\n");
-		// 移動可能範囲の下端座標からプレイヤーの高さの半分上にあげたところに補正
-		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
-		m_velocity.y = 0.0f; // 地面にいるのでY方向の力をなくす
-		m_isGround = true; // 地面についている
-	}
-	else // 地面についていない時
-	{
-		printfDx(L"床から離れた\n");
-		// ジャンプはしないが、空中でのUpdateに変更
-		m_isGround = false; // 地面についていない
-		m_frameCount = 0; // 時間経過をリセット
-		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
-		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
-		m_colRect.pos = m_pos;
-		m_colCircle.pos = m_pos;
-		return;
-	}
-
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
-	moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	float playerLeft = m_pos.x - kPlayerWidth / 2.0f;
-	float playerRight = m_pos.x + kPlayerWidth / 2.0f;
-
-	if (movingLeft)
-	{
-		if (playerLeft < moveRange.GetLeft())
-		{
-			printfDx(L"左から壁に当たった\n");
-			m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
-		}
-	}
-	if (movingRight)
-	{
-		if (playerRight > moveRange.GetRight())
-		{
-			printfDx(L"右から壁に当たった\n");
-			m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
-		}
-	}
-
-	m_colRect.pos = m_pos; // 矩形の座標更新
-	m_colCircle.pos = m_pos; // 円の座標更新
+	MoveOperation(input); // 移動処理を行う
 }
 
 void Player::MissUpdate(Input&)
