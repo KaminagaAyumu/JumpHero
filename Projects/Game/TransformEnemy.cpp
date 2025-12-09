@@ -25,7 +25,12 @@ namespace
 
 	constexpr float kMaxDirectionValue		= 1.0f;		// 向きの最大値(大きさ)
 	constexpr float kDirectionMagnification = 0.01f;	// 向きの倍率
+
+	constexpr int	kTurnMaxCount			= 2;        // 方向転換できる最大回数
 	
+	// マップ関連
+	constexpr int	kSpaceChipNo			= 0;		// マップチップの空白番号
+
 	// 演出関連
 	constexpr float	kItemWarningRate		= 0.20f;	// アイテム化が終わりそうなことを示す時間の割合
 	constexpr float kWarningFrashCycle		= 0.30f;	// 点滅の周期
@@ -467,6 +472,12 @@ bool TransformEnemy::IsItemMode() const
 	return m_updateFunc == &TransformEnemy::ItemUpdate;
 }
 
+bool TransformEnemy::IsFlipCorner() const
+{
+	// 方向転換回数が最大回数以下ならtrueを返す
+	return m_turnCount <= kTurnMaxCount;
+}
+
 void TransformEnemy::MoveOperation()
 {
 	float dx = 0.0f; // X軸の移動量
@@ -561,11 +572,32 @@ void TransformEnemy::MoveOperation()
 	// 状態の更新
 	m_isGround = frags.isHitGround;
 
+	// 方向転換の判定
+	if (m_isGround && IsFlipCorner()) // 地面にいて、方向転換可能な場合
+	{
+		// 前方のX座標を見る
+		const float aheadX = m_isRightDirection ? (m_pos.x + kEnemyWidth * 0.5f) : (m_pos.x - kEnemyWidth * 0.5f);
+		const float aheadY = m_pos.y + kEnemyHeight * 0.5f; // 足元のY座標
+		const float probeY = aheadY + 1.0f; // 足元より少し下のY座標
+		const float tileSize = m_pMap->GetTileSize(); // マップチップのサイズ
+		int tx = m_pMap->WorldPosToMapPos(aheadX, tileSize); // X座標のマップ位置
+		int ty = m_pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
+
+		int chipNo = m_pMap->GetMapChipNum(tx, ty); // マップチップ番号を取得
+		if (chipNo == kSpaceChipNo) // 前方のマップチップが空白の場合
+		{
+			// 足元に地面がないので方向転換
+			m_isRightDirection = !m_isRightDirection;
+			m_turnCount++; // 方向転換カウンタを増加
+		}
+	}
+
+	// 横方向の壁衝突判定
 	if(frags.isHitLeft || frags.isHitRight)
 	{
 		// 方向転換
 		m_isRightDirection = !m_isRightDirection;
-		m_turnCount++;
+		m_turnCount++; // 方向転換カウンタを増加
 	}
 }
 

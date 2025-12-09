@@ -32,18 +32,27 @@ public:
 	bool IsCollision(const Rect2D& rect, Rect2D& mapRect);
 
 	/// <summary>
+	/// ゲーム内座標をマップ基準の座標に変換
+	/// </summary>
+	/// <param name="pos">変換したい座標</param>
+	/// <param name="tileSize">マップチップ1枚の大きさ</param>
+	/// <returns>マップチップ座標</returns>
+	int WorldPosToMapPos(float pos, float tileSize);
+
+	/// <summary>
 	/// 対象の矩形の行動可能範囲を返す
 	/// </summary>
 	/// <param name="rect">対象の矩形</param>
 	/// <returns>行動可能範囲</returns>
 	Rect2D GetCanMoveRange(const Rect2D& rect);
 
-	// ゲッター
+	// ゲッター類
 	int GetGraphChipNumX() const { return m_graphChipNumX; }
 	int GetGraphChipNumY() const { return m_graphChipNumY; }
 
 	int GetMapWidth() const { return m_width; }
 	int GetMapHeight() const { return m_height; }
+	float GetTileSize() const;
 	Size GetMapSize() const;
 	int GetMapChipNum(int x, int y);
 	int GetChestPosToMap(int x, int y);
@@ -87,14 +96,6 @@ private:
 	/// /// <param name="isMiniGame">true : ミニゲーム用マップ false : ゲームマップ</param>
 	/// <returns>true : 読み込み成功 false : 読み込みに失敗</returns>
 	bool LoadStageData(int stageNo, bool isMiniGame);
-
-	/// <summary>
-	/// ゲーム内座標をマップ基準の座標に変換
-	/// </summary>
-	/// <param name="pos">変換したい座標</param>
-	/// <param name="tileSize">マップチップ1枚の大きさ</param>
-	/// <returns>マップチップ座標</returns>
-	int WorldPosToMapPos(float pos, float tileSize);
 
 };
 

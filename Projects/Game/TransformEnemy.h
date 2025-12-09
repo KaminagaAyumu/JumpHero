@@ -99,6 +99,12 @@ private:
 	bool IsItemMode()const;
 
 	/// <summary>
+	/// 移動の際角で折り返すかどうか
+	/// </summary>
+	/// <returns>true : 折り返す false : 折り返さない</returns>
+	bool IsFlipCorner()const;
+
+	/// <summary>
 	/// 座標更新関連の処理
 	/// </summary>
 	void MoveOperation();
