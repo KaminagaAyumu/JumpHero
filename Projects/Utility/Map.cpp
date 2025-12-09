@@ -8,6 +8,8 @@
 
 namespace
 {
+	constexpr int kIdentifierSize = 4; // ファイル識別子の文字数
+
 	// マップのチップを置く数
 	constexpr int kChipNumX = 97;
 	constexpr int kChipNumY = 16;
@@ -15,9 +17,8 @@ namespace
 	constexpr int kChipSize = 32; // マップ1つの大きさ
 	constexpr float kChipScale = 1.40625f; // マップの拡大率
 
-	//constexpr int kSpaceChipNo = 79; // マップチップの透明部分
+	// マップチップ
 	constexpr int kSpaceChipNo = 0; // マップチップの透明部分
-	//constexpr int kChestChipNo = 46; // マップチップの宝箱部分
 	constexpr int kChestChipNo = 106; // マップチップの宝箱部分
 
 	constexpr int kStartChipNoUp = 188; // マップチップのスタート地点上部
@@ -483,7 +484,7 @@ bool Map::LoadStageData(int stageNo, bool isMiniGame)
 	/////////////////////////////////////////////////////////////////////////////////////////
 
 	// ファイル識別子がFMF_でなければロード失敗とする
-	if (std::memcmp(header.identifier, "FMF_", 4) != 0)
+	if (std::memcmp(header.identifier, "FMF_", kIdentifierSize) != 0)
 	{
 		FileRead_close(handle); // ファイルを閉じる
 		return false; // ロード失敗

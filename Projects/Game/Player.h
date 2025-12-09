@@ -46,6 +46,14 @@ public:
 	bool PowerUp();
 
 private:
+	struct ContactFrags
+	{
+		bool hitLeft = false;
+		bool hitRight = false;
+		bool hitCeil = false;
+		bool onGround = false;
+	};
+
 	Vector2 m_direction; // 進む方向
 	Vector2 m_velocity; // 進む速度
 	Position2 m_entryEndPos;
@@ -82,6 +90,11 @@ private:
 	/// プレイヤーのパワーダウンを判定する
 	/// </summary>
 	void CheckPowerDown();
+
+	/// <summary>
+	/// マップとの当たり判定を行う
+	/// </summary>
+	void CheckHitMap(Input& input);
 
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時

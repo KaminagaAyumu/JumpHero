@@ -161,6 +161,113 @@ void Player::CheckPowerDown()
 	}
 }
 
+void Player::CheckHitMap(Input& input)
+{
+	float dx = 0.0f; // X軸の移動量
+	const bool movingLeft = input.IsPressed("Left");
+	const bool movingRight = input.IsPressed("Right");
+	if (movingLeft)
+	{
+		dx -= kNormalMoveSpeed;
+	}
+	if (movingRight)
+	{
+		dx += kNormalMoveSpeed;
+	}
+
+	// Y軸の更新
+	if (m_isGround) // 地面にいる場合
+	{
+		m_velocity.y += kGravity; // 重力をかけるのみ
+	}
+	else // 空中にいる場合
+	{
+		// 加速する落下処理
+		m_frameCount++;
+		m_velocity.y = m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
+	}
+
+	float dy = m_velocity.y; // Y軸の移動量
+	ContactFrags frags;
+	const float margin = 0.5f;
+
+	// X軸の当たり判定
+	Position2 tryPosX = m_pos;
+	tryPosX.x += dx;
+
+	Rect2D rectX(tryPosX, kPlayerWidth, kPlayerHeight);
+	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
+
+	float leftX = tryPosX.x - kPlayerWidth * 0.5f;
+	float rightX = tryPosX.x + kPlayerWidth * 0.5f;
+
+	if (leftX < rangeX.GetLeft())
+	{
+		tryPosX.x = rangeX.GetLeft() + kPlayerWidth * 0.5f + margin;
+		frags.hitLeft = true;
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+	else if (rightX > rangeX.GetRight())
+	{
+		tryPosX.x = rangeX.GetRight() - kPlayerWidth * 0.5f - margin;
+		frags.hitRight = true;
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+
+	// 実際の座標に反映
+	m_pos.x = tryPosX.x;
+
+	// Y軸の当たり判定
+	Position2 tryPosY = m_pos;
+	tryPosY.y += dy;
+
+	Rect2D rectY(tryPosY, kPlayerWidth, kPlayerHeight);
+	Rect2D rangeY = m_pMap->GetCanMoveRange(rectY);
+
+	float topY = tryPosY.y - kPlayerHeight * 0.5f;
+	float bottomY = tryPosY.y + kPlayerHeight * 0.5f;
+
+	// 落下している時に床に当たった場合
+	if (dy > 0.0f && bottomY > rangeY.GetBottom())
+	{
+		tryPosY.y = rangeY.GetBottom() - kPlayerHeight * 0.5f;
+		frags.onGround = true;
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+	}
+	else if(dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
+	{
+		tryPosY.y = rangeY.GetTop() + kPlayerHeight * 0.5f;
+		frags.hitCeil = true;
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+		// 再びジャンプボタンを押した際と同じ処理をする
+		m_isHover = true;
+		m_frameCount = 0;
+	}
+
+	// 実際の座標に反映
+	m_pos.y = tryPosY.y;
+
+	// 状態の更新
+	m_isGround = frags.onGround;
+	if(m_isGround)
+	{
+		m_update = &Player::GroundUpdate; // 更新処理を地面についている時に
+		m_draw = &Player::GroundDraw; // 描画処理を地面についている時に
+	}
+	else
+	{
+		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
+		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
+	}
+
+	m_colCircle.pos = m_pos; // 円の座標更新
+	m_colRect.pos = m_pos; // 矩形の座標更新
+}
+
 void Player::EntryUpdate(Input&)
 {
 	m_frameCount++;
@@ -259,6 +366,7 @@ void Player::JumpUpdate(Input& input)
 	// 床に着地した時の処理
 	if (playerBottom > moveRange.GetBottom())
 	{
+		printfDx(L"床着地\n");
 		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
 		m_velocity = {};
 		m_direction = {};
@@ -279,10 +387,12 @@ void Player::JumpUpdate(Input& input)
 
 	if (movingLeft && playerLeft < moveRange.GetLeft())
 	{
+		//printfDx(L"左から壁に当たった\n");
 		m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f + 1;
 	}
 	if (movingRight && playerRight > moveRange.GetRight())
 	{
+		//printfDx(L"右から壁に当たった\n");
 		m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f - 1;
 	}
 
@@ -319,6 +429,7 @@ void Player::GroundUpdate(Input& input)
 	m_velocity.y += kGravity; // 重力をかける
 	m_pos.y += m_velocity.y; // Y座標の更新
 
+	float playerTop = m_pos.y - kPlayerHeight / 2.0f;
 	// プレイヤーの下、左、右端座標を定義(上端座標は使わないので定義していない)
 	float playerBottom = m_pos.y + kPlayerHeight / 2.0f;
 
@@ -329,10 +440,19 @@ void Player::GroundUpdate(Input& input)
 	m_colCircle.pos = m_pos;
 	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
 
+	// 天井に着いた時の処理
+	if (playerTop < moveRange.GetTop())
+	{
+		m_pos.y = moveRange.GetTop() + kPlayerHeight / 2.0f;
+		m_velocity.y = 0.0f;
+	}
+
+	playerBottom = m_pos.y + kPlayerHeight / 2.0f;
 
 	// 地面に接している時
 	if (playerBottom >= moveRange.GetBottom())
 	{
+		printfDx(L"床判定\n");
 		// 移動可能範囲の下端座標からプレイヤーの高さの半分上にあげたところに補正
 		m_pos.y = moveRange.GetBottom() - kPlayerHeight / 2.0f;
 		m_velocity.y = 0.0f; // 地面にいるのでY方向の力をなくす
@@ -340,6 +460,7 @@ void Player::GroundUpdate(Input& input)
 	}
 	else // 地面についていない時
 	{
+		printfDx(L"床から離れた\n");
 		// ジャンプはしないが、空中でのUpdateに変更
 		m_isGround = false; // 地面についていない
 		m_frameCount = 0; // 時間経過をリセット
@@ -360,6 +481,7 @@ void Player::GroundUpdate(Input& input)
 	{
 		if (playerLeft < moveRange.GetLeft())
 		{
+			printfDx(L"左から壁に当たった\n");
 			m_pos.x = moveRange.GetLeft() + kPlayerWidth / 2.0f;
 		}
 	}
@@ -367,6 +489,7 @@ void Player::GroundUpdate(Input& input)
 	{
 		if (playerRight > moveRange.GetRight())
 		{
+			printfDx(L"右から壁に当たった\n");
 			m_pos.x = moveRange.GetRight() - kPlayerWidth / 2.0f;
 		}
 	}
