@@ -126,32 +126,7 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 #ifdef _DEBUG
 		printfDx(L"Player : 宝箱と衝突しました\n");
 #endif 
-		// 当たっている宝箱を取得
-		auto chest = dynamic_cast<Chest*>(info.other);
-	
-		// 宝箱が横から開けられるかどうかを取得
-		if(IsOpenChestX())
-		{
-			// 宝箱を開ける
-			chest->OpenChest();
-		}
-		else
-		{
-			// 宝箱の上にいる時の条件を見る
-			Rect2D chestRect = chest->GetColRect();
-			
-			// プレイヤーの上から宝箱を開ける
-			if (m_colRect.GetBottom() <= chestRect.GetTop()) // プレイヤーが上から当たっている時
-			{
-				printfDx(L"chestに上から当たっている\n");
-				if (m_isJumpStart) // 空中にいる時
-				{
-					// 宝箱を開ける
-					chest->OpenChest();
-				}
-			}
-
-		}
+		
 
 	}
 }
@@ -301,10 +276,10 @@ void Player::MoveOperation(Input& input)
 	m_colCircle.pos = m_pos; // 円の座標更新
 	m_colRect.pos = m_pos; // 矩形の座標更新
 
-	CheckHitToChest();
+	CheckHitToChest(input);
 }
 
-void Player::CheckHitToChest()
+void Player::CheckHitToChest(Input& input)
 {
 	// 宝箱の位置を調べる
 	bool isOnTop = false;
@@ -339,7 +314,13 @@ void Player::CheckHitToChest()
 			chestX = x;
 			chestY = footY;
 			printfDx(L"Player: 宝箱の上にいる\n");
-			break;
+			
+			if (input.IsTriggered("Jump")) // ジャンプボタンが押されたとき
+			{
+				// 宝箱を開ける(現在ここが通らない)
+				m_pGameManager->OpenChestToPosition(chestX, chestY);
+			}
+			
 		}
 	}
 
@@ -352,9 +333,20 @@ void Player::CheckHitToChest()
 		if(chipNo == kChestChipNo)
 		{
 			isLeftSide = true;
+			
+			printfDx(L"Player: 宝箱の右側にいる\n");
+			if(chestX != -1 && chestY != -1)
+			{
+				// すでに宝箱が見つかっている場合は何もしない
+				break;
+			}
 			chestX = leftProbeX;
 			chestY = y;
-			printfDx(L"Player: 宝箱の右側にいる\n");
+			if(IsOpenChestX()) // 宝箱が横から開けられる時
+			{
+				// 宝箱を開ける
+				m_pGameManager->OpenChestToPosition(chestX, chestY);
+			}
 			break;
 		}
 	}
@@ -368,9 +360,20 @@ void Player::CheckHitToChest()
 		if (chipNo == kChestChipNo)
 		{
 			isRightSide = true;
+			if(chestX != -1 && chestY != -1)
+			{
+				// すでに宝箱が見つかっている場合は何もしない
+				break;
+			}
 			chestX = rightProbeX;
 			chestY = y;
+			
 			printfDx(L"Player: 宝箱の左側にいる\n");
+			if (IsOpenChestX()) // 宝箱が横から開けられる時
+			{
+				// 宝箱を開ける
+				m_pGameManager->OpenChestToPosition(chestX, chestY);
+			}
 			break;
 		}
 	}
@@ -402,7 +405,6 @@ void Player::JumpUpdate(Input& input)
 	{
 		CheckPowerDown(); // プレイヤーのパワーダウンをするかどうか判定する
 	}
-	m_isJumpStart = false; // ジャンプ開始フラグをリセット
 
 	// 空中で浮いたかどうかの判定
 	if (m_isHover) // すでに浮いている場合

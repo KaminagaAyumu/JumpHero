@@ -221,6 +221,11 @@ void GameManager::PowerUpPlayer()
 	}
 }
 
+void GameManager::OpenChestToPosition(int x, int y)
+{
+	m_pChestManager->OpenChestAtPosition(x,y);
+}
+
 const size_t GameManager::GetActorNum() const
 {
 	// +1しているのはプレイヤーの数

@@ -99,7 +99,7 @@ private:
 	/// <summary>
 	/// マップの番号から宝箱に当たっているかどうかを判定
 	/// </summary>
-	void CheckHitToChest();
+	void CheckHitToChest(Input& input);
 
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時

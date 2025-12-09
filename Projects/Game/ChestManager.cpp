@@ -83,7 +83,22 @@ void ChestManager::SpawnChest(Map* map)
 				auto chest = std::make_shared<Chest>(x, y, map,m_chestGraphHandle);
 				chest->SetCamera(m_pCamera);
 				m_chests.push_back(chest);
+				m_chestMap.emplace(TilePos{ x,y }, chest.get());
 			}
 		}
+	}
+}
+
+void ChestManager::OpenChestAtPosition(int tileX, int tileY)
+{
+	if(m_chests.empty())
+	{
+		return;
+	}
+	TilePos pos{ tileX, tileY };
+	auto it = m_chestMap.find(pos);
+	if (it != m_chestMap.end())
+	{
+		it->second->OpenChest();
 	}
 }

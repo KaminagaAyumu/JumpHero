@@ -80,6 +80,13 @@ public:
 	void PowerUpPlayer();
 
 	/// <summary>
+	/// 座標指定した場所の宝箱を開ける
+	/// </summary>
+	/// <param name="x">X座標</param>
+	/// <param name="y">Y座標</param>
+	void OpenChestToPosition(int x, int y);
+
+	/// <summary>
 	/// ゲーム内に存在するオブジェクトの数を取得
 	/// </summary>
 	/// <returns>ゲーム内のオブジェクトの数</returns>
