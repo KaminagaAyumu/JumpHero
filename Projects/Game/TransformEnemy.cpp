@@ -20,7 +20,7 @@ namespace
 	constexpr float kSeekerMoveSpeed		= 0.8f;		// プレイヤーを追い続ける敵の移動の速さ
 
 	constexpr int	kAppearTime				= 60;		// 敵の出現までの時間
-	constexpr int	kFormChangeWaitTime		= 180;		// 敵の変身までの時間
+	constexpr int	kFormChangeWaitTime		= 1380;		// 敵の変身までの時間
 	constexpr int	kFormChangeTime			= 30;		// 敵の変身準備までの時間
 
 	constexpr float kMaxDirectionValue		= 1.0f;		// 向きの最大値(大きさ)
@@ -39,10 +39,12 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_currentForm(EnemyForm::Normal),
 	m_nextForm(changeForm),
 	m_frameCount(0),
+	m_moveCount(0),
 	m_itemFormTime(0),
 	m_maxItemFormTime(0),
 	m_turnCount(0),
 	m_isGround(false),
+	m_isRightDirection(true),
 	m_velocity{}
 {
 	m_direction = {};
@@ -128,23 +130,25 @@ void TransformEnemy::NormalUpdate(Input&)
 		m_frameCount = 0; // フレームカウントをリセット
 		return; // 念のためreturn
 	}
-	m_pos.y += m_velocity.y;
+	//m_pos.y += m_velocity.y;
 
-	if(!m_isGround) // 空中にいるなら重力をかける
-	{
-		m_velocity.y += kGravity;
-	}
+	//if(!m_isGround) // 空中にいるなら重力をかける
+	//{
+	//	m_velocity.y += kGravity;
+	//}
 
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
-	CheckHitMapY();
+	//m_colRect.pos = m_pos;
+	//m_colCircle.pos = m_pos;
+	//CheckHitMapY();
 
-	m_pos.x += m_velocity.x;
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
-	CheckHitMapX();
+	//m_pos.x += m_velocity.x;
+	//m_colRect.pos = m_pos;
+	//m_colCircle.pos = m_pos;
+	//CheckHitMapX();
 
-	m_velocity.x = kNormalMoveSpeed * m_direction.x;
+	//m_velocity.x = kNormalMoveSpeed * m_direction.x;
+
+	MoveOperation();
 
 }
 
@@ -465,7 +469,104 @@ bool TransformEnemy::IsItemMode() const
 
 void TransformEnemy::MoveOperation()
 {
+	float dx = 0.0f; // X軸の移動量
+	const bool movingLeft = !m_isRightDirection;
+	const bool movingRight = m_isRightDirection;
+	if (movingLeft)
+	{
+		dx -= kNormalMoveSpeed;
+	}
+	if (movingRight)
+	{
+		dx += kNormalMoveSpeed;
+	}
 
+	// Y軸の更新
+	if (m_isGround) // 地面にいる場合
+	{
+		m_velocity.y += kGravity; // 重力をかけるのみ
+	}
+	else // 空中にいる場合
+	{
+		// 加速する落下処理
+		m_moveCount++;
+		m_velocity.y = m_velocity.y * m_direction.y + kGravity * m_moveCount * 0.5f;
+	}
+
+	float dy = m_velocity.y; // Y軸の移動量
+	ContactFrags frags;
+	const float margin = 0.5f;
+
+	// X軸の当たり判定
+	Position2 tryPosX = m_pos;
+	tryPosX.x += dx;
+
+	Rect2D rectX(tryPosX, kEnemyWidth, kEnemyHeight);
+	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
+
+	float leftX = tryPosX.x - kEnemyWidth * 0.5f;
+	float rightX = tryPosX.x + kEnemyWidth * 0.5f;
+
+	if (leftX < rangeX.GetLeft())
+	{
+		tryPosX.x = rangeX.GetLeft() + kEnemyWidth * 0.5f + margin;
+		frags.isHitLeft = true;
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+	else if (rightX > rangeX.GetRight())
+	{
+		tryPosX.x = rangeX.GetRight() - kEnemyWidth * 0.5f - margin;
+		frags.isHitRight = true;
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+
+	// 実際の座標に反映
+	m_pos.x = tryPosX.x;
+
+	// Y軸の当たり判定
+	Position2 tryPosY = m_pos;
+	tryPosY.y += dy;
+
+	Rect2D rectY(tryPosY, kEnemyWidth, kEnemyHeight);
+	Rect2D rangeY = m_pMap->GetCanMoveRange(rectY);
+
+	float topY = tryPosY.y - kEnemyHeight * 0.5f;
+	float bottomY = tryPosY.y + kEnemyHeight * 0.5f;
+
+	// 落下している時に床に当たった場合
+	if (dy > 0.0f && bottomY > rangeY.GetBottom())
+	{
+		tryPosY.y = rangeY.GetBottom() - kEnemyHeight * 0.5f;
+		frags.isHitGround = true;
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+		m_moveCount = 0; // 時間経過をリセット
+	}
+	else if (dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
+	{
+		tryPosY.y = rangeY.GetTop() + kEnemyHeight * 0.5f;
+		frags.isHitCeil = true;
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+	}
+
+	// 実際の座標に反映
+	m_pos.y = tryPosY.y;
+
+	m_colCircle.pos = m_pos; // 円の座標更新
+	m_colRect.pos = m_pos; // 矩形の座標更新
+
+	// 状態の更新
+	m_isGround = frags.isHitGround;
+
+	if(frags.isHitLeft || frags.isHitRight)
+	{
+		// 方向転換
+		m_isRightDirection = !m_isRightDirection;
+		m_turnCount++;
+	}
 }
 
 

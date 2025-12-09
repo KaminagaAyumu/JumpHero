@@ -48,6 +48,16 @@ public:
 
 private:
 
+	// 当たり判定用の構造体
+	// どこから当たったかを保存する
+	struct ContactFrags
+	{
+		bool isHitLeft = false;
+		bool isHitRight = false;
+		bool isHitCeil = false;
+		bool isHitGround = false;
+	};
+
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
 
 	// 更新処理用関数群
@@ -100,6 +110,9 @@ private:
 	// 時間カウンタ(状態が変わるごとにリセットする)
 	int m_frameCount;
 
+	// 移動用カウンタ
+	int m_moveCount;
+
 	// アイテム化状態の時間
 	int m_itemFormTime;
 	// 最大時間(残り時間を判定する用)
@@ -110,6 +123,9 @@ private:
 
 	// 床にいるかどうか
 	bool m_isGround;
+
+	// 右向きかどうか
+	bool m_isRightDirection;
 
 	// 移動の力
 	Vector2 m_velocity;

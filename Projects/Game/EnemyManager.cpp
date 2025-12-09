@@ -59,7 +59,7 @@ void EnemyManager::Update(Input& input)
 		else
 		{
 			// スポーンをする(今後は細かく条件を作る)
-			//SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - kEnemySpawnPosY });
+			SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - kEnemySpawnPosY });
 		}
 	}
 

@@ -10,11 +10,13 @@
 
 namespace
 {
-	constexpr float kGravity = 0.50f;					// プレイヤーにかかる重力
+	constexpr float kGravity = 0.30f;					// プレイヤーにかかる重力
 	constexpr float kGroundY = 570.0f;				// 床の座標
-	constexpr float kJumpPower = -20.0f;				// ジャンプ時の上に上がる力
+	constexpr float kJumpPower = -15.0f;				// ジャンプ時の上に上がる力
 	constexpr float kMissJumpPower = kJumpPower * 1.01f;	// ミスしたときの上に上がる力
 	constexpr float kNormalMoveSpeed = 3.5f;					// 左右に動くスピード
+	constexpr float kUpGravityScale = 1.5f;				// 上ボタンを押したときの重力倍率
+	constexpr float kDownGravityScale = 0.5f;			// 下ボタンを押したときの重力倍率
 
 	constexpr int	kGraphWidth = 45;					// プレイヤー画像の幅
 	constexpr int	kGraphHeight = 45;					// プレイヤー画像の高さ
@@ -22,7 +24,7 @@ namespace
 	constexpr float kPlayerWidth = 45.0f;				// プレイヤーの実際の幅
 	constexpr float kPlayerHeight = 45.0f;				// プレイヤーの実際の高さ
 
-	constexpr float kMapColMargin = 0.01f;				// マップとの当たり判定のマージン
+	constexpr float kMapColMargin = 0.5f;				// マップとの当たり判定のマージン
 
 	constexpr int	kEntryTextDispTime = 60;					// 登場テキストを表示する時間
 	constexpr float	kEntryMoveSpeed = 0.05f;				// プレイヤー登場のスピード
@@ -163,85 +165,103 @@ void Player::CheckPowerDown()
 
 void Player::MoveOperation(Input& input)
 {
-	float dx = 0.0f; // X軸の移動量
+	float dx = 0.0f; // X軸の未来の移動量
+	// 左右移動の処理
 	const bool movingLeft = input.IsPressed("Left");
 	const bool movingRight = input.IsPressed("Right");
-	if (movingLeft)
+	
+	if (movingLeft) // 左ボタンが押されている時
 	{
-		dx -= kNormalMoveSpeed;
+		dx -= kNormalMoveSpeed; // 左に移動
 	}
-	if (movingRight)
+	if (movingRight) // 右ボタンが押されている時
 	{
-		dx += kNormalMoveSpeed;
-	}
-
-	// Y軸の更新
-	if (m_isGround) // 地面にいる場合
-	{
-		m_velocity.y += kGravity; // 重力をかけるのみ
-	}
-	else // 空中にいる場合
-	{
-		// 加速する落下処理
-		m_frameCount++;
-		m_velocity.y = m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
+		dx += kNormalMoveSpeed; // 右に移動
 	}
 
-	float dy = m_velocity.y; // Y軸の移動量
-	ContactFrags frags;
-	const float margin = 0.5f;
+	// 重力の処理
+	float gravity = kGravity; // 基本の重力
+
+	if (m_velocity.y < 0.0f) // 上に移動している時
+	{
+		if (input.IsPressed("Down")) // 下ボタンが押されたとき
+		{
+			gravity *= kUpGravityScale; // 重力を強くする
+		}
+		if (input.IsPressed("Up")) // 上ボタンが押されたとき
+		{
+			gravity *= kDownGravityScale; // 重力を弱くする
+		}
+	}
+
+	// 重力を速度に加える
+	m_velocity.y += gravity;
+
+
+	float dy = m_velocity.y; // Y軸の未来の移動量
+	ContactFrags frags; // 当たり判定の結果を格納する構造体
 
 	// X軸の当たり判定
 	Position2 tryPosX = m_pos;
+	// 未来の位置を計算
 	tryPosX.x += dx;
 
+	// 当たり判定用の矩形を作成して移動可能範囲を取得
 	Rect2D rectX(tryPosX, kPlayerWidth, kPlayerHeight);
 	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
 
+	// プレイヤーの左右端の座標を取得
 	float leftX = tryPosX.x - kPlayerWidth * 0.5f;
 	float rightX = tryPosX.x + kPlayerWidth * 0.5f;
 
-	if (leftX < rangeX.GetLeft())
+	if (leftX < rangeX.GetLeft()) // 左端が移動可能範囲を超えた場合
 	{
-		tryPosX.x = rangeX.GetLeft() + kPlayerWidth * 0.5f + margin;
-		frags.isHitLeft = true;
+		// 位置を移動可能範囲内に修正
+		tryPosX.x = rangeX.GetLeft() + kPlayerWidth * 0.5f + kMapColMargin;
+		frags.isHitLeft = true; // 左に当たったフラグを立てる
 		// 速度を抑える(問題があれば0にする)
 		dx = tryPosX.x - m_pos.x;
 	}
-	else if (rightX > rangeX.GetRight())
+	else if (rightX > rangeX.GetRight()) // 右端が移動可能範囲を超えた場合
 	{
-		tryPosX.x = rangeX.GetRight() - kPlayerWidth * 0.5f - margin;
-		frags.isHitRight = true;
+		// 位置を移動可能範囲内に修正
+		tryPosX.x = rangeX.GetRight() - kPlayerWidth * 0.5f - kMapColMargin;
+		frags.isHitRight = true; // 右に当たったフラグを立てる
 		// 速度を抑える(問題があれば0にする)
 		dx = tryPosX.x - m_pos.x;
 	}
 
-	// 実際の座標に反映
+	// 修正した座標を実際の座標に反映
 	m_pos.x = tryPosX.x;
 
 	// Y軸の当たり判定
 	Position2 tryPosY = m_pos;
+	// 未来の位置を計算
 	tryPosY.y += dy;
 
+	// 当たり判定用の矩形を作成して移動可能範囲を取得
 	Rect2D rectY(tryPosY, kPlayerWidth, kPlayerHeight);
 	Rect2D rangeY = m_pMap->GetCanMoveRange(rectY);
 
+	// プレイヤーの上下端の座標を取得
 	float topY = tryPosY.y - kPlayerHeight * 0.5f;
 	float bottomY = tryPosY.y + kPlayerHeight * 0.5f;
 
 	// 落下している時に床に当たった場合
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
 	{
+		// 位置を移動可能範囲内に修正
 		tryPosY.y = rangeY.GetBottom() - kPlayerHeight * 0.5f;
-		frags.isHitGround = true;
+		frags.isHitGround = true; // 床に当たったフラグを立てる
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		m_frameCount = 0; // 時間経過をリセット
 	}
-	else if(dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
+	else if (dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
 	{
+		// 位置を移動可能範囲内に修正
 		tryPosY.y = rangeY.GetTop() + kPlayerHeight * 0.5f;
-		frags.isHitCeil = true;
+		frags.isHitCeil = true; // 天井に当たったフラグを立てる
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		// 再びジャンプボタンを押した際と同じ処理をする
@@ -254,12 +274,12 @@ void Player::MoveOperation(Input& input)
 
 	// 状態の更新
 	m_isGround = frags.isHitGround;
-	if(m_isGround)
+	if (m_isGround) // 地面についている時
 	{
 		m_update = &Player::GroundUpdate; // 更新処理を地面についている時に
 		m_draw = &Player::GroundDraw; // 描画処理を地面についている時に
 	}
-	else
+	else // 空中にいる時
 	{
 		m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
