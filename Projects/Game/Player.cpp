@@ -24,7 +24,9 @@ namespace
 	constexpr float kPlayerWidth = 40.0f;				// プレイヤーの実際の幅
 	constexpr float kPlayerHeight = 40.0f;				// プレイヤーの実際の高さ
 
+	constexpr int	kChestChipNo = 1;					// マップの宝箱の番号
 	constexpr float kMapColMargin = 0.5f;				// マップとの当たり判定のマージン
+	constexpr float kChestConfirmRange = 1.0f;			// マップから宝箱を見る範囲
 
 	constexpr int	kEntryTextDispTime = 60;					// 登場テキストを表示する時間
 	constexpr float	kEntryMoveSpeed = 0.05f;				// プレイヤー登場のスピード
@@ -56,8 +58,8 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
-	m_isOpenChest(false),
 	m_isLevelDown(false),
+	m_isJumpStart(false),
 	m_pMap(map),
 	m_pGameManager(gameManager),
 	m_update(&Player::EntryUpdate),
@@ -77,16 +79,16 @@ void Player::Init()
 	m_direction = {};
 	m_velocity = {};
 	m_graphHandle = LoadGraph(L"data/Idle.png");
-	m_colCircle = { m_pos,kGraphWidth * 0.5f };
-	m_colRect = { m_pos,kGraphWidth,kGraphHeight };
+	m_colCircle = { m_pos,kPlayerWidth * 0.5f };
+	m_colRect = { m_pos,kPlayerWidth,kPlayerHeight };
 	m_frameCount = 0;
 	m_jumpCount = 0;
 	m_level = 0;
 	m_isGround = false;
 	m_isHover = false;
 	m_isMiss = false;
-	m_isOpenChest = false;
 	m_isLevelDown = false;
+	m_isJumpStart = false;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
 }
@@ -124,22 +126,33 @@ void Player::IsCollision(const Types::CollisionInfo& info)
 #ifdef _DEBUG
 		printfDx(L"Player : 宝箱と衝突しました\n");
 #endif 
-
-		if (!m_isGround && m_isOpenChest)
+		// 当たっている宝箱を取得
+		auto chest = dynamic_cast<Chest*>(info.other);
+	
+		// 宝箱が横から開けられるかどうかを取得
+		if(IsOpenChestX())
 		{
-			// 当たっている宝箱を取得
-			auto chest = dynamic_cast<Chest*>(info.other);
-			if (chest) // 宝箱が存在したら
-			{
-				// どこから当たったか、プレイヤーが横から開けるかを判定
-				// chest->GetColRect(); // 宝箱の矩形を取得
-
-
-				chest->OpenChest();
-				m_isOpenChest = false;
-			}
+			// 宝箱を開ける
+			chest->OpenChest();
 		}
-		m_isOpenChest = true;
+		else
+		{
+			// 宝箱の上にいる時の条件を見る
+			Rect2D chestRect = chest->GetColRect();
+			
+			// プレイヤーの上から宝箱を開ける
+			if (m_colRect.GetBottom() <= chestRect.GetTop()) // プレイヤーが上から当たっている時
+			{
+				printfDx(L"chestに上から当たっている\n");
+				if (m_isJumpStart) // 空中にいる時
+				{
+					// 宝箱を開ける
+					chest->OpenChest();
+				}
+			}
+
+		}
+
 	}
 }
 
@@ -287,6 +300,80 @@ void Player::MoveOperation(Input& input)
 
 	m_colCircle.pos = m_pos; // 円の座標更新
 	m_colRect.pos = m_pos; // 矩形の座標更新
+
+	CheckHitToChest();
+}
+
+void Player::CheckHitToChest()
+{
+	// 宝箱の位置を調べる
+	bool isOnTop = false;
+	bool isRightSide = false;
+	bool isLeftSide = false;
+	// 宝箱が見つかった際に見つかった座標を指定できるようにするための変数
+	int chestX = -1;
+	int chestY = -1;
+	float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
+
+
+	const float top = m_pos.y - kPlayerHeight * 0.5f; // プレイヤーの上端のY座標
+	const float bottom = m_pos.y + kPlayerHeight * 0.5f; // プレイヤーの下端のY座標
+	const float left = m_pos.x - kPlayerWidth * 0.5f; // プレイヤーの左端のX座標
+	const float right = m_pos.x + kPlayerWidth * 0.5f; // プレイヤーの右端のX座標
+
+	int topY = m_pMap->WorldPosToMapPos(top, tileSize); // プレイヤーの上端のマップ座標Y
+	int bottomY = m_pMap->WorldPosToMapPos(bottom, tileSize); // プレイヤーの下端のマップ座標Y
+	int leftX = m_pMap->WorldPosToMapPos(left, tileSize); // プレイヤーの左端のマップ座標X
+	int rightX = m_pMap->WorldPosToMapPos(right, tileSize); // プレイヤーの右端のマップ座標X
+
+	// プレイヤーの下端の少し下のマップチップを取得
+	const float foot = bottom + kChestConfirmRange; // プレイヤーの下端の少し下のY座標
+	int footY = m_pMap->WorldPosToMapPos(foot, tileSize); // プレイヤーの下端の少し下のマップ座標Y
+
+	for(int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
+	{
+		int chipNo = m_pMap->GetMapChipNum(x, footY);
+		if (chipNo == kChestChipNo)
+		{
+			isOnTop = true;
+			chestX = x;
+			chestY = footY;
+			printfDx(L"Player: 宝箱の上にいる\n");
+			break;
+		}
+	}
+
+	const float leftProbe = left - kChestConfirmRange; // プレイヤーの左端の少し左のX座標
+	int leftProbeX = m_pMap->WorldPosToMapPos(leftProbe, tileSize);
+	
+	for (int y = topY; y <= bottomY; y++)
+	{
+		int chipNo = m_pMap->GetMapChipNum(leftProbeX,y);
+		if(chipNo == kChestChipNo)
+		{
+			isLeftSide = true;
+			chestX = leftProbeX;
+			chestY = y;
+			printfDx(L"Player: 宝箱の右側にいる\n");
+			break;
+		}
+	}
+
+	const float rightProbe = right + kChestConfirmRange; // プレイヤーの右端の少し右のX座標
+	int rightProbeX = m_pMap->WorldPosToMapPos(rightProbe, tileSize);
+
+	for (int y = topY; y <= bottomY; y++)
+	{
+		int chipNo = m_pMap->GetMapChipNum(rightProbeX, y);
+		if (chipNo == kChestChipNo)
+		{
+			isRightSide = true;
+			chestX = rightProbeX;
+			chestY = y;
+			printfDx(L"Player: 宝箱の左側にいる\n");
+			break;
+		}
+	}
 }
 
 void Player::EntryUpdate(Input&)
@@ -315,6 +402,7 @@ void Player::JumpUpdate(Input& input)
 	{
 		CheckPowerDown(); // プレイヤーのパワーダウンをするかどうか判定する
 	}
+	m_isJumpStart = false; // ジャンプ開始フラグをリセット
 
 	// 空中で浮いたかどうかの判定
 	if (m_isHover) // すでに浮いている場合
@@ -488,7 +576,7 @@ void Player::MissDraw()
 bool Player::IsOpenChestX() const
 {
 	// レベルが1以上なら宝箱が横から開けられる
-	return m_level <= kPowerUpLevelOne;
+	return m_level >= kPowerUpLevelOne;
 }
 
 void Player::JumpStart()
@@ -497,6 +585,7 @@ void Player::JumpStart()
 	m_velocity = { 0.0f, kJumpPower }; // ジャンプの力を加える
 	m_isHover = false; // 空中で浮いたかどうかをリセット
 	m_isGround = false; // ジャンプしたので地面についていないとする
+	m_isJumpStart = true; // ジャンプ開始フラグをtrueにする
 	m_frameCount = 0; // 時間経過をリセット
 	m_jumpCount--; // ジャンプ回数を減らす
 	m_pGameManager->AddScore(kJumpAddScore); // スコアを加算

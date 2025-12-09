@@ -66,8 +66,8 @@ private:
 	bool m_isGround; // 地面についているか
 	bool m_isHover; // ジャンプ中にボタンを押したかどうか
 	bool m_isMiss; // ミスになったかどうか
-	bool m_isOpenChest; // 宝箱を開けられるかどうか(消去する可能性あり)
 	bool m_isLevelDown; // レベルダウンしたかどうか
+	bool m_isJumpStart; // ジャンプ開始したかどうか
 
 	// マップの生ポインタ
 	Map* m_pMap;
@@ -95,6 +95,11 @@ private:
 	/// プレイヤーの位置更新とマップとの当たり判定を行う
 	/// </summary>
 	void MoveOperation(Input& input);
+
+	/// <summary>
+	/// マップの番号から宝箱に当たっているかどうかを判定
+	/// </summary>
+	void CheckHitToChest();
 
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時
