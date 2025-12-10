@@ -12,7 +12,8 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="pos">生成位置</param>
-	LifeUp(const Position2& pos);
+	/// <param name="handle">画像ハンドル</param>
+	LifeUp(const Position2& pos, int handle);
 	virtual ~LifeUp() = default;
 
 	virtual void Init()override;

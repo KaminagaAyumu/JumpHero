@@ -10,11 +10,12 @@ namespace
 	constexpr float kChangeToCoinDefaultHeight = 40.0f;
 }
 
-ChangeToCoin::ChangeToCoin(const Position2& pos)
+ChangeToCoin::ChangeToCoin(const Position2& pos, int handle)
 {
 	m_pos = pos;
 	m_colRect = { {m_pos},kChangeToCoinDefaultWidth,kChangeToCoinDefaultHeight };
 	m_colCircle = { {m_pos},kChangeToCoinDefaultWidth / 2 };
+	m_graphHandle = handle;
 }
 
 void ChangeToCoin::Init()

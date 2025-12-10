@@ -10,7 +10,7 @@ namespace
 	constexpr float kCoinDefaultHeight = 30.0f;
 }
 
-Coin::Coin(const Position2& pos)
+Coin::Coin(const Position2& pos, int handle)
 {
 	m_pos = pos;
 	m_colRect = { {m_pos},kCoinDefaultWidth,kCoinDefaultHeight };

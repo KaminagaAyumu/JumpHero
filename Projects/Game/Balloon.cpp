@@ -8,13 +8,16 @@ namespace
 {
 	constexpr float kBalloonDefaultWidth = 30.0f;
 	constexpr float kBalloonDefaultHeight = 30.0f;
+
+	constexpr float kBalloonScale = 1.0f;
 }
 
-Balloon::Balloon(const Position2& pos)
+Balloon::Balloon(const Position2& pos, int handle)
 {
 	m_pos = pos;
 	m_colRect = { {m_pos},kBalloonDefaultWidth,kBalloonDefaultHeight };
 	m_colCircle = { {m_pos},kBalloonDefaultWidth / 2 };
+	m_graphHandle = handle;
 }
 
 void Balloon::Init()
@@ -34,7 +37,7 @@ void Balloon::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		DrawRotaGraph(drawX, drawY, kBalloonScale, 0.0f, m_graphHandle, true);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);

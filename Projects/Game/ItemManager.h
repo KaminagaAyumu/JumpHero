@@ -7,6 +7,7 @@ class ItemBase;
 class Input;
 class Camera;
 class GameManager;
+class Map;
 
 /// <summary>
 /// アイテム管理用クラス
@@ -16,6 +17,7 @@ class ItemManager
 {
 public:
 	ItemManager(Camera* camera, GameManager* gameManager);
+	~ItemManager();
 
 	/// <summary>
 	/// 初期化を行う関数
@@ -41,6 +43,12 @@ public:
 	void SpawnItem(int x, int y);
 
 	/// <summary>
+	/// ゲーム開始時の最初のアイテム生成
+	/// </summary>
+	/// <param name="map">現在のマップのポインタ</param>
+	void FirstSpawnItem(Map* map);
+
+	/// <summary>
 	/// ゲーム内オブジェクトにアイテムを追加する
 	/// </summary>
 	/// <param name="actors">アクターコンテナの参照</param>
@@ -52,7 +60,7 @@ private:
 	Camera* m_pCamera; // アイテムで使うカメラを取得
 	GameManager* m_pGameManager; // アイテムで使うゲームマネージャーを取得
 	std::list<std::shared_ptr<ItemBase>> m_pItems; // シーン上のアイテム管理用コンテナ
-
+	std::vector<int> m_graphHandles; // アイテムのグラフィックハンドル格納用コンテナ
 
 };
 

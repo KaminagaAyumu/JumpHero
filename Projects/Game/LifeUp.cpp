@@ -10,11 +10,12 @@ namespace
 	constexpr float kLifeUpDefaultHeight = 40.0f;
 }
 
-LifeUp::LifeUp(const Position2& pos)
+LifeUp::LifeUp(const Position2& pos, int handle)
 {
 	m_pos = pos;
 	m_colRect = { {m_pos},kLifeUpDefaultWidth,kLifeUpDefaultHeight };
 	m_colCircle = { {m_pos},kLifeUpDefaultWidth / 2 };
+	m_graphHandle = handle;
 }
 
 void LifeUp::Init()

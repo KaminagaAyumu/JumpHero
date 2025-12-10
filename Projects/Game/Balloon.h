@@ -13,7 +13,8 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="pos">生成位置</param>
-	Balloon(const Position2& pos);
+	/// <param name="handle">画像ハンドル</param>
+	Balloon(const Position2& pos, int handle);
 	virtual ~Balloon() = default;
 
 	virtual void Init()override;

@@ -32,6 +32,9 @@ public:
 
 protected:
 
+	// 画像ハンドル
+	int m_graphHandle;
+
 	// 存在フラグ
 	bool m_isExist;
 

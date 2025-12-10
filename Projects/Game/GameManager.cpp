@@ -43,6 +43,8 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
 	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get(),this);
+	m_pItemManager->FirstSpawnItem(map);
+	m_pItemManager->PushActors(actors);
 	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this, map);
 
 	m_pCamera->SetTarget(m_pPlayer.get());

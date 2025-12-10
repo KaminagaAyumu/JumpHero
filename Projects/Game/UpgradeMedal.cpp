@@ -8,13 +8,16 @@ namespace
 {
 	constexpr float kMedalDefaultWidth = 40.0f;
 	constexpr float kMedalDefaultHeight = 40.0f;
+
+	constexpr float kMedalScale = 1.40625f;
 }
 
-UpgradeMedal::UpgradeMedal(const Position2& pos)
+UpgradeMedal::UpgradeMedal(const Position2& pos, int handle)
 {
 	m_pos = pos;
 	m_colRect = { {m_pos},kMedalDefaultWidth,kMedalDefaultHeight };
 	m_colCircle = { {m_pos},kMedalDefaultWidth / 2 };
+	m_graphHandle = handle;
 }
 
 void UpgradeMedal::Init()
@@ -34,7 +37,7 @@ void UpgradeMedal::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		DrawRotaGraph(drawX, drawY, kMedalScale, 0.0, m_graphHandle, TRUE);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);
