@@ -78,7 +78,7 @@ void ChestManager::SpawnChest(Map* map)
 	{
 		for (int x = 0; x < map->GetMapWidth(); x++)
 		{
-			if (map->GetChestPosToMap(x, y) == kChestChipNo)
+			if (map->GetPositioningData(x, y) == kChestChipNo)
 			{
 				auto chest = std::make_shared<Chest>(x, y, map,m_chestGraphHandle);
 				chest->SetCamera(m_pCamera);

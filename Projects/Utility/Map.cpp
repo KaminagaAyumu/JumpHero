@@ -367,13 +367,17 @@ Size Map::GetMapSize() const
 
 int Map::GetMapChipNum(int x, int y)
 {
-	//return m_chipData[y * m_width + x];
 	return m_layerMapData[kMapData][y * m_width + x];
 }
 
-int Map::GetChestPosToMap(int x, int y)
+int Map::GetPositioningData(int x, int y)
 {
 	return m_layerMapData[kPositioningData][y * m_width + x];
+}
+
+int Map::GetEventData(int x, int y)
+{
+	return m_layerMapData[kEventData][y * m_width + x];
 }
 
 Position2 Map::GetStartPosToMap()

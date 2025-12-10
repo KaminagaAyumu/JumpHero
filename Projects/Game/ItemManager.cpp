@@ -160,7 +160,7 @@ void ItemManager::FirstSpawnItem(Map* map)
 	{
 		for (int x = 0; x < map->GetMapWidth(); x++)
 		{
-			if (map->GetChestPosToMap(x, y) == kBallonChipNo)
+			if (map->GetPositioningData(x, y) == kBallonChipNo)
 			{
 				// マップチップの1マスのサイズを取得(拡大を含む)
 				float tileSize = map->GetTileSize();

@@ -54,8 +54,9 @@ public:
 	int GetMapHeight() const { return m_height; }
 	float GetTileSize() const;
 	Size GetMapSize() const;
-	int GetMapChipNum(int x, int y);
-	int GetChestPosToMap(int x, int y);
+	int GetMapChipNum(int x, int y); // マップチップ番号の取得
+	int GetPositioningData(int x, int y); // 配置データの取得
+	int GetEventData(int x, int y); // イベントデータの取得
 	Position2 GetStartPosToMap();
 	Position2 GetGoalPosToMap();
 
