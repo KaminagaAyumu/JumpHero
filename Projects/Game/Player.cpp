@@ -622,6 +622,7 @@ void Player::MissStart()
 	m_isGround = false; // 一応ジャンプするので地面についていないとする
 	m_isMiss = true; // ミスフラグをtrueにする
 	m_frameCount = 0; // 時間経過をリセット
+	m_pGameManager->LifeDown(); // 残機を減らす処理を呼ぶ
 	m_update = &Player::MissUpdate; // 更新処理をミス状態に
 	m_draw = &Player::MissDraw;// 描画処理をミス状態に
 }

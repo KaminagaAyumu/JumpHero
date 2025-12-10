@@ -62,6 +62,12 @@ public:
 	bool IsClear()const;
 
 	/// <summary>
+	/// ゲームオーバーかどうか
+	/// </summary>
+	/// <returns>true : ゲームオーバー false : ゲームオーバー状態ではない</returns>
+	bool IsGameOver()const;
+
+	/// <summary>
 	/// アイテムを取得した際、アイテムに対応したラムダ式を行う処理
 	/// </summary>
 	/// <param name="type">アイテムの種類</param>
@@ -105,6 +111,11 @@ public:
 	/// </summary>
 	/// <returns>スコア</returns>
 	const int GetScore()const { return m_currentScore; }
+
+	/// <summary>
+	/// 残機を1減らす(仮)
+	/// </summary>
+	void LifeDown() { m_life--; }
 
 private:
 	int m_frameCount; // フレームカウンタ

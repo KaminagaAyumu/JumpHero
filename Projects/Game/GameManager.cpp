@@ -137,6 +137,12 @@ void GameManager::Update(Input& input)
 		}
 	}
 
+	if(IsGameOver()) // ゲームオーバー状態なら更新処理を行わない
+	{
+		printfDx(L"Game Over\n");
+		return;
+	}
+
 	// クリア状態かミス状態の時はプレイヤー以外の更新処理を行わない
 	if (IsClear() || m_pPlayer->IsMiss())
 	{
@@ -188,6 +194,12 @@ bool GameManager::IsClear() const
 	// プレイヤーの座標がゴールの位置に来たら
 	Position2 goalPos = m_pMap->GetGoalPosToMap();
 	return m_pPlayer->GetPos().x >= goalPos.x && m_pPlayer->GetPos().y <= goalPos.y;
+}
+
+bool GameManager::IsGameOver() const
+{
+	// 残機が0以下で、プレイヤーのミス状態が終わればゲームオーバー
+	return m_life <= 0 && !m_pPlayer->IsMiss();
 }
 
 void GameManager::OnItemCollected(const Types::ItemType& type)
