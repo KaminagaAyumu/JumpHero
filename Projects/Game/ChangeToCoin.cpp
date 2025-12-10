@@ -16,6 +16,7 @@ namespace
 ChangeToCoin::ChangeToCoin(const Position2& pos, int handle, bool isPopChest)
 {
 	m_pos = pos;
+	m_startY = pos.y;
 	m_colRect = { {m_pos},kChangeToCoinDefaultWidth,kChangeToCoinDefaultHeight };
 	m_colCircle = { {m_pos},kChangeToCoinDefaultWidth / 2 };
 	m_graphHandle = handle;
@@ -31,7 +32,7 @@ ChangeToCoin::ChangeToCoin(const Position2& pos, int handle, bool isPopChest)
 
 void ChangeToCoin::Init()
 {
-
+	m_startY = m_pos.y;
 }
 
 void ChangeToCoin::Update(Input&)
@@ -63,20 +64,23 @@ void ChangeToCoin::OnCollected(GameManager& gameManager)
 
 bool ChangeToCoin::IsAppear()
 {
+	// コインの出現が終了する位置Y
+	float endY = m_startY - kPopChestUpPositionY;
 	// 宝箱から出た場合、上昇位置Yに達していなければ出現していない
-	return m_updateFunc == &ChangeToCoin::DropUpdate && m_pos.y != kPopChestUpPositionY;
+	return m_updateFunc == &ChangeToCoin::DropUpdate && m_pos.y != endY;
 }
 
 void ChangeToCoin::DropUpdate()
 {
-	float endY = m_pos.y - kPopChestUpPositionY;
-	if (m_pos.y > endY)
+	// コインの出現が終了する位置Y
+	float endY = m_startY - kPopChestUpPositionY;
+	if (m_pos.y > endY) // まだ上昇位置Yに達していない場合
 	{
-		m_pos.y -= kDropSpeed;
+		m_pos.y -= kDropSpeed; // 上昇
 	}
-	else
+	else // 上昇位置Yに達した場合
 	{
-		m_pos.y = endY;
+		m_pos.y = endY; // 位置を調整
 	}
 }
 
@@ -89,10 +93,10 @@ void ChangeToCoin::IsCollision(const Types::CollisionInfo& info)
 	if (info.otherType == Types::ActorType::Player)
 	{
 		// 出現中の場合何もしない
-		if(IsAppear)
+		if(IsAppear())
 		{
 			return;
 		}
-		m_isExist = false;
+		m_isExist = false; // それ以外の場合は消滅させる
 	}
 }

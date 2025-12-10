@@ -29,6 +29,8 @@ public:
 
 private:
 
+	float m_startY; // 初期Y座標
+
 	/// <summary>
 	/// 出現中かどうか
 	/// </summary>
