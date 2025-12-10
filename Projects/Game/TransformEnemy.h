@@ -110,9 +110,9 @@ private:
 	void MoveOperation();
 
 	/// <summary>
-	/// 座標更新関連の処理(変身中用)
+	/// 変身後の座標更新関連の処理
 	/// </summary>
-	void MoveTransformOperation();
+	void TransformMoveOperation();
 
 	// 敵の状態管理用
 	EnemyForm m_currentForm; // 現在の敵の姿

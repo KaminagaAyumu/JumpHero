@@ -601,11 +601,130 @@ void TransformEnemy::MoveOperation()
 	}
 }
 
-void TransformEnemy::MoveTransformOperation()
+void TransformEnemy::TransformMoveOperation()
 {
-	
-}
+	float dx = 0.0f; // X軸の移動量
 
+	m_isRightDirection = m_direction.x >= 0.0f; // 方向を向きに合わせる
+	const bool movingLeft = !m_isRightDirection;
+	const bool movingRight = m_isRightDirection;
+	if (movingLeft)
+	{
+		dx -= kNormalMoveSpeed;
+	}
+	if (movingRight)
+	{
+		dx += kNormalMoveSpeed;
+	}
+
+	// Y軸の更新
+	if (m_isGround) // 地面にいる場合
+	{
+		m_velocity.y += kGravity; // 重力をかけるのみ
+	}
+	else // 空中にいる場合
+	{
+		// 加速する落下処理
+		m_moveCount++;
+		m_velocity.y = m_velocity.y * m_direction.y + kGravity * m_moveCount * 0.5f;
+	}
+
+	float dy = m_velocity.y; // Y軸の移動量
+	ContactFrags frags;
+	const float margin = 0.5f;
+
+	// X軸の当たり判定
+	Position2 tryPosX = m_pos;
+	tryPosX.x += dx;
+
+	Rect2D rectX(tryPosX, kEnemyWidth, kEnemyHeight);
+	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
+
+	float leftX = tryPosX.x - kEnemyWidth * 0.5f;
+	float rightX = tryPosX.x + kEnemyWidth * 0.5f;
+
+	if (leftX < rangeX.GetLeft())
+	{
+		tryPosX.x = rangeX.GetLeft() + kEnemyWidth * 0.5f + margin;
+		frags.isHitLeft = true;
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+	else if (rightX > rangeX.GetRight())
+	{
+		tryPosX.x = rangeX.GetRight() - kEnemyWidth * 0.5f - margin;
+		frags.isHitRight = true;
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+
+	// 実際の座標に反映
+	m_pos.x = tryPosX.x;
+
+	// Y軸の当たり判定
+	Position2 tryPosY = m_pos;
+	tryPosY.y += dy;
+
+	Rect2D rectY(tryPosY, kEnemyWidth, kEnemyHeight);
+	Rect2D rangeY = m_pMap->GetCanMoveRange(rectY);
+
+	float topY = tryPosY.y - kEnemyHeight * 0.5f;
+	float bottomY = tryPosY.y + kEnemyHeight * 0.5f;
+
+	// 落下している時に床に当たった場合
+	if (dy > 0.0f && bottomY > rangeY.GetBottom())
+	{
+		tryPosY.y = rangeY.GetBottom() - kEnemyHeight * 0.5f;
+		frags.isHitGround = true;
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+		m_moveCount = 0; // 時間経過をリセット
+	}
+	else if (dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
+	{
+		tryPosY.y = rangeY.GetTop() + kEnemyHeight * 0.5f;
+		frags.isHitCeil = true;
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+	}
+
+	// 実際の座標に反映
+	m_pos.y = tryPosY.y;
+
+	m_colCircle.pos = m_pos; // 円の座標更新
+	m_colRect.pos = m_pos; // 矩形の座標更新
+
+	// 状態の更新
+	m_isGround = frags.isHitGround;
+
+	// 方向転換の判定
+	if (m_isGround && IsFlipCorner()) // 地面にいて、方向転換可能な場合
+	{
+		// 前方のX座標を見る
+		const float aheadX = m_isRightDirection ? (m_pos.x + kEnemyWidth * 0.5f) : (m_pos.x - kEnemyWidth * 0.5f);
+		const float aheadY = m_pos.y + kEnemyHeight * 0.5f; // 足元のY座標
+		const float probeY = aheadY + 1.0f; // 足元より少し下のY座標
+		const float tileSize = m_pMap->GetTileSize(); // マップチップのサイズ
+		int tx = m_pMap->WorldPosToMapPos(aheadX, tileSize); // X座標のマップ位置
+		int ty = m_pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
+
+		int chipNo = m_pMap->GetMapChipNum(tx, ty); // マップチップ番号を取得
+		if (chipNo == kSpaceChipNo) // 前方のマップチップが空白の場合
+		{
+			// 足元に地面がないので方向転換
+			m_isRightDirection = !m_isRightDirection;
+			m_turnCount++; // 方向転換カウンタを増加
+		}
+	}
+
+	// 横方向の壁衝突判定
+	if (frags.isHitLeft || frags.isHitRight)
+	{
+		// 方向転換
+		m_isRightDirection = !m_isRightDirection;
+		m_turnCount++; // 方向転換カウンタを増加
+	}
+}
 
 //void TransformEnemy::CheckHitMap()
 //{
