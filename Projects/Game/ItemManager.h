@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <list>
 #include <functional>
+#include "../Utility/GameType.h"
 
 class Actor;
 class ItemBase;
@@ -39,8 +40,8 @@ public:
 	/// </summary>
 	/// <param name="x">X座標</param>
 	/// <param name="y">Y座標</param>
-	/// <param name="scoreFunc">スコア関係の関数</param>
-	void SpawnItem(int x, int y);
+	/// <param name="itemType">どのアイテムを生成するか</param>
+	void SpawnItem(int x, int y, Types::ItemType itemType);
 
 	/// <summary>
 	/// ゲーム開始時の最初のアイテム生成

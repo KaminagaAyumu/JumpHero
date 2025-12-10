@@ -104,12 +104,54 @@ void ItemManager::Draw()
 	}*/
 }
 
-void ItemManager::SpawnItem(int x, int y)
+void ItemManager::SpawnItem(int x, int y, Types::ItemType itemType)
 {
+	// スポーン位置を設定
 	Position2 pos = { x,y };
-	auto item = std::make_shared<ChangeToCoin>(pos,m_graphHandles[kGraphChangeToCoin],true);
-	item->SetCamera(m_pCamera);
-	m_pItems.push_back(item);
+
+	// アイテムの種類によって生成するクラスを変える
+	switch (itemType)
+	{
+	case Types::ItemType::Balloon: // 風船
+	{
+		auto item = std::make_shared<Balloon>(pos, m_graphHandles[kGraphBalloon]);
+		item->SetCamera(m_pCamera);
+		m_pItems.push_back(item);
+	}
+		break;
+	case Types::ItemType::UpgradeMedal: // 強化メダル
+	{
+		auto item = std::make_shared<UpgradeMedal>(pos, m_graphHandles[kGraphUpgradeMedal]);
+		item->SetCamera(m_pCamera);
+		m_pItems.push_back(item);
+	}
+		break;
+	case Types::ItemType::LifeUp: // 1UP
+	{
+		auto item = std::make_shared<LifeUp>(pos, m_graphHandles[kGraphLifeUp]);
+		item->SetCamera(m_pCamera);
+		m_pItems.push_back(item);
+	}
+		break;
+	case Types::ItemType::Coin: // スコア加算用コイン
+	{
+		auto item = std::make_shared<Coin>(pos, m_graphHandles[kGraphCoin]);
+		item->SetCamera(m_pCamera);
+		m_pItems.push_back(item);
+	}
+		break;
+	case Types::ItemType::ChangeToCoin: // 敵をコインに変える
+	{
+		auto item = std::make_shared<ChangeToCoin>(pos, m_graphHandles[kGraphChangeToCoin], true);
+		item->SetCamera(m_pCamera);
+		m_pItems.push_back(item);
+	}
+		break;
+	default:
+		break;
+	}
+
+	
 }
 
 void ItemManager::FirstSpawnItem(Map* map)

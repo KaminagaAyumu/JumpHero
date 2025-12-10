@@ -7,6 +7,7 @@
 #include "../Utility/Camera.h"
 #include "../Utility/Input.h"
 #include "../Utility/Map.h"
+#include "../Utility/GameType.h"
 #include "DxLib.h"
 #include <cassert>
 
@@ -198,7 +199,7 @@ void GameManager::OnItemCollected(const Types::ItemType& type)
 
 void GameManager::DropItem(int x, int y)
 {
-	m_pItemManager->SpawnItem(x, y);
+	m_pItemManager->SpawnItem(x, y,Types::ItemType::Coin);
 }
 
 void GameManager::PowerUpPlayer()
