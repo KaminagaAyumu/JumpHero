@@ -106,16 +106,32 @@ void EnemyManager::Draw()
 
 }
 
+void EnemyManager::LoadSpawnPositions(Map* map)
+{
+	for (int y = 0; y < map->GetMapHeight(); y++)
+	{
+		for (int x = 0; x < map->GetMapWidth(); x++)
+		{
+			//if (map->GetPositioningData(x, y) == )
+			//{
+			//	// マップチップの1マスのサイズを取得(拡大を含む)
+			//	float tileSize = map->GetTileSize();
+			//	// 風船のスポーン位置はマップの中心にする
+			//	Position2 pos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+			//	// 風船生成
+			//	auto balloon = std::make_shared<Balloon>(pos, m_graphHandles[kGraphBalloon]);
+			//	balloon->SetCamera(m_pCamera); // カメラセット
+			//	m_pItems.push_back(balloon); // アイテムリストに追加
+			//}
+		}
+	}
+}
+
 void EnemyManager::SpawnEnemy(const Position2& pos)
 {
 	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, TransformEnemy::EnemyForm::Skull);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
-}
-
-const Position2& EnemyManager::FindSpawnPosition() const
-{
-	return Position2{};
 }
 
 bool EnemyManager::IsChangeToItem()

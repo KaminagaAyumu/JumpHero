@@ -38,20 +38,22 @@ public:
 
 private:
 
+	/// <summary>
+	/// 敵の生成位置をマップから読み込む
+	/// </summary>
+	/// <param name="map">読み込むマップ</param>
+	void LoadSpawnPositions(Map* map);
+
 	// 座標のデータを受け取って敵を生成
 	void SpawnEnemy(const Position2& pos);
-
-	/// <summary>
-	/// 敵の生成位置を探す
-	/// </summary>
-	/// <returns>敵の生成位置</returns>
-	const Position2& FindSpawnPosition()const;
 
 	Camera* m_pCamera; // 敵が使うカメラを参照
 	Player* m_pPlayer; // 敵が使うプレイヤーを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
 	Map* m_pMap; // 敵生成用にマップを参照
 	std::list<std::shared_ptr<EnemyBase>> m_enemies;
+
+	std::vector<Position2> m_spawnPositions; // 敵の生成位置リスト
 
 	int m_frameCount; // フレーム数をカウント
 	int m_itemTime; // アイテム状態の時間
