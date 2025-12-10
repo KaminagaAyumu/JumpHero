@@ -16,6 +16,11 @@ ItemManager::ItemManager(Camera* camera, GameManager* gameManager) :
 	m_pItems.clear();
 }
 
+void ItemManager::Init()
+{
+	m_pItems.clear();
+}
+
 void ItemManager::Update(Input& input)
 {
 	if (m_pItems.empty())

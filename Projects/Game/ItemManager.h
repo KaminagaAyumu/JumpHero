@@ -16,6 +16,12 @@ class ItemManager
 {
 public:
 	ItemManager(Camera* camera, GameManager* gameManager);
+
+	/// <summary>
+	/// 初期化を行う関数
+	/// </summary>
+	void Init();
+
 	/// <summary>
 	/// シーン上のアイテムの更新処理を行う関数
 	/// </summary>
