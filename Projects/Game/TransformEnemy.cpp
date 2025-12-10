@@ -50,13 +50,13 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_turnCount(0),
 	m_isGround(false),
 	m_isRightDirection(true),
+	m_isUpDirection(true),
 	m_velocity{}
 {
 	m_direction = {};
 	m_pos = pos;
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
-	//m_direction.x = 1.0f; // 最初は右向きにする
 }
 
 void TransformEnemy::Init()
@@ -599,6 +599,11 @@ void TransformEnemy::MoveOperation()
 		m_isRightDirection = !m_isRightDirection;
 		m_turnCount++; // 方向転換カウンタを増加
 	}
+}
+
+void TransformEnemy::MoveTransformOperation()
+{
+	
 }
 
 

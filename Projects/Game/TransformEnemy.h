@@ -109,6 +109,11 @@ private:
 	/// </summary>
 	void MoveOperation();
 
+	/// <summary>
+	/// 座標更新関連の処理(変身中用)
+	/// </summary>
+	void MoveTransformOperation();
+
 	// 敵の状態管理用
 	EnemyForm m_currentForm; // 現在の敵の姿
 	EnemyForm m_nextForm; // 変わる姿
@@ -132,6 +137,9 @@ private:
 
 	// 右向きかどうか
 	bool m_isRightDirection;
+
+	// 上向きかどうか
+	bool m_isUpDirection;
 
 	// 移動の力
 	Vector2 m_velocity;
