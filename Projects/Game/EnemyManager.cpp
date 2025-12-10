@@ -64,6 +64,10 @@ void EnemyManager::Update(Input& input)
 		}
 		else
 		{
+			if (m_spawnPositions.empty())
+			{
+				return;
+			}
 			Position2 spawnPos = SearchNearestSpawnPosition(m_pPlayer->GetPos()); // プレイヤーに一番近いスポーン位置を取得
 			spawnPos.y -= kEnemySpawnPosMarginY; // 少し上にずらす
 			SpawnEnemy(spawnPos); // 敵を生成
@@ -160,6 +164,10 @@ void EnemyManager::SpawnEnemy(const Position2& pos)
 
 const Position2& EnemyManager::SearchNearestSpawnPosition(const Position2& playerPos)
 {
+	if(m_spawnPositions.empty())
+	{
+		return playerPos; // スポーン位置が存在しない場合はプレイヤー位置を返す
+	}
 	// 最初のスポーン位置を最近点として設定
 	Position2 nearestPos = m_spawnPositions.front();
 	for (const auto& spawnPos : m_spawnPositions)

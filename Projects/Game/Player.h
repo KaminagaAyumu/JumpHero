@@ -45,6 +45,8 @@ public:
 	/// <returns>true : パワーアップできる false : パワーアップできない</returns>
 	bool PowerUp();
 
+	void DebugClear(const Position2& pos);
+
 private:
 	// マップとの当たり判定を行う際の構造体
 	struct ContactFrags
@@ -132,5 +134,6 @@ private:
 	/// </summary>
 	/// <returns>true : 横から開けられる false : 横から開けられない</returns>
 	bool IsOpenChestX()const;
+
 };
 

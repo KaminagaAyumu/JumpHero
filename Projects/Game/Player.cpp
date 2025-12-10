@@ -600,6 +600,11 @@ bool Player::IsOpenChestX() const
 	return m_level >= kPowerUpLevelOne;
 }
 
+void Player::DebugClear(const Position2& pos)
+{
+	m_pos = pos;
+}
+
 void Player::JumpStart()
 {
 	m_direction = { 0.0f,1.0f }; // ジャンプの方向を上向きにする

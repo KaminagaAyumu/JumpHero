@@ -99,12 +99,12 @@ void GameManager::Init()
 void GameManager::Init(Map* map)
 {
 	m_pMap = map;
-	m_pCamera->Init(m_pMap->GetMapSize());
 	m_pPlayer->InitMap(map);
+	m_pPlayer->Init();
+	m_pCamera->Init(m_pMap->GetMapSize());
 	m_pEnemyManager->Init(map);
 	m_pChestManager->Init();
 	m_pItemManager->Init();
-	m_pPlayer->Init();
 }
 
 void GameManager::Update(Input& input)
@@ -114,6 +114,10 @@ void GameManager::Update(Input& input)
 	if (input.IsTriggered("LShift") && input.IsPressed("Up"))
 	{
 		clsDx();
+	}
+	if(input.IsPressed("RShift") && input.IsPressed("Up"))
+	{
+		m_pPlayer->DebugClear(m_pMap->GetGoalPosToMap());
 	}
 #endif
 	m_frameCount++;
