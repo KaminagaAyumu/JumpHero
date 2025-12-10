@@ -10,6 +10,10 @@ namespace
 {
 	constexpr int kIdentifierSize = 4; // ファイル識別子の文字数
 
+	constexpr int kMapData = 0; // マップデータのレイヤー番号
+	constexpr int kPositioningData = 1; // 配置データのレイヤー番号
+	constexpr int kEventData = 2; // イベントデータのレイヤー番号
+
 	// マップのチップを置く数
 	constexpr int kChipNumX = 97;
 	constexpr int kChipNumY = 16;
@@ -144,7 +148,7 @@ void Map::Draw(Camera* camera)
 			const float dstBottom = dstTop + tileSize; // 下端
 
 			//const int chipNo = m_chipData[y * m_width + x];
-			const int chipNo = m_layerMapData[0][y * m_width + x]; // レイヤーの番号
+			const int chipNo = m_layerMapData[kMapData][y * m_width + x]; // レイヤーの番号
 			const int srcX = kChipSize * (chipNo % m_graphChipNumX); // どこの行かを座標に変換
 			const int srcY = kChipSize * (chipNo / m_graphChipNumX); // どこの列かを座標に変換
 
@@ -163,7 +167,7 @@ bool Map::IsCollision(const Rect2D& rect, Rect2D& mapRect)
 		for (int x = 0; x < m_width; x++)
 		{
 			//int chipNo = m_chipData[y * m_width + x];
-			int chipNo = m_layerMapData[0][y * m_width + x];
+			int chipNo = m_layerMapData[kMapData][y * m_width + x];
 			if (chipNo == kSpaceChipNo)
 			{
 				continue; // マップチップの透明部分は当たり判定をしないようにする
@@ -235,7 +239,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		// X座標は矩形の左端からマップの左端に到達するまでループ
 		for (int x = leftTileX; x >= 0; --x)
 		{
-			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
 			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
 			{
 				// マップチップの座標は左端基準なので
@@ -257,7 +261,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		// X座標は矩形の左端からマップの左端に到達するまでループ
 		for (int x = rightTileX; x < m_width; ++x)
 		{
-			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
 			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
 			{
 				// マップチップの座標は左端基準なので
@@ -279,7 +283,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		// Y座標は矩形の上端からマップの上端に到達するまでループ
 		for (int y = topTileY; y >= 0; --y)
 		{
-			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
 			if (chipNo != kSpaceChipNo && chipNo != kThroughChipNoLeft && chipNo != kThroughChipNoCenter && chipNo != kThroughChipNoRight) // マップチップが空白でなければ
 			{
 				// マップチップの座標は左端基準なので
@@ -301,7 +305,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		// Y座標は矩形の上端からマップの上端に到達するまでループ
 		for (int y = bottomTileY; y < m_height; ++y)
 		{
-			int chipNo = m_layerMapData[0][y * m_width + x]; // マップチップ番号を確かめる
+			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
 			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
 			{
 				// マップチップの座標は左端基準なので
@@ -364,12 +368,12 @@ Size Map::GetMapSize() const
 int Map::GetMapChipNum(int x, int y)
 {
 	//return m_chipData[y * m_width + x];
-	return m_layerMapData[0][y * m_width + x];
+	return m_layerMapData[kMapData][y * m_width + x];
 }
 
 int Map::GetChestPosToMap(int x, int y)
 {
-	return m_layerMapData[1][y * m_width + x];
+	return m_layerMapData[kPositioningData][y * m_width + x];
 }
 
 Position2 Map::GetStartPosToMap()
@@ -379,7 +383,7 @@ Position2 Map::GetStartPosToMap()
 		{
 			for (int x = 0; x < m_width; x++)
 			{
-				int chipNo = m_layerMapData[2][y * m_width + x];
+				int chipNo = m_layerMapData[kEventData][y * m_width + x];
 				if (chipNo == kStartChipNoUp)
 				{
 					startPos.x = x * kChipSize * kChipScale - (kChipSize * kChipScale) / 2.0f;
@@ -398,7 +402,7 @@ Position2 Map::GetGoalPosToMap()
 	{
 		for (int x = 0; x < m_width; x++)
 		{
-			int chipNo = m_layerMapData[2][y * m_width + x];
+			int chipNo = m_layerMapData[kEventData][y * m_width + x];
 			if (chipNo == kGoalChipNoUp)
 			{
 				goalPos.x = x * kChipSize * kChipScale - (kChipSize * kChipScale) / 2.0f;
@@ -413,7 +417,7 @@ Position2 Map::GetGoalPosToMap()
 void Map::SetMapChip(int x, int y, int value)
 {
 	//m_chipData[y * m_width + x] = value;
-	m_layerMapData[0][y * m_width + x] = value;
+	m_layerMapData[kMapData][y * m_width + x] = value;
 }
 
 void Map::LoadMapdata(const std::string& fileName)
