@@ -25,6 +25,8 @@ namespace
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
 
 	constexpr int kCoinAddScore = 1000; // コイン取得時のスコア
+
+	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
 }
 
 GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
@@ -33,7 +35,8 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_currentScore(0),
 	m_life(kFirstLife),
 	m_medalNum(0),
-	m_balloonNum(0)
+	m_balloonNum(0),
+	m_balloonCounter(0)
 {
 	m_pMap = map;
 	m_pCamera = std::make_unique<Camera>(m_pMap->GetMapSize());
@@ -55,6 +58,7 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_itemCollectFunc[Types::ItemType::Balloon] = [this]()
 		{
 			m_balloonNum++; // 風船の数を加算
+			m_balloonCounter++; // 風船取得カウンターを加算
 		};
 	// 強化メダルを取った時
 	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this]()
@@ -89,6 +93,7 @@ void GameManager::Init()
 	m_life = kFirstLife;
 	m_medalNum = 0;
 	m_balloonNum = 0;
+	m_balloonCounter = 0;
 }
 
 void GameManager::Init(Map* map)
@@ -200,6 +205,10 @@ void GameManager::OnItemCollected(const Types::ItemType& type)
 void GameManager::DropItem(int x, int y)
 {
 	m_pItemManager->SpawnItem(x, y,Types::ItemType::Coin);
+	if(IsDropChangeToCoin()) // 敵をコインに変えるアイテムを落とすか判定
+	{
+		m_pItemManager->SpawnItem(x, y, Types::ItemType::ChangeToCoin);
+	}
 }
 
 void GameManager::PowerUpPlayer()
@@ -234,4 +243,14 @@ const size_t GameManager::GetActorNum() const
 {
 	// +1しているのはプレイヤーの数
 	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum() + m_pEnemyManager->GetEnemyNum();
+}
+
+bool GameManager::IsDropChangeToCoin()
+{
+	if(m_balloonCounter >= kBalloonForChangeToCoin) // 風船を5個取ったら
+	{
+		m_balloonCounter = 0; // カウンターをリセット
+		return true;
+	}
+	return false;
 }

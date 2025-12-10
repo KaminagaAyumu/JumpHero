@@ -115,6 +115,7 @@ private:
 	int m_life; // 残機数
 	int m_medalNum; // 強化メダルの所持数
 	int m_balloonNum; // 風船をどれだけ取ったか
+	int m_balloonCounter; // 風船の数のカウンタ
 
 	std::unordered_map<Types::ItemType, std::function<void()>> m_itemCollectFunc;
 
@@ -125,6 +126,12 @@ private:
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;
 	std::unique_ptr<EnemyManager> m_pEnemyManager;
+
+	/// <summary>
+	/// 敵をコインに変えるアイテムを生成するかどうか
+	/// </summary>
+	/// <returns>true : 生成する false : 生成しない</returns>
+	bool IsDropChangeToCoin();
 
 };
 
