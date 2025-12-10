@@ -115,6 +115,7 @@ void GameManager::Update(Input& input)
 	{
 		clsDx();
 	}
+	// デバッグ用にプレイヤーをゴール位置に強引に移動させる(上入力しながらRボタン)
 	if(input.IsPressed("RShift") && input.IsPressed("Up"))
 	{
 		m_pPlayer->DebugClear(m_pMap->GetGoalPosToMap());
