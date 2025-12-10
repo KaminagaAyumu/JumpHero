@@ -14,10 +14,12 @@
 
 namespace
 {
+	constexpr int kSpawnChipNo = 2; // マップの敵スポーンチップ番号
+
 	constexpr int kSpawnTime = 600; // 敵生成までの時間
 
-	// 敵スポーン位置(今後はプレイヤーとマップ基準で可変になる)
-	constexpr float kEnemySpawnPosY = 120.0f;
+	// 敵スポーン位置のマージン(敵生成時に床から少し浮かせる)
+	constexpr float kEnemySpawnPosMarginY = 0.1f;
 
 	// 敵のアイテム化時間
 	constexpr int kChangeToItemTime = 360;
@@ -34,12 +36,16 @@ EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameMana
 	m_itemTime(0)
 {
 	m_enemies.clear(); // 敵リストを初期化
+	m_spawnPositions.clear(); // スポーン位置リストを初期化
+	LoadSpawnPositions(map); // 敵スポーン位置の読み込み
 }
 
 void EnemyManager::Init(Map* map)
 {
 	m_pMap = map;
 	m_enemies.clear(); // 敵リストを初期化
+	m_spawnPositions.clear(); // スポーン位置リストを初期化
+	LoadSpawnPositions(map); // 敵スポーン位置の読み込み
 }
 
 void EnemyManager::Update(Input& input)
@@ -58,8 +64,9 @@ void EnemyManager::Update(Input& input)
 		}
 		else
 		{
-			// スポーンをする(今後は細かく条件を作る)
-			SpawnEnemy(Position2{ m_pPlayer->GetPos().x,m_pPlayer->GetPos().y - kEnemySpawnPosY });
+			Position2 spawnPos = SearchNearestSpawnPosition(m_pPlayer->GetPos()); // プレイヤーに一番近いスポーン位置を取得
+			spawnPos.y -= kEnemySpawnPosMarginY; // 少し上にずらす
+			SpawnEnemy(spawnPos); // 敵を生成
 		}
 	}
 
@@ -103,6 +110,25 @@ void EnemyManager::Update(Input& input)
 
 void EnemyManager::Draw()
 {
+#ifdef _DEBUG
+	for(const auto& pos : m_spawnPositions)
+	{
+		Position2 nearPos = SearchNearestSpawnPosition(m_pPlayer->GetPos());
+		if(pos.x == nearPos.x && pos.y == nearPos.y)
+		{
+			// 最近点は色を変える
+			int drawX = static_cast<int>(pos.x - m_pCamera->scroll.x);
+			int drawY = static_cast<int>(pos.y - m_pCamera->scroll.y);
+			// スポーン位置を表示(デバッグ用)
+			DrawCircle(drawX, drawY, 10, GetColor(0, 255, 0), FALSE);
+			continue;
+		}
+		int drawX = static_cast<int>(pos.x - m_pCamera->scroll.x);
+		int drawY = static_cast<int>(pos.y - m_pCamera->scroll.y);
+		// スポーン位置を表示(デバッグ用)
+		DrawCircle(drawX, drawY, 10, GetColor(255, 0, 0), FALSE);
+	}
+#endif
 
 }
 
@@ -112,17 +138,15 @@ void EnemyManager::LoadSpawnPositions(Map* map)
 	{
 		for (int x = 0; x < map->GetMapWidth(); x++)
 		{
-			//if (map->GetPositioningData(x, y) == )
-			//{
-			//	// マップチップの1マスのサイズを取得(拡大を含む)
-			//	float tileSize = map->GetTileSize();
-			//	// 風船のスポーン位置はマップの中心にする
-			//	Position2 pos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
-			//	// 風船生成
-			//	auto balloon = std::make_shared<Balloon>(pos, m_graphHandles[kGraphBalloon]);
-			//	balloon->SetCamera(m_pCamera); // カメラセット
-			//	m_pItems.push_back(balloon); // アイテムリストに追加
-			//}
+			if (map->GetPositioningData(x, y) == kSpawnChipNo)
+			{
+				// マップチップの1マスのサイズを取得(拡大を含む)
+				float tileSize = map->GetTileSize();
+				// スポーン位置はマップの中心にする
+				Position2 pos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+				// スポーン位置リストに追加
+				m_spawnPositions.push_back(pos);
+			}
 		}
 	}
 }
@@ -132,6 +156,22 @@ void EnemyManager::SpawnEnemy(const Position2& pos)
 	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, TransformEnemy::EnemyForm::Skull);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
+}
+
+const Position2& EnemyManager::SearchNearestSpawnPosition(const Position2& playerPos)
+{
+	// 最初のスポーン位置を最近点として設定
+	Position2 nearestPos = m_spawnPositions.front();
+	for (const auto& spawnPos : m_spawnPositions)
+	{
+		// プレイヤーから一番近いスポーン位置を探す
+		if (Geometry::GetDistance(playerPos, spawnPos) < Geometry::GetDistance(playerPos, nearestPos)) // 現在の最近点よりも近い場合
+		{
+			// 最近点を更新
+			nearestPos = spawnPos;
+		}
+	}
+	return nearestPos;
 }
 
 bool EnemyManager::IsChangeToItem()

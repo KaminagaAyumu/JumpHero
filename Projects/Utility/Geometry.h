@@ -162,4 +162,12 @@ namespace Geometry
 	/// <param name="t">割合</param>
 	/// <returns>補完したベクトル</returns>
 	Vector2 LerpVec2(const Vector2& start, const Vector2& end, float t);
+
+	/// <summary>
+	/// 2つの位置間の距離を計算する
+	/// </summary>
+	/// <param name="from">始点の位置</param>
+	/// <param name="to">終点の位置</param>
+	/// <returns>2つの位置間の距離の大きさ</returns>
+	float GetDistance(const Position2& from, const Position2& to);
 };

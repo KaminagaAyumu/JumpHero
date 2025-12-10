@@ -218,3 +218,8 @@ Vector2 Geometry::LerpVec2(const Vector2& start, const Vector2& end, float t)
 
     return ret;
 }
+
+float Geometry::GetDistance(const Position2& from, const Position2& to)
+{
+	return hypotf(to.x - from.x, to.y - from.y);
+}

@@ -47,6 +47,13 @@ private:
 	// 座標のデータを受け取って敵を生成
 	void SpawnEnemy(const Position2& pos);
 
+	/// <summary>
+	/// プレイヤーに最も近いスポーン位置を探す
+	/// </summary>
+	/// <param name="playerPos">プレイヤーの位置</param>
+	/// <returns>敵スポーン位置</returns>
+	const Position2& SearchNearestSpawnPosition(const Position2& playerPos);
+
 	Camera* m_pCamera; // 敵が使うカメラを参照
 	Player* m_pPlayer; // 敵が使うプレイヤーを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
