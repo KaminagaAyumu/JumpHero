@@ -12,6 +12,9 @@ namespace
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
+	constexpr int kMinSelectIndex = 0; // 選択肢の最小インデックス
+	constexpr int kSelectOptionNum = 3; // 選択肢の数
+
 }
 
 SelectScene::SelectScene(SceneController& controller) :
@@ -19,7 +22,7 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_updateFunc(&SelectScene::FadeInUpdate),
 	m_drawFunc(&SelectScene::FadeDraw),
 	m_fadeColor(0x000000),
-	m_selectIndex(0)
+	m_selectIndex(kMinSelectIndex)
 {
 	m_frameCount = kFadeInterval;
 }
@@ -54,14 +57,14 @@ void SelectScene::NormalUpdate(Input& input)
 {
 	if (input.IsTriggered("Down"))
 	{
-		if(m_selectIndex < 1)
+		if(m_selectIndex < kSelectOptionNum)
 		{
 			m_selectIndex++;
 		}
 	}
 	if (input.IsTriggered("Up"))
 	{
-		if(m_selectIndex > 0)
+		if(m_selectIndex > kMinSelectIndex)
 		{
 			m_selectIndex--;
 		}
@@ -84,7 +87,7 @@ void SelectScene::FadeOutUpdate(Input&)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller,m_selectIndex + 1));
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller,m_selectIndex));
 		return; // 念のため処理を抜ける
 	}
 }
@@ -96,7 +99,14 @@ void SelectScene::NormalDraw()
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SelectScene: NormalDraw", 0xffffff);
-	DrawFormatString(0, 30,0xffffff, L"stage : %d",m_selectIndex + 1);
+	if (m_selectIndex > 0)
+	{
+		DrawFormatString(0, 30, 0xffffff, L"stage : %d", m_selectIndex);
+	}
+	else
+	{
+		DrawString(0, 30, L"stage : tutorial",0xffffff);
+	}
 #endif
 }
 

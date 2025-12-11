@@ -27,7 +27,7 @@ namespace
 
 	constexpr int kStartChipNoUp = 188; // マップチップのスタート地点上部
 	constexpr int kStartChipNoDown = 208;// マップチップのスタート地点下部
-	
+
 	constexpr int kGoalChipNoUp = 191; // マップチップのゴール地点上部
 	constexpr int kGoalChipNoDown = 211;// マップチップのゴール地点下部
 
@@ -220,7 +220,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 
 	// 引数の矩形の座標をマップの座標基準に変換
 	// (マップの座標基準でどこにいるか)
-	int topTileY = std::clamp(WorldPosToMapPos(rectTop,tileSize), 0, m_height - 1);
+	int topTileY = std::clamp(WorldPosToMapPos(rectTop, tileSize), 0, m_height - 1);
 	int bottomTileY = std::clamp(WorldPosToMapPos(rectBottom, tileSize), 0, m_height - 1);
 	int leftTileX = std::clamp(WorldPosToMapPos(rectLeft, tileSize), 0, m_width - 1);
 	int rightTileX = std::clamp(WorldPosToMapPos(rectRight, tileSize), 0, m_width - 1);
@@ -383,19 +383,21 @@ int Map::GetEventData(int x, int y)
 Position2 Map::GetStartPosToMap()
 {
 	Position2 startPos = Position2();
-		for (int y = 0; y < m_height; y++)
+	for (int y = 0; y < m_height; y++)
+	{
+		for (int x = 0; x < m_width; x++)
 		{
-			for (int x = 0; x < m_width; x++)
+			int chipNo = m_layerMapData[kEventData][y * m_width + x];
+			if (chipNo == kStartChipNoUp)
 			{
-				int chipNo = m_layerMapData[kEventData][y * m_width + x];
-				if (chipNo == kStartChipNoUp)
-				{
-					startPos.x = x * kChipSize * kChipScale - (kChipSize * kChipScale) / 2.0f;
-					startPos.y = y * kChipSize * kChipScale + (kChipSize * kChipScale);
-					return startPos;
-				}
+				startPos.x = x * kChipSize * kChipScale - (kChipSize * kChipScale) / 2.0f;
+				startPos.y = y * kChipSize * kChipScale + (kChipSize * kChipScale);
+				return startPos;
 			}
 		}
+	}
+	// ここまで来た場合、スタート地点が見つからないのでエラーとする
+	assert(false && "スタート地点のマップチップが見つかりません");
 	return Position2();
 }
 
@@ -415,6 +417,8 @@ Position2 Map::GetGoalPosToMap()
 			}
 		}
 	}
+	// ここまで来た場合、ゴールが見つからないのでエラーとする
+	assert(false && "ゴール地点のマップチップが見つかりません");
 	return Position2();
 }
 
@@ -468,7 +472,14 @@ bool Map::LoadStageData(int stageNo, bool isMiniGame)
 	}
 	else
 	{
-		std::swprintf(filePath, kFilePathSize, L"data/stage%dData.fmf", stageNo);
+		if (stageNo == 0)
+		{
+			std::swprintf(filePath, kFilePathSize, L"data/tutorialData.fmf");
+		}
+		else
+		{
+			std::swprintf(filePath, kFilePathSize, L"data/stage%dData.fmf", stageNo);
+		}
 	}
 
 	// パスに対応したステージデータのファイルを開く
@@ -484,7 +495,7 @@ bool Map::LoadStageData(int stageNo, bool isMiniGame)
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//ファイルの読み込み
 	/////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	// 読み込んだファイルのサイズがヘッダのサイズと一致していなければ
 	if (FileRead_read(&header, sizeof(header), handle) != static_cast<int>(sizeof(header)))
 	{
