@@ -284,7 +284,8 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		for (int y = topTileY; y >= 0; --y)
 		{
 			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
-			if (chipNo != kSpaceChipNo && chipNo != kThroughChipNoLeft && chipNo != kThroughChipNoCenter && chipNo != kThroughChipNoRight) // マップチップが空白でなければ
+			//if (chipNo != kSpaceChipNo && chipNo != kThroughChipNoLeft && chipNo != kThroughChipNoCenter && chipNo != kThroughChipNoRight) // マップチップが空白でなければ
+			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
 			{
 				// マップチップの座標は左端基準なので
 				// 見つかったマップチップの座標から1つ下側の座標が下端となる
