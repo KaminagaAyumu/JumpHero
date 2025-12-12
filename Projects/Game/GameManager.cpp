@@ -222,7 +222,7 @@ void GameManager::OnItemCollected(const Types::ItemType& type)
 
 void GameManager::DropItem(int x, int y)
 {
-	m_pItemManager->SpawnItem(x, y,Types::ItemType::Coin);
+	m_pItemManager->SpawnItem(x, y,Types::ItemType::UpgradeMedal);
 	if(IsDropChangeToCoin()) // 敵をコインに変えるアイテムを落とすか判定
 	{
 		m_pItemManager->SpawnItem(x, y, Types::ItemType::ChangeToCoin);
