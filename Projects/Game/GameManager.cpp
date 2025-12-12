@@ -105,6 +105,7 @@ void GameManager::Init(Map* map)
 	m_pEnemyManager->Init(map);
 	m_pChestManager->Init();
 	m_pItemManager->Init();
+	m_pItemManager->FirstSpawnItem(map);
 }
 
 void GameManager::Update(Input& input)
