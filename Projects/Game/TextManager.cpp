@@ -1,5 +1,6 @@
 ﻿#include <vector>
 #include "TextManager.h"
+#include "../Utility/StringFunction.h"
 #include <fstream>
 #include "DxLib.h"
 
@@ -26,7 +27,8 @@ void TextManager::Draw()
 {
 	for(std::string text : m_textData)
 	{
-		printfDx(L"%s\n", text.c_str());
+		auto str = StringFunction::WStringFromString(text);
+		printfDx(L"%s\n", str.c_str());
 	}
 }
 

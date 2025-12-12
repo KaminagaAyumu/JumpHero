@@ -150,6 +150,7 @@
     <ClCompile Include="Scene\MiniGameScene.cpp" />
     <ClCompile Include="Scene\SelectScene.cpp" />
     <ClCompile Include="Game\TextManager.cpp" />
+    <ClCompile Include="Utility\StringFunction.cpp" />
     <ClCompile Include="Utility\Map.cpp" />
     <ClCompile Include="Scene\ClearScene.cpp" />
     <ClCompile Include="Game\EnemyBase.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Scene\MiniGameScene.h" />
     <ClInclude Include="Scene\SelectScene.h" />
     <ClInclude Include="Game\TextManager.h" />
+    <ClInclude Include="Utility\StringFunction.h" />
     <ClInclude Include="Utility\GameType.h" />
     <ClInclude Include="Game\ItemManager.h" />
     <ClInclude Include="Utility\Map.h" />
