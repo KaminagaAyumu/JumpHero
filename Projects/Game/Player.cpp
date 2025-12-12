@@ -278,7 +278,7 @@ void Player::MoveOperation(Input& input)
 		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
-		float candidateTop = 100000.0f; // 候補となる床の上端のY座標
+		float candidateTop = 100000.0f; // 候補となる床の上端のY座標(仮)
 		int candidateX = -1; // 候補となる床のX座標
 
 		for (int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
