@@ -33,6 +33,10 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
 	// マップの初期化方法模索中
+	if (stageNo == 0)
+	{
+		printfDx(L"チュートリアル用のマップです\n");
+	}
 	m_pMap = std::make_shared<Map>(stageNo,true);
 	m_pMap->Init();
 

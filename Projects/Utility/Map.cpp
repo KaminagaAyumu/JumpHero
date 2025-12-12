@@ -468,16 +468,27 @@ bool Map::LoadStageData(int stageNo, bool isMiniGame)
 	// ステージの番号に対応したパスを取得する
 	if (isMiniGame)
 	{
-		std::swprintf(filePath, kFilePathSize, L"data/minigame%d.fmf", stageNo);
+		if (stageNo == 0)
+		{
+			// チュートリアルの場合(未実装)
+			std::swprintf(filePath, kFilePathSize, L"data/minigame1.fmf");
+		}
+		else
+		{
+			// 通常のミニゲームの場合
+			std::swprintf(filePath, kFilePathSize, L"data/minigame%d.fmf", stageNo);
+		}
 	}
 	else
 	{
 		if (stageNo == 0)
 		{
+			// チュートリアルの場合
 			std::swprintf(filePath, kFilePathSize, L"data/tutorialData.fmf");
 		}
 		else
 		{
+			// 通常のステージの場合
 			std::swprintf(filePath, kFilePathSize, L"data/stage%dData.fmf", stageNo);
 		}
 	}
