@@ -20,12 +20,13 @@ Chest::Chest() :
 	Actor(Types::ActorType::Chest),
 	m_graphHandle(-1),
 	m_isOpen(false),
+	m_state(ChestState::Normal),
 	m_pMap(nullptr),
 	m_chipPos{}
 {
 }
 
-Chest::Chest(int x, int y, Map* map, int handle) :
+Chest::Chest(int x, int y, Map* map, int handle, bool isHidden) :
 	Actor(Types::ActorType::Chest),
 	m_pMap(map),
 	m_chipPos{x,y},
@@ -35,6 +36,14 @@ Chest::Chest(int x, int y, Map* map, int handle) :
 	m_pos = { static_cast<float>(m_chipPos.x) * tileSize + tileSize * 0.5f,static_cast<float>(m_chipPos.y) * tileSize + tileSize * 0.5f };
 	m_colRect = { m_pos,kDefaultWidth,kDefaultHeight };
 	m_graphHandle = handle;
+	if(isHidden)
+	{
+		m_state = ChestState::Hidden;
+	}
+	else
+	{
+		m_state = ChestState::Normal;
+	}
 }
 
 Chest::~Chest()
@@ -82,9 +91,15 @@ void Chest::IsCollision(const Types::CollisionInfo& info)
 	}
 }
 
+void Chest::AppearChest()
+{
+	m_state = ChestState::Normal;
+}
+
 void Chest::OpenChest()
 {
 	m_isOpen = true;
+	m_state = ChestState::Opened;
 
 #ifdef _DEBUG
 	if (m_pMap == nullptr)

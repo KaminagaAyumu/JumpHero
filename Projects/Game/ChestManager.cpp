@@ -11,6 +11,7 @@
 namespace
 {
 	constexpr int kChestChipNo = 106;
+	constexpr int kHiddenChestChipNo = 107;
 }
 
 

@@ -10,7 +10,7 @@ class Chest : public Actor
 {
 public:
 	Chest();
-	Chest(int x, int y, Map* map, int handle);
+	Chest(int x, int y, Map* map, int handle, bool isHidden);
 	virtual ~Chest();
 	virtual void Init() override;
 	virtual void Update(Input&) override;
@@ -22,14 +22,27 @@ public:
 	bool IsOpen()const { return m_isOpen; }
 
 	/// <summary>
+	/// 隠し宝箱が出現するときの処理
+	/// </summary>
+	void AppearChest();
+
+	/// <summary>
 	/// 宝箱が開いたときの処理 マップのデータを変える用
 	/// </summary>
 	void OpenChest();
 
 private:
-	int m_graphHandle; // 画像ハンドル
+	enum class ChestState
+	{
+		Hidden, // 隠し宝箱
+		Normal, // 通常の宝箱
+		Opened // 開いた宝箱
+	};
 
+	int m_graphHandle; // 画像ハンドル
 	bool m_isOpen; // 開いているかどうか
+
+	ChestState m_state; // 宝箱の状態
 
 	Map* m_pMap; // マップのデータを変更できるようにポインタを取得
 	Position2Int m_chipPos; // マップチップ位置 
