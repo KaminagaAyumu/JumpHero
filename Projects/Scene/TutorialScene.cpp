@@ -1,10 +1,14 @@
 ﻿#include <memory>
+#include <vector>
 #include "TutorialScene.h"
 #include "SceneController.h"
 #include "TitleScene.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Game/TextManager.h"
+#include "../Game/GameManager.h"
+#include "../Game/CollisionManager.h"
+#include "../Game/Actor.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
 #include "DxLib.h"
@@ -20,12 +24,18 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_updateFunc(&TutorialScene::FadeInUpdate),
 	m_drawFunc(&TutorialScene::FadeDraw)
 {
+	m_frameCount = kFadeInterval;
+
 	m_pTextManager = std::make_unique<TextManager>();
 	m_pBg = std::make_unique<Bg>();
 	m_pBg->Init();
 	m_pMap = std::make_unique<Map>(0, false);
 	m_pMap->Init();
 
+	m_pGameManager = std::make_shared<GameManager>(m_pMap.get(), m_pActors);
+	m_pGameManager->Init();
+
+	m_pCollisionManager = std::make_unique<CollisionManager>();
 }
 
 TutorialScene::~TutorialScene()
@@ -55,6 +65,20 @@ void TutorialScene::FadeInUpdate(Input& input)
 }
 void TutorialScene::NormalUpdate(Input& input)
 {
+	// ゲームマネージャーの更新
+	m_pGameManager->Update(input);
+
+	// 次のフレームのためにゲーム内オブジェクトを更新
+	m_pActors.clear(); // オブジェクトをリセット
+	m_pActors.reserve(m_pGameManager->GetActorNum()); // 現在のオブジェクトの総数分要素を確保 
+	m_pGameManager->PushActors(m_pActors); // ゲームマネージャーからオブジェクトを受け取る
+
+	// 当たり判定を行う
+	if (!m_pGameManager->IsSkipCollision()) // 当たり判定をスキップしない場合
+	{
+		m_pCollisionManager->CheckCollision(m_pActors);
+	}
+
 	m_pBg->Update();
 	m_pMap->Update();
 }
@@ -75,6 +99,16 @@ void TutorialScene::FadeOutUpdate(Input& input)
 
 void TutorialScene::NormalDraw()
 {
+	m_pBg->Draw(m_pGameManager->GetCamera());
+	m_pMap->Draw(m_pGameManager->GetCamera());
+
+	for (auto& actor : m_pActors)
+	{
+		actor->Draw();
+	}
+
+	m_pGameManager->Draw();
+	
 	m_pTextManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"TutorialScene: NormalDraw", 0xffffff);
@@ -82,6 +116,16 @@ void TutorialScene::NormalDraw()
 }
 void TutorialScene::FadeDraw()
 {
+	m_pBg->Draw(m_pGameManager->GetCamera());
+	m_pMap->Draw(m_pGameManager->GetCamera());
+
+	for (auto& actor : m_pActors)
+	{
+		actor->Draw();
+	}
+
+	m_pGameManager->Draw();
+
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));

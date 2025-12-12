@@ -4,6 +4,9 @@
 class TextManager;
 class Map;
 class Bg;
+class GameManager;
+class CollisionManager;
+class Actor;
 
 /// <summary>
 /// ゲームの基本操作を教える用のシーン
@@ -41,9 +44,12 @@ private:
 	using DrawFunc_t = void (TutorialScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
-	std::unique_ptr<TextManager> m_pTextManager; // テキスト管理クラス
-	std::unique_ptr<Map> m_pMap;                 // マップクラス
-	std::unique_ptr<Bg> m_pBg;                   // 背景クラス
+	std::unique_ptr<TextManager> m_pTextManager;			// テキスト管理クラス
+	std::unique_ptr<Map> m_pMap;							// マップクラス
+	std::unique_ptr<Bg> m_pBg;								// 背景クラス
+	std::shared_ptr<GameManager> m_pGameManager;			// ゲーム管理クラス
+	std::unique_ptr<CollisionManager> m_pCollisionManager;	// 衝突管理クラス
+	std::vector<Actor*> m_pActors;							// アクターの配列
 
 };
 
