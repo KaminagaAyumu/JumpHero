@@ -33,12 +33,12 @@ PauseScene::~PauseScene()
 
 void PauseScene::Update(Input& input)
 {
-	//(this->*m_updateFunc)(input);
+	(this->*m_updateFunc)(input);
 }
 
 void PauseScene::Draw()
 {
-	//(this->*m_drawFunc)();
+	(this->*m_drawFunc)();
 }
 
 void PauseScene::FadeInUpdate(Input&)
@@ -90,12 +90,12 @@ void PauseScene::FadeOutUpdate(Input&)
 		if (m_selectIndex == 0)
 		{
 			// チュートリアルシーンに遷移
-			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+			m_controller.ResetScene(std::make_shared<SelectScene>(m_controller));
 		}
 		else
 		{
 			// ゲームシーンに遷移
-			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+			m_controller.ResetScene(std::make_shared<TitleScene>(m_controller));
 		}
 		return; // 念のため処理を抜ける
 	}
