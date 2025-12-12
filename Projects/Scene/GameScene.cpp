@@ -24,9 +24,6 @@ namespace
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
 	constexpr int kEnemyCount = 5; // 敵の数
 
-	constexpr int kSpaceChipNo = 79; // マップチップの透明部分
-	constexpr int kChestChipNo = 46; // マップチップの宝箱部分
-
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
 	constexpr int kMiniGameStageNo = 1; // ミニゲーム用ステージ番号

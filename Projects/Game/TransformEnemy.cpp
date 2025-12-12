@@ -27,9 +27,6 @@ namespace
 	constexpr float kDirectionMagnification = 0.01f;	// 向きの倍率
 
 	constexpr int	kTurnMaxCount			= 2;        // 方向転換できる最大回数
-	
-	// マップ関連
-	constexpr int	kSpaceChipNo			= 0;		// マップチップの空白番号
 
 	// 演出関連
 	constexpr float	kItemWarningRate		= 0.20f;	// アイテム化が終わりそうなことを示す時間の割合
@@ -584,7 +581,7 @@ void TransformEnemy::MoveOperation()
 		int ty = m_pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
 
 		int chipNo = m_pMap->GetMapChipNum(tx, ty); // マップチップ番号を取得
-		if (chipNo == kSpaceChipNo) // 前方のマップチップが空白の場合
+		if (m_pMap->IsSpaceTile(chipNo)) // 前方のマップチップが空白の場合
 		{
 			// 足元に地面がないので方向転換
 			m_isRightDirection = !m_isRightDirection;
@@ -709,7 +706,7 @@ void TransformEnemy::TransformMoveOperation()
 		int ty = m_pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
 
 		int chipNo = m_pMap->GetMapChipNum(tx, ty); // マップチップ番号を取得
-		if (chipNo == kSpaceChipNo) // 前方のマップチップが空白の場合
+		if (m_pMap->IsSpaceTile(chipNo)) // 前方のマップチップが空白の場合
 		{
 			// 足元に地面がないので方向転換
 			m_isRightDirection = !m_isRightDirection;
