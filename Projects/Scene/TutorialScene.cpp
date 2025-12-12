@@ -2,6 +2,7 @@
 #include <vector>
 #include "TutorialScene.h"
 #include "SceneController.h"
+#include "PauseScene.h"
 #include "TitleScene.h"
 #include "MiniGameScene.h"
 #include "../Utility/Input.h"
@@ -66,6 +67,14 @@ void TutorialScene::FadeInUpdate(Input& input)
 }
 void TutorialScene::NormalUpdate(Input& input)
 {
+	// ポーズボタンが押されたら
+	if (input.IsTriggered("Pause"))
+	{
+		// ポーズシーンをプッシュする(このシーンに戻ることも可能にする)
+		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
+		return;
+	}
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 

@@ -81,12 +81,14 @@ void GameScene::FadeInUpdate(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
-
+	// ポーズボタンが押されたら
 	if (input.IsTriggered("Pause"))
 	{
+		// ポーズシーンをプッシュする(このシーンに戻ることも可能にする)
 		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 		return;
 	}
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
