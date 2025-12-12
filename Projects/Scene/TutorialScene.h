@@ -30,6 +30,8 @@ public:
 
 private:
 
+	unsigned int m_fadeColor; // フェードの色
+
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理
 	void NormalUpdate(Input& input); // 通常時の更新処理

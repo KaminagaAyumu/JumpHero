@@ -24,7 +24,8 @@ namespace
 TutorialScene::TutorialScene(SceneController& controller) : 
 	SceneBase(controller),
 	m_updateFunc(&TutorialScene::FadeInUpdate),
-	m_drawFunc(&TutorialScene::FadeDraw)
+	m_drawFunc(&TutorialScene::FadeDraw),
+	m_fadeColor(0x000000)
 {
 	m_frameCount = kFadeInterval;
 
@@ -95,6 +96,7 @@ void TutorialScene::NormalUpdate(Input& input)
 	if (m_pGameManager->IsClear())
 	{
 		// クリアしたらミニゲームシーンへ移行
+		m_fadeColor = 0xffffff; // 白にフェードアウト
 		m_updateFunc = &TutorialScene::FadeOutUpdate;
 		m_drawFunc = &TutorialScene::FadeDraw;
 		return;
@@ -147,7 +149,7 @@ void TutorialScene::FadeDraw()
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, TRUE);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_fadeColor, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 #ifdef _DEBUG
 	DrawString(0, 0, L"TutorialScene: FadeDraw", 0xffffff);
