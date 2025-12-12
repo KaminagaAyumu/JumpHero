@@ -103,25 +103,25 @@ void PauseScene::FadeOutUpdate(Input&)
 
 void PauseScene::NormalDraw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
 	DrawBox(20, m_selectIndex * 50 + 100, 300, m_selectIndex * 50 + 150, 0xff5500, TRUE);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"PauseScene: NormalDraw", 0xffffff);
 	if (m_selectIndex > 0)
 	{
-		DrawFormatString(0, 30, 0xffffff, L"stage : %d", m_selectIndex);
+		DrawFormatString(0, 30, 0xffffff, L"タイトルへ戻る", m_selectIndex);
 	}
 	else
 	{
-		DrawString(0, 30, L"stage : tutorial", 0xffffff);
+		DrawString(0, 30, L"ステージセレクトへ戻る", 0xffffff);
 	}
 #endif
 }
 
 void PauseScene::FadeDraw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
