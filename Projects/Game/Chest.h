@@ -20,6 +20,7 @@ public:
 
 	void SetIsOpen(bool isOpen) { m_isOpen = isOpen; }
 	bool IsOpen()const { return m_isOpen; }
+	bool IsHidden()const { return m_state == ChestState::Hidden; }
 
 	/// <summary>
 	/// 隠し宝箱が出現するときの処理

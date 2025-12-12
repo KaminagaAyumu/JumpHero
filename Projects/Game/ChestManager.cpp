@@ -107,6 +107,12 @@ void ChestManager::OpenChestAtPosition(int tileX, int tileY)
 	auto it = m_chestMap.find(pos);
 	if (it != m_chestMap.end())
 	{
+		// 隠し宝箱だった場合出現するのみ
+		if(it->second->IsHidden())
+		{
+			it->second->AppearChest();
+			return;
+		}
 		it->second->OpenChest();
 	}
 }
