@@ -46,6 +46,27 @@ public:
 	/// <returns>行動可能範囲</returns>
 	Rect2D GetCanMoveRange(const Rect2D& rect);
 
+	/// <summary>
+	/// 指定されたチップがデフォルトの当たり判定を行うタイルかどうかを調べる
+	/// </summary>
+	/// <param name="chipNo">指定チップ番号</param>
+	/// <returns>true : デフォルト false : デフォルトでない</returns>
+	bool IsNomalTile(int chipNo);
+
+	/// <summary>
+	/// 指定されたチップ番号が当たり判定を行わないタイルかどうかを調べる
+	/// </summary>
+	/// <param name="chipNo">指定チップ番号</param>
+	/// <returns>true : 空白 false : 空白でない</returns>
+	bool IsSpaceTile(int chipNo);
+
+	/// <summary>
+	/// 指定されたチップ番号が上部のみ当たり判定を行うタイルかどうかを調べる
+	/// </summary>
+	/// <param name="chipNo">指定チップ番号</param>
+	/// <returns>true : 上部のみ false : 上部のみでない</returns>
+	bool IsOnlyTopTile(int chipNo);
+
 	// ゲッター類
 	int GetGraphChipNumX() const { return m_graphChipNumX; }
 	int GetGraphChipNumY() const { return m_graphChipNumY; }

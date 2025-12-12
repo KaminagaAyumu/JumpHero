@@ -240,7 +240,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		for (int x = leftTileX; x >= 0; --x)
 		{
 			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
-			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
+			if (IsNomalTile(chipNo)) // マップチップが通常ならば
 			{
 				// マップチップの座標は左端基準なので
 				// 見つかったマップチップから1つ右側の座標が右端となる
@@ -262,7 +262,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		for (int x = rightTileX; x < m_width; ++x)
 		{
 			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
-			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
+			if (IsNomalTile(chipNo)) // マップチップが通常ならば
 			{
 				// マップチップの座標は左端基準なので
 				// 見つかったマップチップの座標が左端となる
@@ -284,8 +284,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		for (int y = topTileY; y >= 0; --y)
 		{
 			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
-			if (chipNo != kSpaceChipNo && chipNo != kThroughChipNoLeft && chipNo != kThroughChipNoCenter && chipNo != kThroughChipNoRight) // マップチップが空白でなければ
-			//if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
+			if (IsNomalTile(chipNo)) // マップチップが通常ならば
 			{
 				// マップチップの座標は左端基準なので
 				// 見つかったマップチップの座標から1つ下側の座標が下端となる
@@ -307,7 +306,7 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 		for (int y = bottomTileY; y < m_height; ++y)
 		{
 			int chipNo = m_layerMapData[kMapData][y * m_width + x]; // マップチップ番号を確かめる
-			if (chipNo != kSpaceChipNo) // マップチップが空白でなければ
+			if (IsNomalTile(chipNo)) // マップチップが通常ならば
 			{
 				// マップチップの座標は左端基準なので
 				// 見つかったマップチップの座標が上端となる
@@ -331,16 +330,16 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 	// 左の座標が右の座標よりも大きくなっている場合
 	if (retRectLeft > retRectRight) {
 		// 左右の距離の中心を取得
-		float mid = (retRectLeft + retRectRight) * 0.5f;
-		retRectLeft = mid - 0.5f; // 中心から0.5引いた座標
-		retRectRight = mid + 0.5f; // 中心から0.5足した座標
+		float centerPos = (retRectLeft + retRectRight) * 0.5f;
+		retRectLeft = centerPos - 0.5f; // 中心から0.5引いた座標
+		retRectRight = centerPos + 0.5f; // 中心から0.5足した座標
 	}
 	// 上の座標が下の座標よりも大きくなっている場合
 	if (retRectTop > retRectBottom) {
 		// 上下の距離の中心を取得
-		float mid = (retRectTop + retRectBottom) * 0.5f;
-		retRectTop = mid - 0.5f; // 中心から0.5引いた座標
-		retRectBottom = mid + 0.5f; // 中心から0.5足した座標
+		float centerPos = (retRectTop + retRectBottom) * 0.5f;
+		retRectTop = centerPos - 0.5f; // 中心から0.5引いた座標
+		retRectBottom = centerPos + 0.5f; // 中心から0.5足した座標
 	}
 
 	// 返す矩形の中心座標を設定
@@ -354,6 +353,24 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 
 	// 設定した矩形を返す
 	return Rect2D(newPos, newWidth, newHeight);
+}
+
+bool Map::IsNomalTile(int chipNo)
+{
+	// 特殊な条件でなければ通常のタイルとする
+	return !IsSpaceTile(chipNo) && !IsOnlyTopTile(chipNo);
+}
+
+bool Map::IsSpaceTile(int chipNo)
+{
+	// 透明部分のマップチップかどうかを返す
+	return chipNo == kSpaceChipNo;
+}
+
+bool Map::IsOnlyTopTile(int chipNo)
+{
+	// 通過可能なマップチップかどうかを返す
+	return chipNo == kThroughChipNoLeft || chipNo == kThroughChipNoCenter || chipNo == kThroughChipNoRight;
 }
 
 float Map::GetTileSize() const

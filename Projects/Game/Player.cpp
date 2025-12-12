@@ -28,10 +28,6 @@ namespace
 	constexpr float kMapColMargin = 0.5f;				// マップとの当たり判定のマージン
 	constexpr float kChestConfirmRange = 1.0f;			// マップから宝箱を見る範囲
 
-	constexpr int kThroughChipNoLeft = 264;
-	constexpr int kThroughChipNoCenter = 265;
-	constexpr int kThroughChipNoRight = 266;
-
 	constexpr int	kEntryTextDispTime = 60;					// 登場テキストを表示する時間
 	constexpr float	kEntryMoveSpeed = 0.05f;				// プレイヤー登場のスピード
 
@@ -200,7 +196,7 @@ void Player::MoveOperation(Input& input)
 	tryPosX.x += dx;
 
 	// 当たり判定用の矩形を作成して移動可能範囲を取得
-	Rect2D rectX(tryPosX, kPlayerWidth, kPlayerHeight);
+	Rect2D rectX(tryPosX, kPlayerWidth, kPlayerHeight - kMapColMargin);
 	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
 
 	// プレイヤーの左右端の座標を取得
@@ -242,6 +238,7 @@ void Player::MoveOperation(Input& input)
 
 	// 貫通しない床に当たったかどうか
 	bool isHitSolidFloor = false;
+	float margin = 0.1f; // マージン
 
 	// 落下している時に床に当たった場合
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
@@ -272,43 +269,38 @@ void Player::MoveOperation(Input& input)
 		const float oldBottom = m_prevPosY + kPlayerHeight * 0.5f; // 前回の下端のY座標
 
 		const float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
-		int leftX = m_pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
-		int rightX = m_pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-
+		int leftTileX = m_pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightTileX = m_pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
 		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
-		float candidateTop = 100000.0f; // 候補となる床の上端のY座標(仮)
-		int candidateX = -1; // 候補となる床のX座標
+		float candidateTop = m_pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
 
-		for (int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
+		for (int x = leftTileX; x <= rightTileX; x++) // プレイヤーの幅が大きい時を考慮
 		{
 			int chipNo = m_pMap->GetMapChipNum(x, footTileY);
-			if (chipNo == kThroughChipNoLeft || chipNo == kThroughChipNoCenter || chipNo == kThroughChipNoRight)
+			if (m_pMap->IsOnlyTopTile(chipNo))
 			{
 				float tileTop = footTileY * tileSize; // タイルの上端のY座標
 
 				if (oldBottom <= tileTop) // 前回の下端が床の上にあった場合
 				{
-					
 					if (tileTop < candidateTop)
 					{
-						candidateTop = tileTop;
-						candidateX = x;
+						candidateTop = min(candidateTop, tileTop);
+						// 一方通行床に当たったフラグを立てる
+						hitOneWay = true;
 					}
-					// 候補として採用
-					hitOneWay = true;
 				}
 			}
-
-			if (hitOneWay)
-			{
-				tryPosY.y = candidateTop - kPlayerHeight * 0.5f;
-				frags.isHitGround = true; // 床に当たったフラグを立てる
-				m_velocity.y = 0.0f; // Y方向の速度を0にする
-				dy = tryPosY.y - m_pos.y; // 移動量を修正
-				m_frameCount = 0; // 時間経過をリセット
-			}
+		}
+		if (hitOneWay)
+		{
+			tryPosY.y = candidateTop - kPlayerHeight * 0.5f;
+			frags.isHitGround = true; // 床に当たったフラグを立てる
+			m_velocity.y = 0.0f; // Y方向の速度を0にする
+			dy = tryPosY.y - m_pos.y; // 移動量を修正
+			m_frameCount = 0; // 時間経過をリセット
 		}
 	}
 	
@@ -436,22 +428,6 @@ void Player::JumpUpdate(Input& input)
 	if (m_level > 0) // レベルが上がっている時
 	{
 		CheckPowerDown(); // プレイヤーのパワーダウンをするかどうか判定する
-	}
-
-	// 空中で浮いたかどうかの判定
-	if (m_isHover) // すでに浮いている場合
-	{
-		// 何もしない
-	}
-	else // 浮いていない場合
-	{
-		// ジャンプの高さを上下に調整できる
-		if (input.IsPressed("Up")) // 上ボタンが押されたとき
-		{
-		}
-		if (input.IsPressed("Down")) // 下ボタンが押されたとき
-		{
-		}
 	}
 
 	if (input.IsTriggered("PowerUp")) // パワーアップボタンが押されたとき
