@@ -92,10 +92,15 @@ void PauseScene::FadeOutUpdate(Input&)
 			// チュートリアルシーンに遷移
 			m_controller.ResetScene(std::make_shared<SelectScene>(m_controller));
 		}
-		else
+		else if (m_selectIndex == 1)
 		{
 			// ゲームシーンに遷移
 			m_controller.ResetScene(std::make_shared<TitleScene>(m_controller));
+		}
+		else
+		{
+			// ポーズしたシーンに戻る
+			m_controller.PopScene();
 		}
 		return; // 念のため処理を抜ける
 	}
@@ -108,13 +113,17 @@ void PauseScene::NormalDraw()
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"PauseScene: NormalDraw", 0xffffff);
-	if (m_selectIndex > 0)
+	if (m_selectIndex == 0)
 	{
-		DrawFormatString(0, 30, 0xffffff, L"タイトルへ戻る", m_selectIndex);
+		DrawFormatString(0, 30, 0xffffff, L"ステージセレクトへ戻る", m_selectIndex);
+	}
+	else if(m_selectIndex == 1)
+	{
+		DrawString(0, 30, L"タイトルへ戻る", 0xffffff);
 	}
 	else
 	{
-		DrawString(0, 30, L"ステージセレクトへ戻る", 0xffffff);
+		DrawString(0, 30, L"ポーズを解除", 0xffffff);
 	}
 #endif
 }
