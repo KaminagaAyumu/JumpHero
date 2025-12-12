@@ -1,13 +1,24 @@
-﻿#include "Bg.h"
-#include "DxLib.h"
+﻿#include <vector>
+#include "Bg.h"
 #include "Game.h"
 #include "Camera.h"
+#include "DxLib.h"
+#include <cassert>
 
 Bg::Bg() :
 	m_pos{}
 {
 	m_bgHandle = LoadGraph(L"data/BlockDestroyer_mainVisual.png");
-
+	
+	auto handle = LoadGraph(L"data/background_1.png");
+	assert(handle != -1 && "画像の読み込みに失敗しました");
+	m_bgHandles.push_back(handle);
+	handle = LoadGraph(L"data/background_2.png");
+	assert(handle != -1 && "画像の読み込みに失敗しました");
+	m_bgHandles.push_back(handle);
+	handle = LoadGraph(L"data/background_3.png");
+	assert(handle != -1 && "画像の読み込みに失敗しました");
+	m_bgHandles.push_back(handle);
 
 
 }
@@ -15,6 +26,10 @@ Bg::Bg() :
 Bg::~Bg()
 {
 	DeleteGraph(m_bgHandle);
+	for (auto handle : m_bgHandles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void Bg::Init()
@@ -48,6 +63,19 @@ void Bg::Draw(Camera* camera)
 			Game::kScreenHeight - bgSize.y,
 			m_bgHandle, true);
 	}
+
+	/*for(int handle : m_bgHandles)
+	{
+		DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), handle, true);
+		if (scrollPos.x > 0)
+		{
+			Size size = {};
+			GetGraphSize(handle, &size.x, &size.y);
+			DrawGraph(static_cast<int>(size.x) - static_cast<int>(scrollPos.x),
+				Game::kScreenHeight - size.y,
+				handle, true);
+		}
+	}*/
 }
 
 

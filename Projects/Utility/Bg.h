@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "Geometry.h"
-#include <memory>
 
 // プロトタイプ宣言
 class Camera;
@@ -25,7 +24,7 @@ public:
 private:
 	int m_bgHandle;
 	Position2 m_pos;
-
+	std::vector<int> m_bgHandles;
 
 };
 
