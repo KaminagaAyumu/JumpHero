@@ -39,6 +39,8 @@ private:
 	using DrawFunc_t = void (TutorialScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
+	std::unique_ptr<TextManager> m_pTextManager; // テキスト管理クラス
+
 
 };
 

@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <sstream>
+
 class TextManager
 {
 public:

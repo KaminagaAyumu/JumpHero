@@ -1,6 +1,5 @@
 ﻿#include <vector>
 #include "TextManager.h"
-#include <sstream>
 #include <fstream>
 #include "DxLib.h"
 
