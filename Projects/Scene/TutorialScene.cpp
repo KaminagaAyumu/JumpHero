@@ -82,6 +82,14 @@ void TutorialScene::NormalUpdate(Input& input)
 
 	m_pBg->Update();
 	m_pMap->Update();
+
+	if (m_pGameManager->IsClear())
+	{
+		// クリアしたらミニゲームシーンへ移行
+		m_updateFunc = &TutorialScene::FadeOutUpdate;
+		m_drawFunc = &TutorialScene::FadeDraw;
+		return;
+	}
 }
 void TutorialScene::MissUpdate(Input& input)
 {
