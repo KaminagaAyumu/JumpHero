@@ -45,6 +45,7 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_itemFormTime(0),
 	m_maxItemFormTime(0),
 	m_turnCount(0),
+	m_prevPosY(0.0f),
 	m_isGround(false),
 	m_isRightDirection(true),
 	m_isUpDirection(true),
@@ -409,13 +410,13 @@ void TransformEnemy::MoveOperation()
 
 	float dy = m_velocity.y; // Y軸の移動量
 	ContactFrags frags;
-	const float margin = 0.5f;
+	const float margin = 0.1f;
 
 	// X軸の当たり判定
 	Position2 tryPosX = m_pos;
 	tryPosX.x += dx;
 
-	Rect2D rectX(tryPosX, kEnemyWidth, kEnemyHeight);
+	Rect2D rectX(tryPosX, kEnemyWidth, kEnemyHeight - margin);
 	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
 
 	float leftX = tryPosX.x - kEnemyWidth * 0.5f;
@@ -449,11 +450,15 @@ void TransformEnemy::MoveOperation()
 	float topY = tryPosY.y - kEnemyHeight * 0.5f;
 	float bottomY = tryPosY.y + kEnemyHeight * 0.5f;
 
+	// 貫通しない床に当たったかどうか
+	bool isHitNormalFloor = false;
+
 	// 落下している時に床に当たった場合
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
 	{
 		tryPosY.y = rangeY.GetBottom() - kEnemyHeight * 0.5f;
 		frags.isHitGround = true;
+		isHitNormalFloor = true; // 貫通しない床に当たった
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		m_moveCount = 0; // 時間経過をリセット
@@ -466,11 +471,54 @@ void TransformEnemy::MoveOperation()
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 	}
 
+	// 下からのみ貫通できる床との判定
+	if (!isHitNormalFloor && dy > 0.0f) // 通常の地面との判定を行わなかった際に落下中なら
+	{
+		const float oldBottom = m_prevPosY + kEnemyHeight * 0.5f; // 前回の下端のY座標
+
+		const float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
+		int leftTileX = m_pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightTileX = m_pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
+		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+
+		bool hitOneWay = false; // 片面通行の床に当たったかどうか
+		float candidateTop = m_pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
+
+		for (int x = leftTileX; x <= rightTileX; x++) // 敵の幅が大きい時を考慮
+		{
+			int chipNo = m_pMap->GetMapChipNum(x, footTileY);
+			if (m_pMap->IsOnlyTopTile(chipNo))
+			{
+				float tileTop = footTileY * tileSize; // タイルの上端のY座標
+
+				if (oldBottom <= tileTop) // 前回の下端が床の上にあった場合
+				{
+					if (tileTop < candidateTop)
+					{
+						candidateTop = min(candidateTop, tileTop);
+						// 一方通行床に当たったフラグを立てる
+						hitOneWay = true;
+					}
+				}
+			}
+		}
+		if (hitOneWay)
+		{
+			tryPosY.y = candidateTop - kEnemyHeight * 0.5f;
+			frags.isHitGround = true; // 床に当たったフラグを立てる
+			m_velocity.y = 0.0f; // Y方向の速度を0にする
+			dy = tryPosY.y - m_pos.y; // 移動量を修正
+			m_moveCount = 0; // 時間経過をリセット
+		}
+	}
+
+
 	// 実際の座標に反映
 	m_pos.y = tryPosY.y;
 
 	m_colCircle.pos = m_pos; // 円の座標更新
 	m_colRect.pos = m_pos; // 矩形の座標更新
+	m_prevPosY = m_pos.y; // 前回のY座標を更新
 
 	// 状態の更新
 	m_isGround = frags.isHitGround;

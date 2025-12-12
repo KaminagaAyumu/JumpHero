@@ -128,6 +128,9 @@ private:
 	// 敵が折り返した回数をカウントする
 	int m_turnCount;
 
+	// 前フレームのY座標
+	float m_prevPosY;
+
 	// 床にいるかどうか
 	bool m_isGround;
 
