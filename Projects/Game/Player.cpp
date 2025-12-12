@@ -28,6 +28,10 @@ namespace
 	constexpr float kMapColMargin = 0.5f;				// マップとの当たり判定のマージン
 	constexpr float kChestConfirmRange = 1.0f;			// マップから宝箱を見る範囲
 
+	constexpr int kThroughChipNoLeft = 264;
+	constexpr int kThroughChipNoCenter = 265;
+	constexpr int kThroughChipNoRight = 266;
+
 	constexpr int	kEntryTextDispTime = 60;					// 登場テキストを表示する時間
 	constexpr float	kEntryMoveSpeed = 0.05f;				// プレイヤー登場のスピード
 
@@ -55,6 +59,7 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_frameCount(0),
 	m_jumpCount(0),
 	m_level(0),
+	m_prevPosY(0.0f),
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
@@ -235,12 +240,16 @@ void Player::MoveOperation(Input& input)
 	float topY = tryPosY.y - kPlayerHeight * 0.5f;
 	float bottomY = tryPosY.y + kPlayerHeight * 0.5f;
 
+	// 貫通しない床に当たったかどうか
+	bool isHitSolidFloor = false;
+
 	// 落下している時に床に当たった場合
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
 	{
 		// 位置を移動可能範囲内に修正
 		tryPosY.y = rangeY.GetBottom() - kPlayerHeight * 0.5f;
 		frags.isHitGround = true; // 床に当たったフラグを立てる
+		isHitSolidFloor = true; // 貫通しない床に当たったとする
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		m_frameCount = 0; // 時間経過をリセット
@@ -256,6 +265,53 @@ void Player::MoveOperation(Input& input)
 		m_isHover = true;
 		m_frameCount = 0;
 	}
+
+	// 下からのみ貫通できる床との判定
+	if (!isHitSolidFloor && dy > 0.0f) // 地面との判定を行わなかった際に落下中なら
+	{
+		const float oldBottom = m_prevPosY + kPlayerHeight * 0.5f; // 前回の下端のY座標
+
+		const float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
+		int leftX = m_pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightX = m_pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
+
+		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+
+		bool hitOneWay = false; // 片面通行の床に当たったかどうか
+		float candidateTop = 100000.0f; // 候補となる床の上端のY座標
+		int candidateX = -1; // 候補となる床のX座標
+
+		for (int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
+		{
+			int chipNo = m_pMap->GetMapChipNum(x, footTileY);
+			if (chipNo == kThroughChipNoLeft || chipNo == kThroughChipNoCenter || chipNo == kThroughChipNoRight)
+			{
+				float tileTop = footTileY * tileSize; // タイルの上端のY座標
+
+				if (oldBottom <= tileTop) // 前回の下端が床の上にあった場合
+				{
+					
+					if (tileTop < candidateTop)
+					{
+						candidateTop = tileTop;
+						candidateX = x;
+					}
+					// 候補として採用
+					hitOneWay = true;
+				}
+			}
+
+			if (hitOneWay)
+			{
+				tryPosY.y = candidateTop - kPlayerHeight * 0.5f;
+				frags.isHitGround = true; // 床に当たったフラグを立てる
+				m_velocity.y = 0.0f; // Y方向の速度を0にする
+				dy = tryPosY.y - m_pos.y; // 移動量を修正
+				m_frameCount = 0; // 時間経過をリセット
+			}
+		}
+	}
+	
 
 	// 実際の座標に反映
 	m_pos.y = tryPosY.y;
@@ -275,6 +331,7 @@ void Player::MoveOperation(Input& input)
 
 	m_colCircle.pos = m_pos; // 円の座標更新
 	m_colRect.pos = m_pos; // 矩形の座標更新
+	m_prevPosY = m_pos.y; // 前回のY座標を更新
 
 	CheckHitToChest(input);
 }
