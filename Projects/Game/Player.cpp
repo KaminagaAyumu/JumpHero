@@ -237,7 +237,7 @@ void Player::MoveOperation(Input& input)
 	float bottomY = tryPosY.y + kPlayerHeight * 0.5f;
 
 	// 貫通しない床に当たったかどうか
-	bool isHitSolidFloor = false;
+	bool isHitNormalFloor = false;
 	float margin = 0.1f; // マージン
 
 	// 落下している時に床に当たった場合
@@ -246,7 +246,7 @@ void Player::MoveOperation(Input& input)
 		// 位置を移動可能範囲内に修正
 		tryPosY.y = rangeY.GetBottom() - kPlayerHeight * 0.5f;
 		frags.isHitGround = true; // 床に当たったフラグを立てる
-		isHitSolidFloor = true; // 貫通しない床に当たったとする
+		isHitNormalFloor = true; // 貫通しない床に当たったとする
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		m_frameCount = 0; // 時間経過をリセット
@@ -264,7 +264,7 @@ void Player::MoveOperation(Input& input)
 	}
 
 	// 下からのみ貫通できる床との判定
-	if (!isHitSolidFloor && dy > 0.0f) // 地面との判定を行わなかった際に落下中なら
+	if (!isHitNormalFloor && dy > 0.0f) // 地面との判定を行わなかった際に落下中なら
 	{
 		const float oldBottom = m_prevPosY + kPlayerHeight * 0.5f; // 前回の下端のY座標
 
