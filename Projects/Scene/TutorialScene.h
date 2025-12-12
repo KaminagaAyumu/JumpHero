@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
+class TextManager;
+
 /// <summary>
 /// ゲームの基本操作を教える用のシーン
 /// </summary>
