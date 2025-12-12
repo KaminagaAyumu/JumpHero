@@ -64,7 +64,7 @@ void Chest::Draw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	if (m_isOpen)
+	if (!(m_state == ChestState::Normal))
 	{
 		//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_openGraphHandle, TRUE);
 		//DrawString(drawX, drawY, L"アイテム", 0xffffff);
