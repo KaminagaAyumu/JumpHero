@@ -19,7 +19,7 @@ namespace
 	constexpr float kNormalMoveSpeed		= 0.9f;		// 通常時の左右移動の速さ
 	constexpr float kSeekerMoveSpeed		= 0.8f;		// プレイヤーを追い続ける敵の移動の速さ
 
-	constexpr int	kAppearTime				= 60;		// 敵の出現までの時間
+	constexpr int	kAppearTime				= 90;		// 敵の出現までの時間
 	constexpr int	kFormChangeWaitTime		= 180;		// 敵の変身までの時間
 	constexpr int	kFormChangeTime			= 30;		// 敵の変身準備までの時間
 
@@ -405,17 +405,7 @@ void TransformEnemy::MoveOperation()
 		dx += kNormalMoveSpeed;
 	}
 
-	// Y軸の更新
-	if (m_isGround) // 地面にいる場合
-	{
-		m_velocity.y += kGravity; // 重力をかけるのみ
-	}
-	else // 空中にいる場合
-	{
-		// 加速する落下処理
-		m_moveCount++;
-		m_velocity.y = m_velocity.y * m_direction.y + kGravity * m_moveCount * 0.5f;
-	}
+	m_velocity.y += kGravity; // 重力をかける
 
 	float dy = m_velocity.y; // Y軸の移動量
 	ContactFrags frags;
