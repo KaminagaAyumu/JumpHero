@@ -8,8 +8,8 @@
 namespace
 {
 	// 描画関連
-	constexpr float kEnemyWidth				= 45.0f;	// 敵の実際の幅
-	constexpr float kEnemyHeight			= 45.0f;	// 敵の実際の高さ
+	constexpr float kEnemyWidth				= 40.0f;	// 敵の実際の幅
+	constexpr float kEnemyHeight			= 40.0f;	// 敵の実際の高さ
 
 	constexpr float kEnemyCoinWidth			= 30.0f;	// 敵がコイン化した際の幅
 	constexpr float kEnemyCoinHeight		= 30.0f;	// 敵がコイン化した際の高さ
