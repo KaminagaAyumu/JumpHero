@@ -18,8 +18,7 @@ public:
 
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
 
-	void SetIsOpen(bool isOpen) { m_isOpen = isOpen; }
-	bool IsOpen()const { return m_isOpen; }
+	bool IsOpen()const { return m_state == ChestState::Opened; } 
 	bool IsHidden()const { return m_state == ChestState::Hidden; }
 
 	/// <summary>
@@ -41,7 +40,6 @@ private:
 	};
 
 	int m_graphHandle; // 画像ハンドル
-	bool m_isOpen; // 開いているかどうか
 
 	ChestState m_state; // 宝箱の状態
 

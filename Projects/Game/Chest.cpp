@@ -19,7 +19,6 @@ namespace
 Chest::Chest() :
 	Actor(Types::ActorType::Chest),
 	m_graphHandle(-1),
-	m_isOpen(false),
 	m_state(ChestState::Normal),
 	m_pMap(nullptr),
 	m_chipPos{}
@@ -29,8 +28,7 @@ Chest::Chest() :
 Chest::Chest(int x, int y, Map* map, int handle, bool isHidden) :
 	Actor(Types::ActorType::Chest),
 	m_pMap(map),
-	m_chipPos{x,y},
-	m_isOpen(false)
+	m_chipPos{x,y}
 {
 	float tileSize = kChipSize * kChipScale;
 	m_pos = { static_cast<float>(m_chipPos.x) * tileSize + tileSize * 0.5f,static_cast<float>(m_chipPos.y) * tileSize + tileSize * 0.5f };
@@ -98,7 +96,6 @@ void Chest::AppearChest()
 
 void Chest::OpenChest()
 {
-	m_isOpen = true;
 	m_state = ChestState::Opened;
 
 #ifdef _DEBUG
