@@ -1,7 +1,7 @@
 ﻿#include "GameScene.h"
 #include "../Utility/Input.h"
 #include "SceneController.h"
-#include "TitleScene.h"
+#include "PauseScene.h"
 #include "ClearScene.h"
 #include "MiniGameScene.h"
 #include "MissScene.h"
@@ -82,6 +82,11 @@ void GameScene::FadeInUpdate(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 
+	if (input.IsTriggered("Pause"))
+	{
+		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
+		return;
+	}
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
