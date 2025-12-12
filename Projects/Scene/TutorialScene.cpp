@@ -3,6 +3,7 @@
 #include "TutorialScene.h"
 #include "SceneController.h"
 #include "TitleScene.h"
+#include "MiniGameScene.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Game/TextManager.h"
@@ -92,7 +93,7 @@ void TutorialScene::FadeOutUpdate(Input& input)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller, m_pGameManager, 0));
 		return; // 念のため処理を抜ける
 	}
 }
