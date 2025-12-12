@@ -2,6 +2,8 @@
 #include "SceneBase.h"
 
 class TextManager;
+class Map;
+class Bg;
 
 /// <summary>
 /// ゲームの基本操作を教える用のシーン
@@ -40,7 +42,8 @@ private:
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
 	std::unique_ptr<TextManager> m_pTextManager; // テキスト管理クラス
-
+	std::unique_ptr<Map> m_pMap;                 // マップクラス
+	std::unique_ptr<Bg> m_pBg;                   // 背景クラス
 
 };
 

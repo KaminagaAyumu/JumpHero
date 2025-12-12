@@ -5,6 +5,8 @@
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Game/TextManager.h"
+#include "../Utility/Bg.h"
+#include "../Utility/Map.h"
 #include "DxLib.h"
 
 namespace
@@ -19,6 +21,11 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_drawFunc(&TutorialScene::FadeDraw)
 {
 	m_pTextManager = std::make_unique<TextManager>();
+	m_pBg = std::make_unique<Bg>();
+	m_pBg->Init();
+	m_pMap = std::make_unique<Map>(0, false);
+	m_pMap->Init();
+
 }
 
 TutorialScene::~TutorialScene()
@@ -48,7 +55,8 @@ void TutorialScene::FadeInUpdate(Input& input)
 }
 void TutorialScene::NormalUpdate(Input& input)
 {
-
+	m_pBg->Update();
+	m_pMap->Update();
 }
 void TutorialScene::MissUpdate(Input& input)
 {
