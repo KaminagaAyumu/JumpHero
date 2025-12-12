@@ -8,6 +8,8 @@ namespace
 {
 	constexpr float kCoinDefaultWidth = 30.0f;
 	constexpr float kCoinDefaultHeight = 30.0f;
+
+	constexpr float kCoinScale = 1.0f;
 }
 
 Coin::Coin(const Position2& pos, int handle)
@@ -15,6 +17,7 @@ Coin::Coin(const Position2& pos, int handle)
 	m_pos = pos;
 	m_colRect = { {m_pos},kCoinDefaultWidth,kCoinDefaultHeight };
 	m_colCircle = { {m_pos},kCoinDefaultWidth / 2 };
+	m_graphHandle = handle;
 }
 
 void Coin::Init()
@@ -34,7 +37,7 @@ void Coin::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		DrawRotaGraph(drawX, drawY, kCoinScale, 0.0, m_graphHandle, true);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);
