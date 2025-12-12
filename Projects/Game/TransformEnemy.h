@@ -82,10 +82,6 @@ private:
 	void SkullDraw(); // プレイヤーの横座標を追い続けるときの描画処理
 	void ItemDraw(); // 敵がアイテム化中の描画処理
 
-	virtual void CheckHitMapX() override;
-
-	virtual void CheckHitMapY() override;
-
 	/// <summary>
 	/// 当たり判定を行うかどうか
 	/// </summary>

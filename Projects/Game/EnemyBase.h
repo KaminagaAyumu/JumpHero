@@ -50,15 +50,5 @@ protected:
 	// 敵が死んだか
 	bool m_isDead;
 
-	/// <summary>
-	/// マップX軸との当たり判定を取り、座標補正をする
-	/// </summary>
-	virtual void CheckHitMapX() abstract;
-	
-	/// <summary>
-	/// マップY軸との当たり判定を取り、座標補正をする
-	/// </summary>
-	virtual void CheckHitMapY() abstract;
-
 };
 
