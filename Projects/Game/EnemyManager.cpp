@@ -18,9 +18,6 @@ namespace
 
 	constexpr int kSpawnTime = 600; // 敵生成までの時間
 
-	// 敵スポーン位置のマージン(敵生成時に床から少し浮かせる)
-	constexpr float kEnemySpawnPosMarginY = 0.1f;
-
 	// 敵のアイテム化時間
 	constexpr int kChangeToItemTime = 360;
 	
@@ -69,7 +66,6 @@ void EnemyManager::Update(Input& input)
 				return;
 			}
 			Position2 spawnPos = SearchNearestSpawnPosition(m_pPlayer->GetPos()); // プレイヤーに一番近いスポーン位置を取得
-			spawnPos.y -= kEnemySpawnPosMarginY; // 少し上にずらす
 			SpawnEnemy(spawnPos); // 敵を生成
 		}
 	}
