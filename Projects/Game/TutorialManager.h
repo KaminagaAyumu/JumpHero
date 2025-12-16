@@ -63,7 +63,8 @@ private:
 	TextManager* m_pTextManager;	// テキストデータのポインタ
 	Map* m_pMap;					// マップデータのポインタ
 
-	bool IsEnterArea(int areaNum);
+	bool IsEnterArea();
+	int GetAreaNum(std::string param);
 
 	/// <summary>
 	/// イベント条件を文字列から変換する用の関数

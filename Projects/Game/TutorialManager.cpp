@@ -32,7 +32,10 @@ void TutorialManager::Update(Input& input)
 	{
 		m_eventIndex++;
 	}
-	DrawEventData(m_eventIndex);
+
+	int a = GetAreaNum(m_eventData[0].triggerParam);
+	printfDx(L"%d\n", a);
+	//DrawEventData(m_eventIndex);
 }
 
 void TutorialManager::DrawEventData(int id)
@@ -108,9 +111,21 @@ size_t TutorialManager::GetEventNum()
 	return size_t(m_eventData.size());
 }
 
-bool TutorialManager::IsEnterArea(int areaNum)
+bool TutorialManager::IsEnterArea()
 {
-	
+	return false;
+}
+
+int TutorialManager::GetAreaNum(std::string param)
+{
+	const size_t n = param.size();
+	size_t i = 0;
+
+	if (param == "area = 1")
+	{
+		return 1;
+	}
+
 }
 
 TriggerType TutorialManager::ToTriggerType(const std::string strData)
