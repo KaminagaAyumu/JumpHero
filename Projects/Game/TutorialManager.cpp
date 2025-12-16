@@ -1,5 +1,6 @@
 ﻿#include <vector>
 #include "TutorialManager.h"
+#include "TextManager.h"
 #include "../Utility/StringFunction.h"
 #include "../Utility/Input.h"
 #include <fstream>

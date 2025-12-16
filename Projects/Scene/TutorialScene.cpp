@@ -31,7 +31,7 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_frameCount = kFadeInterval;
 
 	m_pTextManager = std::make_unique<TextManager>();
-	m_pTutorialManager = std::make_unique<TutorialManager>();
+	m_pTutorialManager = std::make_unique<TutorialManager>(m_pTextManager.get());
 	m_pBg = std::make_unique<Bg>();
 	m_pBg->Init();
 	m_pMap = std::make_unique<Map>(0, false);
