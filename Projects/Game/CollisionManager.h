@@ -17,6 +17,14 @@ public:
 	/// <param name="actors">ゲーム内のアクター</param>
 	void CheckCollision(const std::vector<Actor*>& actors);
 
+	/// <summary>
+	/// 2つの矩形の当たり判定(回転を考慮しない)
+	/// </summary>
+	/// <param name="first">矩形1</param>
+	/// <param name="second">矩形2</param>
+	/// <returns>true : 当たっている false : 当たっていない</returns>
+	bool IsCollisionRectToRect(const Rect2D& first, const Rect2D& second);
+
 private:
 
 	/// <summary>
@@ -26,14 +34,6 @@ private:
 	/// <param name="second">円2</param>
 	/// <returns>true : 当たっている false : 当たっていない</returns>
 	bool IsCollisionCircleToCircle(const Circle2D& first, const Circle2D& second);
-
-	/// <summary>
-	/// 2つの矩形の当たり判定(回転を考慮しない)
-	/// </summary>
-	/// <param name="first">矩形1</param>
-	/// <param name="second">矩形2</param>
-	/// <returns>true : 当たっている false : 当たっていない</returns>
-	bool IsCollisionRectToRect(const Rect2D& first, const Rect2D& second);
 
 	/// <summary>
 	/// 円と矩形の当たり判定
