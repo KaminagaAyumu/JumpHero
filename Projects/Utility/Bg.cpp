@@ -53,16 +53,42 @@ void Bg::Draw(Camera* camera)
 
 	Position2 scrollPos = {};
 	scrollPos.x = static_cast<int>(camera->scroll.x) % bgSize.x;
+	// 縦もスクロールする場合は↓を使う
+	// scrollPos.y = static_cast<int>(camera->scroll.y) % bgSize.y;
 	scrollPos.y = static_cast<int>(camera->scroll.y) / bgSize.y;
 
 	DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
 
+	// 横にのみ表示する時
 	if (scrollPos.x > 0)
 	{
 		DrawGraph(static_cast<int>(bgSize.x) - static_cast<int>(scrollPos.x),
 			Game::kScreenHeight - bgSize.y,
 			m_bgHandle, true);
 	}
+
+	// 上下左右に表示する時
+	/*if(bgSize.x - scrollPos.x < Game::kScreenWidth)
+	{
+		DrawGraph(static_cast<int>(-scrollPos.x) + static_cast<int>(bgSize.x), 
+			static_cast<int>(-scrollPos.y), 
+			m_bgHandle, true);
+	}
+
+	if(bgSize.y - scrollPos.y < Game::kScreenHeight)
+	{
+		DrawGraph(static_cast<int>(-scrollPos.x), 
+			static_cast<int>(-scrollPos.y) + static_cast<int>(bgSize.y), 
+			m_bgHandle, true);
+	}
+
+	if(bgSize.x - scrollPos.x < Game::kScreenWidth &&
+		bgSize.y - scrollPos.y < Game::kScreenHeight)
+	{
+		DrawGraph(static_cast<int>(-scrollPos.x) + static_cast<int>(bgSize.x), 
+			static_cast<int>(-scrollPos.y) + static_cast<int>(bgSize.y), 
+			m_bgHandle, true);
+	}*/
 
 	/*for(int handle : m_bgHandles)
 	{
