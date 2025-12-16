@@ -44,7 +44,8 @@ namespace
 
 ItemManager::ItemManager(Camera* camera, GameManager* gameManager) :
 	m_pCamera(camera),
-	m_pGameManager(gameManager)
+	m_pGameManager(gameManager),
+	m_firstBalloonNum(0)
 {
 	m_pItems.clear();
 	for(int i = 0; i < kGraphNum; i++)
@@ -66,6 +67,7 @@ ItemManager::~ItemManager()
 void ItemManager::Init()
 {
 	m_pItems.clear();
+	m_firstBalloonNum = 0;
 }
 
 void ItemManager::Update(Input& input)
@@ -170,6 +172,7 @@ void ItemManager::FirstSpawnItem(Map* map)
 				auto balloon = std::make_shared<Balloon>(pos,m_graphHandles[kGraphBalloon]);
 				balloon->SetCamera(m_pCamera); // カメラセット
 				m_pItems.push_back(balloon); // アイテムリストに追加
+				m_firstBalloonNum++; // 風船の数をカウント
 			}
 		}
 	}

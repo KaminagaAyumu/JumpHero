@@ -28,7 +28,7 @@ public:
 	virtual ~GameManager();
 
 	void Init();
-	void Init(Map* map); // 一旦マップを取得するだけで使う
+	void MiniGameInit(Map* map); // 一旦マップを取得するだけで使う
 	void Update(Input& input);
 	void Draw() const;
 
@@ -127,6 +127,8 @@ private:
 	int m_medalNum; // 強化メダルの所持数
 	int m_balloonNum; // 風船をどれだけ取ったか
 	int m_balloonCounter; // 風船の数のカウンタ
+	int m_totalBalloonNum; // そのステージに存在する風船の総数
+	bool m_isMiniGame; // ミニゲーム中かどうか
 
 	std::unordered_map<Types::ItemType, std::function<void()>> m_itemCollectFunc;
 

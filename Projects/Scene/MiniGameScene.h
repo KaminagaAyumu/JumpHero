@@ -50,6 +50,8 @@ private:
 
 	bool IsEndDescription() const; // 説明が終了したかどうかを取得する関数
 
+	void GetBalloonNum() const; // 風船の数を取得する関数
+
 	// 背景画像を管理するクラスのポインタ
 	std::shared_ptr<Bg> m_bg;
 

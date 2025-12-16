@@ -36,7 +36,9 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_life(kFirstLife),
 	m_medalNum(0),
 	m_balloonNum(0),
-	m_balloonCounter(0)
+	m_balloonCounter(0),
+	m_totalBalloonNum(0),
+	m_isMiniGame(false)
 {
 	m_pMap = map;
 	m_pCamera = std::make_unique<Camera>(m_pMap->GetMapSize());
@@ -59,6 +61,7 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 		{
 			m_balloonNum++; // 風船の数を加算
 			m_balloonCounter++; // 風船取得カウンターを加算
+			m_totalBalloonNum--; // 総風船数を減算
 		};
 	// 強化メダルを取った時
 	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this]()
@@ -94,9 +97,11 @@ void GameManager::Init()
 	m_medalNum = 0;
 	m_balloonNum = 0;
 	m_balloonCounter = 0;
+	m_totalBalloonNum = 0;
+	m_isMiniGame = false;
 }
 
-void GameManager::Init(Map* map)
+void GameManager::MiniGameInit(Map* map)
 {
 	m_pMap = map;
 	m_pPlayer->InitMap(map);
@@ -106,6 +111,8 @@ void GameManager::Init(Map* map)
 	m_pChestManager->Init();
 	m_pItemManager->Init();
 	m_pItemManager->FirstSpawnItem(map);
+	m_totalBalloonNum = m_pItemManager->GetFirstBalloonNum();
+	m_isMiniGame = true;
 }
 
 void GameManager::Update(Input& input)
@@ -200,6 +207,13 @@ bool GameManager::IsClear() const
 {
 	// プレイヤーの座標がゴールの位置に来たら
 	Position2 goalPos = m_pMap->GetGoalPosToMap();
+	if (m_isMiniGame)
+	{
+		if(m_totalBalloonNum > 0) // ミニゲーム中でまだ風船が残っているならクリアにしない
+		{
+			return false;
+		}
+	}
 	return m_pPlayer->GetPos().x >= goalPos.x && m_pPlayer->GetPos().y <= goalPos.y;
 }
 
