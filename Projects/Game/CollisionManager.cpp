@@ -32,18 +32,6 @@ void CollisionManager::CheckCollision(const std::vector<Actor*>& actors)
 	}
 }
 
-bool CollisionManager::IsCollisionRectToRect(const Rect2D& first, const Rect2D& second)
-{
-	// 確実に当たっていない状況を判定する
-	if (first.GetLeft() > second.GetRight())	return false;
-	if (first.GetTop() > second.GetBottom())	return false;
-	if (first.GetRight() < second.GetLeft())	return false;
-	if (first.GetBottom() < second.GetTop())	return false;
-
-	// 条件をすべて満たしていなければ当たっている
-	return true;
-}
-
 bool CollisionManager::IsCollisionCircleToCircle(const Circle2D& first, const Circle2D& second)
 {
 	// 2つの円の距離を測る
@@ -54,6 +42,18 @@ bool CollisionManager::IsCollisionCircleToCircle(const Circle2D& first, const Ci
 
 	// 距離の二乗が半径の和の二乗以下なら当たっている
 	return delta.SqrMagnitude() <= distance * distance;
+}
+
+bool CollisionManager::IsCollisionRectToRect(const Rect2D& first, const Rect2D& second)
+{
+	// 確実に当たっていない状況を判定する
+	if (first.GetLeft() > second.GetRight())	return false;
+	if (first.GetTop() > second.GetBottom())	return false;
+	if (first.GetRight() < second.GetLeft())	return false;
+	if (first.GetBottom() < second.GetTop())	return false;
+
+	// 条件をすべて満たしていなければ当たっている
+	return true;
 }
 
 bool CollisionManager::IsCollisionCircleToRect(const Circle2D& circle, const Rect2D& rect)
