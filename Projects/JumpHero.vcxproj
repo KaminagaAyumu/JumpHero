@@ -151,6 +151,7 @@
     <ClCompile Include="Scene\PauseScene.cpp" />
     <ClCompile Include="Scene\SelectScene.cpp" />
     <ClCompile Include="Game\TextManager.cpp" />
+    <ClCompile Include="Game\TutorialManager.cpp" />
     <ClCompile Include="Utility\StringFunction.cpp" />
     <ClCompile Include="Utility\Map.cpp" />
     <ClCompile Include="Scene\ClearScene.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Scene\PauseScene.h" />
     <ClInclude Include="Scene\SelectScene.h" />
     <ClInclude Include="Game\TextManager.h" />
+    <ClInclude Include="Game\TutorialManager.h" />
     <ClInclude Include="Utility\StringFunction.h" />
     <ClInclude Include="Utility\GameType.h" />
     <ClInclude Include="Game\ItemManager.h" />

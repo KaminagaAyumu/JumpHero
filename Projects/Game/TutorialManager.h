@@ -1,31 +1,38 @@
 ﻿#pragma once
 #include <sstream>
 
+// イベントが始まる条件
+enum class TriggerType
+{
+	EnterArea, // エリアに入った
+	GetItem, // アイテムを取得した
+	EnemySpawn, // 敵がスポーンした
+};
+
+// イベントで何を行うか
+enum class ActionType
+{
+	ShowText, // テキストを表示する
+	FreezeGame, // ゲームを一時停止する
+	UnfreezeGame, // ゲームを再開する
+	PowerUp, // プレイヤーの強化
+	WaitInput, // ボタン入力待ち
+};
+
 class TutorialManager
 {
 public:
 	TutorialManager();
 	virtual ~TutorialManager();
 
+	/// <summary>
+	/// イベントデータをロードする
+	/// </summary>
+	/// <returns>true : ロード成功 false : ロード失敗</returns>
+	bool LoadEventData();
 
 private:
-	// イベントが始まる条件
-	enum class TriggerType
-	{
-		EnterArea, // エリアに入った
-		GetItem, // アイテムを取得した
-		EnemySpawn, // 敵がスポーンした
-	};
-
-	// イベントで何を行うか
-	enum class ActionType
-	{
-		ShowText, // テキストを表示する
-		FreezeGame, // ゲームを一時停止する
-		UnfreezeGame, // ゲームを再開する
-		PowerUp, // プレイヤーの強化
-		WaitInput, // ボタン入力待ち
-	};
+	
 
 	/// <summary>
 	/// チュートリアルで行われるイベントをまとめる構造体
@@ -38,6 +45,22 @@ private:
 		ActionType actionType; // 行われるイベント
 		std::string actionParam; // イベントで必要なデータ
 	};
+
+	std::vector<EventData> m_eventData; // イベントデータ群
+
+	/// <summary>
+	/// イベント条件を文字列から変換する用の関数
+	/// </summary>
+	/// <param name="strData">文字列データ</param>
+	/// <returns>変換後のイベント条件</returns>
+	TriggerType ToTriggerType(const std::string strData);
+
+	/// <summary>
+	/// イベントで行う内容を文字列から変換する用の関数
+	/// </summary>
+	/// <param name="strData">文字列データ</param>
+	/// <returns>変換後のイベント内容</returns>
+	ActionType ToActionType(const std::string strData);
 
 };
 
