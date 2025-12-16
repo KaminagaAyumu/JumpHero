@@ -25,13 +25,15 @@ public:
 	TutorialManager();
 	virtual ~TutorialManager();
 
-	void Draw();
+	void DrawEventData(int id);
 
 	/// <summary>
 	/// イベントデータをロードする
 	/// </summary>
 	/// <returns>true : ロード成功 false : ロード失敗</returns>
 	bool LoadEventData();
+
+	size_t GetEventNum();
 
 private:
 	

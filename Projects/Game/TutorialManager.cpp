@@ -13,18 +13,28 @@ TutorialManager::~TutorialManager()
 {
 }
 
-void TutorialManager::Draw()
+void TutorialManager::DrawEventData(int id)
 {
-	printfDx(L"%d\n", m_eventData[0].id);
+	printfDx(L"%d\n", m_eventData[id].id);
 	
-	if (m_eventData[0].triggerType == TriggerType::EnterArea)
+	if (m_eventData[id].triggerType == TriggerType::EnterArea)
 	{
 		printfDx(L"TriggerType :: EnterArea\n");
 	}
 
-	auto str = StringFunction::WStringFromString(m_eventData[0].triggerParam);
+	auto str = StringFunction::WStringFromString(m_eventData[id].triggerParam);
 	{
 		printfDx(L"TriggerParam :: %s\n", str.c_str());
+	}
+
+	if (m_eventData[id].actionType == ActionType::FreezeGame)
+	{
+		printfDx(L"TriggerType :: FreezeGame\n");
+	}
+
+	str = StringFunction::WStringFromString(m_eventData[id].actionParam);
+	{
+		printfDx(L"ActionParam :: %s\n", str.c_str());
 	}
 }
 
@@ -57,19 +67,23 @@ bool TutorialManager::LoadEventData()
 		}
 
 		EventData data;
-		if (row.size() >= 4)
+		if (row.size() >= 5)
 		{
 			data.id = std::stoi(row[0]);
 			data.triggerType = ToTriggerType(row[1]);
 			data.triggerParam = row[2];
 			data.actionType = ToActionType(row[3]);
+			data.actionParam = row[4];
 			m_eventData.push_back(data);
 		}
-		
-
 	}
 
 	return true;
+}
+
+size_t TutorialManager::GetEventNum()
+{
+	return size_t(m_eventData.size());
 }
 
 TriggerType TutorialManager::ToTriggerType(const std::string strData)
