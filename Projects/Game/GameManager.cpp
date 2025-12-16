@@ -204,10 +204,6 @@ bool GameManager::IsSkipCollision() const
 
 bool GameManager::IsClear() const
 {
-	// ゴールの座標
-	Position2 goalPos = m_pMap->GetGoalPosToMap();
-	// ゴールの範囲を設定
-	Rect2D goalRange = { goalPos, kGoalWidth, kGoalHeight };
 	if (m_isMiniGame)
 	{
 		if(m_totalBalloonNum > 0) // ミニゲーム中でまだ風船が残っているならクリアにしない
@@ -215,7 +211,18 @@ bool GameManager::IsClear() const
 			return false;
 		}
 	}
-	return m_pPlayer->GetPos().x >= goalPos.x && m_pPlayer->GetPos().y <= goalPos.y;
+	// ゴールの座標
+	Position2 goalPos = m_pMap->GetGoalPosToMap();
+	// ゴールの範囲を設定
+	Rect2D goalRange = { goalPos, kGoalWidth, kGoalHeight };
+	// プレイヤーの矩形を取得
+	Rect2D playerRect = m_pPlayer->GetColRect();
+	// 確実に当たっていない状況を判定する
+	if (playerRect.GetLeft() > goalRange.GetRight())	return false;
+	if (playerRect.GetTop() > goalRange.GetBottom())	return false;
+	if (playerRect.GetRight() < goalRange.GetLeft())	return false;
+	if (playerRect.GetBottom() < goalRange.GetTop())	return false;
+	return true;
 }
 
 bool GameManager::IsGameOver() const

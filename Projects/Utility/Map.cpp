@@ -429,7 +429,9 @@ Position2 Map::GetGoalPosToMap()
 			int chipNo = m_layerMapData[kEventData][y * m_width + x];
 			if (chipNo == kGoalChipNoUp)
 			{
-				goalPos.x = x * kChipSize * kChipScale - (kChipSize * kChipScale) / 2.0f;
+				// X座標はマップチップの左端に
+				goalPos.x = x * kChipSize * kChipScale;
+				// Y座標はマップチップの下端に
 				goalPos.y = y * kChipSize * kChipScale + (kChipSize * kChipScale);
 				return goalPos;
 			}
