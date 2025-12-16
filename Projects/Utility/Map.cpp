@@ -14,6 +14,9 @@ namespace
 	constexpr int kPositioningData = 1; // 配置データのレイヤー番号
 	constexpr int kEventData = 2; // イベントデータのレイヤー番号
 
+	constexpr int kFirstTriggerNum = 1;
+	constexpr int kSecondTriggerNum = 2;
+
 	// マップのチップを置く数
 	constexpr int kChipNumX = 97;
 	constexpr int kChipNumY = 16;

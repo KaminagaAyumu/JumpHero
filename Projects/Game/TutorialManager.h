@@ -63,7 +63,7 @@ private:
 	TextManager* m_pTextManager;	// テキストデータのポインタ
 	Map* m_pMap;					// マップデータのポインタ
 
-	bool IsEnterArea();
+	bool IsEnterArea(int areaNum);
 	int GetAreaNum(std::string param);
 
 	/// <summary>

@@ -111,21 +111,15 @@ size_t TutorialManager::GetEventNum()
 	return size_t(m_eventData.size());
 }
 
-bool TutorialManager::IsEnterArea()
+bool TutorialManager::IsEnterArea(int areaNum)
 {
+	
 	return false;
 }
 
 int TutorialManager::GetAreaNum(std::string param)
 {
-	const size_t n = param.size();
-	size_t i = 0;
-
-	if (param == "area = 1")
-	{
-		return 1;
-	}
-
+	return std::stoi(param);
 }
 
 TriggerType TutorialManager::ToTriggerType(const std::string strData)
