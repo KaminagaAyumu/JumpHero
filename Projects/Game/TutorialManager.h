@@ -74,5 +74,18 @@ private:
 	/// <returns>変換後のイベント内容</returns>
 	ActionType ToActionType(const std::string strData);
 
+	/// <summary>
+	/// イベントトリガーを判定
+	/// </summary>
+	/// <param name="data">イベントデータ</param>
+	/// <returns>true : トリガー発火 false : トリガーが発火していない</returns>
+	bool CheckTrigger(const EventData& data);
+
+	/// <summary>
+	/// 指定されたイベントを行う
+	/// </summary>
+	/// <param name="data">イベントデータ</param>
+	void RunAction(const EventData& data);
+
 };
 

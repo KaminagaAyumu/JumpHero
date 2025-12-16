@@ -19,7 +19,7 @@ TutorialManager::~TutorialManager()
 
 void TutorialManager::Update(Input& input)
 {
-	if (m_eventIndex > static_cast<int>(m_eventData.size()))
+	if (m_eventIndex + 1 >= static_cast<int>(m_eventData.size()))
 	{
 		return;
 	}
@@ -118,4 +118,13 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 	if (strData == "UnfreezeGame") return ActionType::UnfreezeGame;
 	if (strData == "PowerUp") return ActionType::PowerUp;
 	if (strData == "WaitInput") return ActionType::WaitInput;
+}
+
+bool TutorialManager::CheckTrigger(const EventData& data)
+{
+	return false;
+}
+
+void TutorialManager::RunAction(const EventData& data)
+{
 }
