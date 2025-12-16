@@ -1,16 +1,33 @@
 ﻿#include <vector>
 #include "TutorialManager.h"
 #include "../Utility/StringFunction.h"
+#include "../Utility/Input.h"
 #include <fstream>
 #include "DxLib.h"
 
-TutorialManager::TutorialManager()
+TutorialManager::TutorialManager(TextManager* textManager) :
+	m_eventIndex(0)
 {
+	m_pTextManager = textManager;
 	LoadEventData();
 }
 
 TutorialManager::~TutorialManager()
 {
+}
+
+void TutorialManager::Update(Input& input)
+{
+	if (m_eventIndex > static_cast<int>(m_eventData.size()))
+	{
+		return;
+	}
+
+	if (input.IsTriggered("OK"))
+	{
+		m_eventIndex++;
+	}
+	DrawEventData(m_eventIndex);
 }
 
 void TutorialManager::DrawEventData(int id)

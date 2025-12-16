@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <sstream>
 
+class Input;
+class TextManager;
+
 // イベントが始まる条件
 enum class TriggerType
 {
@@ -22,9 +25,10 @@ enum class ActionType
 class TutorialManager
 {
 public:
-	TutorialManager();
+	TutorialManager(TextManager* textManager);
 	virtual ~TutorialManager();
 
+	void Update(Input& input);
 	void DrawEventData(int id);
 
 	/// <summary>
@@ -50,7 +54,11 @@ private:
 		std::string actionParam; // イベントで必要なデータ
 	};
 
+	int m_eventIndex; // イベントの進行状況
 	std::vector<EventData> m_eventData; // イベントデータ群
+
+	TextManager* m_pTextManager; // テキストデータのポインタ
+
 
 	/// <summary>
 	/// イベント条件を文字列から変換する用の関数

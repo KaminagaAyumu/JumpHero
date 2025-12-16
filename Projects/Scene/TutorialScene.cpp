@@ -77,6 +77,7 @@ void TutorialScene::NormalUpdate(Input& input)
 		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 		return;
 	}
+	m_pTutorialManager->Update(input);
 
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
@@ -130,13 +131,8 @@ void TutorialScene::NormalDraw()
 	}
 
 	m_pGameManager->Draw();
-	
-	size_t num = m_pTutorialManager->GetEventNum();
-	for (int i = 0; i < num; i++)
-	{
-		//m_pTutorialManager->DrawEventData(i);
-	}
-	m_pTextManager->Draw();
+
+	//m_pTextManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"TutorialScene: NormalDraw", 0xffffff);
 #endif
