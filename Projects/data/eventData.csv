@@ -1,13 +1,13 @@
 ID,TriggerType,TriggerParam,ActionType,ActionParam
 1,EnterArea,area = 1,FreezeGame,0
-2,EnterArea,area = 1,ShowText,TIP_MOVE
+2,EnterArea,area = 1,ShowText,tuto_start
 3,EnterArea,area = 1,WaitInput,0
 4,EnterArea,area = 2,FreezeGame,0
-5,EnterArea,area = 2,ShowText,TIP_JUMP
+5,EnterArea,area = 2,ShowText,tuto_jump_1
 6,EnterArea,area = 2,WaitInput,0
 7,EnterArea,area = 3,FreezeGame,0
-8,EnterArea,area = 3,ShowText,1
+8,EnterArea,area = 3,ShowText,tuto_jump_2
 9,EnterArea,area = 3,WaitInput,0
 10,EnterArea,area = 4,FreezeGame,0
-11,EnterArea,area = 4,ShowText,1
+11,EnterArea,area = 4,ShowText,tuto_chest
 12,EnterArea,area = 4,WaitInput,0
