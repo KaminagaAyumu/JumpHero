@@ -1,0 +1,13 @@
+ID,TriggerType,TriggerParam,ActionType
+1,EnterArea,area = 1,FreezeGame
+2,EnterArea,area = 1,ShowText
+3,EnterArea,area = 1,WaitInput
+4,EnterArea,area = 2,FreezeGame
+5,EnterArea,area = 2,ShowText
+6,EnterArea,area = 2,WaitInput
+7,EnterArea,area = 3,FreezeGame
+8,EnterArea,area = 3,ShowText
+9,EnterArea,area = 3,WaitInput
+10,EnterArea,area = 4,FreezeGame
+11,EnterArea,area = 4,ShowText
+12,EnterArea,area = 4,WaitInput
