@@ -8,6 +8,7 @@
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Game/TextManager.h"
+#include "../Game/TutorialManager.h"
 #include "../Game/GameManager.h"
 #include "../Game/CollisionManager.h"
 #include "../Game/Actor.h"
@@ -30,6 +31,7 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_frameCount = kFadeInterval;
 
 	m_pTextManager = std::make_unique<TextManager>();
+	m_pTutorialManager = std::make_unique<TutorialManager>();
 	m_pBg = std::make_unique<Bg>();
 	m_pBg->Init();
 	m_pMap = std::make_unique<Map>(0, false);
@@ -129,7 +131,8 @@ void TutorialScene::NormalDraw()
 
 	m_pGameManager->Draw();
 	
-	m_pTextManager->Draw();
+	m_pTutorialManager->Draw();
+	//m_pTextManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"TutorialScene: NormalDraw", 0xffffff);
 #endif

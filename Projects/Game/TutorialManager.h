@@ -25,6 +25,8 @@ public:
 	TutorialManager();
 	virtual ~TutorialManager();
 
+	void Draw();
+
 	/// <summary>
 	/// イベントデータをロードする
 	/// </summary>

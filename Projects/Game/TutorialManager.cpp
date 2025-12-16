@@ -6,48 +6,67 @@
 
 TutorialManager::TutorialManager()
 {
+	LoadEventData();
 }
 
 TutorialManager::~TutorialManager()
 {
 }
 
+void TutorialManager::Draw()
+{
+	printfDx(L"%d\n", m_eventData[0].id);
+	
+	if (m_eventData[0].triggerType == TriggerType::EnterArea)
+	{
+		printfDx(L"TriggerType :: EnterArea\n");
+	}
+
+	auto str = StringFunction::WStringFromString(m_eventData[0].triggerParam);
+	{
+		printfDx(L"TriggerParam :: %s\n", str.c_str());
+	}
+}
+
 bool TutorialManager::LoadEventData()
 {
-	std::ifstream file("data/textData.csv");
+	std::ifstream file("data/eventData.csv");
 	if (!file) // ファイルの読み込みに失敗した場合
 	{
 		return false; // ロード失敗とする
 	}
 	std::string line;
+	bool isHeader = true;
+
 
 	while (std::getline(file, line))
 	{
+		// 最初の一行は読み込まない
+		if (isHeader)
+		{
+			isHeader = false;
+			continue;
+		}
 
 		std::istringstream stream(line);
 		std::string field;
 		std::vector<std::string> row;
-		bool isHeader = true;
-
 		while (getline(stream, field, ','))
 		{
-			// 最初の一行は読み込まない
-			if (isHeader)
-			{
-				isHeader = false;
-				continue;
-			}
 			row.push_back(field);
 		}
+
+		EventData data;
 		if (row.size() >= 4)
 		{
-			EventData data;
 			data.id = std::stoi(row[0]);
 			data.triggerType = ToTriggerType(row[1]);
 			data.triggerParam = row[2];
 			data.actionType = ToActionType(row[3]);
 			m_eventData.push_back(data);
 		}
+		
+
 	}
 
 	return true;
