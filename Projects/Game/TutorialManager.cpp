@@ -1,15 +1,19 @@
 ﻿#include <vector>
 #include "TutorialManager.h"
+#include "GameManager.h"
 #include "TextManager.h"
+#include "../Utility/Map.h"
 #include "../Utility/StringFunction.h"
 #include "../Utility/Input.h"
 #include <fstream>
 #include "DxLib.h"
 
-TutorialManager::TutorialManager(TextManager* textManager) :
+TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map) :
 	m_eventIndex(0)
 {
+	m_pGameManager = gameManager;
 	m_pTextManager = textManager;
+	m_pMap = map;
 	LoadEventData();
 }
 
@@ -104,6 +108,11 @@ size_t TutorialManager::GetEventNum()
 	return size_t(m_eventData.size());
 }
 
+bool TutorialManager::IsEnterArea(int areaNum)
+{
+	
+}
+
 TriggerType TutorialManager::ToTriggerType(const std::string strData)
 {
 	if (strData == "EnterArea") return TriggerType::EnterArea;
@@ -122,6 +131,15 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 
 bool TutorialManager::CheckTrigger(const EventData& data)
 {
+	switch (data.triggerType)
+	{
+	case TriggerType::EnterArea:
+		break;
+	case TriggerType::GetItem:
+		break;
+	case TriggerType::EnemySpawn:
+		break;
+	}
 	return false;
 }
 

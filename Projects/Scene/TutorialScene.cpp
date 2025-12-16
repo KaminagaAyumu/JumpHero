@@ -31,7 +31,7 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_frameCount = kFadeInterval;
 
 	m_pTextManager = std::make_unique<TextManager>();
-	m_pTutorialManager = std::make_unique<TutorialManager>(m_pTextManager.get());
+	
 	m_pBg = std::make_unique<Bg>();
 	m_pBg->Init();
 	m_pMap = std::make_unique<Map>(0, false);
@@ -39,6 +39,8 @@ TutorialScene::TutorialScene(SceneController& controller) :
 
 	m_pGameManager = std::make_shared<GameManager>(m_pMap.get(), m_pActors);
 	m_pGameManager->Init();
+
+	m_pTutorialManager = std::make_unique<TutorialManager>(m_pGameManager.get(),m_pTextManager.get(),m_pMap.get());
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 }
