@@ -17,9 +17,8 @@ namespace
 
 	constexpr int kEnemySpawnTime = 600; // 敵がスポーンするまでの時間
 
-	// ゴールフラグの位置(今後はマップから取得などにする)
-	constexpr float kGoalPosX = 4250.5f;
-	constexpr float kGoalPosY = 157.5f;
+	constexpr float kGoalWidth = 40.0f;
+	constexpr float kGoalHeight = 60.0f;
 
 	constexpr float	kScoreAddRate = 0.2f; // スコア加算の割合
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
@@ -205,8 +204,10 @@ bool GameManager::IsSkipCollision() const
 
 bool GameManager::IsClear() const
 {
-	// プレイヤーの座標がゴールの位置に来たら
+	// ゴールの座標
 	Position2 goalPos = m_pMap->GetGoalPosToMap();
+	// ゴールの範囲を設定
+	Rect2D goalRange = { goalPos, kGoalWidth, kGoalHeight };
 	if (m_isMiniGame)
 	{
 		if(m_totalBalloonNum > 0) // ミニゲーム中でまだ風船が残っているならクリアにしない
