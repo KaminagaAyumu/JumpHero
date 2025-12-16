@@ -134,9 +134,9 @@ void TutorialScene::NormalDraw()
 	size_t num = m_pTutorialManager->GetEventNum();
 	for (int i = 0; i < num; i++)
 	{
-		m_pTutorialManager->DrawEventData(i);
+		//m_pTutorialManager->DrawEventData(i);
 	}
-	//m_pTextManager->Draw();
+	m_pTextManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"TutorialScene: NormalDraw", 0xffffff);
 #endif

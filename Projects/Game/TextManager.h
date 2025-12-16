@@ -15,10 +15,15 @@ public:
 
 private:
 
-	// テキストのID
-	std::vector<int> m_textIDs;
-	// テキストのデータ
-	std::vector<std::string> m_textData;
+	struct TextData
+	{
+		std::string id;
+		int page;
+		std::string textData;
+	};
+
+	// テキストのデータを格納する配列
+	std::vector<TextData> m_textData;
 
 
 };
