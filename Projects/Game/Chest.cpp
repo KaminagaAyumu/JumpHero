@@ -106,5 +106,5 @@ void Chest::OpenChest()
 	}
 #endif
 
-	m_pMap->SetMapChip(m_chipPos.x, m_chipPos.y, kSpaceChipNo);
+	m_pMap->ResetChestData(m_chipPos.x, m_chipPos.y);
 }

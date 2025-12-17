@@ -453,7 +453,8 @@ Position2 Map::GetGoalPosToMap()
 
 void Map::ResetChestData(int x, int y)
 {
-
+	m_layerMapData[kMapData][y * m_width + x] = kSpaceChipNo;
+	m_layerMapData[kPositioningData][y * m_width + x] = kSpaceChipNo;
 }
 
 void Map::SetMapChip(int x, int y, int value)
