@@ -204,6 +204,8 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		int areaNum = GetAreaNum(data.triggerParam);
 		return IsEnterArea(areaNum);
 	}
+	case TriggerType::OpenChest:
+		break;
 	case TriggerType::GetItem:
 		break;
 	case TriggerType::EnemySpawn:
@@ -232,6 +234,8 @@ void TutorialManager::RunAction(const EventData& data)
 		
 		m_isShowTextWindow = true;
 	}
+		break;
+	case ActionType::DropItem:
 		break;
 	case ActionType::FreezeGame:
 		m_isFreezeGame = true;

@@ -23,6 +23,7 @@ enum class TriggerType
 enum class ActionType
 {
 	ShowText, // テキストを表示する
+	DropItem, // アイテムを生成する
 	FreezeGame, // ゲームを一時停止する
 	UnfreezeGame, // ゲームを再開する
 	PowerUp, // プレイヤーの強化
