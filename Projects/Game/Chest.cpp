@@ -13,7 +13,7 @@ namespace
 	constexpr int	kChipSize = 32; // マップ1つの大きさ
 	constexpr float kChipScale = 1.40625f; // マップの拡大率
 
-	constexpr int kSpaceChipNo = 0;
+	constexpr int kChestMapChipNo = 1; // マップチップの当たり判定のみを行うチップ番号
 }
 
 Chest::Chest() :
@@ -30,17 +30,21 @@ Chest::Chest(int x, int y, Map* map, int handle, bool isHidden) :
 	m_pMap(map),
 	m_chipPos{x,y}
 {
-	float tileSize = kChipSize * kChipScale;
+	// マップチップ一つのサイズを取得
+	float tileSize = m_pMap->GetTileSize();
+	// 座標をマップ座標から変換
+	// 座標基準を左上から中心にする
 	m_pos = { static_cast<float>(m_chipPos.x) * tileSize + tileSize * 0.5f,static_cast<float>(m_chipPos.y) * tileSize + tileSize * 0.5f };
 	m_colRect = { m_pos,kDefaultWidth,kDefaultHeight };
 	m_graphHandle = handle;
-	if(isHidden)
+	// 引数で取得した条件によって初期状態を変える
+	if(isHidden) // trueの場合
 	{
-		m_state = ChestState::Hidden;
+		m_state = ChestState::Hidden; // 隠し宝箱
 	}
 	else
 	{
-		m_state = ChestState::Normal;
+		m_state = ChestState::Normal; // 通常の宝箱(最初から見えている)
 	}
 }
 
@@ -85,17 +89,20 @@ void Chest::IsCollision(const Types::CollisionInfo& info)
 		printfDx(L"Chest : プレイヤーと衝突しました\n");
 #endif
 
-		//OpenChest(); // 仮で当たったら開くようにする
 	}
 }
 
 void Chest::AppearChest()
 {
+	// 通常の状態に変更
 	m_state = ChestState::Normal;
+	// マップのデータを通常の状態と同じ番号にする
+	m_pMap->SetMapChip(m_chipPos.x, m_chipPos.y, kChestMapChipNo);
 }
 
 void Chest::OpenChest()
 {
+	// 開いた状態に変更
 	m_state = ChestState::Opened;
 
 #ifdef _DEBUG
@@ -106,5 +113,6 @@ void Chest::OpenChest()
 	}
 #endif
 
+	// マップのデータから宝箱のデータを消去する
 	m_pMap->ResetChestData(m_chipPos.x, m_chipPos.y);
 }

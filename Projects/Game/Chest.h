@@ -44,7 +44,7 @@ private:
 	ChestState m_state; // 宝箱の状態
 
 	Map* m_pMap; // マップのデータを変更できるようにポインタを取得
-	Position2Int m_chipPos; // マップチップ位置 
+	Position2Int m_chipPos; // マップチップ位置(左上座標)
 
 };
 
