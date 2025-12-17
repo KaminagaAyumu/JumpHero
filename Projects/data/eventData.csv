@@ -9,5 +9,8 @@ ID,TriggerType,TriggerParam,ActionType,ActionParam
 8,EnterArea,3,ShowText,tuto_jump_2
 9,EnterArea,3,WaitInput,0
 10,EnterArea,4,FreezeGame,0
-11,EnterArea,4,ShowText,tuto_chest
+11,EnterArea,4,ShowText,tuto_chest_1
 12,EnterArea,4,WaitInput,0
+13,OpenChest,item = coin,FreezeGame,0
+14,OpenChest,item = coin,ShowText,tuto_chest_2
+15,OpenChest,item = coin,WaitInput,0
