@@ -25,14 +25,7 @@ void TextManager::Update()
 
 void TextManager::Draw()
 {
-	for(TextData data : m_textData)
-	{
-		auto str = StringFunction::WStringFromString(data.id);
-		printfDx(L"%s\n", str.c_str());
-		printfDx(L"%d\n", data.page);
-		str = StringFunction::WStringFromString(data.textData);
-		printfDx(L"%s\n", str.c_str());
-	}
+	
 }
 
 void TextManager::LoadTextData()
@@ -65,7 +58,7 @@ void TextManager::LoadTextData()
 			data.id = row[0];
 			data.page = std::stoi(row[1]);
 			data.textData = row[2];
-			m_textData.push_back(data);
+			m_textData[data.id].push_back(data);
 		}
 	}
 

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <sstream>
+#include <unordered_map>
 
 class TextManager
 {
@@ -30,7 +31,7 @@ private:
 	};
 
 	// テキストのデータを格納する配列
-	std::vector<TextData> m_textData;
+	std::unordered_map<std::string, std::vector<TextData>> m_textData;
 
 
 };
