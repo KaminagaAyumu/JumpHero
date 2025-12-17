@@ -4,9 +4,15 @@
 #include "../Utility/Map.h"
 #include "../Utility/StringFunction.h"
 #include "../Utility/Input.h"
+#include "../Utility/Game.h"
 #include "Player.h"
 #include <fstream>
 #include "DxLib.h"
+
+namespace
+{
+	constexpr int kTextWindowMargin = 25;
+}
 
 TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player) :
 	m_eventIndex(0),
@@ -39,6 +45,11 @@ void TutorialManager::Update(Input& input)
 		RunAction(m_eventData[m_eventIndex]);
 	}
 	//DrawEventData(m_eventIndex);
+}
+
+void TutorialManager::Draw() const
+{
+
 }
 
 void TutorialManager::DrawEventData(int id)
@@ -156,6 +167,14 @@ int TutorialManager::GetAreaNum(std::string param)
 	return std::stoi(param);
 }
 
+void TutorialManager::DrawTextWindow(std::string text) const
+{
+	DrawBox(kTextWindowMargin, kTextWindowMargin, Game::kScreenWidth - kTextWindowMargin, Game::kScreenHeight * 0.5f, 0x333333,true);
+	auto str = StringFunction::WStringFromString(text);
+	int width = GetDrawFormatStringWidth(L"%s", str.c_str());
+	DrawFormatString(width / 2, 200, 0xffffff, L"%s", str.c_str());
+}
+
 TriggerType TutorialManager::ToTriggerType(const std::string strData)
 {
 	if (strData == "EnterArea") return TriggerType::EnterArea;
@@ -195,8 +214,18 @@ void TutorialManager::RunAction(const EventData& data)
 	{
 	case ActionType::ShowText:
 	{
-		auto str = StringFunction::WStringFromString(m_pTextManager->GetFirstPageText(data.actionParam));
-		printfDx(L"%s\n", str.c_str());
+		std::string id = data.actionParam;
+		auto pages = m_pTextManager->GetAllPageText(id);
+		if (pages.empty())
+		{
+			printfDx(L"テキストが存在しない\n");
+			return;
+		}
+		m_textPager.id = id;
+		m_textPager.pages = pages;
+		m_textPager.index = 0;
+		m_textPager.isActive = true;
+		DrawTextWindow(m_textPager.pages[m_textPager.index].textData);
 	}
 		break;
 	case ActionType::FreezeGame:
@@ -209,11 +238,27 @@ void TutorialManager::RunAction(const EventData& data)
 	case ActionType::WaitInput:
 		if (m_isInput)
 		{
-			m_isFreezeGame = false;
+			if (m_textPager.isActive)
+			{
+				m_textPager.index++;
+				if (m_textPager.index >= m_textPager.pages.size())
+				{
+					m_textPager.isActive = false;
+					m_textPager.index = m_textPager.pages.size() - 1;
+				}
+			}
 		}
 		else
 		{
-			printfDx(L"キー入力待ち\n");
+			if (!m_textPager.isActive)
+			{
+				m_isFreezeGame = false;
+			}
+
+		}
+		if (m_isFreezeGame)
+		{
+			DrawTextWindow(m_textPager.pages[m_textPager.index].textData);
 			return;
 		}
 		break;

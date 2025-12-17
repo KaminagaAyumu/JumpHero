@@ -35,6 +35,7 @@ public:
 	virtual ~TutorialManager();
 
 	void Update(Input& input);
+	void Draw() const; 
 	void DrawEventData(int id);
 
 	/// <summary>
@@ -93,6 +94,12 @@ private:
 
 	bool IsEnterArea(int areaNum);
 	int GetAreaNum(std::string param);
+
+	/// <summary>
+	/// テキストデータをウィンドウとともに表示する
+	/// </summary>
+	/// <param name="text"></param>
+	void DrawTextWindow(std::string text) const;
 
 	/// <summary>
 	/// イベント条件を文字列から変換する用の関数
