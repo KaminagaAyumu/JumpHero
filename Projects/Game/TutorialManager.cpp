@@ -182,6 +182,7 @@ void TutorialManager::DrawTextWindow() const
 
 TriggerType TutorialManager::ToTriggerType(const std::string strData)
 {
+	if (strData == "GameStart") return TriggerType::GameStart;
 	if (strData == "EnterArea") return TriggerType::EnterArea;
 	if (strData == "OpenChest") return TriggerType::OpenChest;
 	if (strData == "GetItem") return TriggerType::GetItem;
@@ -202,6 +203,8 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 {
 	switch (data.triggerType)
 	{
+	case TriggerType::GameStart:
+		return true;
 	case TriggerType::EnterArea:
 	{
 		int areaNum = GetAreaNum(data.triggerParam);

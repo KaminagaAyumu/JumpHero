@@ -13,6 +13,7 @@ class Player;
 // イベントが始まる条件
 enum class TriggerType
 {
+	GameStart, // ゲームが始まった
 	EnterArea, // エリアに入った
 	OpenChest, // 宝箱を開けた
 	GetItem, // アイテムを取得した
