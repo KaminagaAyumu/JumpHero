@@ -14,8 +14,11 @@ namespace
 	constexpr int kPositioningData = 1; // 配置データのレイヤー番号
 	constexpr int kEventData = 2; // イベントデータのレイヤー番号
 
+	// イベント発火フラグの場所を取得するための番号(修正する可能性あり)
 	constexpr int kFirstTriggerNum = 1;
 	constexpr int kSecondTriggerNum = 2;
+	constexpr int kThirdTriggerNum = 3;
+	constexpr int kFourthTriggerNum = 4;
 
 	// マップのチップを置く数
 	constexpr int kChipNumX = 97;
@@ -384,7 +387,7 @@ bool Map::IsChestTile(int chipNo)
 
 bool Map::IsEventFlagTile(int chipNo)
 {
-	return chipNo == kFirstTriggerNum || chipNo == kSecondTriggerNum;
+	return chipNo == kFirstTriggerNum || chipNo == kSecondTriggerNum || chipNo == kThirdTriggerNum || chipNo == kFourthTriggerNum;
 }
 
 float Map::GetTileSize() const
