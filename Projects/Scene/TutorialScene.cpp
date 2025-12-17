@@ -139,6 +139,8 @@ void TutorialScene::NormalDraw()
 
 	m_pGameManager->Draw();
 
+	m_pTutorialManager->Draw();
+
 	//m_pTextManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"TutorialScene: NormalDraw", 0xffffff);

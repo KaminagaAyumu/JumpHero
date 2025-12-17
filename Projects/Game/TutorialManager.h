@@ -76,8 +76,9 @@ private:
 
 	int m_eventIndex; // イベントの進行状況
 
-	bool m_isInput;
-	bool m_isFreezeGame;
+	bool m_isInput; // 入力があるかどうか
+	bool m_isFreezeGame; // ゲームを止めるかどうか
+	bool m_isShowTextWindow; // テキストウィンドウを表示するかどうか
 
 	std::vector<EventData> m_eventData; // イベントデータ群
 	TextPager m_textPager; // テキストを管理する構造体
@@ -88,6 +89,7 @@ private:
 	Player* m_pPlayer;				// プレイヤーのポインタ(座標取得用)
 
 	std::unordered_map<int, Position2> m_areaPos;
+
 	bool InitAreaPos();
 
 	const Position2* FindAreaPos(int areaId) const;
@@ -98,8 +100,7 @@ private:
 	/// <summary>
 	/// テキストデータをウィンドウとともに表示する
 	/// </summary>
-	/// <param name="text"></param>
-	void DrawTextWindow(std::string text) const;
+	void DrawTextWindow() const;
 
 	/// <summary>
 	/// イベント条件を文字列から変換する用の関数

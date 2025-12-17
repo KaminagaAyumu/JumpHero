@@ -17,7 +17,8 @@ namespace
 TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player) :
 	m_eventIndex(0),
 	m_isInput(false),
-	m_isFreezeGame(false)
+	m_isFreezeGame(false),
+	m_isShowTextWindow(false)
 {
 	m_pGameManager = gameManager;
 	m_pTextManager = textManager;
@@ -49,7 +50,10 @@ void TutorialManager::Update(Input& input)
 
 void TutorialManager::Draw() const
 {
-
+	if (m_isShowTextWindow)
+	{
+		DrawTextWindow();
+	}
 }
 
 void TutorialManager::DrawEventData(int id)
@@ -167,10 +171,10 @@ int TutorialManager::GetAreaNum(std::string param)
 	return std::stoi(param);
 }
 
-void TutorialManager::DrawTextWindow(std::string text) const
+void TutorialManager::DrawTextWindow() const
 {
 	DrawBox(kTextWindowMargin, kTextWindowMargin, Game::kScreenWidth - kTextWindowMargin, Game::kScreenHeight * 0.5f, 0x333333,true);
-	auto str = StringFunction::WStringFromString(text);
+	auto str = StringFunction::WStringFromString(m_textPager.pages[m_textPager.index].textData);
 	int width = GetDrawFormatStringWidth(L"%s", str.c_str());
 	DrawFormatString(width / 2, 200, 0xffffff, L"%s", str.c_str());
 }
@@ -225,7 +229,8 @@ void TutorialManager::RunAction(const EventData& data)
 		m_textPager.pages = pages;
 		m_textPager.index = 0;
 		m_textPager.isActive = true;
-		DrawTextWindow(m_textPager.pages[m_textPager.index].textData);
+		
+		m_isShowTextWindow = true;
 	}
 		break;
 	case ActionType::FreezeGame:
@@ -253,12 +258,12 @@ void TutorialManager::RunAction(const EventData& data)
 			if (!m_textPager.isActive)
 			{
 				m_isFreezeGame = false;
+				m_isShowTextWindow = false;
 			}
 
 		}
 		if (m_isFreezeGame)
 		{
-			DrawTextWindow(m_textPager.pages[m_textPager.index].textData);
 			return;
 		}
 		break;
