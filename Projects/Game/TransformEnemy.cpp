@@ -188,9 +188,9 @@ void TransformEnemy::SeekerUpdate(Input&)
 	}
 	// 向きを正規化する
 	m_direction.Normalize();
-	m_pos += m_direction * kSeekerMoveSpeed;
-	m_colCircle.pos = m_pos;
-	m_colRect.pos = m_pos;
+
+	Position2 steer = m_direction * kSeekerMoveSpeed;
+	TransformMoveOperation(steer);
 }
 
 void TransformEnemy::FireBallUpdate(Input&)
@@ -198,13 +198,12 @@ void TransformEnemy::FireBallUpdate(Input&)
 	// プレイヤーの縦方向だけ追い続ける
 	float toPlayerY = m_pPlayer->GetPos().y - m_pos.y; // 敵からプレイヤーに向かうベクトルのY座標
 	float yComp = std::clamp(toPlayerY * kDirectionMagnification, -kMaxDirectionValue, kMaxDirectionValue); // -1から1までの間で向きを変える
-	m_direction.x = kMaxDirectionValue;
+	m_direction.x = m_isRightDirection ? kMaxDirectionValue : -kMaxDirectionValue;
 	m_direction.y = yComp;
 	m_direction.Normalize();
 
-	m_pos += m_direction * kSeekerMoveSpeed;
-	m_colCircle.pos = m_pos;
-	m_colRect.pos = m_pos;
+	Position2 steer = m_direction * kSeekerMoveSpeed;
+	TransformMoveOperation(steer);
 }
 
 void TransformEnemy::SkullUpdate(Input&)
@@ -216,9 +215,8 @@ void TransformEnemy::SkullUpdate(Input&)
 	m_direction.x = xComp;
 	m_direction.Normalize();
 
-	m_pos += m_direction * kSeekerMoveSpeed;
-	m_colCircle.pos = m_pos;
-	m_colRect.pos = m_pos;
+	Position2 steer = m_direction * kSeekerMoveSpeed;
+	TransformMoveOperation(steer);
 }
 
 void TransformEnemy::ItemUpdate(Input&)
@@ -552,37 +550,16 @@ void TransformEnemy::MoveOperation()
 	}
 }
 
-void TransformEnemy::TransformMoveOperation()
+void TransformEnemy::TransformMoveOperation(const Position2& steer)
 {
-	float dx = 0.0f; // X軸の移動量
+	float dx = steer.x; // X軸の移動量
 
-	m_isRightDirection = m_direction.x >= 0.0f; // 方向を向きに合わせる
-	const bool movingLeft = !m_isRightDirection;
-	const bool movingRight = m_isRightDirection;
-	if (movingLeft)
-	{
-		dx -= kNormalMoveSpeed;
-	}
-	if (movingRight)
-	{
-		dx += kNormalMoveSpeed;
-	}
+	float dy = steer.y;
+	m_velocity.y = 0.0f;
 
-	// Y軸の更新
-	if (m_isGround) // 地面にいる場合
-	{
-		m_velocity.y += kGravity; // 重力をかけるのみ
-	}
-	else // 空中にいる場合
-	{
-		// 加速する落下処理
-		m_moveCount++;
-		m_velocity.y = m_velocity.y * m_direction.y + kGravity * m_moveCount * 0.5f;
-	}
-
-	float dy = m_velocity.y; // Y軸の移動量
+	
 	ContactFrags frags;
-	const float margin = 0.5f;
+	const float margin = 0.1f;
 
 	// X軸の当たり判定
 	Position2 tryPosX = m_pos;
@@ -598,15 +575,15 @@ void TransformEnemy::TransformMoveOperation()
 	{
 		tryPosX.x = rangeX.GetLeft() + kEnemyWidth * 0.5f + margin;
 		frags.isHitLeft = true;
-		// 速度を抑える(問題があれば0にする)
-		dx = tryPosX.x - m_pos.x;
+		
+		dx = fabsf(dx);
 	}
 	else if (rightX > rangeX.GetRight())
 	{
 		tryPosX.x = rangeX.GetRight() - kEnemyWidth * 0.5f - margin;
 		frags.isHitRight = true;
-		// 速度を抑える(問題があれば0にする)
-		dx = tryPosX.x - m_pos.x;
+		
+		dx = -fabsf(dx);
 	}
 
 	// 実際の座標に反映
@@ -622,12 +599,16 @@ void TransformEnemy::TransformMoveOperation()
 	float topY = tryPosY.y - kEnemyHeight * 0.5f;
 	float bottomY = tryPosY.y + kEnemyHeight * 0.5f;
 
+	// 貫通しない床に当たったかどうか
+	bool isHitNormalFloor = false;
+
 	// 落下している時に床に当たった場合
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
 	{
 		tryPosY.y = rangeY.GetBottom() - kEnemyHeight * 0.5f;
 		frags.isHitGround = true;
 		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		isHitNormalFloor = true; // 貫通しない床に当たった
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 		m_moveCount = 0; // 時間経過をリセット
 	}
@@ -639,34 +620,56 @@ void TransformEnemy::TransformMoveOperation()
 		dy = tryPosY.y - m_pos.y; // 移動量を修正
 	}
 
+	// 下からのみ貫通できる床との判定
+	if (!isHitNormalFloor && dy > 0.0f) // 通常の地面との判定を行わなかった際に落下中なら
+	{
+		const float oldBottom = m_prevPosY + kEnemyHeight * 0.5f; // 前回の下端のY座標
+
+		const float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
+		int leftTileX = m_pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightTileX = m_pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
+		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+
+		bool hitOneWay = false; // 片面通行の床に当たったかどうか
+		float candidateTop = m_pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
+
+		for (int x = leftTileX; x <= rightTileX; x++) // 敵の幅が大きい時を考慮
+		{
+			int chipNo = m_pMap->GetMapChipNum(x, footTileY);
+			if (m_pMap->IsOnlyTopTile(chipNo))
+			{
+				float tileTop = footTileY * tileSize; // タイルの上端のY座標
+
+				if (oldBottom <= tileTop) // 前回の下端が床の上にあった場合
+				{
+					if (tileTop < candidateTop)
+					{
+						candidateTop = min(candidateTop, tileTop);
+						// 一方通行床に当たったフラグを立てる
+						hitOneWay = true;
+					}
+				}
+			}
+		}
+		if (hitOneWay)
+		{
+			tryPosY.y = candidateTop - kEnemyHeight * 0.5f;
+			frags.isHitGround = true; // 床に当たったフラグを立てる
+			m_velocity.y = 0.0f; // Y方向の速度を0にする
+			dy = tryPosY.y - m_pos.y; // 移動量を修正
+			m_moveCount = 0; // 時間経過をリセット
+		}
+	}
+
 	// 実際の座標に反映
 	m_pos.y = tryPosY.y;
 
 	m_colCircle.pos = m_pos; // 円の座標更新
 	m_colRect.pos = m_pos; // 矩形の座標更新
+	m_prevPosY = m_pos.y; // 前フレームのY座標更新
 
 	// 状態の更新
 	m_isGround = frags.isHitGround;
-
-	// 方向転換の判定
-	if (m_isGround && IsFlipCorner()) // 地面にいて、方向転換可能な場合
-	{
-		// 前方のX座標を見る
-		const float aheadX = m_isRightDirection ? (m_pos.x + kEnemyWidth * 0.5f) : (m_pos.x - kEnemyWidth * 0.5f);
-		const float aheadY = m_pos.y + kEnemyHeight * 0.5f; // 足元のY座標
-		const float probeY = aheadY + 1.0f; // 足元より少し下のY座標
-		const float tileSize = m_pMap->GetTileSize(); // マップチップのサイズ
-		int tx = m_pMap->WorldPosToMapPos(aheadX, tileSize); // X座標のマップ位置
-		int ty = m_pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
-
-		int chipNo = m_pMap->GetMapChipNum(tx, ty); // マップチップ番号を取得
-		if (m_pMap->IsSpaceTile(chipNo)) // 前方のマップチップが空白の場合
-		{
-			// 足元に地面がないので方向転換
-			m_isRightDirection = !m_isRightDirection;
-			m_turnCount++; // 方向転換カウンタを増加
-		}
-	}
 
 	// 横方向の壁衝突判定
 	if (frags.isHitLeft || frags.isHitRight)
@@ -675,4 +678,5 @@ void TransformEnemy::TransformMoveOperation()
 		m_isRightDirection = !m_isRightDirection;
 		m_turnCount++; // 方向転換カウンタを増加
 	}
+
 }
