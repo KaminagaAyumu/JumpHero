@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <sstream>
 #include <unordered_map>
+#include "TextManager.h"
 #include "../Utility/Geometry.h"
 
 class Input;
@@ -61,12 +62,24 @@ private:
 		std::string actionParam; // イベントで必要なデータ
 	};
 
+	/// <summary>
+	/// テキストデータをページで管理する構造体
+	/// </summary>
+	struct TextPager
+	{
+		std::string id; // 識別ID
+		std::vector<TextData> pages; // ページごとのテキストデータ
+		int index = 0; // ページ数
+		bool isActive = false; // ページ送りが進行中か
+	};
+
 	int m_eventIndex; // イベントの進行状況
 
 	bool m_isInput;
 	bool m_isFreezeGame;
 
 	std::vector<EventData> m_eventData; // イベントデータ群
+	TextPager m_textPager; // テキストを管理する構造体
 
 	GameManager* m_pGameManager;	// ゲームマネージャーのポインタ
 	TextManager* m_pTextManager;	// テキストデータのポインタ

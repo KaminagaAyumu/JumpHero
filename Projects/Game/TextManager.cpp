@@ -74,3 +74,14 @@ std::string TextManager::GetFirstPageText(const std::string& id)
 	}
 	return it->second.front().textData;
 }
+
+std::vector<TextData> TextManager::GetAllPageText(const std::string& id)
+{
+	auto it = m_textData.find(id);
+	// idが存在しなかった場合
+	if (it == m_textData.end())
+	{
+		return {}; // 空白の配列を返す
+	}
+	return it->second;
+}

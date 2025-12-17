@@ -1,7 +1,6 @@
 ﻿#include <vector>
 #include "TutorialManager.h"
 #include "GameManager.h"
-#include "TextManager.h"
 #include "../Utility/Map.h"
 #include "../Utility/StringFunction.h"
 #include "../Utility/Input.h"
