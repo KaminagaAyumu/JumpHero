@@ -70,3 +70,8 @@ void TextManager::LoadTextData()
 	}
 
 }
+
+std::string TextManager::GetText(const std::string& id)
+{
+	return std::string();
+}

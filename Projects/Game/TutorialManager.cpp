@@ -197,6 +197,10 @@ void TutorialManager::RunAction(const EventData& data)
 	switch (data.actionType)
 	{
 	case ActionType::ShowText:
+	{
+		auto str = StringFunction::WStringFromString(data.actionParam);
+		printfDx(L"%s\n", str.c_str());
+	}
 		break;
 	case ActionType::FreezeGame:
 		break;

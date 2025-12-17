@@ -13,6 +13,13 @@ public:
 
 	void LoadTextData();
 
+	/// <summary>
+	/// 取得したIDのテキストデータを返す
+	/// </summary>
+	/// <param name="id">テキストID</param>
+	/// <returns>テキストデータ</returns>
+	std::string GetText(const std::string& id);
+
 private:
 
 	struct TextData
