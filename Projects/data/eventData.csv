@@ -11,6 +11,10 @@ ID,TriggerType,TriggerParam,ActionType,ActionParam
 10,EnterArea,4,FreezeGame,0
 11,EnterArea,4,ShowText,tuto_chest_1
 12,EnterArea,4,WaitInput,0
-13,OpenChest,item = coin,FreezeGame,0
-14,OpenChest,item = coin,ShowText,tuto_chest_2
-15,OpenChest,item = coin,WaitInput,0
+13,OpenChest,chest = 1,DropItem,coin
+14,OpenChest,chest = 1,FreezeGame,0
+15,OpenChest,chest = 1,ShowText,tuto_chest_2
+16,OpenChest,chest = 1,WaitInput,0
+17,GetItem,item = coin,FreezeGame,0
+18,GetItem,item = coin,ShowText,tuto_item
+19,GetItem,item = coin,WaitInput,0
