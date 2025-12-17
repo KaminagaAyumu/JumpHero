@@ -81,6 +81,14 @@ public:
 	void DropItem(int x, int y);
 
 	/// <summary>
+	/// アイテムを指定して生成する通知をItemManagerに送る関数
+	/// </summary>
+	/// <param name="x">生成X座標</param>
+	/// <param name="y">生成Y座標</param>
+	/// <param name="type">アイテムの種類</param>
+	void DropItem(int x, int y, const Types::ItemType& type);
+
+	/// <summary>
 	/// プレイヤーを強化する
 	/// </summary>
 	void PowerUpPlayer();

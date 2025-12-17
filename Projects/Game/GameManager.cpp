@@ -252,6 +252,11 @@ void GameManager::DropItem(int x, int y)
 	}
 }
 
+void GameManager::DropItem(int x, int y, const Types::ItemType& type)
+{
+	m_pItemManager->SpawnItem(x, y, type);
+}
+
 void GameManager::PowerUpPlayer()
 {
 	// メダルを持っていれば強化を行う

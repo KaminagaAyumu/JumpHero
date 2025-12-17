@@ -5,6 +5,7 @@
 #include "../Utility/StringFunction.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
+#include "../Utility/GameType.h"
 #include "Player.h"
 #include <fstream>
 #include "DxLib.h"
@@ -182,6 +183,7 @@ void TutorialManager::DrawTextWindow() const
 TriggerType TutorialManager::ToTriggerType(const std::string strData)
 {
 	if (strData == "EnterArea") return TriggerType::EnterArea;
+	if (strData == "OpenChest") return TriggerType::OpenChest;
 	if (strData == "GetItem") return TriggerType::GetItem;
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
 }
@@ -189,6 +191,7 @@ TriggerType TutorialManager::ToTriggerType(const std::string strData)
 ActionType TutorialManager::ToActionType(const std::string strData)
 {
 	if (strData == "ShowText") return ActionType::ShowText;
+	if (strData == "DropItem") return ActionType::DropItem;
 	if (strData == "FreezeGame") return ActionType::FreezeGame;
 	if (strData == "UnfreezeGame") return ActionType::UnfreezeGame;
 	if (strData == "PowerUp") return ActionType::PowerUp;
@@ -205,6 +208,7 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		return IsEnterArea(areaNum);
 	}
 	case TriggerType::OpenChest:
+		return true;
 		break;
 	case TriggerType::GetItem:
 		break;
@@ -236,6 +240,15 @@ void TutorialManager::RunAction(const EventData& data)
 	}
 		break;
 	case ActionType::DropItem:
+	{
+		Types::ItemType type;
+		if (data.actionParam == "coin")
+		{
+			type = Types::ItemType::Coin;
+		}
+		// アイテムの生成ができることは確認済み
+		//m_pGameManager->DropItem(m_pPlayer->GetPos().x - 60, m_pPlayer->GetPos().y, type);
+	}
 		break;
 	case ActionType::FreezeGame:
 		m_isFreezeGame = true;
