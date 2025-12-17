@@ -59,7 +59,7 @@ private:
 	/// </summary>
 	struct EventData
 	{
-		int id; // 識別ID
+		int id = 0; // 識別ID
 		TriggerType triggerType; // イベントが始まる条件
 		std::string triggerParam; // イベントの場合分けで必要なデータ
 		ActionType actionType; // 行われるイベント
