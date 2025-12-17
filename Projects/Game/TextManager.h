@@ -15,11 +15,11 @@ public:
 	void LoadTextData();
 
 	/// <summary>
-	/// 取得したIDのテキストデータを返す
+	/// 取得したIDのテキストデータの1ページ目を返す
 	/// </summary>
 	/// <param name="id">テキストID</param>
 	/// <returns>テキストデータ</returns>
-	std::string GetText(const std::string& id);
+	std::string GetFirstPageText(const std::string& id);
 
 private:
 

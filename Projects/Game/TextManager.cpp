@@ -64,7 +64,13 @@ void TextManager::LoadTextData()
 
 }
 
-std::string TextManager::GetText(const std::string& id)
+std::string TextManager::GetFirstPageText(const std::string& id)
 {
-	return std::string();
+	auto it = m_textData.find(id);
+	// idが存在しなかった場合
+	if (it == m_textData.end() || it->second.empty())
+	{
+		return "エラーメッセージ : textIdが存在しません"; // エラーメッセージを返す
+	}
+	return it->second.front().textData;
 }

@@ -196,7 +196,7 @@ void TutorialManager::RunAction(const EventData& data)
 	{
 	case ActionType::ShowText:
 	{
-		auto str = StringFunction::WStringFromString(data.actionParam);
+		auto str = StringFunction::WStringFromString(m_pTextManager->GetFirstPageText(data.actionParam));
 		printfDx(L"%s\n", str.c_str());
 	}
 		break;
