@@ -382,6 +382,11 @@ bool Map::IsChestTile(int chipNo)
 	return chipNo == kChestChipNo || chipNo == kHiddenChestChipNo;
 }
 
+bool Map::IsEventFlagTile(int chipNo)
+{
+	return chipNo == kFirstTriggerNum || chipNo == kSecondTriggerNum;
+}
+
 float Map::GetTileSize() const
 {
 	return kChipSize * kChipScale;

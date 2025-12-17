@@ -1,10 +1,13 @@
 ﻿#pragma once
 #include <sstream>
+#include <unordered_map>
+#include "../Utility/Geometry.h"
 
 class Input;
 class GameManager;
 class TextManager;
 class Map;
+class Player;
 
 // イベントが始まる条件
 enum class TriggerType
@@ -62,6 +65,11 @@ private:
 	GameManager* m_pGameManager;	// ゲームマネージャーのポインタ
 	TextManager* m_pTextManager;	// テキストデータのポインタ
 	Map* m_pMap;					// マップデータのポインタ
+
+	std::unordered_map<int, Position2> m_areaPos;
+	bool InitAreaPos();
+
+	const Position2* FindAreaPos(int areaId) const;
 
 	bool IsEnterArea(int areaNum);
 	int GetAreaNum(std::string param);

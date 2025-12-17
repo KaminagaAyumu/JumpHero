@@ -5,6 +5,8 @@
 #include "../Utility/Map.h"
 #include "../Utility/StringFunction.h"
 #include "../Utility/Input.h"
+#include "Actor.h"
+#include "Player.h"
 #include <fstream>
 #include "DxLib.h"
 
@@ -15,6 +17,7 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	m_pTextManager = textManager;
 	m_pMap = map;
 	LoadEventData();
+	InitAreaPos();
 }
 
 TutorialManager::~TutorialManager()
@@ -33,8 +36,7 @@ void TutorialManager::Update(Input& input)
 		m_eventIndex++;
 	}
 
-	int a = GetAreaNum(m_eventData[0].triggerParam);
-	printfDx(L"%d\n", a);
+	CheckTrigger(m_eventData[m_eventIndex]);
 	//DrawEventData(m_eventIndex);
 }
 
@@ -111,9 +113,41 @@ size_t TutorialManager::GetEventNum()
 	return size_t(m_eventData.size());
 }
 
+bool TutorialManager::InitAreaPos()
+{
+	m_areaPos.clear();
+	for (int x = 0; x < m_pMap->GetMapWidth(); x++)
+	{
+		for (int y = 0; y < m_pMap->GetMapHeight(); y++)
+		{
+			int chipNo = m_pMap->GetEventData(x, y);
+			if (m_pMap->IsEventFlagTile(chipNo))
+			{
+				int areaId = chipNo;
+				float tileSize = m_pMap->GetTileSize();
+				Position2 areaPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+				m_areaPos[areaId] = areaPos;
+			}
+		}
+	}
+
+	return true;
+}
+
+const Position2* TutorialManager::FindAreaPos(int areaId) const
+{
+	auto it = m_areaPos.find(areaId);
+	return it != m_areaPos.end() ? &it->second : nullptr;
+}
+
 bool TutorialManager::IsEnterArea(int areaNum)
 {
-	
+	// プレイヤーの座標が指定エリアに達したら
+	/*if (m_pPlayerPos->x >= m_areaPos[areaNum].x)
+	{
+		printfDx(L"イベント発火フラグ\n");
+		return true;
+	}*/
 	return false;
 }
 
@@ -143,6 +177,10 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 	switch (data.triggerType)
 	{
 	case TriggerType::EnterArea:
+	{
+		int areaNum = GetAreaNum(data.triggerParam);
+		IsEnterArea(areaNum);
+	}
 		break;
 	case TriggerType::GetItem:
 		break;

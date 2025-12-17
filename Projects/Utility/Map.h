@@ -74,6 +74,13 @@ public:
 	/// <returns>true : 宝箱 false : 宝箱でない</returns>
 	bool IsChestTile(int chipNo);
 
+	/// <summary>
+	/// 指定されたチップ番号がイベント発火フラグのタイルかどうかを調べる
+	/// </summary>
+	/// <param name="chipNo">指定チップ番号</param>
+	/// <returns>true : イベント発火フラグ false : イベント発火フラグでない</returns>
+	bool IsEventFlagTile(int chipNo);
+
 	// ゲッター類
 	int GetGraphChipNumX() const { return m_graphChipNumX; }
 	int GetGraphChipNumY() const { return m_graphChipNumY; }
