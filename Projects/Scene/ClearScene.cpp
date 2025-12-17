@@ -108,11 +108,6 @@ void ClearScene::NormalDraw()
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
 	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
 
-	// マップ遷移可能になったら消す
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 40);
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + 100, L"(本来は1画面マップへ遷移します)", 0xffffff);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
 #ifdef _DEBUG
 	DrawString(0, 0, L"ClearScene: NormalDraw", 0xffffff);
 #endif
