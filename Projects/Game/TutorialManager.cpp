@@ -36,7 +36,10 @@ void TutorialManager::Update(Input& input)
 		m_eventIndex++;
 	}
 
-	CheckTrigger(m_eventData[m_eventIndex]);
+	if (CheckTrigger(m_eventData[m_eventIndex]))
+	{
+		RunAction(m_eventData[m_eventIndex]);
+	}
 	//DrawEventData(m_eventIndex);
 }
 
@@ -179,9 +182,8 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 	case TriggerType::EnterArea:
 	{
 		int areaNum = GetAreaNum(data.triggerParam);
-		IsEnterArea(areaNum);
+		return IsEnterArea(areaNum);
 	}
-		break;
 	case TriggerType::GetItem:
 		break;
 	case TriggerType::EnemySpawn:
@@ -192,4 +194,18 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 
 void TutorialManager::RunAction(const EventData& data)
 {
+	switch (data.actionType)
+	{
+	case ActionType::ShowText:
+		break;
+	case ActionType::FreezeGame:
+		break;
+	case ActionType::UnfreezeGame:
+		break;
+	case ActionType::PowerUp:
+		break;
+	case ActionType::WaitInput:
+		break;
+	}
+	m_eventIndex++;
 }
