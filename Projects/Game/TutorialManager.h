@@ -44,6 +44,8 @@ public:
 
 	size_t GetEventNum();
 
+	bool IsFreezeGame()const { return m_isFreezeGame; };
+
 private:
 	
 
@@ -60,6 +62,10 @@ private:
 	};
 
 	int m_eventIndex; // イベントの進行状況
+
+	bool m_isInput;
+	bool m_isFreezeGame;
+
 	std::vector<EventData> m_eventData; // イベントデータ群
 
 	GameManager* m_pGameManager;	// ゲームマネージャーのポインタ

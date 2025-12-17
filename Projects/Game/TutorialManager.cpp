@@ -10,7 +10,9 @@
 #include "DxLib.h"
 
 TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player) :
-	m_eventIndex(0)
+	m_eventIndex(0),
+	m_isInput(false),
+	m_isFreezeGame(false)
 {
 	m_pGameManager = gameManager;
 	m_pTextManager = textManager;
@@ -31,10 +33,7 @@ void TutorialManager::Update(Input& input)
 		return;
 	}
 
-	if (input.IsTriggered("OK"))
-	{
-		m_eventIndex++;
-	}
+	m_isInput = input.IsTriggered("OK");
 
 	if (CheckTrigger(m_eventData[m_eventIndex]))
 	{
@@ -148,7 +147,6 @@ bool TutorialManager::IsEnterArea(int areaNum)
 	// プレイヤーの座標が指定エリアに達したら
 	if (m_pPlayer->GetPos().x >= m_areaPos[areaNum].x)
 	{
-		printfDx(L"イベント発火フラグ\n");
 		return true;
 	}
 	return false;
@@ -203,12 +201,22 @@ void TutorialManager::RunAction(const EventData& data)
 	}
 		break;
 	case ActionType::FreezeGame:
+		m_isFreezeGame = true;
 		break;
 	case ActionType::UnfreezeGame:
 		break;
 	case ActionType::PowerUp:
 		break;
 	case ActionType::WaitInput:
+		if (m_isInput)
+		{
+			m_isFreezeGame = false;
+		}
+		else
+		{
+			printfDx(L"キー入力待ち\n");
+			return;
+		}
 		break;
 	}
 	m_eventIndex++;

@@ -81,6 +81,11 @@ void TutorialScene::NormalUpdate(Input& input)
 	}
 	m_pTutorialManager->Update(input);
 
+	if (m_pTutorialManager->IsFreezeGame())
+	{
+		return;
+	}
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
