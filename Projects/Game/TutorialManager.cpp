@@ -5,17 +5,17 @@
 #include "../Utility/Map.h"
 #include "../Utility/StringFunction.h"
 #include "../Utility/Input.h"
-#include "Actor.h"
 #include "Player.h"
 #include <fstream>
 #include "DxLib.h"
 
-TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map) :
+TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player) :
 	m_eventIndex(0)
 {
 	m_pGameManager = gameManager;
 	m_pTextManager = textManager;
 	m_pMap = map;
+	m_pPlayer = player;
 	LoadEventData();
 	InitAreaPos();
 }
@@ -143,11 +143,11 @@ const Position2* TutorialManager::FindAreaPos(int areaId) const
 bool TutorialManager::IsEnterArea(int areaNum)
 {
 	// プレイヤーの座標が指定エリアに達したら
-	/*if (m_pPlayerPos->x >= m_areaPos[areaNum].x)
+	if (m_pPlayer->GetPos().x >= m_areaPos[areaNum].x)
 	{
 		printfDx(L"イベント発火フラグ\n");
 		return true;
-	}*/
+	}
 	return false;
 }
 

@@ -106,6 +106,13 @@ public:
 	Camera* GetCamera()const { return m_pCamera.get(); }
 
 	/// <summary>
+	/// プレイヤーを取得させる
+	/// </summary>
+	/// <returns>プレイヤーポインタ</returns>
+	/// <note>ゲームマネージャー自身が管理しているが、他でも参照したいクラスが存在するため作っている</note>
+	Player* GetPlayer()const { return m_pPlayer.get(); }
+
+	/// <summary>
 	/// 現在のスコアを取得する
 	/// リザルト用
 	/// </summary>

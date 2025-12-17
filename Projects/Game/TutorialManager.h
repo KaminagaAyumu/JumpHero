@@ -30,7 +30,7 @@ enum class ActionType
 class TutorialManager
 {
 public:
-	TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map);
+	TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player);
 	virtual ~TutorialManager();
 
 	void Update(Input& input);
@@ -65,6 +65,7 @@ private:
 	GameManager* m_pGameManager;	// ゲームマネージャーのポインタ
 	TextManager* m_pTextManager;	// テキストデータのポインタ
 	Map* m_pMap;					// マップデータのポインタ
+	Player* m_pPlayer;				// プレイヤーのポインタ(座標取得用)
 
 	std::unordered_map<int, Position2> m_areaPos;
 	bool InitAreaPos();
