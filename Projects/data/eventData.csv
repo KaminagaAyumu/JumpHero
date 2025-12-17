@@ -1,16 +1,16 @@
 ID,TriggerType,TriggerParam,ActionType,ActionParam
-1,EnterArea,1,FreezeGame,0
-2,EnterArea,1,ShowText,tuto_start
-3,EnterArea,1,WaitInput,0
-4,EnterArea,2,FreezeGame,0
-5,EnterArea,2,ShowText,tuto_jump_1
-6,EnterArea,2,WaitInput,0
-7,EnterArea,3,FreezeGame,0
-8,EnterArea,3,ShowText,tuto_jump_2
-9,EnterArea,3,WaitInput,0
-10,EnterArea,4,FreezeGame,0
-11,EnterArea,4,ShowText,tuto_chest_1
-12,EnterArea,4,WaitInput,0
+1,GameStart,0,FreezeGame,0
+2,GameStart,0,ShowText,tuto_start
+3,GameStart,0,WaitInput,0
+4,EnterArea,1,FreezeGame,0
+5,EnterArea,1,ShowText,tuto_jump_1
+6,EnterArea,1,WaitInput,0
+7,EnterArea,2,FreezeGame,0
+8,EnterArea,2,ShowText,tuto_jump_2
+9,EnterArea,2,WaitInput,0
+10,EnterArea,3,FreezeGame,0
+11,EnterArea,3,ShowText,tuto_chest_1
+12,EnterArea,3,WaitInput,0
 13,OpenChest,chest = 1,DropItem,coin
 14,OpenChest,chest = 1,FreezeGame,0
 15,OpenChest,chest = 1,ShowText,tuto_chest_2
