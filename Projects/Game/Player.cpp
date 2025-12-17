@@ -353,8 +353,9 @@ void Player::CheckHitToChest(Input& input)
 	
 	for (int y = topY; y <= bottomY; y++)
 	{
-		int chipNo = m_pMap->GetMapChipNum(leftProbeX,y);
-		if(chipNo == kChestChipNo)
+		// int chipNo = m_pMap->GetMapChipNum(leftProbeX,y);
+		int chipNo = m_pMap->GetPositioningData(leftProbeX, y);
+		if(m_pMap->IsChestTile(chipNo))
 		{
 			isLeftSide = true;
 			
@@ -380,8 +381,9 @@ void Player::CheckHitToChest(Input& input)
 
 	for (int y = topY; y <= bottomY; y++)
 	{
-		int chipNo = m_pMap->GetMapChipNum(rightProbeX, y);
-		if (chipNo == kChestChipNo)
+		//int chipNo = m_pMap->GetMapChipNum(rightProbeX, y);
+		int chipNo = m_pMap->GetPositioningData(rightProbeX, y);
+		if (m_pMap->IsChestTile(chipNo))
 		{
 			isRightSide = true;
 			if(chestX != -1 && chestY != -1)
@@ -614,8 +616,8 @@ bool Player::IsOnChestTop(Position2Int& chestPos)
 
 	for (int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
 	{
-		int chipNo = m_pMap->GetMapChipNum(x, footY);
-		if (chipNo == kChestChipNo)
+		int chipNo = m_pMap->GetPositioningData(x, footY);
+		if (m_pMap->IsChestTile(chipNo))
 		{
 			chestX = x;
 			chestY = footY;

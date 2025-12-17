@@ -27,6 +27,7 @@ namespace
 	// マップチップ
 	constexpr int kSpaceChipNo = 0; // マップチップの透明部分
 	constexpr int kChestChipNo = 106; // マップチップの宝箱部分
+	constexpr int kHiddenChestChipNo = 107; // マップチップの隠し宝箱部分
 
 	constexpr int kStartChipNoUp = 188; // マップチップのスタート地点上部
 	constexpr int kStartChipNoDown = 208;// マップチップのスタート地点下部
@@ -376,6 +377,11 @@ bool Map::IsOnlyTopTile(int chipNo)
 	return chipNo == kThroughChipNoLeft || chipNo == kThroughChipNoCenter || chipNo == kThroughChipNoRight;
 }
 
+bool Map::IsChestTile(int chipNo)
+{
+	return chipNo == kChestChipNo || chipNo == kHiddenChestChipNo;
+}
+
 float Map::GetTileSize() const
 {
 	return kChipSize * kChipScale;
@@ -443,6 +449,11 @@ Position2 Map::GetGoalPosToMap()
 	// ここまで来た場合、ゴールが見つからないのでエラーとする
 	assert(false && "ゴール地点のマップチップが見つかりません");
 	return Position2();
+}
+
+void Map::ResetChestData(int x, int y)
+{
+
 }
 
 void Map::SetMapChip(int x, int y, int value)

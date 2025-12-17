@@ -67,6 +67,13 @@ public:
 	/// <returns>true : 上部のみ false : 上部のみでない</returns>
 	bool IsOnlyTopTile(int chipNo);
 
+	/// <summary>
+	/// 指定されたチップ番号が宝箱データのタイルかどうかを調べる
+	/// </summary>
+	/// <param name="chipNo">指定チップ番号</param>
+	/// <returns>true : 宝箱 false : 宝箱でない</returns>
+	bool IsChestTile(int chipNo);
+
 	// ゲッター類
 	int GetGraphChipNumX() const { return m_graphChipNumX; }
 	int GetGraphChipNumY() const { return m_graphChipNumY; }
@@ -80,6 +87,13 @@ public:
 	int GetEventData(int x, int y); // イベントデータの取得
 	Position2 GetStartPosToMap();
 	Position2 GetGoalPosToMap();
+
+	/// <summary>
+	/// 宝箱が開いた際にデータを変更する
+	/// </summary>
+	/// <param name="x">マップのX座標</param>
+	/// <param name="y">マップのY座標</param>
+	void ResetChestData(int x, int y);
 
 	/// <summary>
 	/// マップチップの指定の座標のデータを変更する
