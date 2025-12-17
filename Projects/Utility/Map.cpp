@@ -42,6 +42,8 @@ namespace
 	constexpr int kThroughChipNoCenter = 265;
 	constexpr int kThroughChipNoRight = 266;
 
+	constexpr int kSignboardChipNo = 291; // 右を指す看板のマップチップ(当たり判定を行わない)
+
 
 	constexpr float kMoveRangeMargin = 0.1f; // マップとの位置の補正用
 
@@ -371,7 +373,7 @@ bool Map::IsNomalTile(int chipNo)
 bool Map::IsSpaceTile(int chipNo)
 {
 	// 透明部分のマップチップかどうかを返す
-	return chipNo == kSpaceChipNo;
+	return chipNo == kSpaceChipNo || chipNo == kSignboardChipNo;
 }
 
 bool Map::IsOnlyTopTile(int chipNo)

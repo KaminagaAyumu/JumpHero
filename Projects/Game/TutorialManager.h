@@ -14,6 +14,7 @@ class Player;
 enum class TriggerType
 {
 	EnterArea, // エリアに入った
+	OpenChest, // 宝箱を開けた
 	GetItem, // アイテムを取得した
 	EnemySpawn, // 敵がスポーンした
 };
