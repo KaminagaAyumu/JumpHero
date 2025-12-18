@@ -75,9 +75,9 @@ size_t ChestManager::GetChestNum()
 
 void ChestManager::SpawnChest(Map* map)
 {
-	for (int y = 0; y < map->GetMapHeight(); y++)
+	for (int x = 0; x < map->GetMapWidth(); x++)
 	{
-		for (int x = 0; x < map->GetMapWidth(); x++)
+		for (int y = 0; y < map->GetMapHeight(); y++)
 		{
 			if (map->GetPositioningData(x, y) == kChestChipNo)
 			{
