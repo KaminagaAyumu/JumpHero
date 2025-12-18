@@ -52,3 +52,8 @@ ID,TriggerType,TriggerParam,ActionType,ActionParam
 51,NoTrigger,0,WaitInput,0
 52,NoTrigger,0,UnFreezeGame,0
 53,NoTrigger,0,UnFreezePlayer,0
+54,OpenChest,11,DropItem,toitem
+55,NoTrigger,4,FreezeGame,0
+56,NoTrigger,4,ShowText,tuto_chest_2
+57,NoTrigger,4,WaitInput,0
+58,NoTrigger,0,UnFreezeGame,0
