@@ -249,6 +249,7 @@ TriggerType TutorialManager::ToTriggerType(const std::string strData)
 {
 	if (strData == "GameStart") return TriggerType::GameStart;
 	if (strData == "EnterArea") return TriggerType::EnterArea;
+	if (strData == "TimeElapsed") return TriggerType::TimeElapsed;
 	if (strData == "OpenChest") return TriggerType::OpenChest;
 	if (strData == "GetItem") return TriggerType::GetItem;
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
@@ -282,6 +283,8 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		int areaNum = GetParamNum(data.triggerParam);
 		return IsEnterArea(areaNum);
 	}
+	case TriggerType::TimeElapsed:
+		break;
 	case TriggerType::OpenChest:
 	{
 		int chestNum = GetParamNum(data.triggerParam);
@@ -338,6 +341,10 @@ void TutorialManager::RunAction(const EventData& data)
 	}
 		break;
 	case ActionType::SpawnEnemy:
+		for (auto& pos : m_spawnPos)
+		{
+			m_pGameManager->SpawnEnemy(pos.x,pos.y, 1);
+		}
 		break;
 	case ActionType::FreezeGame:
 		m_isFreezeGame = true;

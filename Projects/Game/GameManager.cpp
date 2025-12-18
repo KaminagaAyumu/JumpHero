@@ -256,6 +256,12 @@ void GameManager::DropItem(int x, int y, const Types::ItemType& type)
 	m_pItemManager->SpawnItem(x, y, type);
 }
 
+void GameManager::SpawnEnemy(int x, int y, int formNum)
+{
+	Position2 pos = { x,y };
+	m_pEnemyManager->SpawnEnemy(pos, formNum);
+}
+
 void GameManager::PowerUpPlayer()
 {
 	// メダルを持っていれば強化を行う

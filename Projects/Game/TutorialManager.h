@@ -15,6 +15,7 @@ enum class TriggerType
 {
 	GameStart, // ゲームが始まった
 	EnterArea, // エリアに入った
+	TimeElapsed, // 時間が経過した
 	OpenChest, // 宝箱を開けた
 	GetItem, // アイテムを取得した
 	EnemySpawn, // 敵がスポーンした

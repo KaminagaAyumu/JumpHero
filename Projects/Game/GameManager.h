@@ -91,6 +91,15 @@ public:
 	void DropItem(int x, int y, const Types::ItemType& type);
 
 	/// <summary>
+	/// 敵の変身先を指定して生成する通知をEnemyManagerに送る関数
+	/// </summary>
+	/// <param name="x">生成X座標</param>
+	/// <param name="y">生成Y座標</param>
+	/// <param name="formNum">敵の変身先</param>
+	/// <note>敵のステートは敵クラス内に書いてしまっているため、一旦番号を変換する形で指定</note>
+	void SpawnEnemy(int x, int y, int formNum);
+
+	/// <summary>
 	/// プレイヤーを強化する
 	/// </summary>
 	void PowerUpPlayer();
