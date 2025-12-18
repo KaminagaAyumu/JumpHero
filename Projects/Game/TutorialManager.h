@@ -85,6 +85,7 @@ private:
 		bool isActive = false; // ページ送りが進行中か
 	};
 
+	int m_timeCount; // 時間経過用フレーム数のカウンタ
 	int m_eventIndex; // イベントの進行状況
 
 	bool m_isInput; // 入力があるかどうか

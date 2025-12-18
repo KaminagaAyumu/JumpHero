@@ -16,6 +16,7 @@ namespace
 }
 
 TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player) :
+	m_timeCount(0),
 	m_eventIndex(0),
 	m_isInput(false),
 	m_isFreezeGame(false),
@@ -284,7 +285,16 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		return IsEnterArea(areaNum);
 	}
 	case TriggerType::TimeElapsed:
-		break;
+	{
+		m_timeCount++;
+		int endTime = GetParamNum(data.triggerParam);
+		if (m_timeCount >= endTime)
+		{
+			m_timeCount = 0;
+			return true;
+		}
+	}
+	break;
 	case TriggerType::OpenChest:
 	{
 		int chestNum = GetParamNum(data.triggerParam);
