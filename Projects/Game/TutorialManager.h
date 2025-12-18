@@ -110,6 +110,9 @@ private:
 	bool IsGetItem(std::string param); // 指定されたアイテムを取得したか
 	int GetParamNum(std::string param); // パラメータの数値を整数型に変換
 
+	void LookCamera(std::string param); // パラメータの座標にカメラを動かす
+
+
 	/// <summary>
 	/// テキストデータをウィンドウとともに表示する
 	/// </summary>

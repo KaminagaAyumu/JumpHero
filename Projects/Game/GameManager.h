@@ -5,6 +5,7 @@
 #include <functional>
 #include <deque>
 #include "../Utility/GameType.h"
+#include "../Utility/Geometry.h"
 
 // プロトタイプ宣言
 class Actor;
@@ -106,6 +107,12 @@ public:
 	/// </summary>
 	/// <param name="pos">カメラの座標</param>
 	void SetCameraTarget(const Position2* pos);
+
+	/// <summary>
+	/// カメラの補正が終わったかどうか
+	/// </summary>
+	/// <returns>true : 終わった false : 終わっていない</returns>
+	bool IsCameraLeapEnd();
 
 	/// <summary>
 	/// ゲーム内に存在するオブジェクトの数を取得

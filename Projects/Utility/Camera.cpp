@@ -5,6 +5,8 @@
 namespace
 {
 	constexpr float kLerpSpeed = 0.05f;
+
+	constexpr float kLerpEndDistance = 0.5f;
 }
 
 Camera::Camera(const Size& size) :
@@ -29,7 +31,14 @@ void Camera::Update()
 	assert(m_pTargetPos != nullptr && L"カメラのターゲット取得失敗");
 
 	// カメラの座標を補正
-	m_pos = Geometry::LerpVec2(m_pos, *m_pTargetPos, kLerpSpeed);
+	if (IsLeapEnd()) // 補正が終わっていたら
+	{
+		m_pos = *m_pTargetPos; // カメラの座標をターゲットに固定
+	}
+	else
+	{
+		m_pos = Geometry::LerpVec2(m_pos, *m_pTargetPos, kLerpSpeed); // 補正してカメラを動かす
+	}
 
 	// スクロール量の計算
 	// カメラの座標を画面中央にずらす
@@ -62,4 +71,9 @@ void Camera::Update()
 const Rect2D& Camera::GetNowScreenArea() const
 {
 	return { scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenWidth };
+}
+
+bool Camera::IsLeapEnd() const
+{
+	return Geometry::GetDistance(m_pos, *m_pTargetPos) <= kLerpEndDistance;
 }

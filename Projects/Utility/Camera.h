@@ -35,6 +35,12 @@ public:
 	/// <returns>画面の表示範囲</returns>
 	const Rect2D& GetNowScreenArea()const;
 
+	/// <summary>
+	/// カメラの補正が終わったかどうか
+	/// </summary>
+	/// <returns>true : 終わった false : 終わっていない</returns>
+	bool IsLeapEnd()const;
+
 private:
 	Position2 m_pos; // カメラの座標
 	Size m_mapSize; // マップのサイズ

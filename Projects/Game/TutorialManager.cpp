@@ -216,6 +216,11 @@ int TutorialManager::GetParamNum(std::string param)
 	return std::stoi(param);
 }
 
+void TutorialManager::LookCamera(std::string param)
+{
+	
+}
+
 void TutorialManager::DrawTextWindow() const
 {
 	DrawBox(kTextWindowMargin, kTextWindowMargin, Game::kScreenWidth - kTextWindowMargin, Game::kScreenHeight * 0.5f, 0x333333,true);
@@ -311,7 +316,7 @@ void TutorialManager::RunAction(const EventData& data)
 		{
 			type = Types::ItemType::UpgradeMedal;
 		}
-		// アイテムの生成ができることは確認済み
+		// 宝箱の番号を取得
 		int chestNum = GetParamNum(data.triggerParam);
 		m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, type);
 	}
@@ -330,8 +335,22 @@ void TutorialManager::RunAction(const EventData& data)
 		m_pPlayer->FreezeChange();
 		break;
 	case ActionType::LookCamera:
+	{
+		const Position2& lookPos = { m_pPlayer->GetPos().x + 200,m_pPlayer->GetPos().y + 20 };
+		m_pGameManager->SetCameraTarget(&lookPos);
+		//LookCamera(data.actionParam);
+		if (m_pGameManager->IsCameraLeapEnd())
+		{
+
+		}
+		else
+		{
+			return;
+		}
+	}
 		break;
 	case ActionType::ReturnCamera:
+		m_pGameManager->SetCameraTarget(&m_pPlayer->GetPos());
 		break;
 	case ActionType::PowerUp:
 		break;

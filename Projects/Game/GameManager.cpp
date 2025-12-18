@@ -7,7 +7,6 @@
 #include "../Utility/Camera.h"
 #include "../Utility/Input.h"
 #include "../Utility/Map.h"
-#include "../Utility/GameType.h"
 #include "DxLib.h"
 #include <cassert>
 
@@ -288,6 +287,11 @@ void GameManager::OpenChestToPosition(int x, int y)
 void GameManager::SetCameraTarget(const Position2* pos)
 {
 	m_pCamera->SetTarget(pos);
+}
+
+bool GameManager::IsCameraLeapEnd()
+{
+	return m_pCamera->IsLeapEnd();
 }
 
 const size_t GameManager::GetActorNum() const
