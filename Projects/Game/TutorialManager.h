@@ -18,6 +18,7 @@ enum class TriggerType
 	OpenChest, // 宝箱を開けた
 	GetItem, // アイテムを取得した
 	EnemySpawn, // 敵がスポーンした
+	PlayerPowerUp, // プレイヤーがパワーアップ状態になった
 };
 
 // イベントで何を行うか

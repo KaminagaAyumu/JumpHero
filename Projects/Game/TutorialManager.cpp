@@ -216,6 +216,7 @@ TriggerType TutorialManager::ToTriggerType(const std::string strData)
 	if (strData == "OpenChest") return TriggerType::OpenChest;
 	if (strData == "GetItem") return TriggerType::GetItem;
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
+	if (strData == "PlayerPowerUp") return TriggerType::PlayerPowerUp;
 }
 
 ActionType TutorialManager::ToActionType(const std::string strData)
@@ -247,6 +248,8 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 	case TriggerType::GetItem:
 		break;
 	case TriggerType::EnemySpawn:
+		break;
+	case TriggerType::PlayerPowerUp:
 		break;
 	}
 	return false;
