@@ -324,8 +324,10 @@ void TutorialManager::RunAction(const EventData& data)
 	case ActionType::UnfreezeGame:
 		break;
 	case ActionType::FreezePlayer:
+		m_pPlayer->FreezeChange();
 		break;
 	case ActionType::UnFreezePlayer:
+		m_pPlayer->FreezeChange();
 		break;
 	case ActionType::LookCamera:
 		break;

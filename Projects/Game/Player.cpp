@@ -61,6 +61,7 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_isMiss(false),
 	m_isLevelDown(false),
 	m_isJumpStart(false),
+	m_isFreeze(false),
 	m_pMap(map),
 	m_pGameManager(gameManager),
 	m_update(&Player::EntryUpdate),
@@ -90,6 +91,7 @@ void Player::Init()
 	m_isMiss = false;
 	m_isLevelDown = false;
 	m_isJumpStart = false;
+	m_isFreeze = false;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
 }
@@ -101,6 +103,10 @@ void Player::InitMap(Map* map)
 
 void Player::Update(Input& input)
 {
+	if (m_isFreeze)
+	{
+		return;
+	}
 	(this->*m_update)(input);
 }
 
@@ -644,6 +650,11 @@ bool Player::IsPowerUp()
 void Player::DebugClear(const Position2& pos)
 {
 	m_pos = pos;
+}
+
+void Player::FreezeChange()
+{
+	m_isFreeze = !m_isFreeze;
 }
 
 void Player::JumpStart()

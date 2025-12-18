@@ -53,6 +53,11 @@ public:
 
 	void DebugClear(const Position2& pos);
 
+	/// <summary>
+	/// プレイヤーが動くかどうかのフラグを変える
+	/// </summary>
+	void FreezeChange();
+
 private:
 	// マップとの当たり判定を行う際の構造体
 	struct ContactFrags
@@ -78,6 +83,7 @@ private:
 	bool m_isMiss; // ミスになったかどうか
 	bool m_isLevelDown; // レベルダウンしたかどうか
 	bool m_isJumpStart; // ジャンプ開始したかどうか
+	bool m_isFreeze; // 止まっているかどうか
 
 	// マップの生ポインタ
 	Map* m_pMap;
