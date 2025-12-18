@@ -203,6 +203,10 @@ bool TutorialManager::IsGetItem(std::string param)
 	{
 		type = Types::ItemType::Coin;
 	}
+	if (param == "medal")
+	{
+		type = Types::ItemType::UpgradeMedal;
+	}
 
 	return m_pGameManager->IsItemPicked(type);
 }
@@ -296,6 +300,10 @@ void TutorialManager::RunAction(const EventData& data)
 		if (data.actionParam == "coin")
 		{
 			type = Types::ItemType::Coin;
+		}
+		if (data.actionParam == "medal")
+		{
+			type = Types::ItemType::UpgradeMedal;
 		}
 		// アイテムの生成ができることは確認済み
 		int chestNum = GetParamNum(data.triggerParam);

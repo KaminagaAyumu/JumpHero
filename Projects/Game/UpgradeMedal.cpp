@@ -49,6 +49,7 @@ void UpgradeMedal::OnCollected(GameManager& gameManager)
 {
 	// 風船が取得された際の処理を行わせる
 	gameManager.OnItemCollected(Types::ItemType::UpgradeMedal);
+	gameManager.NotifyItemEvent(Types::ItemType::UpgradeMedal);
 }
 
 void UpgradeMedal::IsCollision(const Types::CollisionInfo& info)
