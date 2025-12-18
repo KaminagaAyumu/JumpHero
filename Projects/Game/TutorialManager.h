@@ -100,7 +100,7 @@ private:
 
 	bool IsEnterArea(int areaNum);
 	bool IsOpenChest(int chestNum);
-	int GetAreaNum(std::string param);
+	int GetParamNum(std::string param); // パラメータの数値を整数型に変換
 
 	/// <summary>
 	/// テキストデータをウィンドウとともに表示する

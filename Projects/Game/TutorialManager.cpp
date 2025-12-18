@@ -196,7 +196,7 @@ bool TutorialManager::IsOpenChest(int chestNum)
 	return false;
 }
 
-int TutorialManager::GetAreaNum(std::string param)
+int TutorialManager::GetParamNum(std::string param)
 {
 	return std::stoi(param);
 }
@@ -236,12 +236,12 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		return true;
 	case TriggerType::EnterArea:
 	{
-		int areaNum = GetAreaNum(data.triggerParam);
+		int areaNum = GetParamNum(data.triggerParam);
 		return IsEnterArea(areaNum);
 	}
 	case TriggerType::OpenChest:
 	{
-		int chestNum = 1;
+		int chestNum = GetParamNum(data.triggerParam);
 		return IsOpenChest(chestNum);
 	}
 	case TriggerType::GetItem:
@@ -281,7 +281,8 @@ void TutorialManager::RunAction(const EventData& data)
 			type = Types::ItemType::Coin;
 		}
 		// アイテムの生成ができることは確認済み
-		m_pGameManager->DropItem(m_chestPos[1].x, m_chestPos[1].y, type);
+		int chestNum = GetParamNum(data.triggerParam);
+		m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, type);
 	}
 		break;
 	case ActionType::FreezeGame:
