@@ -291,6 +291,24 @@ const size_t GameManager::GetActorNum() const
 	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum() + m_pEnemyManager->GetEnemyNum();
 }
 
+void GameManager::NotifyItemEvent(Types::ItemType type)
+{
+	m_itemPickEvent.push_back({ type, m_frameCount });
+}
+
+bool GameManager::IsItemPicked(Types::ItemType itemType)
+{
+	for (auto it = m_itemPickEvent.begin(); it != m_itemPickEvent.end(); it++)
+	{
+		if (it->type == itemType)
+		{
+			m_itemPickEvent.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
 bool GameManager::IsDropChangeToCoin()
 {
 	if(m_balloonCounter >= kBalloonForChangeToCoin) // 風船を5個取ったら

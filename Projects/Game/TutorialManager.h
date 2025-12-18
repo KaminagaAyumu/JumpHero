@@ -99,8 +99,9 @@ private:
 
 	const Position2* FindAreaPos(int areaId) const;
 
-	bool IsEnterArea(int areaNum);
-	bool IsOpenChest(int chestNum);
+	bool IsEnterArea(int areaNum); // イベント発火フラグの場所に到達したか
+	bool IsOpenChest(int chestNum); // 指定された宝箱を開けたか
+	bool IsGetItem(std::string param); // 指定されたアイテムを取得したか
 	int GetParamNum(std::string param); // パラメータの数値を整数型に変換
 
 	/// <summary>

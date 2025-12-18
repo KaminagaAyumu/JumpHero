@@ -196,6 +196,17 @@ bool TutorialManager::IsOpenChest(int chestNum)
 	return false;
 }
 
+bool TutorialManager::IsGetItem(std::string param)
+{
+
+	if (param == "coin")
+	{
+
+	}
+
+	return false;
+}
+
 int TutorialManager::GetParamNum(std::string param)
 {
 	return std::stoi(param);

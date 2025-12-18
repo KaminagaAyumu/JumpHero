@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <functional>
+#include <deque>
 #include "../Utility/GameType.h"
 
 // プロトタイプ宣言
@@ -132,6 +133,19 @@ public:
 	/// </summary>
 	void LifeDown() { m_life--; }
 
+	/// <summary>
+	/// アイテムを取得するイベントを設定
+	/// </summary>
+	/// <param name="type">どのアイテムか</param>
+	void NotifyItemEvent(Types::ItemType type);
+
+	/// <summary>
+	/// 指定されたアイテムが取得されたかどうか
+	/// </summary>
+	/// <param name="type"></param>
+	/// <returns></returns>
+	bool IsItemPicked(Types::ItemType itemType);
+
 private:
 	int m_frameCount; // フレームカウンタ
 
@@ -146,6 +160,17 @@ private:
 	bool m_isMiniGame; // ミニゲーム中かどうか
 
 	std::unordered_map<Types::ItemType, std::function<void()>> m_itemCollectFunc;
+
+	/// <summary>
+	/// アイテムが取得される時のイベント
+	/// </summary>
+	struct ItemPickUpEvent
+	{
+		Types::ItemType type; // どのアイテムか
+		int frameCount; // どの順序かを確認するためにフレーム数を格納
+	};
+
+	std::deque<ItemPickUpEvent> m_itemPickEvent; // アイテムを取得したかどうかのイベント
 
 	// 各オブジェクト管理クラスの参照用
 	Map* m_pMap;
