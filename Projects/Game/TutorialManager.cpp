@@ -198,13 +198,14 @@ bool TutorialManager::IsOpenChest(int chestNum)
 
 bool TutorialManager::IsGetItem(std::string param)
 {
-
-	if (param == "coin")
+	auto type = Types::ItemType::Coin;
+	if (param == "coin") // テスト用
 	{
-
+		printfDx(L"コインを取ってください\n");
+		type = Types::ItemType::Coin;
 	}
 
-	return false;
+	return m_pGameManager->IsItemPicked(type);
 }
 
 int TutorialManager::GetParamNum(std::string param)
@@ -257,7 +258,7 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		return IsOpenChest(chestNum);
 	}
 	case TriggerType::GetItem:
-		break;
+		return IsGetItem(data.triggerParam);
 	case TriggerType::EnemySpawn:
 		break;
 	case TriggerType::PlayerPowerUp:

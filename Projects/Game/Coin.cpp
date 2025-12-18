@@ -49,6 +49,7 @@ void Coin::OnCollected(GameManager& gameManager)
 {
 	// コインが取得された際の処理を行わせる
 	gameManager.OnItemCollected(Types::ItemType::Coin);
+	gameManager.NotifyItemEvent(Types::ItemType::Coin);
 }
 
 void Coin::IsCollision(const Types::CollisionInfo& info)
