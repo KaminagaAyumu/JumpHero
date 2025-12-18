@@ -133,6 +133,7 @@ size_t TutorialManager::GetEventNum()
 bool TutorialManager::InitAreaPos()
 {
 	m_areaPos.clear();
+	int chestId = 0; // 宝箱で使用するためのID
 	for (int x = 0; x < m_pMap->GetMapWidth(); x++)
 	{
 		for (int y = 0; y < m_pMap->GetMapHeight(); y++)
@@ -144,6 +145,14 @@ bool TutorialManager::InitAreaPos()
 				float tileSize = m_pMap->GetTileSize();
 				Position2 areaPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
 				m_areaPos[areaId] = areaPos;
+			}
+			chipNo = m_pMap->GetPositioningData(x, y);
+			if (m_pMap->IsChestTile(chipNo))
+			{
+				chestId++;
+				float tileSize = m_pMap->GetTileSize();
+				Position2 chestPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+				m_chestPos[chestId] = chestPos;
 			}
 		}
 	}
