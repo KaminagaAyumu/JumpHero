@@ -14,6 +14,8 @@
 
 namespace
 {
+	constexpr int kEnemyFormNum = 2;	// 敵のフォームの総数
+
 	constexpr int kSpawnChipNo = 2; // マップの敵スポーンチップ番号
 
 	constexpr int kSpawnTime = 600; // 敵生成までの時間
@@ -155,7 +157,7 @@ void EnemyManager::SpawnEnemy(const Position2& pos)
 {
 	// とりあえず生成する敵をランダムに
 	auto enemyForm = TransformEnemy::EnemyForm::PlayerSeeker;
-	int rand = GetRand(2);
+	int rand = GetRand(kEnemyFormNum);
 	if (rand == 1)
 	{
 		enemyForm = TransformEnemy::EnemyForm::FireBall;
@@ -220,4 +222,13 @@ void EnemyManager::ChangeToItemAll()
 	{
 		enemy->ChangeToItem(kChangeToItemTime);
 	}
+}
+
+void EnemyManager::SpawnEnemy(const Position2& pos, int spawnNum)
+{
+	auto enemyForm = (TransformEnemy::EnemyForm)spawnNum;
+
+	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm);
+	enemy->SetCamera(m_pCamera);
+	m_enemies.push_back(enemy);
 }

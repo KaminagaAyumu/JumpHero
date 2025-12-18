@@ -36,6 +36,14 @@ public:
 	/// </summary>
 	void ChangeToItemAll();
 
+	/// <summary>
+	/// 敵を指定座標にスポーンさせる
+	/// </summary>
+	/// <param name="x">X座標</param>
+	/// <param name="y">Y座標</param>
+	/// <param name="spawnNum">スポーンする敵の番号</param>
+	void SpawnEnemy(const Position2& pos, int spawnNum);
+
 private:
 
 	/// <summary>
