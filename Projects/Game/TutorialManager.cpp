@@ -239,8 +239,13 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 {
 	if (strData == "ShowText") return ActionType::ShowText;
 	if (strData == "DropItem") return ActionType::DropItem;
+	if (strData == "SpawnEnemy") return ActionType::SpawnEnemy;
 	if (strData == "FreezeGame") return ActionType::FreezeGame;
 	if (strData == "UnfreezeGame") return ActionType::UnfreezeGame;
+	if (strData == "FreezePlayer") return ActionType::FreezePlayer;
+	if (strData == "UnFreezePlayer") return ActionType::UnFreezePlayer;
+	if (strData == "LookCamera") return ActionType::LookCamera;
+	if (strData == "ReturnCamera") return ActionType::ReturnCamera;
 	if (strData == "PowerUp") return ActionType::PowerUp;
 	if (strData == "WaitInput") return ActionType::WaitInput;
 }
@@ -311,10 +316,20 @@ void TutorialManager::RunAction(const EventData& data)
 		m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, type);
 	}
 		break;
+	case ActionType::SpawnEnemy:
+		break;
 	case ActionType::FreezeGame:
 		m_isFreezeGame = true;
 		break;
 	case ActionType::UnfreezeGame:
+		break;
+	case ActionType::FreezePlayer:
+		break;
+	case ActionType::UnFreezePlayer:
+		break;
+	case ActionType::LookCamera:
+		break;
+	case ActionType::ReturnCamera:
 		break;
 	case ActionType::PowerUp:
 		break;

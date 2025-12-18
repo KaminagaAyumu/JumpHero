@@ -27,8 +27,13 @@ enum class ActionType
 {
 	ShowText, // テキストを表示する
 	DropItem, // アイテムを生成する
+	SpawnEnemy, // 敵をスポーンさせる
 	FreezeGame, // ゲームを一時停止する
 	UnfreezeGame, // ゲームを再開する
+	FreezePlayer, // プレイヤーを止める
+	UnFreezePlayer, // プレイヤーを止める
+	LookCamera, // カメラが特定の場所を見る
+	ReturnCamera, // カメラが戻ってくる
 	PowerUp, // プレイヤーの強化
 	WaitInput, // ボタン入力待ち
 };
