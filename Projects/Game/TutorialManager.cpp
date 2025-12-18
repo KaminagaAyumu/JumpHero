@@ -152,6 +152,14 @@ bool TutorialManager::InitEventPos()
 				m_areaPos[areaId] = areaPos; // IDと座標を設定
 			}
 
+			if (chipNo == 7)
+			{
+				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
+				// マップチップ座標からゲーム内座標に変換
+				Position2 cameraPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+				m_cameraPos[7] = cameraPos; // IDと座標を設定
+			}
+
 			// 宝箱のIDと座標を取得
 			chipNo = m_pMap->GetPositioningData(x, y);
 			if (m_pMap->IsChestTile(chipNo))
@@ -162,6 +170,13 @@ bool TutorialManager::InitEventPos()
 				Position2 chestPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
 				m_chestPos[chestId] = chestPos; // IDと座標を設定
 			}
+
+			if (chipNo == 1)
+			{
+				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
+				Position2 spawnPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+				m_spawnPos.push_back(spawnPos);
+			}
 		}
 	}
 
@@ -170,7 +185,8 @@ bool TutorialManager::InitEventPos()
 
 const Position2* TutorialManager::FindAreaPos(int areaId) const
 {
-	auto it = m_areaPos.find(areaId);
+	auto it = m_areaPos.find(areaId); // IDに対応する座標を探す
+	// IDが配列の終端でなければ座標を返す、それ以外ならnullptrを返す
 	return it != m_areaPos.end() ? &it->second : nullptr;
 }
 
@@ -336,8 +352,8 @@ void TutorialManager::RunAction(const EventData& data)
 		break;
 	case ActionType::LookCamera:
 	{
-		const Position2& lookPos = { m_pPlayer->GetPos().x + 200,m_pPlayer->GetPos().y + 20 };
-		m_pGameManager->SetCameraTarget(&lookPos);
+		// メモ:一時変数などでポジションを入れると破棄されてしまうので注意
+		m_pGameManager->SetCameraTarget(&m_cameraPos[7]);
 		//LookCamera(data.actionParam);
 		if (m_pGameManager->IsCameraLeapEnd())
 		{

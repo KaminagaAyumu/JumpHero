@@ -100,6 +100,8 @@ private:
 
 	std::unordered_map<int, Position2> m_areaPos;
 	std::unordered_map<int, Position2> m_chestPos;
+	std::vector<Position2> m_spawnPos;
+	std::unordered_map<int, Position2> m_cameraPos;
 
 	bool InitEventPos();
 
