@@ -26,7 +26,7 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	m_pMap = map;
 	m_pPlayer = player;
 	LoadEventData();
-	InitAreaPos();
+	InitEventPos();
 }
 
 TutorialManager::~TutorialManager()
@@ -130,29 +130,37 @@ size_t TutorialManager::GetEventNum()
 	return size_t(m_eventData.size());
 }
 
-bool TutorialManager::InitAreaPos()
+bool TutorialManager::InitEventPos()
 {
-	m_areaPos.clear();
+	m_areaPos.clear(); // イベント発火座標を初期化
+	m_chestPos.clear(); // 宝箱の座標を初期化
 	int chestId = 0; // 宝箱で使用するためのID
+
+	// マップの右端からループ
 	for (int x = 0; x < m_pMap->GetMapWidth(); x++)
 	{
 		for (int y = 0; y < m_pMap->GetMapHeight(); y++)
 		{
+			// イベント発火IDと座標を取得
 			int chipNo = m_pMap->GetEventData(x, y);
 			if (m_pMap->IsEventFlagTile(chipNo))
 			{
-				int areaId = chipNo;
-				float tileSize = m_pMap->GetTileSize();
+				int areaId = chipNo; // エリアのIDを設定
+				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
+				// マップチップ座標からゲーム内座標に変換
 				Position2 areaPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
-				m_areaPos[areaId] = areaPos;
+				m_areaPos[areaId] = areaPos; // IDと座標を設定
 			}
+
+			// 宝箱のIDと座標を取得
 			chipNo = m_pMap->GetPositioningData(x, y);
 			if (m_pMap->IsChestTile(chipNo))
 			{
-				chestId++;
-				float tileSize = m_pMap->GetTileSize();
+				chestId++; // IDを増加(1から始まる)
+				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
+				// マップチップ座標からゲーム内座標に変換
 				Position2 chestPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
-				m_chestPos[chestId] = chestPos;
+				m_chestPos[chestId] = chestPos; // IDと座標を設定
 			}
 		}
 	}

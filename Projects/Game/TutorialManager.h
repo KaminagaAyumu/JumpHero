@@ -94,7 +94,7 @@ private:
 	std::unordered_map<int, Position2> m_areaPos;
 	std::unordered_map<int, Position2> m_chestPos;
 
-	bool InitAreaPos();
+	bool InitEventPos();
 
 	const Position2* FindAreaPos(int areaId) const;
 
