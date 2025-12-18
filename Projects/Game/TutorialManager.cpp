@@ -404,12 +404,11 @@ void TutorialManager::RunAction(const EventData& data)
 		{
 			if (!m_textPager.isActive)
 			{
-				m_isFreezeGame = false;
 				m_isShowTextWindow = false;
 			}
 
 		}
-		if (m_isFreezeGame)
+		if (m_isShowTextWindow)
 		{
 			return;
 		}
