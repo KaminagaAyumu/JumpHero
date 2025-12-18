@@ -184,6 +184,18 @@ bool TutorialManager::IsEnterArea(int areaNum)
 	return false;
 }
 
+bool TutorialManager::IsOpenChest(int chestNum)
+{
+	float tileSize = m_pMap->GetTileSize();
+	int x = m_pMap->WorldPosToMapPos(m_chestPos[chestNum].x, tileSize);
+	int y = m_pMap->WorldPosToMapPos(m_chestPos[chestNum].y, tileSize);
+	if (m_pMap->GetPositioningData(x, y) == 0)
+	{
+		return true;
+	}
+	return false;
+}
+
 int TutorialManager::GetAreaNum(std::string param)
 {
 	return std::stoi(param);
@@ -228,8 +240,10 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		return IsEnterArea(areaNum);
 	}
 	case TriggerType::OpenChest:
-		return true;
-		break;
+	{
+		int chestNum = 1;
+		return IsOpenChest(chestNum);
+	}
 	case TriggerType::GetItem:
 		break;
 	case TriggerType::EnemySpawn:
@@ -267,7 +281,7 @@ void TutorialManager::RunAction(const EventData& data)
 			type = Types::ItemType::Coin;
 		}
 		// アイテムの生成ができることは確認済み
-		//m_pGameManager->DropItem(m_pPlayer->GetPos().x - 60, m_pPlayer->GetPos().y, type);
+		m_pGameManager->DropItem(m_chestPos[1].x, m_chestPos[1].y, type);
 	}
 		break;
 	case ActionType::FreezeGame:

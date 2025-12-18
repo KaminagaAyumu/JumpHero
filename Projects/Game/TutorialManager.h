@@ -99,6 +99,7 @@ private:
 	const Position2* FindAreaPos(int areaId) const;
 
 	bool IsEnterArea(int areaNum);
+	bool IsOpenChest(int chestNum);
 	int GetAreaNum(std::string param);
 
 	/// <summary>

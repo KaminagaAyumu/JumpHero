@@ -19,6 +19,15 @@ Bg::Bg() :
 	handle = LoadGraph(L"data/background_3.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
+	handle = LoadGraph(L"data/background_4.png");
+	assert(handle != -1 && "画像の読み込みに失敗しました");
+	m_bgHandles.push_back(handle);
+	handle = LoadGraph(L"data/background_5.png");
+	assert(handle != -1 && "画像の読み込みに失敗しました");
+	m_bgHandles.push_back(handle);
+	handle = LoadGraph(L"data/background_6.png");
+	assert(handle != -1 && "画像の読み込みに失敗しました");
+	m_bgHandles.push_back(handle);
 
 
 }
@@ -60,12 +69,12 @@ void Bg::Draw(Camera* camera)
 	DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
 
 	// 横にのみ表示する時
-	if (scrollPos.x > 0)
+	/*if (scrollPos.x > 0)
 	{
 		DrawGraph(static_cast<int>(bgSize.x) - static_cast<int>(scrollPos.x),
 			Game::kScreenHeight - bgSize.y,
 			m_bgHandle, true);
-	}
+	}*/
 
 	// 上下左右に表示する時
 	/*if(bgSize.x - scrollPos.x < Game::kScreenWidth)
@@ -90,7 +99,7 @@ void Bg::Draw(Camera* camera)
 			m_bgHandle, true);
 	}*/
 
-	/*for(int handle : m_bgHandles)
+	for(int handle : m_bgHandles)
 	{
 		DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), handle, true);
 		if (scrollPos.x > 0)
@@ -101,7 +110,7 @@ void Bg::Draw(Camera* camera)
 				Game::kScreenHeight - size.y,
 				handle, true);
 		}
-	}*/
+	}
 }
 
 
