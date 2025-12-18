@@ -34,7 +34,7 @@ ID,TriggerType,TriggerParam,ActionType,ActionParam
 33,EnterArea,5,FreezePlayer,0
 34,NoTrigger,5,LookCamera,spawnPos
 35,NoTrigger,5,SpawnEnemy,0
-36,TimeElapsed,300,FreezeGame,0
+36,TimeElapsed,120,FreezeGame,0
 37,NoTrigger,5,ShowText,tuto_enemy
 38,NoTrigger,5,WaitInput,0
 39,NoTrigger,5,ReturnCamera,0
