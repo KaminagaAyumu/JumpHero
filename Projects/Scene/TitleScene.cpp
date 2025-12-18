@@ -88,10 +88,12 @@ void TitleScene::NormalDraw()
 	);*/
 #ifdef _DEBUG
 	DrawString(0, 0, L"TitleScene: NormalDraw", 0xFFFFFF);
-	DrawString(Game::kScreenWidth / 2 - 20,
-		Game::kScreenHeight / 2 + 50, L"※違います", 0xFFFFFF);
+	//DrawString(Game::kScreenWidth / 2 - 20,
+		//Game::kScreenHeight / 2 + 50, L"※違います", 0xFFFFFF);
+	DrawString(Game::kScreenWidth / 2 - 60,
+		Game::kScreenHeight / 2, L"JumpHero", 0xFFFFFF);
 #endif
-	DrawString(Game::kScreenWidth / 2,
+	DrawString(Game::kScreenWidth / 2 - 100,
 		Game::kScreenHeight / 2 + 100, L"STARTかAボタンでスタート", 0xFFFFFF);
 
 }

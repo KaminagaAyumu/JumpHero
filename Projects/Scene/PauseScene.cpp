@@ -89,18 +89,19 @@ void PauseScene::FadeOutUpdate(Input&)
 		// フェードアウト完了
 		if (m_selectIndex == 0)
 		{
-			// チュートリアルシーンに遷移
-			m_controller.ResetScene(std::make_shared<SelectScene>(m_controller));
+			// ポーズしたシーンに戻る
+			m_controller.PopScene();
+			
 		}
 		else if (m_selectIndex == 1)
 		{
-			// ゲームシーンに遷移
-			m_controller.ResetScene(std::make_shared<TitleScene>(m_controller));
+			// ステージセレクトシーンに遷移
+			m_controller.ResetScene(std::make_shared<SelectScene>(m_controller));
 		}
 		else
 		{
-			// ポーズしたシーンに戻る
-			m_controller.PopScene();
+			// ゲームシーンに遷移
+			m_controller.ResetScene(std::make_shared<TitleScene>(m_controller));
 		}
 		return; // 念のため処理を抜ける
 	}
@@ -108,29 +109,34 @@ void PauseScene::FadeOutUpdate(Input&)
 
 void PauseScene::NormalDraw()
 {
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	DrawBox(20, m_selectIndex * 50 + 100, 300, m_selectIndex * 50 + 150, 0xff5500, TRUE);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"PauseScene: NormalDraw", 0xffffff);
 	if (m_selectIndex == 0)
 	{
-		DrawFormatString(0, 30, 0xffffff, L"ステージセレクトへ戻る", m_selectIndex);
+		DrawString(0, 30, L"ポーズを解除", 0xffffff);
 	}
 	else if(m_selectIndex == 1)
 	{
-		DrawString(0, 30, L"タイトルへ戻る", 0xffffff);
+		DrawFormatString(0, 30, 0xffffff, L"ステージセレクトへ戻る", m_selectIndex);
 	}
 	else
 	{
-		DrawString(0, 30, L"ポーズを解除", 0xffffff);
+		DrawString(0, 30, L"タイトルへ戻る", 0xffffff);
 	}
 #endif
 }
 
 void PauseScene::FadeDraw()
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);

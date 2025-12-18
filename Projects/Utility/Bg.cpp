@@ -51,7 +51,8 @@ void Bg::Update()
 
 void Bg::Draw()
 {
-	DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_bgHandle, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x448899, true);
+	//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_bgHandle, true);
 }
 
 
