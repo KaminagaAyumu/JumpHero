@@ -264,7 +264,7 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 	if (strData == "DropItem") return ActionType::DropItem;
 	if (strData == "SpawnEnemy") return ActionType::SpawnEnemy;
 	if (strData == "FreezeGame") return ActionType::FreezeGame;
-	if (strData == "UnfreezeGame") return ActionType::UnfreezeGame;
+	if (strData == "UnFreezeGame") return ActionType::UnFreezeGame;
 	if (strData == "FreezePlayer") return ActionType::FreezePlayer;
 	if (strData == "UnFreezePlayer") return ActionType::UnFreezePlayer;
 	if (strData == "LookCamera") return ActionType::LookCamera;
@@ -359,7 +359,8 @@ void TutorialManager::RunAction(const EventData& data)
 	case ActionType::FreezeGame:
 		m_isFreezeGame = true;
 		break;
-	case ActionType::UnfreezeGame:
+	case ActionType::UnFreezeGame:
+		m_isFreezeGame = false;
 		break;
 	case ActionType::FreezePlayer:
 		m_pPlayer->FreezeChange();

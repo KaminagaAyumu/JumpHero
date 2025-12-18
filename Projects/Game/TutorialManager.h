@@ -30,7 +30,7 @@ enum class ActionType
 	DropItem, // アイテムを生成する
 	SpawnEnemy, // 敵をスポーンさせる
 	FreezeGame, // ゲームを一時停止する
-	UnfreezeGame, // ゲームを再開する
+	UnFreezeGame, // ゲームを再開する
 	FreezePlayer, // プレイヤーを止める
 	UnFreezePlayer, // プレイヤーを止める
 	LookCamera, // カメラが特定の場所を見る
