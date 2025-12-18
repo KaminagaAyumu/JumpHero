@@ -285,6 +285,11 @@ void GameManager::OpenChestToPosition(int x, int y)
 	m_pChestManager->OpenChestAtPosition(x,y);
 }
 
+void GameManager::SetCameraTarget(const Position2* pos)
+{
+	m_pCamera->SetTarget(pos);
+}
+
 const size_t GameManager::GetActorNum() const
 {
 	// +1しているのはプレイヤーの数

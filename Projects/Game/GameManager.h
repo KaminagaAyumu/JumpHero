@@ -102,6 +102,12 @@ public:
 	void OpenChestToPosition(int x, int y);
 
 	/// <summary>
+	/// カメラのターゲットをセットする
+	/// </summary>
+	/// <param name="pos">カメラの座標</param>
+	void SetCameraTarget(const Position2* pos);
+
+	/// <summary>
 	/// ゲーム内に存在するオブジェクトの数を取得
 	/// </summary>
 	/// <returns>ゲーム内のオブジェクトの数</returns>
