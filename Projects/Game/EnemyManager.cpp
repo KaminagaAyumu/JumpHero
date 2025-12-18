@@ -153,7 +153,19 @@ void EnemyManager::LoadSpawnPositions(Map* map)
 
 void EnemyManager::SpawnEnemy(const Position2& pos)
 {
-	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, TransformEnemy::EnemyForm::FireBall);
+	// とりあえず生成する敵をランダムに
+	auto enemyForm = TransformEnemy::EnemyForm::PlayerSeeker;
+	int rand = GetRand(2);
+	if (rand == 1)
+	{
+		enemyForm = TransformEnemy::EnemyForm::FireBall;
+	}
+	else if (rand == 2)
+	{
+		enemyForm = TransformEnemy::EnemyForm::Skull;
+	}
+
+	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }
