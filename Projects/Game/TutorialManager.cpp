@@ -201,7 +201,6 @@ bool TutorialManager::IsGetItem(std::string param)
 	auto type = Types::ItemType::Coin;
 	if (param == "coin") // テスト用
 	{
-		printfDx(L"コインを取ってください\n");
 		type = Types::ItemType::Coin;
 	}
 
