@@ -19,6 +19,7 @@ enum class TriggerType
 	GetItem, // アイテムを取得した
 	EnemySpawn, // 敵がスポーンした
 	PlayerPowerUp, // プレイヤーがパワーアップ状態になった
+	NoTrigger, // 条件なし
 };
 
 // イベントで何を行うか

@@ -228,6 +228,7 @@ TriggerType TutorialManager::ToTriggerType(const std::string strData)
 	if (strData == "GetItem") return TriggerType::GetItem;
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
 	if (strData == "PlayerPowerUp") return TriggerType::PlayerPowerUp;
+	if (strData == "NoTrigger") return TriggerType::NoTrigger;
 }
 
 ActionType TutorialManager::ToActionType(const std::string strData)
@@ -262,6 +263,8 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		break;
 	case TriggerType::PlayerPowerUp:
 		break;
+	case TriggerType::NoTrigger:
+		return true;
 	}
 	return false;
 }
