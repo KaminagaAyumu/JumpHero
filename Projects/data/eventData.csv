@@ -31,3 +31,11 @@ ID,TriggerType,TriggerParam,ActionType,ActionParam
 30,PlayerPowerUp,0,FreezeGame,0
 31,PlayerPowerUp,0,ShowText,tuto_power_2
 32,PlayerPowerUp,0,WaitInput,0
+33,EnterArea,5,FreezePlayer,0
+34,EnterArea,5,LookCamera,spawnPos
+35,EnterArea,5,SpawnEnemy,0
+36,EnterArea,5,FreezeGame,0
+37,EnterArea,5,ShowText,tuto_enemy
+38,EnterArea,5,WaitInput,0
+39,EnterArea,5,ReturnCamera,0
+40,EnterArea,5,UnFreezePlayer,0
