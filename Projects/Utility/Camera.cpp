@@ -1,6 +1,5 @@
 ﻿#include "Camera.h"
 #include "Game.h"
-#include "../Game/Actor.h"
 #include <cassert>
 
 namespace
@@ -12,7 +11,6 @@ Camera::Camera(const Size& size) :
 	scroll{},
 	m_pos{},
 	m_mapSize(size),
-	m_pTargetActor(nullptr),
 	m_pTargetPos(nullptr)
 {
 }
@@ -31,7 +29,6 @@ void Camera::Update()
 	assert(m_pTargetPos != nullptr && L"カメラのターゲット取得失敗");
 
 	// カメラの座標を補正
-	//m_pos = Geometry::LerpVec2(m_pos, m_pTargetActor->GetPos(), kLerpSpeed);
 	m_pos = Geometry::LerpVec2(m_pos, *m_pTargetPos, kLerpSpeed);
 
 	// スクロール量の計算

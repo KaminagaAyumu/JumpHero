@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "Geometry.h"
 
-class Actor;
-
 /// <summary>
 /// ターゲットを基準にして描画位置を設定するカメラクラス
 /// </summary>
@@ -27,9 +25,7 @@ public:
 	/// <summary>
 	/// カメラが見るターゲットをセットする
 	/// </summary>
-	/// <param name="actor">ターゲットのポインタ</param>
-	void SetTarget(Actor* actor) { m_pTargetActor = actor; }
-
+	/// <param name="pos">ターゲットの座標のポインタ</param>
 	void SetTarget(const Position2* pos) { m_pTargetPos = pos; }
 
 	/// <summary>
@@ -42,7 +38,6 @@ public:
 private:
 	Position2 m_pos; // カメラの座標
 	Size m_mapSize; // マップのサイズ
-	Actor* m_pTargetActor; // カメラが見るターゲットオブジェクト
 	const Position2* m_pTargetPos; // カメラが見るターゲットの座標
 
 };
