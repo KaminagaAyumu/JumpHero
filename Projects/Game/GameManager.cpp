@@ -52,7 +52,6 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 	m_pItemManager->PushActors(actors);
 	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this, map);
 
-	//m_pCamera->SetTarget(m_pPlayer.get());
 	m_pCamera->SetTarget(&m_pPlayer->GetPos());
 
 	// アイテムを取った際のラムダ式定義
