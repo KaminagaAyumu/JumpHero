@@ -45,6 +45,12 @@ public:
 	/// <returns>true : パワーアップできる false : パワーアップできない</returns>
 	bool PowerUp();
 
+	/// <summary>
+	/// パワーアップ状態かどうか
+	/// </summary>
+	/// <returns>true : パワーアップ状態 false : パワーアップしていない</returns>
+	bool IsPowerUp();
+
 	void DebugClear(const Position2& pos);
 
 private:

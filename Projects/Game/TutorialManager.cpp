@@ -266,6 +266,7 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 	case TriggerType::EnemySpawn:
 		break;
 	case TriggerType::PlayerPowerUp:
+		return m_pPlayer->IsPowerUp();
 		break;
 	case TriggerType::NoTrigger:
 		return true;

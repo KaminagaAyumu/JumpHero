@@ -635,6 +635,12 @@ bool Player::IsOpenChestX() const
 	return m_level >= kPowerUpLevelOne;
 }
 
+bool Player::IsPowerUp()
+{
+	// レベルが1以上ならパワーアップしている
+	return m_level >= kPowerUpLevelOne;
+}
+
 void Player::DebugClear(const Position2& pos)
 {
 	m_pos = pos;
