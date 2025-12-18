@@ -26,8 +26,8 @@ ID,TriggerType,TriggerParam,ActionType,ActionParam
 25,OpenChest,4,ShowText,tuto_medal
 26,OpenChest,4,WaitInput,0
 27,GetItem,medal,FreezeGame,0
-28,GetItem,medal,ShowText,tuto_power_1
-29,GetItem,medal,WaitInput,0
+28,NoTrigger,0,ShowText,tuto_power_1
+29,NoTrigger,0,WaitInput,0
 30,PlayerPowerUp,0,FreezeGame,0
 31,PlayerPowerUp,0,ShowText,tuto_power_2
 32,PlayerPowerUp,0,WaitInput,0
