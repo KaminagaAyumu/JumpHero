@@ -41,7 +41,7 @@ TutorialManager::~TutorialManager()
 
 void TutorialManager::Update(Input& input)
 {
-	if (m_eventIndex + 1 >= static_cast<int>(m_eventData.size()))
+	if (m_eventIndex >= static_cast<int>(m_eventData.size()))
 	{
 		return;
 	}
