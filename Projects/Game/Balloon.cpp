@@ -49,6 +49,7 @@ void Balloon::OnCollected(GameManager& gameManager)
 {
 	// 風船が取得された際の処理を行わせる
 	gameManager.OnItemCollected(Types::ItemType::Balloon);
+	gameManager.NotifyItemEvent(Types::ItemType::Balloon);
 }
 
 void Balloon::IsCollision(const Types::CollisionInfo& info)

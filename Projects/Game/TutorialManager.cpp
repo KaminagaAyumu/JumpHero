@@ -326,6 +326,10 @@ bool TutorialManager::IsGetItem(std::string param)
 	{
 		type = Types::ItemType::ChangeToCoin;
 	}
+	if (param == "balloon")
+	{
+		type = Types::ItemType::Balloon;
+	}
 
 	return m_pGameManager->IsItemPicked(type);
 }
@@ -542,6 +546,7 @@ void TutorialManager::RunAction(const EventData& data)
 		m_pPlayer->SetBarrier(m_barrierPos[1]);
 		break;
 	case ActionType::UnlockBarrier:
+		
 		break;
 	case ActionType::ActiveGoal:
 		break;
@@ -654,9 +659,23 @@ void TutorialManager::RunCommonAction(const EventData& data)
 		}
 		break;
 	case ActionType::SetBarrier:
-		m_pPlayer->SetBarrier(m_barrierPos[1]);
+	{
+		int barrierNo = GetParamNum(data.actionParam);
+		m_pPlayer->SetBarrier(m_barrierPos[barrierNo]);
+	}
 		break;
 	case ActionType::UnlockBarrier:
+	{
+		int barrierNo = GetParamNum(data.actionParam);
+		m_barrierPos[barrierNo].isActive = false;
+		m_pPlayer->SetBarrier(m_barrierPos[barrierNo]);
+		barrierNo++;
+		if (barrierNo > m_barrierPos.size())
+		{
+			break;
+		}
+		m_pPlayer->SetBarrier(m_barrierPos[barrierNo]);
+	}
 		break;
 	case ActionType::ActiveGoal:
 		break;

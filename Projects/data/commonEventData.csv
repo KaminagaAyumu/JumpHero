@@ -1,5 +1,5 @@
 ID,TriggerType,TriggerParam,ActionType,ActionParam,Once
-1,EventEnd,1,SetBarrier,0,TRUE
+1,EventEnd,1,SetBarrier,1,TRUE
 2,EventEnd,25,UnlockBarrier,1,TRUE
 3,GetItem,balloon,UnlockBarrier,2,TRUE
 4,EventEnd,62,UnlockBarrier,3,TRUE
