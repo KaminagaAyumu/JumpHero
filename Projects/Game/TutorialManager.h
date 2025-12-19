@@ -85,6 +85,12 @@ private:
 		bool isActive = false; // ページ送りが進行中か
 	};
 
+	struct CommonEventData : EventData
+	{
+		bool isOnce; // 一度しか行わないかどうか
+		bool isInvoked = false; // 行われたかどうか(onceの際使う)
+	};
+
 	int m_timeCount; // 時間経過用フレーム数のカウンタ
 	int m_eventIndex; // イベントの進行状況
 
@@ -93,6 +99,7 @@ private:
 	bool m_isShowTextWindow; // テキストウィンドウを表示するかどうか
 
 	std::vector<EventData> m_eventData; // イベントデータ群
+	std::vector<CommonEventData> m_commonEventData; // 共通イベントデータ群
 	TextPager m_textPager; // テキストを管理する構造体
 
 	GameManager* m_pGameManager;	// ゲームマネージャーのポインタ
@@ -104,6 +111,12 @@ private:
 	std::unordered_map<int, Position2> m_chestPos;
 	std::vector<Position2> m_spawnPos;
 	std::unordered_map<int, Position2> m_cameraPos;
+
+	/// <summary>
+	/// 共通イベントデータをロードする
+	/// </summary>
+	/// <returns>true : ロード成功 false: ロード失敗</returns>
+	bool LoadCommonEventData();
 
 	bool InitEventPos();
 

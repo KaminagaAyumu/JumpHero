@@ -14,10 +14,19 @@ namespace
 {
 	constexpr int kTextWindowMargin = 25;
 
-	constexpr int kEnemySpawnPosChipNo = 1;
+	constexpr int kEnemySpawnPosChipNo = 1; // 敵のスポーン位置のマップチップ番号
 
 	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
 	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
+
+	constexpr int kEventDataSize = 5;
+	constexpr int kCommonEventDataSize = 6;
+	constexpr int kEventId = 0;
+	constexpr int kTriggerType = 1;
+	constexpr int kTriggerParam = 2;
+	constexpr int kActionType = 3;
+	constexpr int kActionParam = 4;
+	constexpr int kOnce = 5;
 }
 
 TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player) :
@@ -33,6 +42,7 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	m_pPlayer = player;
 	LoadEventData();
 	InitEventPos();
+	LoadCommonEventData();
 }
 
 TutorialManager::~TutorialManager()
@@ -117,13 +127,13 @@ bool TutorialManager::LoadEventData()
 		}
 
 		EventData data;
-		if (row.size() >= 5)
+		if (row.size() >= kEventDataSize)
 		{
-			data.id = std::stoi(row[0]);
-			data.triggerType = ToTriggerType(row[1]);
-			data.triggerParam = row[2];
-			data.actionType = ToActionType(row[3]);
-			data.actionParam = row[4];
+			data.id = std::stoi(row[kEventId]);
+			data.triggerType = ToTriggerType(row[kTriggerType]);
+			data.triggerParam = row[kTriggerParam];
+			data.actionType = ToActionType(row[kActionType]);
+			data.actionParam = row[kActionParam];
 			m_eventData.push_back(data);
 		}
 	}
@@ -134,6 +144,50 @@ bool TutorialManager::LoadEventData()
 size_t TutorialManager::GetEventNum()
 {
 	return size_t(m_eventData.size());
+}
+
+bool TutorialManager::LoadCommonEventData()
+{
+	std::ifstream file("data/commonEventData.csv");
+	if (!file) // ファイルの読み込みに失敗した場合
+	{
+		return false; // ロード失敗とする
+	}
+	std::string line;
+	bool isHeader = true;
+
+
+	while (std::getline(file, line))
+	{
+		// 最初の一行は読み込まない
+		if (isHeader)
+		{
+			isHeader = false;
+			continue;
+		}
+
+		std::istringstream stream(line);
+		std::string field;
+		std::vector<std::string> row;
+		while (getline(stream, field, ','))
+		{
+			row.push_back(field);
+		}
+
+		CommonEventData data;
+		if (row.size() >= kCommonEventDataSize)
+		{
+			data.id = std::stoi(row[kEventId]);
+			data.triggerType = ToTriggerType(row[kTriggerType]);
+			data.triggerParam = row[kTriggerParam];
+			data.actionType = ToActionType(row[kActionType]);
+			data.actionParam = row[kActionParam];
+			data.isOnce = row[kOnce] == "TRUE" ? true : false; // TRUEという文字列ならtrue、それ以外ならfalseにする
+			m_commonEventData.push_back(data);
+		}
+	}
+
+	return true;
 }
 
 bool TutorialManager::InitEventPos()
