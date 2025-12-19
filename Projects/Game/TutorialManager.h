@@ -112,7 +112,7 @@ private:
 	Player* m_pPlayer;				// プレイヤーのポインタ(座標取得用)
 
 	std::unordered_map<int, Position2> m_areaPos;
-	std::unordered_map<int, Position2> m_barrierPos;
+	std::unordered_map<int, ActivePosition2> m_barrierPos;
 	std::unordered_map<int, Position2> m_chestPos;
 	std::vector<Position2> m_spawnPos;
 	std::unordered_map<int, Position2> m_cameraPos;
@@ -129,6 +129,7 @@ private:
 
 	bool IsEnterArea(int areaNum); // イベント発火フラグの場所に到達したか
 	bool IsOpenChest(int chestNum); // 指定された宝箱を開けたか
+	bool IsEventEnd(int eventNum); // 指定されたイベントが終わったか
 	bool IsGetItem(std::string param); // 指定されたアイテムを取得したか
 	int GetParamNum(std::string param); // パラメータの数値を整数型に変換
 
@@ -166,6 +167,12 @@ private:
 	/// </summary>
 	/// <param name="data">イベントデータ</param>
 	void RunAction(const EventData& data);
+
+	/// <summary>
+	/// 指定された共通イベントを行う
+	/// </summary>
+	/// <param name="data">イベントデータ</param>
+	void RunCommonAction(const EventData& data);
 
 };
 

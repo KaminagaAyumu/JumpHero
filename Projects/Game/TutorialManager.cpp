@@ -59,6 +59,20 @@ void TutorialManager::Update(Input& input)
 
 	m_isInput = input.IsTriggered("OK");
 
+	for (auto& common : m_commonEventData)
+	{
+		// すでにアクションが行われていて一度しか行わないイベントなら行わない
+		if (common.isOnce && common.isInvoked) continue;
+		if (CheckTrigger(common))
+		{
+			RunCommonAction(common);
+			if (common.isOnce)
+			{
+				common.isInvoked = true;
+			}
+		}
+	}
+
 	if (CheckTrigger(m_eventData[m_eventIndex]))
 	{
 		RunAction(m_eventData[m_eventIndex]);
@@ -236,7 +250,8 @@ bool TutorialManager::InitEventPos()
 				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
 				// マップチップ座標からゲーム内座標に変換
 				Position2 barrierPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
-				m_barrierPos[barrierId] = barrierPos; // IDと座標を設定
+				ActivePosition2 barrier = { barrierPos,true };
+				m_barrierPos[barrierId] = barrier; // IDと座標を設定
 			}
 
 			// 宝箱のIDと座標を取得
@@ -289,6 +304,11 @@ bool TutorialManager::IsOpenChest(int chestNum)
 		return true;
 	}
 	return false;
+}
+
+bool TutorialManager::IsEventEnd(int eventNum)
+{
+	return m_eventIndex >= eventNum;
 }
 
 bool TutorialManager::IsGetItem(std::string param)
@@ -391,6 +411,10 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 	}
 	break;
 	case TriggerType::EventEnd:
+	{
+		int eventNum = GetParamNum(data.triggerParam);
+		return IsEventEnd(eventNum);
+	}
 		break;
 	case TriggerType::OpenChest:
 	{
@@ -515,6 +539,7 @@ void TutorialManager::RunAction(const EventData& data)
 		}
 		break;
 	case ActionType::SetBarrier:
+		m_pPlayer->SetBarrier(m_barrierPos[1]);
 		break;
 	case ActionType::UnlockBarrier:
 		break;
@@ -522,4 +547,118 @@ void TutorialManager::RunAction(const EventData& data)
 		break;
 	}
 	m_eventIndex++;
+}
+
+void TutorialManager::RunCommonAction(const EventData& data)
+{
+	switch (data.actionType)
+	{
+	case ActionType::ShowText:
+	{
+		std::string id = data.actionParam;
+		auto pages = m_pTextManager->GetAllPageText(id);
+		if (pages.empty())
+		{
+			printfDx(L"テキストが存在しない\n");
+			return;
+		}
+		m_textPager.id = id;
+		m_textPager.pages = pages;
+		m_textPager.index = 0;
+		m_textPager.isActive = true;
+
+		m_isShowTextWindow = true;
+	}
+	break;
+	case ActionType::DropItem:
+	{
+		Types::ItemType type; // 生成するアイテムが何かを判別する
+		// 宝箱の番号を取得
+		int chestNum = GetParamNum(data.triggerParam);
+		if (data.actionParam == "coin")
+		{
+			type = Types::ItemType::Coin;
+		}
+		if (data.actionParam == "medal")
+		{
+			type = Types::ItemType::UpgradeMedal;
+		}
+		if (data.actionParam == "toitem")
+		{
+			type = Types::ItemType::ChangeToCoin;
+			// 通常のアイテム(コイン)をまず生成
+			m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, Types::ItemType::Coin);
+		}
+
+		m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, type);
+	}
+	break;
+	case ActionType::SpawnEnemy:
+		for (auto& pos : m_spawnPos)
+		{
+			m_pGameManager->SpawnEnemy(pos.x, pos.y, kEnemySpawnPosChipNo);
+		}
+		break;
+	case ActionType::FreezeGame:
+		m_isFreezeGame = true;
+		break;
+	case ActionType::UnFreezeGame:
+		m_isFreezeGame = false;
+		break;
+	case ActionType::FreezePlayer:
+		m_pPlayer->FreezeChange();
+		break;
+	case ActionType::UnFreezePlayer:
+		m_pPlayer->FreezeChange();
+		break;
+	case ActionType::LookCamera:
+	{
+		// カメラが見る位置を設定
+		LookCamera(data.actionParam);
+		// カメラの補正が終わっていなければ
+		if (!m_pGameManager->IsCameraLerpEnd())
+		{
+			return; // ここを抜けないようにする
+		}
+	}
+	break;
+	case ActionType::ReturnCamera:
+		m_pGameManager->SetCameraTarget(&m_pPlayer->GetPos());
+		break;
+	case ActionType::PowerUp:
+		break;
+	case ActionType::WaitInput:
+		if (m_isInput)
+		{
+			if (m_textPager.isActive)
+			{
+				m_textPager.index++;
+				if (m_textPager.index >= m_textPager.pages.size())
+				{
+					m_textPager.isActive = false;
+					m_textPager.index = m_textPager.pages.size() - 1;
+				}
+			}
+		}
+		else
+		{
+			if (!m_textPager.isActive)
+			{
+				m_isShowTextWindow = false;
+			}
+
+		}
+		if (m_isShowTextWindow)
+		{
+			return;
+		}
+		break;
+	case ActionType::SetBarrier:
+		m_pPlayer->SetBarrier(m_barrierPos[1]);
+		break;
+	case ActionType::UnlockBarrier:
+		break;
+	case ActionType::ActiveGoal:
+		break;
+	}
 }

@@ -331,7 +331,7 @@ void Player::MoveOperation(Input& input)
 
 	if (m_barrierPos.isActive)
 	{
-		if (m_pos.x <= m_barrierPos.pos.x)
+		if (m_pos.x >= m_barrierPos.pos.x)
 		{
 			m_pos.x = m_barrierPos.pos.x;
 		}
