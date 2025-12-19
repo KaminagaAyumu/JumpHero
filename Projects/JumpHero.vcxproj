@@ -176,6 +176,7 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scene\TutorialScene.cpp" />
     <ClCompile Include="Game\TransformEnemy.cpp" />
+    <ClCompile Include="Utility\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Balloon.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Game\Coin.h" />
     <ClInclude Include="Game\EnemyManager.h" />
     <ClInclude Include="Game\ChestManager.h" />
+    <ClInclude Include="Game\EventControls.h" />
     <ClInclude Include="Game\LifeUp.h" />
     <ClInclude Include="Game\UpgradeMedal.h" />
     <ClInclude Include="Scene\MiniGameScene.h" />
@@ -216,6 +218,7 @@
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scene\TutorialScene.h" />
     <ClInclude Include="Game\TransformEnemy.h" />
+    <ClInclude Include="Utility\UI\UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
