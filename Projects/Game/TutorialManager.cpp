@@ -363,6 +363,7 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 	if (strData == "ReturnCamera") return ActionType::ReturnCamera;
 	if (strData == "PowerUp") return ActionType::PowerUp;
 	if (strData == "WaitInput") return ActionType::WaitInput;
+	if (strData == "SetBarrier") return ActionType::SetBarrier;
 	if (strData == "UnlockBarrier") return ActionType::UnlockBarrier;
 	if (strData == "ActiveGoal") return ActionType::ActiveGoal;
 }
@@ -512,6 +513,8 @@ void TutorialManager::RunAction(const EventData& data)
 		{
 			return;
 		}
+		break;
+	case ActionType::SetBarrier:
 		break;
 	case ActionType::UnlockBarrier:
 		break;
