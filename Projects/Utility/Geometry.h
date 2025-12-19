@@ -151,6 +151,15 @@ struct Rect2D
 	Position2 GetRightBottom()const;
 };
 
+/// <summary>
+/// 座標をアクティブかどうかの状態付きで指定できる構造体
+/// </summary>
+struct ActivePosition2
+{
+	Position2 pos;
+	bool isActive;
+};
+
 
 namespace Geometry
 {
