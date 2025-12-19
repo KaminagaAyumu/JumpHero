@@ -329,6 +329,14 @@ void Player::MoveOperation(Input& input)
 		m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 	}
 
+	if (m_barrierPos.isActive)
+	{
+		if (m_pos.x <= m_barrierPos.pos.x)
+		{
+			m_pos.x = m_barrierPos.pos.x;
+		}
+	}
+
 	m_colCircle.pos = m_pos; // 円の座標更新
 	m_colRect.pos = m_pos; // 矩形の座標更新
 	m_prevPosY = m_pos.y; // 前回のY座標を更新
