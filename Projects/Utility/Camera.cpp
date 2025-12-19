@@ -31,7 +31,7 @@ void Camera::Update()
 	assert(m_pTargetPos != nullptr && L"カメラのターゲット取得失敗");
 
 	// カメラの座標を補正
-	if (IsLeapEnd()) // 補正が終わっていたら
+	if (IsLerpEnd()) // 補正が終わっていたら
 	{
 		m_pos = *m_pTargetPos; // カメラの座標をターゲットに固定
 	}
@@ -73,7 +73,7 @@ const Rect2D& Camera::GetNowScreenArea() const
 	return { scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenWidth };
 }
 
-bool Camera::IsLeapEnd() const
+bool Camera::IsLerpEnd() const
 {
 	return Geometry::GetDistance(m_pos, *m_pTargetPos) <= kLerpEndDistance;
 }

@@ -16,7 +16,7 @@ namespace
 
 	// イベント発火フラグの場所を取得するための番号(修正する可能性あり)
 	constexpr int kFirstTriggerNum = 1;
-	constexpr int kLastTriggerNum = 5;
+	constexpr int kLastTriggerNum = 6;
 
 	// マップのチップを置く数
 	constexpr int kChipNumX = 97;

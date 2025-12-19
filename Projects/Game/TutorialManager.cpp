@@ -13,6 +13,11 @@
 namespace
 {
 	constexpr int kTextWindowMargin = 25;
+
+	constexpr int kEnemySpawnPosChipNo = 1;
+
+	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
+	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
 }
 
 TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textManager, Map* map, Player* player) :
@@ -153,12 +158,19 @@ bool TutorialManager::InitEventPos()
 				m_areaPos[areaId] = areaPos; // IDと座標を設定
 			}
 
-			if (chipNo == 7)
+			if (chipNo == kSpawnPosChipNo)
 			{
 				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
 				// マップチップ座標からゲーム内座標に変換
 				Position2 cameraPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
-				m_cameraPos[7] = cameraPos; // IDと座標を設定
+				m_cameraPos[kSpawnPosChipNo] = cameraPos; // IDと座標を設定
+			}
+			if (chipNo == kGoalPosChipNo)
+			{
+				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
+				// マップチップ座標からゲーム内座標に変換
+				Position2 cameraPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+				m_cameraPos[kGoalPosChipNo] = cameraPos; // IDと座標を設定
 			}
 
 			// 宝箱のIDと座標を取得
@@ -172,7 +184,7 @@ bool TutorialManager::InitEventPos()
 				m_chestPos[chestId] = chestPos; // IDと座標を設定
 			}
 
-			if (chipNo == 1)
+			if (chipNo == kEnemySpawnPosChipNo)
 			{
 				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
 				Position2 spawnPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
@@ -224,6 +236,10 @@ bool TutorialManager::IsGetItem(std::string param)
 	{
 		type = Types::ItemType::UpgradeMedal;
 	}
+	if (param == "toitem")
+	{
+		type = Types::ItemType::ChangeToCoin;
+	}
 
 	return m_pGameManager->IsItemPicked(type);
 }
@@ -235,7 +251,16 @@ int TutorialManager::GetParamNum(std::string param)
 
 void TutorialManager::LookCamera(std::string param)
 {
-	
+	// パラメータを見てカメラが見る位置を決める
+	// メモ:一時変数などでポジションを入れると破棄されてしまうので注意
+	if (param == "spawnPos")
+	{
+		m_pGameManager->SetCameraTarget(&m_cameraPos[kSpawnPosChipNo]);
+	}
+	if (param == "goalPos")
+	{
+		m_pGameManager->SetCameraTarget(&m_cameraPos[kGoalPosChipNo]);
+	}
 }
 
 void TutorialManager::DrawTextWindow() const
@@ -336,7 +361,9 @@ void TutorialManager::RunAction(const EventData& data)
 		break;
 	case ActionType::DropItem:
 	{
-		Types::ItemType type;
+		Types::ItemType type; // 生成するアイテムが何かを判別する
+		// 宝箱の番号を取得
+		int chestNum = GetParamNum(data.triggerParam);
 		if (data.actionParam == "coin")
 		{
 			type = Types::ItemType::Coin;
@@ -345,8 +372,13 @@ void TutorialManager::RunAction(const EventData& data)
 		{
 			type = Types::ItemType::UpgradeMedal;
 		}
-		// 宝箱の番号を取得
-		int chestNum = GetParamNum(data.triggerParam);
+		if (data.actionParam == "toitem")
+		{
+			type = Types::ItemType::ChangeToCoin;
+			// 通常のアイテム(コイン)をまず生成
+			m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, Types::ItemType::Coin);
+		}
+		
 		m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, type);
 	}
 		break;
@@ -370,16 +402,12 @@ void TutorialManager::RunAction(const EventData& data)
 		break;
 	case ActionType::LookCamera:
 	{
-		// メモ:一時変数などでポジションを入れると破棄されてしまうので注意
-		m_pGameManager->SetCameraTarget(&m_cameraPos[7]);
-		//LookCamera(data.actionParam);
-		if (m_pGameManager->IsCameraLeapEnd())
+		// カメラが見る位置を設定
+		LookCamera(data.actionParam);
+		// カメラの補正が終わっていなければ
+		if (!m_pGameManager->IsCameraLerpEnd())
 		{
-
-		}
-		else
-		{
-			return;
+			return; // ここを抜けないようにする
 		}
 	}
 		break;

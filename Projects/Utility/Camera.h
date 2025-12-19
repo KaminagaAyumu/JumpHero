@@ -39,7 +39,7 @@ public:
 	/// カメラの補正が終わったかどうか
 	/// </summary>
 	/// <returns>true : 終わった false : 終わっていない</returns>
-	bool IsLeapEnd()const;
+	bool IsLerpEnd()const;
 
 private:
 	Position2 m_pos; // カメラの座標

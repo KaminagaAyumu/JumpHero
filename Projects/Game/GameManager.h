@@ -121,7 +121,7 @@ public:
 	/// カメラの補正が終わったかどうか
 	/// </summary>
 	/// <returns>true : 終わった false : 終わっていない</returns>
-	bool IsCameraLeapEnd();
+	bool IsCameraLerpEnd();
 
 	/// <summary>
 	/// ゲーム内に存在するオブジェクトの数を取得

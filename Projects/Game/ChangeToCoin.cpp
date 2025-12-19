@@ -58,8 +58,9 @@ void ChangeToCoin::Draw()
 
 void ChangeToCoin::OnCollected(GameManager& gameManager)
 {
-	// 風船が取得された際の処理を行わせる
+	// 敵をコインに変えるアイテムが取得された際の処理を行わせる
 	gameManager.OnItemCollected(Types::ItemType::ChangeToCoin);
+	gameManager.NotifyItemEvent(Types::ItemType::ChangeToCoin);
 }
 
 bool ChangeToCoin::IsAppear()

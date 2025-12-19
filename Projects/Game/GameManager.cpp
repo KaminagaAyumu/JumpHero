@@ -295,9 +295,9 @@ void GameManager::SetCameraTarget(const Position2* pos)
 	m_pCamera->SetTarget(pos);
 }
 
-bool GameManager::IsCameraLeapEnd()
+bool GameManager::IsCameraLerpEnd()
 {
-	return m_pCamera->IsLeapEnd();
+	return m_pCamera->IsLerpEnd();
 }
 
 const size_t GameManager::GetActorNum() const
