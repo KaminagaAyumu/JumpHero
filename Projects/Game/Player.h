@@ -35,6 +35,12 @@ public:
 	bool IsGround() const { return m_isGround; }
 
 	/// <summary>
+	/// プレイヤーの登場が終わったかどうかを判定
+	/// </summary>
+	/// <returns>true : 終わった false : 終わっていない</returns>
+	bool IsEntryEnd()const;
+
+	/// <summary>
 	/// ミスした瞬間の処理
 	/// </summary>
 	void MissStart();

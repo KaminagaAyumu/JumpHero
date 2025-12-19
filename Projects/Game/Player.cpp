@@ -686,6 +686,12 @@ void Player::JumpStart()
 	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 }
 
+bool Player::IsEntryEnd() const
+{
+	// 初期状態がentryなのでそれ以外の時は終わっているとする
+	return !(m_update == Player::EntryUpdate);
+}
+
 void Player::MissStart()
 {
 	m_direction = { 0.0f,1.0f }; // ジャンプの方向を上向きにする
