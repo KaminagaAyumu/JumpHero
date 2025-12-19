@@ -444,7 +444,7 @@ void TutorialManager::RunAction(const EventData& data)
 	case ActionType::SpawnEnemy:
 		for (auto& pos : m_spawnPos)
 		{
-			m_pGameManager->SpawnEnemy(pos.x,pos.y, 1);
+			m_pGameManager->SpawnEnemy(pos.x,pos.y, kEnemySpawnPosChipNo);
 		}
 		break;
 	case ActionType::FreezeGame:
