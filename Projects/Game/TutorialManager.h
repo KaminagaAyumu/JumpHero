@@ -111,6 +111,7 @@ private:
 	Player* m_pPlayer;				// プレイヤーのポインタ(座標取得用)
 
 	std::unordered_map<int, Position2> m_areaPos;
+	std::unordered_map<int, Position2> m_barrierPos;
 	std::unordered_map<int, Position2> m_chestPos;
 	std::vector<Position2> m_spawnPos;
 	std::unordered_map<int, Position2> m_cameraPos;

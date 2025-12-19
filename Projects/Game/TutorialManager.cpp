@@ -18,6 +18,7 @@ namespace
 
 	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
 	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
+	constexpr int kBarrierPosChipNo = 10; // バリアのマップチップ番号
 
 	constexpr int kEventDataSize = 5;
 	constexpr int kCommonEventDataSize = 6;
@@ -193,7 +194,10 @@ bool TutorialManager::LoadCommonEventData()
 bool TutorialManager::InitEventPos()
 {
 	m_areaPos.clear(); // イベント発火座標を初期化
+	m_cameraPos.clear(); // カメラターゲット座標を初期化
+	m_barrierPos.clear(); // バリア座標を初期化
 	m_chestPos.clear(); // 宝箱の座標を初期化
+	int barrierId = 0; // バリアで使用するためのID
 	int chestId = 0; // 宝箱で使用するためのID
 
 	// マップの右端からループ
@@ -225,6 +229,14 @@ bool TutorialManager::InitEventPos()
 				// マップチップ座標からゲーム内座標に変換
 				Position2 cameraPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
 				m_cameraPos[kGoalPosChipNo] = cameraPos; // IDと座標を設定
+			}
+			if (chipNo == kBarrierPosChipNo)
+			{
+				barrierId++;
+				float tileSize = m_pMap->GetTileSize(); // マップチップのサイズを取得
+				// マップチップ座標からゲーム内座標に変換
+				Position2 barrierPos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
+				m_barrierPos[barrierId] = barrierPos; // IDと座標を設定
 			}
 
 			// 宝箱のIDと座標を取得
