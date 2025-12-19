@@ -38,6 +38,7 @@ enum class ActionType
 	ReturnCamera, // カメラが戻ってくる
 	PowerUp, // プレイヤーの強化
 	WaitInput, // ボタン入力待ち
+	UnlockBarrier, // 移動制限バリアを開放
 };
 
 class TutorialManager

@@ -351,6 +351,7 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 	if (strData == "ReturnCamera") return ActionType::ReturnCamera;
 	if (strData == "PowerUp") return ActionType::PowerUp;
 	if (strData == "WaitInput") return ActionType::WaitInput;
+	if (strData == "UnlockBarrier") return ActionType::UnlockBarrier;
 }
 
 bool TutorialManager::CheckTrigger(const EventData& data)
@@ -498,6 +499,8 @@ void TutorialManager::RunAction(const EventData& data)
 		{
 			return;
 		}
+		break;
+	case ActionType::UnlockBarrier:
 		break;
 	}
 	m_eventIndex++;
