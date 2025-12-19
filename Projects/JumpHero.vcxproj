@@ -152,6 +152,7 @@
     <ClCompile Include="Scene\SelectScene.cpp" />
     <ClCompile Include="Game\TextManager.cpp" />
     <ClCompile Include="Game\TutorialManager.cpp" />
+    <ClCompile Include="Utility\UI\UITextWindow.cpp" />
     <ClCompile Include="Utility\StringFunction.cpp" />
     <ClCompile Include="Utility\Map.cpp" />
     <ClCompile Include="Scene\ClearScene.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scene\TutorialScene.cpp" />
     <ClCompile Include="Game\TransformEnemy.cpp" />
+    <ClCompile Include="Utility\UI\UIBase.cpp" />
     <ClCompile Include="Utility\UI\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +194,7 @@
     <ClInclude Include="Scene\SelectScene.h" />
     <ClInclude Include="Game\TextManager.h" />
     <ClInclude Include="Game\TutorialManager.h" />
+    <ClInclude Include="Utility\UI\UITextWindow.h" />
     <ClInclude Include="Utility\StringFunction.h" />
     <ClInclude Include="Utility\GameType.h" />
     <ClInclude Include="Game\ItemManager.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scene\TutorialScene.h" />
     <ClInclude Include="Game\TransformEnemy.h" />
+    <ClInclude Include="Utility\UI\UIBase.h" />
     <ClInclude Include="Utility\UI\UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
