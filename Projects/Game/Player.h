@@ -58,6 +58,12 @@ public:
 	/// </summary>
 	void FreezeChange();
 
+	/// <summary>
+	/// バリアを設定する
+	/// </summary>
+	/// <param name="barrier">バリアの情報</param>
+	void SetBarrier(const ActivePosition2& barrier);
+
 private:
 	// マップとの当たり判定を行う際の構造体
 	struct ContactFrags
@@ -71,6 +77,7 @@ private:
 	Vector2 m_direction; // 進む方向
 	Vector2 m_velocity; // 進む速度
 	Position2 m_entryEndPos;
+	ActivePosition2 m_barrierPos; // バリア
 
 	int m_graphHandle; // プレイヤーのグラフィックハンドル
 

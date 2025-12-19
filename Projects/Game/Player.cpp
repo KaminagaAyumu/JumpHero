@@ -51,6 +51,7 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_direction{},
 	m_velocity{},
 	m_entryEndPos{},
+	m_barrierPos{},
 	m_graphHandle(-1),
 	m_frameCount(0),
 	m_jumpCount(0),
@@ -80,6 +81,7 @@ void Player::Init()
 	m_entryEndPos = m_pos + Vector2{ kEntryEndXOffset,0.0f };
 	m_direction = {};
 	m_velocity = {};
+	m_barrierPos = {};
 	m_graphHandle = LoadGraph(L"data/Idle.png");
 	m_colCircle = { m_pos,kPlayerWidth * 0.5f };
 	m_colRect = { m_pos,kPlayerWidth,kPlayerHeight };
@@ -655,6 +657,11 @@ void Player::DebugClear(const Position2& pos)
 void Player::FreezeChange()
 {
 	m_isFreeze = !m_isFreeze;
+}
+
+void Player::SetBarrier(const ActivePosition2& barrier)
+{
+	m_barrierPos = barrier;
 }
 
 void Player::JumpStart()
