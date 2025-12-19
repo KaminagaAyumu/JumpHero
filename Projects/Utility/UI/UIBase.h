@@ -8,6 +8,6 @@ class UIBase
 public:
 	virtual ~UIBase() = default;
 	virtual void Update()abstract;
-	virtual void Draw()abstract;
+	virtual void Draw()const abstract;
 };
 
