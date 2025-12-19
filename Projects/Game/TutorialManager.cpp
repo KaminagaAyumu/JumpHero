@@ -352,6 +352,7 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 	if (strData == "PowerUp") return ActionType::PowerUp;
 	if (strData == "WaitInput") return ActionType::WaitInput;
 	if (strData == "UnlockBarrier") return ActionType::UnlockBarrier;
+	if (strData == "ActiveGoal") return ActionType::ActiveGoal;
 }
 
 bool TutorialManager::CheckTrigger(const EventData& data)
@@ -501,6 +502,8 @@ void TutorialManager::RunAction(const EventData& data)
 		}
 		break;
 	case ActionType::UnlockBarrier:
+		break;
+	case ActionType::ActiveGoal:
 		break;
 	}
 	m_eventIndex++;

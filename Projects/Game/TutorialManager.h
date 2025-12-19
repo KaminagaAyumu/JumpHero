@@ -39,6 +39,7 @@ enum class ActionType
 	PowerUp, // プレイヤーの強化
 	WaitInput, // ボタン入力待ち
 	UnlockBarrier, // 移動制限バリアを開放
+	ActiveGoal, // ゴールを開く
 };
 
 class TutorialManager
