@@ -330,6 +330,7 @@ TriggerType TutorialManager::ToTriggerType(const std::string strData)
 	if (strData == "GameStart") return TriggerType::GameStart;
 	if (strData == "EnterArea") return TriggerType::EnterArea;
 	if (strData == "TimeElapsed") return TriggerType::TimeElapsed;
+	if (strData == "EventEnd") return TriggerType::EventEnd;
 	if (strData == "OpenChest") return TriggerType::OpenChest;
 	if (strData == "GetItem") return TriggerType::GetItem;
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
@@ -374,6 +375,8 @@ bool TutorialManager::CheckTrigger(const EventData& data)
 		}
 	}
 	break;
+	case TriggerType::EventEnd:
+		break;
 	case TriggerType::OpenChest:
 	{
 		int chestNum = GetParamNum(data.triggerParam);
