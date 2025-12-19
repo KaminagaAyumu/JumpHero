@@ -26,7 +26,7 @@ public:
 	/// ミスしているかどうかを返す
 	/// </summary>
 	/// <returns>true: ミス状態 false: ミスしていない</returns>
-	bool IsMiss() const { return m_isMiss; }
+	bool IsMiss() const;
 
 	/// <summary>
 	/// 地面についているかどうかを返す

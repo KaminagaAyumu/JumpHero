@@ -117,6 +117,11 @@ void Player::Draw()
 	(this->*m_draw)();
 }
 
+bool Player::IsMiss() const
+{
+	return (m_update == &Player::MissUpdate);
+}
+
 void Player::IsCollision(const Types::CollisionInfo& info)
 {
 	// 敵と衝突したらミス処理を行う
@@ -689,7 +694,7 @@ void Player::JumpStart()
 bool Player::IsEntryEnd() const
 {
 	// 初期状態がentryなのでそれ以外の時は終わっているとする
-	return !(m_update == Player::EntryUpdate);
+	return !(m_update == &Player::EntryUpdate);
 }
 
 void Player::MissStart()
