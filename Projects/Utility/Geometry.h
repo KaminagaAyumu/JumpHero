@@ -81,17 +81,20 @@ struct Vector2
 using Position2 = Vector2;
 //typedef Vector2 Position2;
 
-/// <summary>
-/// サイズを格納する構造体
-/// </summary>
-struct Size
+struct Position2Int
 {
 	int x;
 	int y;
 };
 
-// 座標情報で使用するために別名をつける
-using Position2Int = Size;
+/// <summary>
+/// サイズを格納する構造体
+/// </summary>
+struct Size
+{
+	int width;
+	int height;
+};
 
 
 /// <summary>

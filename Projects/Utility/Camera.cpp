@@ -51,9 +51,9 @@ void Camera::Update()
 		scroll.x = 0;
 	}
 	// カメラがスクロール終了位置より右にある時はそれ以上スクロールさせない
-	if (scroll.x > m_mapSize.x - Game::kScreenWidth)
+	if (scroll.x > m_mapSize.width - Game::kScreenWidth)
 	{
-		scroll.x = m_mapSize.x - Game::kScreenWidth;
+		scroll.x = m_mapSize.width - Game::kScreenWidth;
 	}
 
 	// カメラがスクロール開始位置より上にいるときはスクロールさせない
@@ -62,9 +62,9 @@ void Camera::Update()
 		scroll.y = 0;
 	}
 	// カメラがスクロール終了位置より下にいるときはそれ以上スクロールさせない
-	if (scroll.y > m_mapSize.y - Game::kScreenHeight)
+	if (scroll.y > m_mapSize.height - Game::kScreenHeight)
 	{
-		scroll.y = m_mapSize.y - Game::kScreenHeight;
+		scroll.y = m_mapSize.height - Game::kScreenHeight;
 	}
 }
 

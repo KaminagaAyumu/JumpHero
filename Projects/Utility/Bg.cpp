@@ -59,13 +59,13 @@ void Bg::Draw()
 void Bg::Draw(Camera* camera)
 {
 	Size bgSize = {};
-	GetGraphSize(m_bgHandle, &bgSize.x, &bgSize.y);
+	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
 
 	Position2 scrollPos = {};
-	scrollPos.x = static_cast<int>(camera->scroll.x) % bgSize.x;
+	scrollPos.x = static_cast<int>(camera->scroll.x) % bgSize.width;
 	// 縦もスクロールする場合は↓を使う
 	// scrollPos.y = static_cast<int>(camera->scroll.y) % bgSize.y;
-	scrollPos.y = static_cast<int>(camera->scroll.y) / bgSize.y;
+	scrollPos.y = static_cast<int>(camera->scroll.y) / bgSize.height;
 
 	DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
 
@@ -106,9 +106,9 @@ void Bg::Draw(Camera* camera)
 		if (scrollPos.x > 0)
 		{
 			Size size = {};
-			GetGraphSize(handle, &size.x, &size.y);
-			DrawGraph(static_cast<int>(size.x) - static_cast<int>(scrollPos.x),
-				Game::kScreenHeight - size.y,
+			GetGraphSize(handle, &size.width, &size.height);
+			DrawGraph(static_cast<int>(size.width) - static_cast<int>(scrollPos.x),
+				Game::kScreenHeight - size.height,
 				handle, true);
 		}
 	}
