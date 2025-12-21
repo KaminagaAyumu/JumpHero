@@ -380,7 +380,9 @@ void Player::CheckHitToChest(Input& input)
 		{
 			isLeftSide = true;
 			
+#ifdef _DEBUG
 			printfDx(L"Player: 宝箱の右側にいる\n");
+#endif 
 			if(chestX != -1 && chestY != -1)
 			{
 				// すでに宝箱が見つかっている場合は何もしない
@@ -414,8 +416,9 @@ void Player::CheckHitToChest(Input& input)
 			}
 			chestX = rightProbeX;
 			chestY = y;
-			
+#ifdef _DEBUG
 			printfDx(L"Player: 宝箱の左側にいる\n");
+#endif 
 			if (IsOpenChestX()) // 宝箱が横から開けられる時
 			{
 				// 宝箱を開ける
@@ -643,7 +646,9 @@ bool Player::IsOnChestTop(Position2Int& chestPos)
 			chestX = x;
 			chestY = footY;
 			chestPos = { chestX,chestY };
+#ifdef _DEBUG
 			printfDx(L"Player: 宝箱の上にいる\n");
+#endif
 			return true;
 		}
 	}
