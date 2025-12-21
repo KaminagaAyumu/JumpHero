@@ -20,7 +20,7 @@ m_frameCount(kFadeInterval),
 m_updateFunc(&TitleScene::FadeInUpdate),
 m_drawFunc(&TitleScene::FadeDraw)
 {
-	m_titleImageHandle = LoadGraph(L"data/player.png");
+	m_titleImageHandle = LoadGraph(L"data/logo.png");
 	m_bg = std::make_shared<Bg>();
 }
 
@@ -78,14 +78,14 @@ void TitleScene::FadeOutUpdate(Input& input)
 void TitleScene::NormalDraw()
 {
 	m_bg->Draw();
-	/*DrawRotaGraph(
+	DrawRotaGraph(
 		Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2,
 		1.0f,
 		0.0f,
 		m_titleImageHandle,
 		TRUE
-	);*/
+	);
 #ifdef _DEBUG
 	DrawString(0, 0, L"TitleScene: NormalDraw", 0xFFFFFF);
 	//DrawString(Game::kScreenWidth / 2 - 20,
