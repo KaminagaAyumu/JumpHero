@@ -11,6 +11,13 @@ public:
 	UITextWindow();
 	virtual ~UITextWindow();
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="text">表示するテキストの内容</param>
+	/// <param name="size">ウィンドウのサイズ</param>
+	void Init(std::string text, Size size);
+
 	void Update()override;
 	void Draw()const override;
 
