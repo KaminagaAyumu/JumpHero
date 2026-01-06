@@ -30,7 +30,6 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_frameCount = kFadeInterval;
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/cursorSE.mp3", SoundBus::SE, 1.0f, false);
-	m_soundManager->StopBGM(0.0f);
 }
 
 SelectScene::~SelectScene()
