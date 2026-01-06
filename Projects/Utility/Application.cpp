@@ -1,10 +1,10 @@
-﻿#include <memory>
-#include "DxLib.h"
-#include "Game.h"
-#include "Application.h"
+﻿#include "Application.h"
 #include "Input.h"
+#include "Sound/SoundManager.h"
 #include "../Scene/SceneController.h"
 #include "../Scene/TitleScene.h"
+#include "Game.h"
+#include "DxLib.h"
 
 namespace
 {
@@ -13,6 +13,7 @@ namespace
 
 Application::Application()
 {
+	m_soundManager = std::make_shared<SoundManager>();
 }
 
 Application::~Application()
@@ -64,6 +65,8 @@ void Application::Run()
 
 		// ここにゲームの処理を書く
 		input.Update(); // 入力情報の更新
+
+		m_soundManager->Update(); // サウンドマネージャーの更新処理
 
 		controller.Update(input); // シーンの更新処理
 		controller.Draw(); // シーンの描画処理

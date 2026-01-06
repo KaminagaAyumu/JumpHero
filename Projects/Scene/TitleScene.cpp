@@ -7,6 +7,7 @@
 #include "../Utility/Game.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Sound/SoundManager.h"
+#include "../Utility/Application.h"
 #include <string>
 #include "DxLib.h"
 
@@ -24,7 +25,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 {
 	m_titleImageHandle = LoadGraph(L"data/logo.png");
 	m_bg = std::make_shared<Bg>();
-	m_soundManager = std::make_shared<SoundManager>();
+	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("test", L"data/sound/testBGM.mp3",SoundBus::BGM,1.0f,true);
 	m_soundManager->LoadSoundClip("test2", L"data/sound/testBGM2.mp3", SoundBus::BGM, 1.0f, true);
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/testSE.mp3", SoundBus::SE, 1.0f, false);
@@ -69,11 +70,8 @@ void TitleScene::NormalUpdate(Input& input)
 		m_drawFunc = &TitleScene::FadeDraw;
 		m_frameCount = 0;
 		m_soundManager->Play("testSE", 1.0f, false);
-		return;
-	}
-	if (input.IsTriggered("Up"))
-	{
 		m_soundManager->CrossFadeBGM("test2", 120.0f);
+		return;
 	}
 }
 

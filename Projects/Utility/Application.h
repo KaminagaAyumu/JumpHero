@@ -1,4 +1,8 @@
 ﻿#pragma once
+#include <memory>
+
+class SoundManager; // 前方宣言
+
 /// <summary>
 /// アプリケーションを管理するシングルトンクラス
 /// </summary>
@@ -12,6 +16,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	static Application& GetInstance();
+
+	/// <summary>
+	/// サウンドマネージャーのスマートポインタを取得する
+	/// </summary>
+	/// <returns>サウンドマネージャーのポインタ</returns>
+	std::shared_ptr<SoundManager> GetSoundManager() { return m_soundManager; }
 
 	/// <summary>
 	/// ゲームの初期化
@@ -35,6 +45,6 @@ private:
 	Application(const Application&) = delete; // コピーコンストラクタを作れないようにする
 	void operator=(const Application&) = delete; // 代入演算子も使えないようにする
 
-
+	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャーのスマートポインタ
 };
 
