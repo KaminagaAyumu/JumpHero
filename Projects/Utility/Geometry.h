@@ -159,7 +159,7 @@ struct Rect2D
 /// </summary>
 struct ActivePosition2
 {
-	Position2 pos;
+	Position2 pos = {};
 	bool isActive = false;
 };
 

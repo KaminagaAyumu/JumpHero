@@ -92,7 +92,7 @@ private:
 
 	struct CommonEventData : EventData
 	{
-		bool isOnce; // 一度しか行わないかどうか
+		bool isOnce = false; // 一度しか行わないかどうか
 		bool isInvoked = false; // 行われたかどうか(onceの際使う)
 	};
 
