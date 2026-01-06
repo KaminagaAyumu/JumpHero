@@ -6,6 +6,7 @@
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "DxLib.h"
 
 namespace
@@ -28,6 +29,8 @@ SelectScene::SelectScene(SceneController& controller) :
 {
 	m_frameCount = kFadeInterval;
 	m_soundManager = Application::GetInstance().GetSoundManager();
+	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/cursorSE.mp3", SoundBus::SE, 1.0f, false);
+	m_soundManager->StopBGM(0.0f);
 }
 
 SelectScene::~SelectScene()
@@ -60,6 +63,7 @@ void SelectScene::NormalUpdate(Input& input)
 {
 	if (input.IsTriggered("Down"))
 	{
+		m_soundManager->Play("cursor_se", 1.0f, true);
 		if(m_selectIndex < kSelectOptionNum)
 		{
 			m_selectIndex++;
@@ -67,6 +71,7 @@ void SelectScene::NormalUpdate(Input& input)
 	}
 	if (input.IsTriggered("Up"))
 	{
+		m_soundManager->Play("cursor_se", 1.0f, true);
 		if(m_selectIndex > kMinSelectIndex)
 		{
 			m_selectIndex--;

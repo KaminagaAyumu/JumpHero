@@ -105,6 +105,12 @@ public:
 	/// <param name="soundID">サウンドID</param>
 	void Stop(const std::string& soundID);
 
+	/// <summary>
+	/// BGMを止める(フェードアウト可能)
+	/// </summary>
+	/// <param name="fadeOutTime">フェードアウト時間</param>
+	void StopBGM(float fadeOutTime);
+
 private:
 
 	// サウンドクリップのコンテナ

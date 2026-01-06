@@ -118,7 +118,7 @@ void SoundManager::Play(const std::string& soundID, float volume, bool restart)
 	// ボリュームを適用
 	ApplyVolumeToHandle(clip, volume);
 	// ループ設定を適用
-	int playType = clip.isLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_NORMAL;
+	int playType = clip.isLoop ? DX_PLAYTYPE_LOOP : DX_PLAYTYPE_BACK;
 	// 再び鳴らすかどうかを判定してフラグを設定
 	if (!restart)
 	{
@@ -181,6 +181,35 @@ void SoundManager::Stop(const std::string& soundID)
 	if (it == m_soundClips.end()) return;
 	// サウンドを止める
 	StopSoundMem(it->second.handle);
+}
+
+void SoundManager::StopBGM(float fadeOutTime)
+{
+	if (fadeOutTime <= 0.0f)
+	{
+		StopBGMTrack(m_bgmA);
+		StopBGMTrack(m_bgmB);
+		m_bgmPhase = BGMPhase::Idle;
+		return;
+	}
+
+	if( !m_bgmA.isActive && !m_bgmB.isActive)
+	{
+		// どちらのトラックも再生されていない場合は何もしない
+		return;
+	}
+
+	// フェードアウト中のトラックとフェードイン中のトラックを切り替える
+	BGMTrack* currentTrack = (m_bgmA.isActive) ? &m_bgmA : &m_bgmB;
+	BGMTrack* newTrack = (currentTrack == &m_bgmA) ? &m_bgmB : &m_bgmA;
+	StopBGMTrack(*newTrack); // 念のため停止しておく
+	newTrack->volume = 0.0f; // 音量0に設定
+	newTrack->isActive = false; // 非アクティブに設定
+	m_bgmPhase = BGMPhase::CrossFading;
+	// フェード時間を設定
+	m_bgmFadeTime = fadeOutTime;
+	m_bgmFadeTimer = 0.0f;
+
 }
 
 void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) const
