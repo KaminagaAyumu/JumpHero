@@ -26,8 +26,9 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_bg = std::make_shared<Bg>();
 	m_soundManager = std::make_shared<SoundManager>();
 	m_soundManager->LoadSoundClip("test", L"data/sound/testBGM.mp3",SoundBus::BGM,1.0f,true);
+	m_soundManager->LoadSoundClip("test2", L"data/sound/testBGM2.mp3", SoundBus::BGM, 1.0f, true);
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/testSE.mp3", SoundBus::SE, 1.0f, false);
-	m_soundManager->Play("test",1.0f,false);
+	m_soundManager->PlayBGM("test",0.0f);
 }
 
 TitleScene::~TitleScene()
@@ -59,6 +60,7 @@ void TitleScene::FadeInUpdate(Input& input)
 
 void TitleScene::NormalUpdate(Input& input)
 {
+	m_soundManager->Update();
 	// STARTボタンもしくはAボタンが押されたら
 	if (input.IsTriggered("OK"))
 	{
@@ -68,6 +70,10 @@ void TitleScene::NormalUpdate(Input& input)
 		m_frameCount = 0;
 		m_soundManager->Play("testSE", 1.0f, false);
 		return;
+	}
+	if (input.IsTriggered("Up"))
+	{
+		m_soundManager->CrossFadeBGM("test2", 120.0f);
 	}
 }
 

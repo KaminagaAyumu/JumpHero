@@ -45,7 +45,7 @@ void SoundManager::Update()
 
 		// 現在のBGMトラックと新しいBGMトラックの音量を更新
 		// AがアクティブかつBが非アクティブ、またはAの音量がBの音量以上の場合、Aがアクティブとみなす
-		bool isActiveA = (m_bgmA.isActive && (!m_bgmB.isActive || m_bgmA.volume >= m_bgmB.volume));
+		bool isActiveA = (m_bgmA.isActive);
 	
 		BGMTrack& currentTrack = isActiveA ? m_bgmA : m_bgmB;
 		BGMTrack& newTrack = isActiveA ? m_bgmB : m_bgmA;
@@ -161,7 +161,7 @@ void SoundManager::CrossFadeBGM(const std::string& soundID, float fadeTime)
 
 	// フェードアウト中のトラックとフェードイン中のトラックを切り替える
 	BGMTrack* currentTrack = (m_bgmA.isActive) ? &m_bgmA : &m_bgmB;
-	BGMTrack* newTrack = currentTrack == &m_bgmA ? &m_bgmB : &m_bgmA;
+	BGMTrack* newTrack = (currentTrack == &m_bgmA) ? &m_bgmB : &m_bgmA;
 
 	// 新しいトラックでBGMを開始
 	StopBGMTrack(*newTrack); // 念のため停止しておく

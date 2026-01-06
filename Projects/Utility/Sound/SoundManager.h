@@ -27,8 +27,8 @@ struct BGMTrack
 {
 	std::string soundID; // サウンドID
 	int handle = -1; // ハンドル(初期状態は-1)
-	float volume; // 音量
-	bool isActive; // 再生中かどうか
+	float volume = 0.0f; // 音量
+	bool isActive = false; // 再生中かどうか
 };
 
 /// <summary>
