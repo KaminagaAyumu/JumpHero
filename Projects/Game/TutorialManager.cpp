@@ -6,6 +6,7 @@
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Utility/GameType.h"
+#include "../Utility/UI/UIManager.h"
 #include "Player.h"
 #include <fstream>
 #include "DxLib.h"
@@ -41,6 +42,8 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	m_pTextManager = textManager;
 	m_pMap = map;
 	m_pPlayer = player;
+	m_pUIManager = std::make_shared<UIManager>();
+	m_pUIManager->Init();
 	LoadEventData();
 	InitEventPos();
 	LoadCommonEventData();
@@ -52,6 +55,7 @@ TutorialManager::~TutorialManager()
 
 void TutorialManager::Update(Input& input)
 {
+	m_pUIManager->Update();
 	if (m_eventIndex >= static_cast<int>(m_eventData.size()))
 	{
 		return;
@@ -82,6 +86,7 @@ void TutorialManager::Update(Input& input)
 
 void TutorialManager::Draw() const
 {
+	m_pUIManager->Draw();
 	if (m_isShowTextWindow)
 	{
 		DrawTextWindow();

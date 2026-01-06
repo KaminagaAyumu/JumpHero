@@ -8,7 +8,7 @@ UIManager::UIManager()
 	// UIコンテナを初期化
 	m_pUIElements.clear();
 	auto textWindow = std::make_shared<UITextWindow>();
-	textWindow->Init("sss", { 200, 200 });
+	textWindow->Init("sssJJJ", { 600, 200 });
 	m_pUIElements.push_back(textWindow);
 }
 
@@ -28,7 +28,7 @@ void UIManager::Update()
 	}
 }
 
-void UIManager::Draw(Map* map)
+void UIManager::Draw()
 {
 	for (auto& element : m_pUIElements)
 	{

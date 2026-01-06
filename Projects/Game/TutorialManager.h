@@ -9,6 +9,7 @@ class GameManager;
 class TextManager;
 class Map;
 class Player;
+class UIManager;
 
 // イベントが始まる条件
 enum class TriggerType
@@ -110,6 +111,7 @@ private:
 	TextManager* m_pTextManager;	// テキストデータのポインタ
 	Map* m_pMap;					// マップデータのポインタ
 	Player* m_pPlayer;				// プレイヤーのポインタ(座標取得用)
+	std::shared_ptr<UIManager> m_pUIManager;		// UIマネージャーポインタ
 
 	std::unordered_map<int, Position2> m_areaPos;
 	std::unordered_map<int, ActivePosition2> m_barrierPos;

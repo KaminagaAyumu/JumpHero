@@ -1,7 +1,7 @@
 ﻿#pragma once
+#include <string>
 #include "UIBase.h"
 #include "../Geometry.h"
-#include <string>
 
 /// <summary>
 /// テキストとウィンドウを表示するUIクラス
