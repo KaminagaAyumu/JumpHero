@@ -102,9 +102,9 @@ void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) cons
 	// 音量の割合を計算
 	float rate = m_masterVolume * busVolume * clip.defaultRate * volume;
 	// 最終的なボリュームを取得
-	int volume = ToDxLibVolume(rate);
+	int vol = ToDxLibVolume(rate);
 	// ハンドルに音量を設定
-	ChangeVolumeSoundMem(volume, clip.handle);
+	ChangeVolumeSoundMem(vol, clip.handle);
 }
 
 int SoundManager::ToDxLibVolume(float rate) const
