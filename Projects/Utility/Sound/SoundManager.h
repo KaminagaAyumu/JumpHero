@@ -19,7 +19,7 @@ struct SoundClip
 	int handle = -1; // ハンドル(初期状態は-1)
 	SoundBus bus = SoundBus::Master; // サウンドの種類(初期状態はMaster)
 	float defaultRate = 1.0f; // 初期音量の大きさ(最大1.0)
-	bool loop = false; // ループするかどうか
+	bool isLoop = false; // ループするかどうか
 };
 
 /// <summary>
@@ -32,6 +32,29 @@ public:
 	SoundManager();
 	virtual ~SoundManager();
 
+	/// <summary>
+	/// 更新処理を行う
+	/// </summary>
+	void Update();
+
+	/// <summary>
+	/// サウンド全体の音量を設定する
+	/// </summary>
+	/// <param name="volume">設定する音量</param>
+	void SetMasterVolume(float volume);
+
+	/// <summary>
+	/// サウンドをロードする
+	/// </summary>
+	/// <param name="soundID">サウンドクリップのID</param>
+	/// <param name="path">ハンドルのパス</param>
+	/// <param name="bus">サウンドの種類</param>
+	/// <param name="volume">サウンドの初期音量</param>
+	/// <param name="isLoop">ループするかどうか</param>
+	/// <returns>true : ロード成功 false : ロード失敗</returns>
+	bool LoadSoundClip(const std::string& soundID, const std::wstring& path, SoundBus bus, float volume, bool isLoop);
+
+	void Play(const std::string& soundID, float volume, bool restart);
 
 private:
 
