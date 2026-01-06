@@ -62,7 +62,19 @@ public:
 	/// <returns>true : ロード成功 false : ロード失敗</returns>
 	bool LoadSoundClip(const std::string& soundID, const std::wstring& path, SoundBus bus, float volume, bool isLoop);
 
+	/// <summary>
+	/// サウンドを再生する
+	/// </summary>
+	/// <param name="soundID">サウンドID</param>
+	/// <param name="volume">サウンドの大きさ</param>
+	/// <param name="restart">再生を上書きするかどうか</param>
 	void Play(const std::string& soundID, float volume, bool restart);
+
+	/// <summary>
+	/// サウンドを止める
+	/// </summary>
+	/// <param name="soundID">サウンドID</param>
+	void Stop(const std::string& soundID);
 
 private:
 

@@ -94,6 +94,15 @@ void SoundManager::Play(const std::string& soundID, float volume, bool restart)
 	PlaySoundMem(clip.handle, playType);
 }
 
+void SoundManager::Stop(const std::string& soundID)
+{
+	auto it = m_soundClips.find(soundID);
+	// 指定されたIDのサウンドが存在するかを判定
+	if (it == m_soundClips.end()) return;
+	// サウンドを止める
+	StopSoundMem(it->second.handle);
+}
+
 void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) const
 {
 	// サウンドの音量を取得
