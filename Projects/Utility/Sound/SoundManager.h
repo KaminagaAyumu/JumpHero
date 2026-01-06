@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <unordered_map>
 
 /// <summary>
 /// サウンドの種類を持つ列挙体

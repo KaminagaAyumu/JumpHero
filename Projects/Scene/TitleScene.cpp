@@ -1,12 +1,14 @@
 ﻿#include <memory>
 #include "TitleScene.h"
-#include "DxLib.h"
 #include "../Utility/Input.h"
 #include "SceneController.h"
 #include "GameScene.h"
 #include "SelectScene.h"
 #include "../Utility/Game.h"
 #include "../Utility/Bg.h"
+#include "../Utility/Sound/SoundManager.h"
+#include <string>
+#include "DxLib.h"
 
 namespace 
 {
@@ -22,6 +24,10 @@ m_drawFunc(&TitleScene::FadeDraw)
 {
 	m_titleImageHandle = LoadGraph(L"data/logo.png");
 	m_bg = std::make_shared<Bg>();
+	m_soundManager = std::make_shared<SoundManager>();
+	m_soundManager->LoadSoundClip("test", L"data/sound/testBGM.mp3",SoundBus::BGM,1.0f,true);
+	m_soundManager->LoadSoundClip("testSE", L"data/sound/testSE.mp3", SoundBus::SE, 1.0f, false);
+	m_soundManager->Play("test",1.0f,false);
 }
 
 TitleScene::~TitleScene()
@@ -60,6 +66,7 @@ void TitleScene::NormalUpdate(Input& input)
 		m_updateFunc = &TitleScene::FadeOutUpdate;
 		m_drawFunc = &TitleScene::FadeDraw;
 		m_frameCount = 0;
+		m_soundManager->Play("testSE", 1.0f, false);
 		return;
 	}
 }

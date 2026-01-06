@@ -3,6 +3,7 @@
 
 // プロトタイプ宣言
 class Bg;
+class SoundManager;
 
 /// <summary>
 /// タイトルシーンクラス
@@ -44,6 +45,7 @@ private:
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
 	std::shared_ptr<Bg> m_bg;
+	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャークラス
 
 
 };
