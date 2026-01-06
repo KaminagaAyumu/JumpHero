@@ -43,6 +43,12 @@ void SoundManager::SetMasterVolume(float volume)
 	m_masterVolume = std::clamp(volume, 0.0f, kMaxMasterVolumeRate);
 }
 
+void SoundManager::SetBusVolume(SoundBus bus, float volume)
+{
+	// 指定されたボリュームが0.0~1.0の範囲内になるようにする
+	m_busVolume[bus] = std::clamp(volume, 0.0f, kMaxMasterVolumeRate);
+}
+
 float SoundManager::GetBusVolume(SoundBus bus) const
 {
 	// サウンドの種類があるかどうかを判定

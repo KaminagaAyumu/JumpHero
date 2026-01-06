@@ -45,6 +45,13 @@ public:
 	void SetMasterVolume(float volume);
 
 	/// <summary>
+	/// サウンドのバスごとの音量を設定する
+	/// </summary>
+	/// <param name="bus">サウンドの種類</param>
+	/// <param name="volume">設定する音量</param>
+	void SetBusVolume(SoundBus bus, float volume);
+
+	/// <summary>
 	/// 特定の種類のサウンドの音量を取得する
 	/// </summary>
 	/// <param name="bus">サウンドの種類</param>
