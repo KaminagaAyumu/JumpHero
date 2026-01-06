@@ -1,7 +1,11 @@
-﻿#include "UIManager.h"
+﻿#include <memory>
+#include <vector>
+#include "UIManager.h"
 
 UIManager::UIManager()
 {
+	// UIコンテナを初期化
+	m_pUIElements.clear();
 }
 
 UIManager::~UIManager()
