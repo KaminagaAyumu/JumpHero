@@ -23,6 +23,14 @@ struct SoundClip
 	bool isLoop = false; // ループするかどうか
 };
 
+struct BGMTrack
+{
+	std::string soundID; // サウンドID
+	int handle = -1; // ハンドル(初期状態は-1)
+	float volume; // 音量
+	bool isActive; // 再生中かどうか
+};
+
 /// <summary>
 /// サウンドを管理するクラス
 /// </summary>
@@ -78,6 +86,20 @@ public:
 	void Play(const std::string& soundID, float volume, bool restart);
 
 	/// <summary>
+	/// BGMを再生する(フェードインしながら再生可能)
+	/// </summary>
+	/// <param name="soundID">サウンドID</param>
+	/// <param name="fadeTime">フェードの時間</param>
+	void PlayBGM(const std::string& soundID, float fadeTime);
+
+	/// <summary>
+	/// クロスフェードでBGMを切り替える
+	/// </summary>
+	/// <param name="soundID">次のBGMのID</param>
+	/// <param name="fadeTime">フェードインの時間</param>
+	void CrossFadeBGM(const std::string& soundID, float fadeTime);
+
+	/// <summary>
 	/// サウンドを止める
 	/// </summary>
 	/// <param name="soundID">サウンドID</param>
@@ -91,6 +113,22 @@ private:
 	float m_masterVolume;
 	// サウンドの種類ごとのボリューム
 	std::unordered_map<SoundBus, float> m_busVolume;
+
+	// BGM関連
+	BGMTrack m_bgmA;
+	BGMTrack m_bgmB;
+
+	/// <summary>
+	/// BGMのフェーズを表す列挙体
+	/// </summary>
+	enum class BGMPhase
+	{
+		Idle, // 待機中
+		CrossFading // クロスフェード中
+	};
+	BGMPhase m_bgmPhase; // 現在のBGMフェーズ
+	float m_bgmFadeTime; // フェードにかける時間
+	float m_bgmFadeTimer; // フェードの経過時間
 
 	/// <summary>
 	/// マスターボリュームを考慮した音量をサウンドクリップに設定する
@@ -106,5 +144,18 @@ private:
 	/// <returns>DxLibの音量</returns>
 	int ToDxLibVolume(float rate) const;
 
+	/// <summary>
+	/// BGMを指定したトラックで再生する
+	/// </summary>
+	/// <param name="track">BGMトラック(AorB)</param>
+	/// <param name="soundID">サウンドのID</param>
+	/// <param name="volume">BGMの音量</param>
+	void StartBGMOnTrack(BGMTrack& track, const std::string& soundID, float volume);
+
+	/// <summary>
+	/// BGMトラックの再生を停止する
+	/// </summary>
+	/// <param name="track">BGMトラック(AorB)</param>
+	void StopBGMTrack(BGMTrack& track);
 };
 
