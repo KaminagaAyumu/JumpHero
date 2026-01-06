@@ -1,7 +1,11 @@
 ﻿#pragma once
+#include <memory>
+#include <list>
+#include "../Geometry.h"
 
 class Map;
 class UIBase;
+class UITextWindow;
 
 class UIManager
 {
@@ -13,8 +17,10 @@ public:
 	void Update();
 	void Draw();
 
+	UITextWindow* CreateTextWindow(const std::string& text, const Size& size, const Position2& pos);
+
 private:
-	std::vector<std::shared_ptr<UIBase>> m_pUIElements; // UIの要素を格納するコンテナ
+	std::list<std::shared_ptr<UIBase>> m_pUIElements; // UIの要素を格納するコンテナ
 
 };
 

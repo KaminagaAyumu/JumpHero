@@ -17,16 +17,33 @@ public:
 	/// </summary>
 	/// <param name="text">表示するテキストの内容</param>
 	/// <param name="size">ウィンドウのサイズ</param>
-	void Init(std::string text, Size size);
+	/// <param name="target">表示する中心座標</param>
+	void Init(std::string text, Size size, const Position2& target);
 
 	void Update()override;
 	void Draw()const override;
 
+	bool IsAlive()const override;
+
+	void ShowFromRight(); // 右から表示
+
+	enum class TextWindowState
+	{
+		Hidden, // 非表示
+		Appearing, // 表示中
+		Visible, // 表示完了
+		Disappearing // 非表示中
+	};
+
 private:
 	Position2 m_pos; // 現在の表示座標(中心座標)
+	Position2 m_startPos; // アニメーション開始位置の座標
 	Position2 m_targetPos; // 指定位置に移動するための座標
 	std::string m_text; // 表示するテキスト
 	Size m_size; // ウィンドウのサイズ
+	TextWindowState m_state; // ウィンドウの状態
+	float m_appearRate; // 表示率(0.0~1.0)
+	float m_appearDuration; // 表示アニメーションの時間
 
 };
 

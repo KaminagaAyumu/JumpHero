@@ -7,6 +7,7 @@
 #include "../Utility/Game.h"
 #include "../Utility/GameType.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UITextWindow.h"
 #include "Player.h"
 #include <fstream>
 #include "DxLib.h"
@@ -44,6 +45,8 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	m_pPlayer = player;
 	m_pUIManager = std::make_shared<UIManager>();
 	m_pUIManager->Init();
+	auto* test = m_pUIManager->CreateTextWindow("aaa", { 300,200 }, { 640,480 });
+	test->ShowFromRight();
 	LoadEventData();
 	InitEventPos();
 	LoadCommonEventData();
