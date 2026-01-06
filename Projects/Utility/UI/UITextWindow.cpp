@@ -1,7 +1,10 @@
 ﻿#include <string>
 #include "UITextWindow.h"
 
-UITextWindow::UITextWindow()
+UITextWindow::UITextWindow() : 
+	m_pos{},
+	m_targetPos{},
+	m_size{}
 {
 }
 
