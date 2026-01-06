@@ -8,6 +8,7 @@ class Bg;
 class GameManager;
 class CollisionManager;
 class Actor;
+class SoundManager;
 
 /// <summary>
 /// ゲームの基本操作を教える用のシーン
@@ -54,6 +55,7 @@ private:
 	std::shared_ptr<GameManager> m_pGameManager;			// ゲーム管理クラス
 	std::unique_ptr<CollisionManager> m_pCollisionManager;	// 衝突管理クラス
 	std::vector<Actor*> m_pActors;							// アクターの配列
+	std::shared_ptr<SoundManager> m_pSoundManager;			// サウンド管理クラス
 
 };
 

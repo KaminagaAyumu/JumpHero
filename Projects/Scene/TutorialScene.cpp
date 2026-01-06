@@ -14,6 +14,8 @@
 #include "../Game/Actor.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "DxLib.h"
 
 namespace
@@ -43,6 +45,10 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_pTutorialManager = std::make_unique<TutorialManager>(m_pGameManager.get(), m_pTextManager.get(), m_pMap.get(), m_pGameManager->GetPlayer());
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
+
+	m_pSoundManager = Application::GetInstance().GetSoundManager();
+	m_pSoundManager->LoadSoundClip("tutorial", L"data/sound/tutorialBGM.mp3", SoundBus::BGM, 1.0f,true);
+	m_pSoundManager->CrossFadeBGM("tutorial", 120.0f);
 }
 
 TutorialScene::~TutorialScene()

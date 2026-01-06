@@ -193,7 +193,7 @@ void SoundManager::StopBGM(float fadeOutTime)
 		return;
 	}
 
-	if( !m_bgmA.isActive && !m_bgmB.isActive)
+	if(!m_bgmA.isActive && !m_bgmB.isActive)
 	{
 		// どちらのトラックも再生されていない場合は何もしない
 		return;
