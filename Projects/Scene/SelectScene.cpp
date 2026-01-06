@@ -30,6 +30,7 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_frameCount = kFadeInterval;
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/cursorSE.mp3", SoundBus::SE, 1.0f, false);
+	m_soundManager->LoadSoundClip("ok_se", L"data/sound/okSE.mp3", SoundBus::SE, 1.0f, false);
 }
 
 SelectScene::~SelectScene()
@@ -83,6 +84,7 @@ void SelectScene::NormalUpdate(Input& input)
 		m_fadeColor = 0x000000;
 		m_updateFunc = &SelectScene::FadeOutUpdate;
 		m_drawFunc = &SelectScene::FadeDraw;
+		m_soundManager->Play("ok_se", 1.0f, true);
 		return; // 念のため処理を抜ける
 	}
 
