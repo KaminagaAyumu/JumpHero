@@ -1,5 +1,4 @@
-﻿#include <string>
-#include "UITextWindow.h"
+﻿#include "UITextWindow.h"
 
 UITextWindow::UITextWindow() : 
 	m_pos{},
