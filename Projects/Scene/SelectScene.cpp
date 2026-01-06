@@ -5,6 +5,7 @@
 #include "TutorialScene.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
+#include "../Utility/Application.h"
 #include "DxLib.h"
 
 namespace
@@ -26,6 +27,7 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_selectIndex(kMinSelectIndex)
 {
 	m_frameCount = kFadeInterval;
+	m_soundManager = Application::GetInstance().GetSoundManager();
 }
 
 SelectScene::~SelectScene()

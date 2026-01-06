@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
+// 前方宣言
+class SoundManager;
+
 /// <summary>
 /// セレクトシーン
 /// ステージ選択などを行う
@@ -38,6 +41,7 @@ private:
 	using DrawFunc_t = void (SelectScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
+	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャーへのポインタ
 
 };
 
