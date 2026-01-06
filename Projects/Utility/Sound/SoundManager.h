@@ -44,6 +44,13 @@ public:
 	void SetMasterVolume(float volume);
 
 	/// <summary>
+	/// 特定の種類のサウンドの音量を取得する
+	/// </summary>
+	/// <param name="bus">サウンドの種類</param>
+	/// <returns>サウンドの音量</returns>
+	float GetBusVolume(SoundBus bus) const;
+
+	/// <summary>
 	/// サウンドをロードする
 	/// </summary>
 	/// <param name="soundID">サウンドクリップのID</param>
@@ -64,6 +71,20 @@ private:
 	float m_masterVolume;
 	// サウンドの種類ごとのボリューム
 	std::unordered_map<SoundBus, float> m_busVolume;
+
+	/// <summary>
+	/// マスターボリュームを考慮した音量をサウンドクリップに設定する
+	/// </summary>
+	/// <param name="clip">サウンドクリップ</param>
+	/// <param name="volume">音量</param>
+	void ApplyVolumeToHandle(const SoundClip& clip, float volume) const;
+	
+	/// <summary>
+	/// 割合からDxLibの音量(0~255)に変換
+	/// </summary>
+	/// <param name="rate">音量の割合</param>
+	/// <returns>DxLibの音量</returns>
+	int ToDxLibVolume(float rate) const;
 
 };
 
