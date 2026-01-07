@@ -46,5 +46,6 @@ namespace Types
 		LifeUp, // 1UP
 		Coin, // スコア加算用コイン
 		ChangeToCoin, // 敵をコインに変える
+		AttackItem, // 攻撃アイテム
 	};
 }
