@@ -98,9 +98,15 @@ void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 	{
 		if (IsCanCollision()) // 当たり判定を行えるなら
 		{
-			// プレイヤーが判定するとしたらダウンキャストするやり方しかわからないため
-			// 敵がプレイヤーを持っているので一旦それを使う
-			m_pPlayer->MissStart(); // プレイヤーをミスにさせる
+			// プレイヤーが攻撃可能状態なら
+			if (m_pPlayer->IsAttackable())
+			{
+				// 敵が吹っ飛ぶ処理を行う予定
+			}
+			else // プレイヤーが攻撃可能状態でないなら
+			{
+				m_pPlayer->MissStart(); // プレイヤーをミスにさせる
+			}
 		}
 		else if (IsItemMode()) // 敵がアイテム化している場合
 		{

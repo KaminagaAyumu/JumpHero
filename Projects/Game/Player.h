@@ -58,6 +58,12 @@ public:
 	bool IsPowerUp();
 
 	/// <summary>
+	/// 攻撃可能かどうか
+	/// </summary>
+	/// <returns>true : 攻撃可能 false : 攻撃できない</returns>
+	bool IsAttackable() const { return m_isAttackable; }
+
+	/// <summary>
 	/// 攻撃可能状態になる
 	/// </summary>
 	void AttackableStart();
