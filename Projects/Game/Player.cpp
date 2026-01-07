@@ -42,6 +42,8 @@ namespace
 	constexpr int	kPowerUpLevelMax = 2;					// パワーアップ最大値
 	constexpr int	kJumpLimitNumLevelMax = 25;					// パワーアップが解除されるまでのジャンプ回数
 
+	constexpr int	kAttackableTime = 600;				// 攻撃可能時間
+
 	constexpr float kEntryEndXOffset = 100.0f;			// プレイヤー登場終了位置のXオフセット
 
 }
@@ -55,6 +57,7 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_graphHandle(-1),
 	m_frameCount(0),
 	m_jumpCount(0),
+	m_attackCount(0),
 	m_level(0),
 	m_prevPosY(0.0f),
 	m_isGround(false),
@@ -88,6 +91,7 @@ void Player::Init()
 	m_colRect = { m_pos,kPlayerWidth,kPlayerHeight };
 	m_frameCount = 0;
 	m_jumpCount = 0;
+	m_attackCount = 0;
 	m_level = 0;
 	m_isGround = false;
 	m_isHover = false;
@@ -111,6 +115,14 @@ void Player::Update(Input& input)
 	{
 		return;
 	}
+
+	m_attackCount--;
+	if (m_attackCount < 0)
+	{
+		m_attackCount = 0;
+		m_isAttackable = false;
+	}
+
 	(this->*m_update)(input);
 }
 
@@ -643,6 +655,12 @@ bool Player::IsPowerUp()
 {
 	// レベルが1以上ならパワーアップしている
 	return m_level >= kPowerUpLevelOne;
+}
+
+void Player::AttackableStart()
+{
+	m_isAttackable = true;
+	m_attackCount = kAttackableTime;
 }
 
 void Player::DebugClear(const Position2& pos)
