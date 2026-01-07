@@ -14,6 +14,7 @@ class Camera;
 class ItemBase;
 class GameManager;
 class CollisionManager;
+class SoundManager;
 
 /// <summary>
 /// ゲームのメインとなるシーン
@@ -68,5 +69,7 @@ private:
 	std::vector<Actor*> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
+
+	std::shared_ptr<SoundManager> m_pSoundManager; // サウンドマネージャークラス
 };
 

@@ -6,6 +6,8 @@
 #include "MiniGameScene.h"
 #include "MissScene.h"
 #include "../Utility/Game.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "../Game/Player.h"
 #include "../Game/Chest.h"
 #include "../Game/EnemyBase.h"
@@ -48,6 +50,10 @@ m_fadeColor(0x000000)
 	m_pGameManager->Init();
 	
 	m_pCollisionManager = std::make_unique<CollisionManager>();
+
+	m_pSoundManager = Application::GetInstance().GetSoundManager();
+	m_pSoundManager->LoadSoundClip("game", L"data/sound/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
+	m_pSoundManager->CrossFadeBGM("game", 120.0f);
 }
 
 GameScene::~GameScene()
