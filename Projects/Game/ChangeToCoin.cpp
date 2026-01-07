@@ -11,6 +11,8 @@ namespace
 
 	constexpr float kPopChestUpPositionY = 40.0f; // 宝箱から出たときの上昇位置Y
 	constexpr float kDropSpeed = 2.0f; // 宝箱から出たときの落下速度
+
+	constexpr float kScale = 1.0f; // 拡大率
 }
 
 ChangeToCoin::ChangeToCoin(const Position2& pos, int handle, bool isPopChest)
@@ -48,7 +50,8 @@ void ChangeToCoin::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		DrawRotaGraph(drawX, drawY, kScale, 0.0f, m_graphHandle, true);
+		//DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);
