@@ -83,7 +83,8 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 		};
 	m_itemCollectFunc[Types::ItemType::AttackItem] = [this]()
 		{
-			// 攻撃アイテム取得時の処理(今のところ無し)
+			// 攻撃アイテム取得時の処理
+			m_pPlayer->AttackableStart();
 		};
 
 
