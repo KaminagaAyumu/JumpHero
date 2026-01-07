@@ -81,6 +81,10 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 		{
 			ChangeEnemyToCoin(); // 敵をすべてアイテム化
 		};
+	m_itemCollectFunc[Types::ItemType::AttackItem] = [this]()
+		{
+			// 攻撃アイテム取得時の処理(今のところ無し)
+		};
 
 
 }
