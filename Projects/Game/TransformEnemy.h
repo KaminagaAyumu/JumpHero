@@ -70,6 +70,7 @@ private:
 	void FireBallUpdate(Input&); // プレイヤーの縦座標を追い続ける更新処理
 	void SkullUpdate(Input&); // プレイヤーの横座標を追い続ける更新処理
 	void ItemUpdate(Input&); // 敵がアイテム化中の更新処理
+	void DeadUpdate(Input&); // 敵が倒された後の更新処理
 
 	// 描画処理用関数群
 	using DrawFunc_t = void(TransformEnemy::*)(); // 関数の形式自体は更新処理と同じなので別名とする

@@ -22,6 +22,7 @@ namespace
 	constexpr int	kAppearTime				= 90;		// 敵の出現までの時間
 	constexpr int	kFormChangeWaitTime		= 180;		// 敵の変身までの時間
 	constexpr int	kFormChangeTime			= 30;		// 敵の変身準備までの時間
+	constexpr int	kDeadTime				= 300;		// 敵がやられて消えるの時間
 
 	constexpr float kMaxDirectionValue		= 1.0f;		// 向きの最大値(大きさ)
 	constexpr float kDirectionMagnification = 0.01f;	// 向きの倍率
@@ -102,6 +103,7 @@ void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 			if (m_pPlayer->IsAttackable())
 			{
 				// 敵が吹っ飛ぶ処理を行う予定
+				m_updateFunc = &TransformEnemy::DeadUpdate;
 			}
 			else // プレイヤーが攻撃可能状態でないなら
 			{
@@ -265,6 +267,18 @@ void TransformEnemy::ItemUpdate(Input&)
 	}
 }
 
+void TransformEnemy::DeadUpdate(Input&)
+{
+	m_frameCount++;
+	// 一定時間経ったら消える
+	if (m_frameCount >= kDeadTime)
+	{
+		m_isDead = true; // 敵を消す
+		return; // 念のためreturn
+	}
+	m_pos.y -= 2.0f; // 上に飛んでいく
+}
+
 void TransformEnemy::AppearDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
@@ -375,8 +389,8 @@ void TransformEnemy::ItemDraw()
 
 bool TransformEnemy::IsCanCollision() const
 {
-	// 出現中、変身中、アイテム化中は当たり判定を行わない
-	if (m_updateFunc == &TransformEnemy::AppearUpdate || m_updateFunc == &TransformEnemy::TransformUpdate || m_updateFunc == &TransformEnemy::ItemUpdate)
+	// 出現中、変身中、アイテム化中、やられ中は当たり判定を行わない
+	if (m_updateFunc == &TransformEnemy::AppearUpdate || m_updateFunc == &TransformEnemy::TransformUpdate || m_updateFunc == &TransformEnemy::ItemUpdate || m_updateFunc == &TransformEnemy::DeadUpdate)
 	{
 		return false;
 	}
