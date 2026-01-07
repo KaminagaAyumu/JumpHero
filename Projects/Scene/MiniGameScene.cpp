@@ -20,6 +20,8 @@ namespace
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
+	constexpr int kHeaderMargin = 60; // ヘッダー(見出し)の余白
+
 }
 
 MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo) :
@@ -184,6 +186,7 @@ void MiniGameScene::DescriptionDraw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"ゲームの説明", 0xffffff);
+	DrawString(Game::kScreenWidth / 2, kHeaderMargin, L"ミニゲーム", 0xffffff);
 #ifdef _DEBUG
 	DrawString(0, 0, L"MiniGameScene: DescriptionDraw", 0xffffff);
 #endif
