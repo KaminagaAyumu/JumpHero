@@ -25,6 +25,7 @@ namespace
 		kGraphLifeUp, // 1UP
 		kGraphCoin, // スコア加算用コイン
 		kGraphChangeToCoin, // 敵をコインに変える
+		kGraphAttackItem, // 攻撃アイテム
 
 		kGraphNum // 画像の数
 	};
@@ -37,6 +38,7 @@ namespace
 		L"data/life_up.png", // 1UP
 		L"data/coin.png", // スコア加算用コイン
 		L"data/change_to_coin.png", // 敵をコインに変える
+		L"data/attack_item.png", // 攻撃アイテム
 	};
 
 	// 画像枚数が違うときにエラーを出せるようにする
