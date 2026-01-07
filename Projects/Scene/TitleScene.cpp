@@ -27,7 +27,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_bg = std::make_shared<Bg>();
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("test", L"data/sound/testBGM.mp3",SoundBus::BGM,1.0f,true);
-	m_soundManager->LoadSoundClip("test2", L"data/sound/selectBGM.mp3", SoundBus::BGM, 1.0f, true);
+	m_soundManager->LoadSoundClip("select", L"data/sound/selectBGM.mp3", SoundBus::BGM, 1.0f, true);
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/testSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->PlayBGM("test",0.0f);
 }
@@ -70,7 +70,7 @@ void TitleScene::NormalUpdate(Input& input)
 		m_drawFunc = &TitleScene::FadeDraw;
 		m_frameCount = 0;
 		m_soundManager->Play("testSE", 1.0f, false);
-		m_soundManager->CrossFadeBGM("test2", 120.0f);
+		m_soundManager->CrossFadeBGM("select", 120.0f);
 		return;
 	}
 }
