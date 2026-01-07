@@ -14,7 +14,7 @@ SoundManager::SoundManager()
 {
 	m_masterVolume = kMaxMasterVolumeRate;
 
-	m_busVolume = 
+	m_busVolume =
 	{
 		{SoundBus::BGM, 1.0f},
 		{SoundBus::SE, 1.0f}
@@ -27,7 +27,7 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
-	for(auto& pair : m_soundClips)
+	for (auto& pair : m_soundClips)
 	{
 		// サウンドメモリの解放
 		DeleteSoundMem(pair.second.handle);
@@ -38,32 +38,44 @@ SoundManager::~SoundManager()
 
 void SoundManager::Update()
 {
-	if (m_bgmPhase == BGMPhase::CrossFading)
+	if (m_bgmPhase != BGMPhase::CrossFading || !m_crossBGMInfo.isActive)
 	{
-		m_bgmFadeTimer++;
-		float t = std::clamp(m_bgmFadeTimer / m_bgmFadeTime, 0.0f, 1.0f);
-
-		// 現在のBGMトラックと新しいBGMトラックの音量を更新
-		// AがアクティブかつBが非アクティブ、またはAの音量がBの音量以上の場合、Aがアクティブとみなす
-		bool isActiveA = (m_bgmA.isActive);
-	
-		BGMTrack& currentTrack = isActiveA ? m_bgmA : m_bgmB;
-		BGMTrack& newTrack = isActiveA ? m_bgmB : m_bgmA;
-
-		newTrack.volume = std::clamp(t, 0.0f, 1.0f);
-		currentTrack.volume = std::clamp(1.0f - t, 0.0f, 1.0f);
-
-		// 音量を適用
-		ApplyVolumeToHandle(m_soundClips[currentTrack.soundID], currentTrack.volume);
-		ApplyVolumeToHandle(m_soundClips[newTrack.soundID], newTrack.volume);
-
-		if(t >= 1.0f)
-		{
-			// フェード完了
-			StopBGMTrack(currentTrack);
-			m_bgmPhase = BGMPhase::Idle;
-		}
+		return;
 	}
+
+	m_crossBGMInfo.fadeCount++;
+	float t = std::clamp(m_crossBGMInfo.fadeCount / m_crossBGMInfo.fadeTime, 0.0f, 1.0f);
+
+	if (m_crossBGMInfo.fadeOutTrack)
+	{
+		m_crossBGMInfo.fadeOutTrack->volume = std::clamp(1.0f - t, 0.0f, 1.0f);
+	}
+	if (m_crossBGMInfo.fadeInTrack)
+	{
+		m_crossBGMInfo.fadeInTrack->volume = std::clamp(t, 0.0f, 1.0f);
+	}
+
+
+	// 音量を適用
+	if (m_crossBGMInfo.fadeOutTrack)
+	{
+		ApplyVolumeToHandle(m_soundClips[m_crossBGMInfo.fadeOutTrack->soundID], m_crossBGMInfo.fadeOutTrack->volume);
+	}
+	if (m_crossBGMInfo.fadeInTrack)
+	{
+		ApplyVolumeToHandle(m_soundClips[m_crossBGMInfo.fadeInTrack->soundID], m_crossBGMInfo.fadeInTrack->volume);
+	}
+
+	if (t >= 1.0f)
+	{
+		if (m_crossBGMInfo.fadeOutTrack)
+		{
+			StopBGMTrack(*m_crossBGMInfo.fadeOutTrack);
+		}
+		m_crossBGMInfo = {};
+		m_bgmPhase = BGMPhase::Idle;
+	}
+
 }
 
 void SoundManager::SetMasterVolume(float volume)
@@ -137,7 +149,7 @@ void SoundManager::PlayBGM(const std::string& soundID, float fadeTime)
 
 	StartBGMOnTrack(m_bgmA, soundID, fadeTime > 0.0f ? 0.0f : 1.0f); // フェードインがある場合は最初は音量0で再生
 
-	if(fadeTime > 0.0f)
+	if (fadeTime > 0.0f)
 	{
 		m_bgmPhase = BGMPhase::CrossFading;
 		m_bgmFadeTime = fadeTime;
@@ -152,7 +164,7 @@ void SoundManager::PlayBGM(const std::string& soundID, float fadeTime)
 
 void SoundManager::CrossFadeBGM(const std::string& soundID, float fadeTime)
 {
-	if(!m_bgmA.isActive && !m_bgmB.isActive)
+	if (!m_bgmA.isActive && !m_bgmB.isActive)
 	{
 		// どちらのトラックも再生されていない場合は通常のBGM再生を行う
 		PlayBGM(soundID, 0.0f);
@@ -160,18 +172,31 @@ void SoundManager::CrossFadeBGM(const std::string& soundID, float fadeTime)
 	}
 
 	// フェードアウト中のトラックとフェードイン中のトラックを切り替える
-	BGMTrack* currentTrack = (m_bgmA.isActive) ? &m_bgmA : &m_bgmB;
-	BGMTrack* newTrack = (currentTrack == &m_bgmA) ? &m_bgmB : &m_bgmA;
+	BGMTrack* currentTrack = nullptr;
+	BGMTrack* newTrack = nullptr;
+
+	if (m_bgmA.isActive && m_bgmB.isActive)
+	{
+		currentTrack = (m_bgmA.volume >= m_bgmB.volume) ? &m_bgmA : &m_bgmB;
+		newTrack = (currentTrack == &m_bgmA) ? &m_bgmB : &m_bgmA;
+	}
+	else
+	{
+		currentTrack = (m_bgmA.isActive) ? &m_bgmA : &m_bgmB;
+		newTrack = (currentTrack == &m_bgmA) ? &m_bgmB : &m_bgmA;
+	}
 
 	// 新しいトラックでBGMを開始
 	StopBGMTrack(*newTrack); // 念のため停止しておく
 	StartBGMOnTrack(*newTrack, soundID, 0.0f); // 最初は音量0で再生
 
-	m_bgmPhase = BGMPhase::CrossFading;
-	// フェード時間を設定
-	m_bgmFadeTime = max(0.01f,fadeTime);
-	m_bgmFadeTimer = 0.0f;
+	m_crossBGMInfo.fadeOutTrack = currentTrack;
+	m_crossBGMInfo.fadeInTrack = newTrack;
+	m_crossBGMInfo.fadeTime = fadeTime;
+	m_crossBGMInfo.fadeCount = 0.0f;
+	m_crossBGMInfo.isActive = true;
 
+	m_bgmPhase = BGMPhase::CrossFading;
 }
 
 void SoundManager::Stop(const std::string& soundID)
@@ -193,7 +218,7 @@ void SoundManager::StopBGM(float fadeOutTime)
 		return;
 	}
 
-	if(!m_bgmA.isActive && !m_bgmB.isActive)
+	if (!m_bgmA.isActive && !m_bgmB.isActive)
 	{
 		// どちらのトラックも再生されていない場合は何もしない
 		return;

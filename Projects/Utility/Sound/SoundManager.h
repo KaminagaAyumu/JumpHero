@@ -31,6 +31,15 @@ struct BGMTrack
 	bool isActive = false; // 再生中かどうか
 };
 
+struct CrossBGMInfo
+{
+	BGMTrack* fadeOutTrack = nullptr; // フェードアウト中のトラック
+	BGMTrack* fadeInTrack = nullptr; // フェードイン中のトラック
+	float fadeTime = 0.0f; // フェードにかける時間
+	float fadeCount = 0.0f; // フェードの経過時間
+	bool isActive = false; // クロスフェード中かどうか
+};
+
 /// <summary>
 /// サウンドを管理するクラス
 /// </summary>
@@ -133,6 +142,8 @@ private:
 		CrossFading // クロスフェード中
 	};
 	BGMPhase m_bgmPhase; // 現在のBGMフェーズ
+	CrossBGMInfo m_crossBGMInfo; // クロスフェード情報
+
 	float m_bgmFadeTime; // フェードにかける時間
 	float m_bgmFadeTimer; // フェードの経過時間
 
