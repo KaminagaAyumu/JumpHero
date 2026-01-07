@@ -55,6 +55,9 @@ private:
 	TextWindowState m_state; // ウィンドウの状態
 	float m_appearRate; // 表示率(0.0~1.0)
 	float m_appearDuration; // 表示アニメーションの時間
+	bool m_isChangePos; // 位置変更アニメーション中かどうか
+	bool m_isChangeSize; // サイズ変更アニメーション中かどうか
+	int m_aliveFrame; // ウィンドウが表示されてからのフレーム数
 
 };
 

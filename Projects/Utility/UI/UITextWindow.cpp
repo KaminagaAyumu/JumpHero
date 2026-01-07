@@ -1,10 +1,13 @@
 ﻿#include "UITextWindow.h"
 #include "../StringFunction.h"
+#include <cmath>
 #include "DxLib.h"
 
 namespace
 {
-	constexpr float startPosLeftX = -400.0f; // 画面外左側の開始位置X座標
+	constexpr float kStartPosLeftX = -400.0f; // 画面外左側の開始位置X座標
+
+	constexpr int kDefaultAliveTime = 660; // デフォルトの表示時間（フレーム数）
 }
 
 UITextWindow::UITextWindow() :
@@ -15,7 +18,10 @@ UITextWindow::UITextWindow() :
 	m_targetSize{},
 	m_state(TextWindowState::Appearing),
 	m_appearRate(0.0f),
-	m_appearDuration(0.0f)
+	m_appearDuration(0.0f),
+	m_isChangePos(false),
+	m_isChangeSize(false),
+	m_aliveFrame(kDefaultAliveTime)
 {
 }
 
@@ -26,7 +32,6 @@ UITextWindow::~UITextWindow()
 void UITextWindow::Init(std::string text, Size size, const Position2& target)
 {
 	m_text = text; // テキストの内容を設定
-	//m_size = size; // ウィンドウのサイズを設定
 	m_targetSize = size; // 目標サイズを設定
 	m_targetPos = target; // 目標位置を設定
 	m_pos = m_startPos; // 初期位置を設定
@@ -34,6 +39,7 @@ void UITextWindow::Init(std::string text, Size size, const Position2& target)
 
 void UITextWindow::Update()
 {
+	m_aliveFrame--;
 	if (m_state == TextWindowState::Appearing || m_state == TextWindowState::Disappearing)
 	{
 		m_appearRate += 0.1f / m_appearDuration;
@@ -42,8 +48,33 @@ void UITextWindow::Update()
 			m_appearRate = 1.0f;
 			m_state = (m_state == TextWindowState::Appearing) ? TextWindowState::Visible : TextWindowState::Hidden;
 		}
-		m_pos = Geometry::LerpVec2(m_startPos, m_targetPos, m_appearRate); // 線形補間で位置を更新
-		//m_size.height = static_cast<int>(m_targetSize.height * m_appearRate); // 高さを更新
+		if (m_isChangePos)
+		{
+			m_pos = Geometry::LerpVec2(m_startPos, m_targetPos, m_appearRate); // 線形補間で位置を更新
+		}
+		if(m_isChangeSize)
+		{
+			//m_size.height = static_cast<int>(m_targetSize.height * m_appearRate);
+			m_size.height = static_cast<int>(std::lerp(m_size.height, m_targetSize.height, m_appearRate)); // 線形補間でサイズを更新
+		}
+	}
+	if (m_aliveFrame <= 0)
+	{
+		if (m_state == TextWindowState::Visible)
+		{
+			m_state = TextWindowState::Disappearing;
+			m_appearRate = 0.0f;
+			m_appearDuration = 10.0f; // 消えるアニメーションの時間を設定
+			if (m_isChangePos)
+			{
+				m_targetPos = m_startPos; // 目標位置を開始位置に設定
+				m_startPos = m_pos; // 現在の位置を開始位置に設定
+			}
+			if (m_isChangeSize)
+			{
+				m_targetSize = { m_size.width, 0 }; // 目標サイズを高さ0に設定
+			}
+		}
 	}
 }
 
@@ -65,18 +96,20 @@ bool UITextWindow::IsAlive() const
 
 void UITextWindow::ShowFromRight(float duration)
 {
-	m_startPos = { startPosLeftX, m_targetPos.y };
+	m_startPos = { kStartPosLeftX, m_targetPos.y };
 	m_appearRate = 0.0f;
 	m_appearDuration = duration;
 	m_size = m_targetSize;
 	m_state = TextWindowState::Appearing;
+	m_isChangePos = true;
 }
 
 void UITextWindow::AppearFromCenter(float duration)
 {
 	m_pos = m_targetPos;
-	m_size.height = 0;
+	m_size = { m_targetSize.width, 0 };
 	m_appearRate = 0.0f;
 	m_appearDuration = duration;
 	m_state = TextWindowState::Appearing;
+	m_isChangeSize = true;
 }
