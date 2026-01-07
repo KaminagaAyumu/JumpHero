@@ -63,6 +63,7 @@ Player::Player(Map* map, GameManager* gameManager) :
 	m_isLevelDown(false),
 	m_isJumpStart(false),
 	m_isFreeze(false),
+	m_isAttackable(false),
 	m_pMap(map),
 	m_pGameManager(gameManager),
 	m_update(&Player::EntryUpdate),
@@ -94,6 +95,7 @@ void Player::Init()
 	m_isLevelDown = false;
 	m_isJumpStart = false;
 	m_isFreeze = false;
+	m_isAttackable = false;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
 }

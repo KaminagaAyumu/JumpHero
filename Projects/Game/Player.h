@@ -97,6 +97,7 @@ private:
 	bool m_isLevelDown; // レベルダウンしたかどうか
 	bool m_isJumpStart; // ジャンプ開始したかどうか
 	bool m_isFreeze; // 止まっているかどうか
+	bool m_isAttackable; // 攻撃可能かどうか
 
 	// マップの生ポインタ
 	Map* m_pMap;
