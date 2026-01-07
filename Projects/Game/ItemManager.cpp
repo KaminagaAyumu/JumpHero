@@ -7,6 +7,7 @@
 #include "UpgradeMedal.h"
 #include "LifeUp.h"
 #include "ChangeToCoin.h"
+#include "AttackItem.h"
 #include "../Utility/Map.h"
 #include "../Utility/Input.h"
 #include <cassert>
@@ -149,6 +150,13 @@ void ItemManager::SpawnItem(int x, int y, Types::ItemType itemType)
 		m_pItems.push_back(item);
 	}
 		break;
+	case Types::ItemType::AttackItem: // 攻撃アイテム
+	{
+		auto item = std::make_shared<AttackItem>(pos, m_graphHandles[kGraphChangeToCoin]);
+		item->SetCamera(m_pCamera);
+		m_pItems.push_back(item);
+	}
+	break;
 	default:
 		break;
 	}
