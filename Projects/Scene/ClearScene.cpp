@@ -2,6 +2,7 @@
 #include "ClearScene.h"
 #include "SceneController.h"
 #include "TitleScene.h"
+#include "SelectScene.h"
 #include "../Game/GameManager.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
@@ -27,6 +28,7 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 	m_updateFunc(&ClearScene::FadeInUpdate),
 	m_drawFunc(&ClearScene::FadeDraw),
 	m_fadeColor(0xffffff),
+	m_selectIndex(0),
 	m_resultScore(0),
 	m_gameScore(0)
 {
@@ -62,6 +64,7 @@ void ClearScene::FadeInUpdate(Input&)
 void ClearScene::NormalUpdate(Input& input)
 {
 	m_gameScore = m_pGameManager->GetScore();
+
 	// スコアの更新処理
 	if (m_resultScore < m_gameScore) // リザルト表示スコアがゲームで獲得したスコアより小さい場合
 	{
@@ -80,8 +83,31 @@ void ClearScene::NormalUpdate(Input& input)
 		}
 	}
 
-	// 決定ボタンを押したときにスコアの加算表示が終わっていたら
-	if (input.IsTriggered("OK") && m_resultScore == m_gameScore)
+	if (m_resultScore != m_gameScore)
+	{
+		return;
+	}
+
+	if (input.IsTriggered("Up"))
+	{
+		m_selectIndex--;
+	}
+	if (input.IsTriggered("Down"))
+	{
+		m_selectIndex++;
+	}
+
+	if (m_selectIndex < 0)
+	{
+		m_selectIndex = 1;
+	}
+	if (m_selectIndex > 1)
+	{
+		m_selectIndex = 0;
+	}
+
+	// 決定ボタンを押したとき
+	if (input.IsTriggered("OK"))
 	{
 		// フェードイン完了
 		m_fadeColor = 0x000000;
@@ -97,7 +123,15 @@ void ClearScene::FadeOutUpdate(Input&)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+
+		if (m_selectIndex == 0)
+		{
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+		}
+		else
+		{
+			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+		}
 		return; // 念のため処理を抜ける
 	}
 }
@@ -105,8 +139,13 @@ void ClearScene::FadeOutUpdate(Input&)
 void ClearScene::NormalDraw()
 {
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kClearDispMargin, L"Clear!", 0xffffff);
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
+	//DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
 	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
+
+	int cursorY = Game::kScreenHeight - 50 + (m_selectIndex * 20);
+	DrawString(Game::kScreenWidth / 2, cursorY, L"→", (m_selectIndex == 0) ? 0xff0000 : 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight - 50, L"ステージセレクトへ", 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight - 30, L"タイトルへ", 0xffffff);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"ClearScene: NormalDraw", 0xffffff);
@@ -116,7 +155,7 @@ void ClearScene::NormalDraw()
 void ClearScene::FadeDraw()
 {
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kClearDispMargin, L"Clear!", 0xffffff);
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
+	//DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
 	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
 
 

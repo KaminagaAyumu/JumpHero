@@ -26,6 +26,7 @@ public:
 
 private:
 	unsigned int m_fadeColor; // 単色フェード用の色
+	int m_selectIndex; // 選択中のカーソルインデックス
 
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理
