@@ -28,12 +28,14 @@ public:
 	/// <summary>
 	/// ウィンドウを右から表示する(スライドして動いてくる)
 	/// </summary>
-	void ShowFromRight();
+	/// <param name="duration">表示が終わるまでの時間</param>
+	void ShowFromRight(float duration);
 
 	/// <summary>
 	/// ウィンドウを中央から表示する(拡大して現れる)
 	/// </summary>
-	void AppearFromCenter();
+	/// <param name="duration">表示が終わるまでの時間</param>
+	void AppearFromCenter(float duration);
 
 	enum class TextWindowState
 	{
@@ -49,6 +51,7 @@ private:
 	Position2 m_targetPos; // 指定位置に移動するための座標
 	std::string m_text; // 表示するテキスト
 	Size m_size; // ウィンドウのサイズ
+	Size m_targetSize; // アニメーション使用時のサイズ
 	TextWindowState m_state; // ウィンドウの状態
 	float m_appearRate; // 表示率(0.0~1.0)
 	float m_appearDuration; // 表示アニメーションの時間

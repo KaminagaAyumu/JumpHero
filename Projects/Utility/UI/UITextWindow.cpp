@@ -12,9 +12,10 @@ UITextWindow::UITextWindow() :
 	m_startPos{},
 	m_targetPos{},
 	m_size{},
+	m_targetSize{},
 	m_state(TextWindowState::Appearing),
 	m_appearRate(0.0f),
-	m_appearDuration(30.0f)
+	m_appearDuration(0.0f)
 {
 }
 
@@ -25,7 +26,8 @@ UITextWindow::~UITextWindow()
 void UITextWindow::Init(std::string text, Size size, const Position2& target)
 {
 	m_text = text; // テキストの内容を設定
-	m_size = size; // ウィンドウのサイズを設定
+	//m_size = size; // ウィンドウのサイズを設定
+	m_targetSize = size; // 目標サイズを設定
 	m_targetPos = target; // 目標位置を設定
 	m_pos = m_startPos; // 初期位置を設定
 }
@@ -41,6 +43,7 @@ void UITextWindow::Update()
 			m_state = (m_state == TextWindowState::Appearing) ? TextWindowState::Visible : TextWindowState::Hidden;
 		}
 		m_pos = Geometry::LerpVec2(m_startPos, m_targetPos, m_appearRate); // 線形補間で位置を更新
+		//m_size.height = static_cast<int>(m_targetSize.height * m_appearRate); // 高さを更新
 	}
 }
 
@@ -51,7 +54,7 @@ void UITextWindow::Draw() const
 		GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
 	auto text = StringFunction::WStringFromString(m_text);
 	int width = GetDrawFormatStringWidth(L"%s", text.c_str());
-	DrawString(m_pos.x + width / 2, m_pos.y,
+	DrawString(m_pos.x - width / 2, m_pos.y,
 		text.c_str(), GetColor(255, 255, 255)); // テキストを描画
 }
 
@@ -60,13 +63,20 @@ bool UITextWindow::IsAlive() const
 	return m_state != TextWindowState::Hidden;
 }
 
-void UITextWindow::ShowFromRight()
+void UITextWindow::ShowFromRight(float duration)
 {
 	m_startPos = { startPosLeftX, m_targetPos.y };
 	m_appearRate = 0.0f;
+	m_appearDuration = duration;
+	m_size = m_targetSize;
 	m_state = TextWindowState::Appearing;
 }
 
-void UITextWindow::AppearFromCenter()
+void UITextWindow::AppearFromCenter(float duration)
 {
+	m_pos = m_targetPos;
+	m_size.height = 0;
+	m_appearRate = 0.0f;
+	m_appearDuration = duration;
+	m_state = TextWindowState::Appearing;
 }
