@@ -562,15 +562,6 @@ void Player::JumpDraw()
 	DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 
 #ifdef _DEBUG
-
-	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	//moveRange.Draw(drawX, drawY);
-	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetLeft(), moveRange.GetBottom(), 0xff0000);
-	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetTop(), 0xff0000);
-	DrawLine(moveRange.GetRight(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
-	DrawLine(moveRange.GetLeft(), moveRange.GetBottom(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
-
-
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif
@@ -585,21 +576,6 @@ void Player::GroundDraw()
 
 
 #ifdef _DEBUG
-
-	// 当たっているマップチップを表示(スクロールは考えない)
-	Rect2D collisionMapChip = {};
-	if (m_pMap->IsCollision(m_colRect, collisionMapChip))
-	{
-		collisionMapChip.Draw();
-	}
-
-	Rect2D moveRange = m_pMap->GetCanMoveRange(m_colRect);
-	//moveRange.Draw(drawX,drawY);
-	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetLeft(), moveRange.GetBottom(), 0xff0000);
-	DrawLine(moveRange.GetLeft(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetTop(), 0xff0000);
-	DrawLine(moveRange.GetRight(), moveRange.GetTop(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
-	DrawLine(moveRange.GetLeft(), moveRange.GetBottom(), moveRange.GetRight(), moveRange.GetBottom(), 0xff0000);
-
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
 #endif
