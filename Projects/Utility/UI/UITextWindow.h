@@ -25,7 +25,15 @@ public:
 
 	bool IsAlive()const override;
 
-	void ShowFromRight(); // 右から表示
+	/// <summary>
+	/// ウィンドウを右から表示する(スライドして動いてくる)
+	/// </summary>
+	void ShowFromRight();
+
+	/// <summary>
+	/// ウィンドウを中央から表示する(拡大して現れる)
+	/// </summary>
+	void AppearFromCenter();
 
 	enum class TextWindowState
 	{

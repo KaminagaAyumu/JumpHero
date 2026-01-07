@@ -66,3 +66,7 @@ void UITextWindow::ShowFromRight()
 	m_appearRate = 0.0f;
 	m_state = TextWindowState::Appearing;
 }
+
+void UITextWindow::AppearFromCenter()
+{
+}
