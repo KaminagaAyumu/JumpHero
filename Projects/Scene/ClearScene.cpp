@@ -20,6 +20,8 @@ namespace
 
 	constexpr int kClearDispMargin = -30;
 	constexpr int kScoreDispMargin = -60;
+
+	constexpr int kSelectDispMargin = 50;
 }
 
 ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager) :
@@ -142,10 +144,10 @@ void ClearScene::NormalDraw()
 	//DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
 	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
 
-	int cursorY = Game::kScreenHeight - 50 + (m_selectIndex * 20);
+	int cursorY = Game::kScreenHeight / 2 + kSelectDispMargin + (m_selectIndex * kSelectDispMargin);
 	DrawString(Game::kScreenWidth / 2, cursorY, L"→", (m_selectIndex == 0) ? 0xff0000 : 0xffffff);
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight - 50, L"ステージセレクトへ", 0xffffff);
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight - 30, L"タイトルへ", 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kSelectDispMargin, L"ステージセレクトへ", 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kSelectDispMargin, L"タイトルへ", 0xffffff);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"ClearScene: NormalDraw", 0xffffff);
