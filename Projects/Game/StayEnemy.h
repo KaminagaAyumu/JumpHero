@@ -32,5 +32,14 @@ private:
 	void NormalDraw(); // 通常時の描画処理
 	void ItemDraw();   // アイテム変化時の描画処理
 
+	// 時間カウンタ(状態が変わるごとにリセットする)
+	int m_frameCount;
+
+	// アイテム化状態の時間
+	int m_itemTime;
+
+	// アイテム化の最大時間
+	int m_maxItemTime;
+
 };
 

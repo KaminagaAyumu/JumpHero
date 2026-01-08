@@ -19,9 +19,13 @@ namespace
 }
 
 StayEnemy::StayEnemy(const Position2& pos, Player* player, Map* map) :
-	EnemyBase(player, map)
+	EnemyBase(player, map),
+	m_frameCount(0),
+	m_itemTime(0),
+	m_maxItemTime(0)
 {
 	m_updateFunc = &StayEnemy::NormalUpdate;
+	m_drawFunc = &StayEnemy::NormalDraw;
 	m_pos = pos;
 }
 
@@ -43,6 +47,14 @@ void StayEnemy::Draw()
 
 void StayEnemy::ChangeToItem(int time)
 {
+	// 当たり判定をコイン用に変更
+	m_colRect = { m_pos,kCoinWidth,kCoinHeight };
+	m_colCircle = { m_pos,kCoinWidth / 2 };
+	m_updateFunc = &StayEnemy::ItemUpdate;
+	m_drawFunc = &StayEnemy::ItemDraw;
+	m_itemTime = time;
+	m_maxItemTime = time;
+	return; // 念のためreturn
 }
 
 void StayEnemy::IsCollision(const Types::CollisionInfo& info)
@@ -55,6 +67,19 @@ void StayEnemy::NormalUpdate(Input&)
 
 void StayEnemy::ItemUpdate(Input&)
 {
+	// アイテム化時間を減らしていって、時間に達したら
+	if (--m_itemTime <= 0)
+	{
+		// 当たり判定を元に戻す
+		m_colRect = { m_pos,kWidth,kHeight };
+		m_colCircle = { m_pos,kWidth / 2 };
+
+		m_itemTime = 0; // アイテム化時間を0にする
+		m_maxItemTime = 0; // アイテム化最大時間を0にする
+		m_updateFunc = &StayEnemy::NormalUpdate; // 通常更新に戻す
+		m_drawFunc = &StayEnemy::NormalDraw; // 通常描画に戻す
+		return; // 念のためreturn
+	}
 }
 
 void StayEnemy::DeadUpdate(Input&)
