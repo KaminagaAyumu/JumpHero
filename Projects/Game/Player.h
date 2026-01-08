@@ -111,6 +111,8 @@ private:
 	bool m_isFreeze; // 止まっているかどうか
 	bool m_isAttackable; // 攻撃可能かどうか
 
+	Animation m_moveAnim; // 移動アニメーション
+
 	// マップの生ポインタ
 	Map* m_pMap;
 

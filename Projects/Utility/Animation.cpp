@@ -71,6 +71,7 @@ void Animation::Draw(Position2Int pos, bool isTurn) const
 		m_animScale, // 拡大率
 		m_animAngle, // 回転角度
 		m_handle, // 画像ハンドル
+		true,
 		isTurn); // 反転するかどうか
 }
 

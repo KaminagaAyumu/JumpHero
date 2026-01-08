@@ -102,6 +102,8 @@ void Player::Init()
 	m_isAttackable = false;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
+	m_moveAnim.SetAnimation(m_graphHandle, { kGraphWidth,kGraphHeight }, 18, 6, true);
+	m_currentAnim = m_moveAnim;
 }
 
 void Player::InitMap(Map* map)
@@ -122,6 +124,9 @@ void Player::Update(Input& input)
 		m_attackCount = 0;
 		m_isAttackable = false;
 	}
+
+	m_moveAnim.Update();
+	m_currentAnim = m_moveAnim;
 
 	(this->*m_update)(input);
 }
@@ -572,9 +577,9 @@ void Player::JumpDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xaaffff, true);
-	DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-
+	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xaaffff, true);
+	//DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+	m_currentAnim.Draw({ drawX, drawY }, false);
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -585,9 +590,9 @@ void Player::GroundDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
-	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-
+	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
+	//DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+	m_currentAnim.Draw({ drawX, drawY }, false);
 
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
@@ -599,8 +604,9 @@ void Player::MissDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xff00aa, true);
-	DrawRectRotaGraph(drawX, drawY, kGraphWidth, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xff00aa, true);
+	//DrawRectRotaGraph(drawX, drawY, kGraphWidth, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+	m_currentAnim.Draw({ drawX, drawY }, false);
 
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Miss!", 0xffffff);
 #ifdef _DEBUG
