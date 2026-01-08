@@ -36,6 +36,10 @@ public:
 	/// <param name="isTurn">画像の向きを反転するか</param>
 	void Draw(Position2Int pos, bool isTurn) const;
 
+	// 大きさや角度を変えたい際にはこの関数を使う
+	void SetScale(float scale) { m_animScale = scale; } // 拡大率を設定する
+	void SetAngle(float angle) { m_animAngle = angle; } // 回転角度を設定する
+
 private:
 	// アニメーションに必須の変数群
 	int m_handle; // アニメーションさせたい画像のハンドル
