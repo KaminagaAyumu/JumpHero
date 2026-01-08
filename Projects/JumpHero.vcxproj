@@ -148,7 +148,6 @@
     <ClCompile Include="Game\ItemManager.cpp" />
     <ClCompile Include="Game\LifeUp.cpp" />
     <ClCompile Include="Game\UpgradeMedal.cpp" />
-    <ClCompile Include="Utility\HandleManager.cpp" />
     <ClCompile Include="Scene\MiniGameScene.cpp" />
     <ClCompile Include="Scene\PauseScene.cpp" />
     <ClCompile Include="Scene\SelectScene.cpp" />
@@ -194,7 +193,6 @@
     <ClInclude Include="Game\EventControls.h" />
     <ClInclude Include="Game\LifeUp.h" />
     <ClInclude Include="Game\UpgradeMedal.h" />
-    <ClInclude Include="Utility\HandleManager.h" />
     <ClInclude Include="Scene\MiniGameScene.h" />
     <ClInclude Include="Scene\PauseScene.h" />
     <ClInclude Include="Scene\SelectScene.h" />
