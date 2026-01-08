@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../Utility/Geometry.h"
 #include "../Utility/GameType.h"
+#include "../Utility/Animation.h"
 
 class Input;
 class Camera;
@@ -27,7 +28,8 @@ public:
 
 	void SetCamera(Camera* camera); // カメラの参照をセットする関数
 
-	
+	void ChangeAnimation(const Animation& anim) { m_currentAnim = anim; } // アニメーションを変更する関数
+
 	//////////////////////////////////////////////
 	         //////当たり判定用関数//////
 	//////////////////////////////////////////////
@@ -73,6 +75,7 @@ protected:
 	Types::ActorType m_type; // オブジェクトのタイプ
 
 	Camera* m_pCamera; // カメラへの参照
+	Animation m_currentAnim; // 現在のアニメーション
 
 };
 

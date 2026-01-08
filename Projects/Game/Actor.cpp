@@ -6,7 +6,8 @@ Actor::Actor(Types::ActorType t) :
 	m_colCircle{},
 	m_colRect{},
 	m_type(t),
-	m_pCamera(nullptr)
+	m_pCamera(nullptr),
+	m_currentAnim{}
 {
 }
 
