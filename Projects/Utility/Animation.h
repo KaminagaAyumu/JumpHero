@@ -11,9 +11,9 @@ public:
 	/// 何もアニメーションが入っていない状態で初期化される
 	/// </summary>
 	Animation();
-	virtual ~Animation();
+	virtual ~Animation() = default;
 
-	
+
 	/// <summary>
 	/// アニメーションを設定する
 	/// </summary>

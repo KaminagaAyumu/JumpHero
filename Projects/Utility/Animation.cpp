@@ -21,10 +21,6 @@ Animation::Animation() :
 {
 }
 
-Animation::~Animation()
-{
-}
-
 void Animation::SetAnimation(int handle, const Size& animSize, int animNum, int animFrame, bool isLoop)
 {
 	m_handle = handle;
