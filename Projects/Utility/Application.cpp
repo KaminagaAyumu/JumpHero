@@ -8,12 +8,16 @@
 
 namespace
 {
-	constexpr int	kOneFrameNanoSec = 16667;
+	constexpr int	kOneFrameNanoSec = 16667; // 1フレームのナノ秒(60FPS)
+
+	const wchar_t* kFontPath = L"data/toroman.ttf"; // プロジェクト内にあるフォントデータのパス
 }
 
 Application::Application()
 {
 	m_soundManager = std::make_shared<SoundManager>();
+	// フォントデータをプロジェクトから読み込んで追加する(このプロジェクトの起動時にしか使えない)
+	AddFontResourceExW(kFontPath, FR_PRIVATE, nullptr);
 }
 
 Application::~Application()
@@ -92,5 +96,7 @@ void Application::Run()
 
 void Application::Terminate()
 {
+	// 追加したフォントデータを明示的に削除する
+	RemoveFontResourceExW(kFontPath, FR_PRIVATE, nullptr);
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 }

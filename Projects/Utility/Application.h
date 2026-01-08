@@ -45,6 +45,6 @@ private:
 	Application(const Application&) = delete; // コピーコンストラクタを作れないようにする
 	void operator=(const Application&) = delete; // 代入演算子も使えないようにする
 
-	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャーのスマートポインタ
+	std::shared_ptr<SoundManager> m_soundManager; // 多くのクラスで使用するためサウンドマネージャーを保持する
 };
 
