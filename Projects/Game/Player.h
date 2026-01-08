@@ -145,6 +145,11 @@ private:
 	/// </summary>
 	void CheckHitToChest(Input& input);
 
+	/// <summary>
+	/// プレイヤーの状態をチェックしてアニメーションを変更する
+	/// </summary>
+	void CheckAnimation();
+
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時
 	void JumpUpdate(Input&); // ジャンプ状態の時

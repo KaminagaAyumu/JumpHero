@@ -46,6 +46,10 @@ namespace
 
 	constexpr float kEntryEndXOffset = 100.0f;			// プレイヤー登場終了位置のXオフセット
 
+	// アニメーション関連
+	constexpr int kAnimGroundNum = 18;				// 地上アニメーションの枚数
+	constexpr int kAnimGroundFrame = 6;				// 地上アニメーションのフレーム数
+	//constexpr int kAnimJumpFrame = 4;					// ジャンプアニメーションのフレーム数
 }
 
 Player::Player(Map* map, GameManager* gameManager) :
@@ -125,8 +129,7 @@ void Player::Update(Input& input)
 		m_isAttackable = false;
 	}
 
-	m_moveAnim.Update();
-	m_currentAnim = m_moveAnim;
+	m_currentAnim.Update();
 
 	(this->*m_update)(input);
 }
@@ -446,6 +449,15 @@ void Player::CheckHitToChest(Input& input)
 			break;
 		}
 	}
+}
+
+void Player::CheckAnimation()
+{
+	if (m_isGround) // 地面についている時
+	{
+		m_currentAnim = m_moveAnim;
+	}
+	// 他の処理も今後実装
 }
 
 void Player::EntryUpdate(Input&)
