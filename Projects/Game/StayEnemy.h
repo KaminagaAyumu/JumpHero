@@ -18,5 +18,19 @@ class StayEnemy : public EnemyBase
 private:
 
 	virtual void IsCollision(const Types::CollisionInfo& info) override;
+
+	// 更新処理用関数群
+	using UpdateFunc_t = void(StayEnemy::*)(Input&); // 更新処理用関数ポインタの型定義
+	UpdateFunc_t m_updateFunc; // 現在の更新処理用関数ポインタ
+	void NormalUpdate(Input&); // 通常時の更新処理
+	void ItemUpdate(Input&);   // アイテム変化時の更新処理
+	void DeadUpdate(Input&);   // 倒された後の更新処理
+
+	// 描画処理用関数群
+	using DrawFunc_t = void(StayEnemy::*)(); // 描画処理用関数ポインタの型定義
+	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
+	void NormalDraw(); // 通常時の描画処理
+	void ItemDraw();   // アイテム変化時の描画処理
+
 };
 
