@@ -115,6 +115,8 @@ private:
 	EnemyForm m_currentForm; // 現在の敵の姿
 	EnemyForm m_nextForm; // 変わる姿
 
+	int m_graphHandle; // 画像ハンドル
+
 	// 時間カウンタ(状態が変わるごとにリセットする)
 	int m_frameCount;
 
@@ -143,6 +145,8 @@ private:
 
 	// 移動の力
 	Vector2 m_velocity;
+
+	Animation m_animNormalWalk; // 通常状態の歩きアニメーション
 	
 };
 

@@ -33,6 +33,10 @@ namespace
 	constexpr float	kItemWarningRate		= 0.20f;	// アイテム化が終わりそうなことを示す時間の割合
 	constexpr float kWarningFrashCycle		= 0.30f;	// 点滅の周期
 	constexpr int	kMaxFadeRate			= 255;		// フェード率の最大値
+
+	// アニメーション関連
+	constexpr int	kAnimNormalWalkNum		= 19;		// 通常歩きアニメーションの枚数
+	constexpr int	kAnimNormalWalkFrame	= 5;		// 通常歩きアニメーションのフレーム数
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
