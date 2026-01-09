@@ -39,7 +39,7 @@ namespace
 	constexpr int	kGraphHeight			= 64;		// 敵画像1枚の高さ
 	constexpr float	kGraphScale				= 0.625;	// 敵画像の拡大率(サイズが40*40になる)
 
-	constexpr int	kAnimNormalWalkNum		= 19;		// 通常歩きアニメーションの枚数
+	constexpr int	kAnimNormalWalkNum		= 12;		// 通常歩きアニメーションの枚数
 	constexpr int	kAnimNormalWalkFrame	= 5;		// 通常歩きアニメーションのフレーム数
 }
 
