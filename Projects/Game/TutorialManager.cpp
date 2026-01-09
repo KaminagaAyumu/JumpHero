@@ -49,6 +49,7 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	test->ShowFromRight(4.0f);
 	auto* test2 = m_pUIManager->CreateTextWindow("説明", { 200,50 }, { 170,570 });
 	test2->AppearFromCenter(4.0f);
+	auto test3 = m_pUIManager->CreateText(-1, "testあああ123", { 170,400 });
 	LoadEventData();
 	InitEventPos();
 	LoadCommonEventData();
