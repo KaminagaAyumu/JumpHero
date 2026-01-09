@@ -312,7 +312,7 @@ void TransformEnemy::NormalDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	m_currentAnim.Draw({ drawX, drawY }, false);
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 
 	/*DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
 			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
