@@ -16,6 +16,7 @@ class EnemyManager
 {
 public:
 	EnemyManager(Camera* camera,Player* player, GameManager* gameManager, Map* map);
+	virtual ~EnemyManager();
 
 	void Init(Map* map);
 
@@ -69,6 +70,8 @@ private:
 	std::list<std::shared_ptr<EnemyBase>> m_enemies;
 
 	std::vector<Position2> m_spawnPositions; // 敵の生成位置リスト
+
+	std::vector<int> m_graphHandles; // 敵の画像ハンドルリスト
 
 	int m_frameCount; // フレーム数をカウント
 	int m_itemTime; // アイテム状態の時間

@@ -37,6 +37,17 @@ EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameMana
 	m_enemies.clear(); // 敵リストを初期化
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
 	LoadSpawnPositions(map); // 敵スポーン位置の読み込み
+
+	int handle = LoadGraph(L"data/img/enemy_Base.png");
+	m_graphHandles.push_back(handle);
+}
+
+EnemyManager::~EnemyManager()
+{
+	for (auto& handle : m_graphHandles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void EnemyManager::Init(Map* map)
@@ -167,7 +178,7 @@ void EnemyManager::SpawnEnemy(const Position2& pos)
 		enemyForm = TransformEnemy::EnemyForm::Skull;
 	}
 
-	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm);
+	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm, m_graphHandles[0]);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }
@@ -228,7 +239,7 @@ void EnemyManager::SpawnEnemy(const Position2& pos, int spawnNum)
 {
 	auto enemyForm = (TransformEnemy::EnemyForm)spawnNum;
 
-	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm);
+	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm, m_graphHandles[0]);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }

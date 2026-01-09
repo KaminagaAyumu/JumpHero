@@ -31,8 +31,8 @@ public:
 	/// <param name="player">敵の初期位置</param>
 	/// <param name="player">プレイヤーのポインタ</param>
 	/// <param name="map">マップのポインタ</param>
-	/// <param name="changeForm">変わる姿</param>
-	TransformEnemy(const Position2& pos,Player* player, Map* map, EnemyForm changeForm);
+	/// <param name="graphHandle">変わる姿</param>
+	TransformEnemy(const Position2& pos,Player* player, Map* map, EnemyForm changeForm, int graphHandle);
 	
 	// デストラクタ(今は特に使わないのでdefault)
 	virtual ~TransformEnemy() = default;

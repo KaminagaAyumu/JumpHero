@@ -35,11 +35,15 @@ namespace
 	constexpr int	kMaxFadeRate			= 255;		// フェード率の最大値
 
 	// アニメーション関連
+	constexpr int	kGraphWidth				= 64;		// 敵画像1枚の幅
+	constexpr int	kGraphHeight			= 64;		// 敵画像1枚の高さ
+	constexpr float	kGraphScale				= 0.625;	// 敵画像の拡大率(サイズが40*40になる)
+
 	constexpr int	kAnimNormalWalkNum		= 19;		// 通常歩きアニメーションの枚数
 	constexpr int	kAnimNormalWalkFrame	= 5;		// 通常歩きアニメーションのフレーム数
 }
 
-TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm) :
+TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm, int graphHandle) :
 	EnemyBase(player, map),
 	m_updateFunc(&TransformEnemy::AppearUpdate),
 	m_drawFunc(&TransformEnemy::AppearDraw),
@@ -56,10 +60,16 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_isUpDirection(true),
 	m_velocity{}
 {
+	m_graphHandle = graphHandle;
 	m_direction = {};
 	m_pos = pos;
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
+	// アニメーションの設定
+	m_animNormalWalk.SetAnimation(m_graphHandle, { kGraphWidth, kGraphHeight }, kAnimNormalWalkNum, kAnimNormalWalkFrame, true);
+	m_animNormalWalk.SetScale(kGraphScale);
+	m_currentAnim = m_animNormalWalk; // 現在のアニメーションを更新
+
 }
 
 void TransformEnemy::Init()
@@ -78,6 +88,9 @@ void TransformEnemy::Update(Input& input)
 	{
 		m_frameCount++; // フレーム数は常に更新し続ける
 	}
+
+	m_currentAnim.Update(); // アニメーションの更新
+
 	(this->*m_updateFunc)(input);
 }
 
@@ -299,9 +312,11 @@ void TransformEnemy::NormalDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
+	m_currentAnim.Draw({ drawX, drawY }, false);
+
+	/*DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
 			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
-			0x0000ff, true);
+			0x0000ff, true);*/
 
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
