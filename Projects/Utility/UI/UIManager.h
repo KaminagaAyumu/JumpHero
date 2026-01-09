@@ -29,7 +29,7 @@ public:
 	/// <param name="size"></param>
 	/// <param name="pos"></param>
 	/// <returns></returns>
-	UITextWindow* CreateTextWindow(const std::string& text, const Size& size, const Position2& pos);
+	std::weak_ptr<UITextWindow> CreateTextWindow(const std::string& text, const Size& size, const Position2& pos);
 	
 	/// <summary>
 	/// テキストを作成する関数

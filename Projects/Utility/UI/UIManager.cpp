@@ -59,12 +59,12 @@ void UIManager::Draw()
 	}
 }
 
-UITextWindow* UIManager::CreateTextWindow(const std::string& text, const Size& size, const Position2& pos)
+std::weak_ptr<UITextWindow> UIManager::CreateTextWindow(const std::string& text, const Size& size, const Position2& pos)
 {
 	auto ptr = std::make_shared<UITextWindow>();
 	ptr->Init(text, size, pos);
 	m_pUIElements.push_back(ptr);
-	return ptr.get();
+	return ptr;
 }
 
 std::weak_ptr<UIText> UIManager::CreateText(int handle, const std::string& text, const Position2& pos)
