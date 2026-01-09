@@ -2,6 +2,7 @@
 #include <list>
 #include <functional>
 #include "../Utility/GameType.h"
+#include "../Utility/Geometry.h"
 
 class Actor;
 class ItemBase;
@@ -38,10 +39,9 @@ public:
 	/// <summary>
 	/// 指定した座標にアイテムの追加を行う
 	/// </summary>
-	/// <param name="x">X座標</param>
-	/// <param name="y">Y座標</param>
+	/// <param name="pos">表示座標</param>
 	/// <param name="itemType">どのアイテムを生成するか</param>
-	void SpawnItem(int x, int y, Types::ItemType itemType);
+	void SpawnItem(const Position2& pos, Types::ItemType itemType);
 
 	/// <summary>
 	/// ゲーム開始時の最初のアイテム生成

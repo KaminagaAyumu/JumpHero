@@ -365,7 +365,7 @@ void TutorialManager::LookCamera(std::string param)
 
 void TutorialManager::DrawTextWindow() const
 {
-	DrawBox(kTextWindowMargin, kTextWindowMargin, Game::kScreenWidth - kTextWindowMargin, Game::kScreenHeight * 0.5f, 0x333333,true);
+	DrawBox(kTextWindowMargin, kTextWindowMargin, Game::kScreenWidth - kTextWindowMargin, Game::kScreenHeight / 2, 0x333333,true);
 	auto str = StringFunction::WStringFromString(m_textPager.pages[m_textPager.index].textData);
 	int width = GetDrawFormatStringWidth(L"%s", str.c_str());
 	DrawFormatString(width / 2, 200, 0xffffff, L"%s", str.c_str());
@@ -382,6 +382,7 @@ TriggerType TutorialManager::ToTriggerType(const std::string strData)
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
 	if (strData == "PlayerPowerUp") return TriggerType::PlayerPowerUp;
 	if (strData == "NoTrigger") return TriggerType::NoTrigger;
+	return TriggerType::NoTrigger; // ここまで来たら不正な値なのでNoTriggerを返す
 }
 
 ActionType TutorialManager::ToActionType(const std::string strData)
@@ -400,6 +401,7 @@ ActionType TutorialManager::ToActionType(const std::string strData)
 	if (strData == "SetBarrier") return ActionType::SetBarrier;
 	if (strData == "UnlockBarrier") return ActionType::UnlockBarrier;
 	if (strData == "ActiveGoal") return ActionType::ActiveGoal;
+	return ActionType::NoAction; // ここまで来たら不正な値なのでNoActionを返す
 }
 
 bool TutorialManager::CheckTrigger(const EventData& data)
@@ -486,16 +488,16 @@ void TutorialManager::RunAction(const EventData& data)
 		{
 			type = Types::ItemType::ChangeToCoin;
 			// 通常のアイテム(コイン)をまず生成
-			m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, Types::ItemType::Coin);
+			m_pGameManager->DropItem(m_chestPos[chestNum], Types::ItemType::Coin);
 		}
 		
-		m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, type);
+		m_pGameManager->DropItem(m_chestPos[chestNum], type);
 	}
 		break;
 	case ActionType::SpawnEnemy:
 		for (auto& pos : m_spawnPos)
 		{
-			m_pGameManager->SpawnEnemy(pos.x,pos.y, kEnemySpawnPosChipNo);
+			m_pGameManager->SpawnEnemy(pos, kEnemySpawnPosChipNo);
 		}
 		break;
 	case ActionType::FreezeGame:
@@ -560,6 +562,8 @@ void TutorialManager::RunAction(const EventData& data)
 		break;
 	case ActionType::ActiveGoal:
 		break;
+	case ActionType::NoAction:
+		break;
 	}
 	m_eventIndex++;
 }
@@ -602,16 +606,16 @@ void TutorialManager::RunCommonAction(const EventData& data)
 		{
 			type = Types::ItemType::ChangeToCoin;
 			// 通常のアイテム(コイン)をまず生成
-			m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, Types::ItemType::Coin);
+			m_pGameManager->DropItem(m_chestPos[chestNum], Types::ItemType::Coin);
 		}
 
-		m_pGameManager->DropItem(m_chestPos[chestNum].x, m_chestPos[chestNum].y, type);
+		m_pGameManager->DropItem(m_chestPos[chestNum], type);
 	}
 	break;
 	case ActionType::SpawnEnemy:
 		for (auto& pos : m_spawnPos)
 		{
-			m_pGameManager->SpawnEnemy(pos.x, pos.y, kEnemySpawnPosChipNo);
+			m_pGameManager->SpawnEnemy(pos, kEnemySpawnPosChipNo);
 		}
 		break;
 	case ActionType::FreezeGame:
@@ -688,6 +692,8 @@ void TutorialManager::RunCommonAction(const EventData& data)
 	}
 		break;
 	case ActionType::ActiveGoal:
+		break;
+	case ActionType::NoAction:
 		break;
 	}
 }

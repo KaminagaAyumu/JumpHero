@@ -42,6 +42,7 @@ enum class ActionType
 	SetBarrier, // 移動制限バリアを設定
 	UnlockBarrier, // 移動制限バリアを開放
 	ActiveGoal, // ゴールを開く
+	NoAction, // 何もしない
 };
 
 class TutorialManager
@@ -73,9 +74,9 @@ private:
 	struct EventData
 	{
 		int id = 0; // 識別ID
-		TriggerType triggerType; // イベントが始まる条件
+		TriggerType triggerType = TriggerType::NoTrigger; // イベントが始まる条件
 		std::string triggerParam; // イベントの場合分けで必要なデータ
-		ActionType actionType; // 行われるイベント
+		ActionType actionType = ActionType::NoAction; // 行われるイベント
 		std::string actionParam; // イベントで必要なデータ
 	};
 

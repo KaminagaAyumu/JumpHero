@@ -247,23 +247,22 @@ void GameManager::OnItemCollected(const Types::ItemType& type)
 	}
 }
 
-void GameManager::DropItem(int x, int y)
+void GameManager::DropItem(const Position2& pos)
 {
-	m_pItemManager->SpawnItem(x, y,Types::ItemType::UpgradeMedal);
+	m_pItemManager->SpawnItem(pos,Types::ItemType::UpgradeMedal);
 	if(IsDropChangeToCoin()) // 敵をコインに変えるアイテムを落とすか判定
 	{
-		m_pItemManager->SpawnItem(x, y, Types::ItemType::ChangeToCoin);
+		m_pItemManager->SpawnItem(pos, Types::ItemType::ChangeToCoin);
 	}
 }
 
-void GameManager::DropItem(int x, int y, const Types::ItemType& type)
+void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 {
-	m_pItemManager->SpawnItem(x, y, type);
+	m_pItemManager->SpawnItem(pos, type);
 }
 
-void GameManager::SpawnEnemy(int x, int y, int formNum)
+void GameManager::SpawnEnemy(const Position2& pos, int formNum)
 {
-	Position2 pos = { x,y };
 	m_pEnemyManager->SpawnEnemy(pos, formNum);
 }
 

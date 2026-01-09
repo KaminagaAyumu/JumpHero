@@ -109,10 +109,8 @@ void ItemManager::Draw()
 	}*/
 }
 
-void ItemManager::SpawnItem(int x, int y, Types::ItemType itemType)
+void ItemManager::SpawnItem(const Position2& pos, Types::ItemType itemType)
 {
-	// スポーン位置を設定
-	Position2 pos = { x,y };
 
 	// アイテムの種類によって生成するクラスを変える
 	switch (itemType)
