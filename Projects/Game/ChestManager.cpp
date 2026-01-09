@@ -60,11 +60,11 @@ void ChestManager::Draw()
 	}*/
 }
 
-void ChestManager::PushActors(std::vector<Actor*>& actors)
+void ChestManager::PushActors(std::vector<std::weak_ptr<Actor>>& actors)
 {
 	for (auto& chest : m_chests)
 	{
-		actors.push_back(chest.get());
+		actors.push_back(chest);
 	}
 }
 

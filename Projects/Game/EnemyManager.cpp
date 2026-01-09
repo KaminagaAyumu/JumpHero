@@ -209,11 +209,11 @@ bool EnemyManager::IsChangeToItem()
 	return m_itemTime > 0;
 }
 
-void EnemyManager::PushActors(std::vector<Actor*>& actors)
+void EnemyManager::PushActors(std::vector<std::weak_ptr<Actor>>& actors)
 {
 	for (auto& enemy : m_enemies)
 	{
-		actors.push_back(enemy.get());
+		actors.push_back(enemy);
 	}
 }
 

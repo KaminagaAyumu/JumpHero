@@ -27,7 +27,7 @@ namespace
 	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
 }
 
-GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
+GameManager::GameManager(Map* map, std::vector<std::weak_ptr<Actor>>& actors) :
 	m_frameCount(0),
 	m_score(0),
 	m_currentScore(0),
@@ -40,7 +40,7 @@ GameManager::GameManager(Map* map, std::vector<Actor*>& actors) :
 {
 	m_pMap = map;
 	m_pCamera = std::make_unique<Camera>(m_pMap->GetMapSize());
-	m_pPlayer = std::make_unique<Player>(map,this);
+	m_pPlayer = std::make_shared<Player>(map,this);
 	m_pPlayer->SetCamera(m_pCamera.get());
 	m_pPlayer->Init();
 	m_pChestManager = std::make_unique<ChestManager>(m_pCamera.get(), this);
@@ -183,9 +183,9 @@ void GameManager::Draw() const
 	m_pEnemyManager->Draw();
 }
 
-void GameManager::PushActors(std::vector<Actor*>& actors)
+void GameManager::PushActors(std::vector<std::weak_ptr<Actor>>& actors)
 {
-	actors.push_back(m_pPlayer.get());
+	actors.push_back(m_pPlayer);
 	m_pChestManager->PushActors(actors);
 	m_pItemManager->PushActors(actors);
 	m_pEnemyManager->PushActors(actors);

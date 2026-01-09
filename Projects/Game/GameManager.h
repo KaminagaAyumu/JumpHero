@@ -26,7 +26,7 @@ class Map;
 class GameManager
 {
 public:
-	GameManager(Map* map, std::vector<Actor*>& actors);
+	GameManager(Map* map, std::vector<std::weak_ptr<Actor>>& actors);
 	virtual ~GameManager();
 
 	void Init();
@@ -38,7 +38,7 @@ public:
 	/// ゲームシーンが持っているオブジェクトコンテナに派生クラスを入れる
 	/// </summary>
 	/// <param name="actors">ゲームシーン内オブジェクトコンテナ</param>
-	void PushActors(std::vector<Actor*>& actors);
+	void PushActors(std::vector<std::weak_ptr<Actor>>& actors);
 
 	/// <summary>
 	/// スコアを加算する
@@ -194,7 +194,7 @@ private:
 	// 各オブジェクト管理クラスの参照用
 	Map* m_pMap;
 	std::unique_ptr<Camera> m_pCamera;
-	std::unique_ptr<Player> m_pPlayer;
+	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;
 	std::unique_ptr<EnemyManager> m_pEnemyManager;

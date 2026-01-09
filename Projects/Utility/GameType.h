@@ -30,7 +30,6 @@ namespace Types
 	/// </summary>
 	struct CollisionInfo
 	{
-		Actor* other; // 当たったオブジェクト
 		ActorType otherType; // 当たったオブジェクトの種類
 		ColliderType ownColliderType; // 自身の当たり判定のタイプ
 		ColliderType otherColliderType; // 当たったオブジェクトの当たり判定のタイプ

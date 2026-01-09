@@ -15,7 +15,7 @@ public:
 	/// ゲーム内すべてのアクターと当たり判定を行う
 	/// </summary>
 	/// <param name="actors">ゲーム内のアクター</param>
-	void CheckCollision(const std::vector<Actor*>& actors);
+	void CheckCollision(const std::vector<std::weak_ptr<Actor>>& actors);
 
 private:
 

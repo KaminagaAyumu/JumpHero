@@ -186,7 +186,7 @@ void ItemManager::FirstSpawnItem(Map* map)
 	}
 }
 
-void ItemManager::PushActors(std::vector<Actor*>& actors)
+void ItemManager::PushActors(std::vector<std::weak_ptr<Actor>>& actors)
 {
 	if (m_pItems.empty())
 	{
@@ -194,7 +194,7 @@ void ItemManager::PushActors(std::vector<Actor*>& actors)
 	}
 	for (auto& item : m_pItems)
 	{
-		actors.push_back(item.get());
+		actors.push_back(item);
 	}
 }
 

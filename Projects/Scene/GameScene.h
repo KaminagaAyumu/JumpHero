@@ -66,7 +66,7 @@ private:
 	// マップのデータを取得するポインタ
 	std::shared_ptr<Map> m_pMap;
 
-	std::vector<Actor*> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
+	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 

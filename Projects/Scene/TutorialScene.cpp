@@ -140,7 +140,11 @@ void TutorialScene::NormalDraw()
 
 	for (auto& actor : m_pActors)
 	{
-		actor->Draw();
+		// Actorの描画関数を呼ぶためにlockする
+		if (auto pActor = actor.lock())
+		{
+			pActor->Draw();
+		}
 	}
 
 	m_pGameManager->Draw();
@@ -159,7 +163,11 @@ void TutorialScene::FadeDraw()
 
 	for (auto& actor : m_pActors)
 	{
-		actor->Draw();
+		// Actorの描画関数を呼ぶためにlockする
+		if (auto pActor = actor.lock())
+		{
+			pActor->Draw();
+		}
 	}
 
 	m_pGameManager->Draw();

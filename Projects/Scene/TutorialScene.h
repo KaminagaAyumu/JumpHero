@@ -54,7 +54,7 @@ private:
 	std::unique_ptr<Bg> m_pBg;								// 背景クラス
 	std::shared_ptr<GameManager> m_pGameManager;			// ゲーム管理クラス
 	std::unique_ptr<CollisionManager> m_pCollisionManager;	// 衝突管理クラス
-	std::vector<Actor*> m_pActors;							// アクターの配列
+	std::vector<std::weak_ptr<Actor>> m_pActors;							// アクターの配列
 	std::shared_ptr<SoundManager> m_pSoundManager;			// サウンド管理クラス
 
 };

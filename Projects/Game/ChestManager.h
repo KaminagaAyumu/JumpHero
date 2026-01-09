@@ -37,7 +37,7 @@ public:
 	/// ゲーム内オブジェクトに宝箱を追加する
 	/// </summary>
 	/// <param name="actors">アクターコンテナの参照</param>
-	void PushActors(std::vector<Actor*>& actors);
+	void PushActors(std::vector<std::weak_ptr<Actor>>& actors);
 
 	size_t GetChestNum();
 

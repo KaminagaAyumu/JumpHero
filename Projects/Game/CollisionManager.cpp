@@ -2,31 +2,32 @@
 #include "Actor.h"
 #include "../Utility/GameType.h"
 
-void CollisionManager::CheckCollision(const std::vector<Actor*>& actors)
+void CollisionManager::CheckCollision(const std::vector<std::weak_ptr<Actor>>& actors)
 {
 	for (size_t i = 0; i < actors.size(); ++i)
 	{
 		for (size_t j = i + 1; j < actors.size(); ++j)
 		{
-			auto& a = *actors[i];
-			auto& b = *actors[j];
+			// 当たり判定関数を呼び出すために共有ポインタに変換
+			auto a = actors[i].lock();
+			auto b = actors[j].lock();
 
 			// 当たり判定のパターン
 			// 現在一回何かしら当たったら終わるようになっているが、すべての場合使えるようにしたい
-			if (IsCollisionRectToRect(a.GetColRect(), b.GetColRect()))
+			if (IsCollisionRectToRect(a->GetColRect(), b->GetColRect()))
 			{
-				a.IsCollision({ &b,b.GetType(),Types::ColliderType::Rect,Types::ColliderType::Rect });
-				b.IsCollision({ &a,a.GetType(),Types::ColliderType::Rect,Types::ColliderType::Rect });
+				a->IsCollision({ b->GetType(),Types::ColliderType::Rect,Types::ColliderType::Rect });
+				b->IsCollision({ a->GetType(),Types::ColliderType::Rect,Types::ColliderType::Rect });
 			}
-			else if (IsCollisionCircleToRect(a.GetColCircle(), b.GetColRect()))
+			else if (IsCollisionCircleToRect(a->GetColCircle(), b->GetColRect()))
 			{
-				a.IsCollision({ &b,b.GetType(),Types::ColliderType::Circle,Types::ColliderType::Rect });
-				b.IsCollision({ &a,a.GetType(),Types::ColliderType::Rect,Types::ColliderType::Circle });
+				a->IsCollision({ b->GetType(),Types::ColliderType::Circle,Types::ColliderType::Rect });
+				b->IsCollision({ a->GetType(),Types::ColliderType::Rect,Types::ColliderType::Circle });
 			}
-			else if (IsCollisionCircleToCircle(a.GetColCircle(), b.GetColCircle()))
+			else if (IsCollisionCircleToCircle(a->GetColCircle(), b->GetColCircle()))
 			{
-				a.IsCollision({ &b,b.GetType(),Types::ColliderType::Circle,Types::ColliderType::Circle });
-				b.IsCollision({ &a,a.GetType(),Types::ColliderType::Circle,Types::ColliderType::Circle });
+				a->IsCollision({ b->GetType(),Types::ColliderType::Circle,Types::ColliderType::Circle });
+				b->IsCollision({ a->GetType(),Types::ColliderType::Circle,Types::ColliderType::Circle });
 			}
 		}
 	}
