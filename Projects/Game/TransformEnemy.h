@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "EnemyBase.h"
+#include <vector>
 
 class Player;
 class Map;
@@ -47,6 +48,21 @@ public:
 	virtual void ChangeToItem(int time)override;
 
 private:
+
+	enum class AnimState
+	{
+		Appear, // 出現
+		NormalWalk, // 通常歩き
+		NormalFly, // 通常飛行
+		Transform, // 変身中
+		SeekerFly, // プレイヤー追尾
+		FireBallFly, // 火の玉飛行
+		SkullFly, // どくろ飛行
+		Item, // アイテム化
+		Dead, // 倒された後
+		
+		AnimNum // アニメーション総数取得用
+	};
 
 	// 当たり判定用の構造体
 	// どこから当たったかを保存する
@@ -143,6 +159,9 @@ private:
 
 	// 移動の力
 	Vector2 m_velocity;
+
+	// アニメーション関連
+	std::vector<Animation> m_animations; // 各状態のアニメーション格納用配列
 
 	Animation m_animNormalWalk; // 通常状態の歩きアニメーション
 	
