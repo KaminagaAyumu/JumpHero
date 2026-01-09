@@ -75,3 +75,15 @@ void Animation::Draw(Position2Int pos, bool isTurn) const
 		isTurn); // 反転するかどうか
 }
 
+bool Animation::operator!=(const Animation& anim) const
+{
+	// 設定したアニメーションが異なっていたらtrueを返す
+	if (m_handle != anim.m_handle) return true;
+	if (m_animSize.width != anim.m_animSize.width) return true;
+	if (m_animSize.height != anim.m_animSize.height) return true;
+	if (m_animNum != anim.m_animNum) return true;
+	if (m_animFrame != anim.m_animFrame) return true;
+	// それ以外はfalseを返す
+	return false;
+}
+

@@ -40,6 +40,9 @@ public:
 	void SetScale(float scale) { m_animScale = scale; } // 拡大率を設定する
 	void SetAngle(float angle) { m_animAngle = angle; } // 回転角度を設定する
 
+	// アニメーション同士の比較演算子
+	bool operator!=(const Animation& anim) const;
+
 private:
 	// アニメーションに必須の変数群
 	int m_handle; // アニメーションさせたい画像のハンドル
