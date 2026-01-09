@@ -36,6 +36,8 @@ public:
 	virtual void ChangeToItem(int time)abstract;
 
 protected:
+	int m_graphHandle; // 画像ハンドル
+
 	// プレイヤーの生ポインタ
 	// 座標を調べるためにしか使わないが、
 	// 更新処理で受け取るのが面倒なためコンストラクタで受け取る

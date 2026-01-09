@@ -20,6 +20,7 @@ namespace
 
 EnemyBase::EnemyBase(Player* player, Map* map) :
 	Actor(Types::ActorType::Enemy),
+	m_graphHandle(-1),
 	m_pPlayer(player),
 	m_pMap(map),
 	m_direction{},
