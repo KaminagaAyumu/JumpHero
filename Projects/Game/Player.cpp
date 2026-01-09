@@ -107,7 +107,6 @@ void Player::Init()
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
 	m_moveAnim.SetAnimation(m_graphHandle, { kGraphWidth,kGraphHeight }, kAnimGroundNum, kAnimGroundFrame, true);
-	m_currentAnim = m_moveAnim;
 }
 
 void Player::InitMap(Map* map)
@@ -129,6 +128,7 @@ void Player::Update(Input& input)
 		m_isAttackable = false;
 	}
 
+	CheckAnimation();
 	m_currentAnim.Update();
 
 	(this->*m_update)(input);
@@ -455,7 +455,8 @@ void Player::CheckAnimation()
 {
 	if (m_isGround) // 地面についている時
 	{
-		m_currentAnim = m_moveAnim;
+		// 移動アニメーションに変更
+		ChangeAnimation(m_moveAnim);
 	}
 	// 他の処理も今後実装
 }

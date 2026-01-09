@@ -28,8 +28,6 @@ public:
 
 	void SetCamera(Camera* camera); // カメラの参照をセットする関数
 
-	void ChangeAnimation(const Animation& anim) { m_currentAnim = anim; } // アニメーションを変更する関数
-
 	//////////////////////////////////////////////
 	         //////当たり判定用関数//////
 	//////////////////////////////////////////////
@@ -76,6 +74,13 @@ protected:
 
 	Camera* m_pCamera; // カメラへの参照
 	Animation m_currentAnim; // 現在のアニメーション
+
+	/// <summary>
+	/// アニメーションを変更する
+	/// 注意:現在のアニメーションと同じならば変更しない
+	/// </summary>
+	/// <param name="anim"></param>
+	void ChangeAnimation(const Animation& anim);
 
 };
 

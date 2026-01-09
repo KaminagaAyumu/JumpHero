@@ -20,5 +20,14 @@ void Actor::SetCamera(Camera* camera)
 	m_pCamera = camera;
 }
 
+void Actor::ChangeAnimation(const Animation& anim)
+{
+	// 現在のアニメーションと違う場合のみ変更を行う
+	if (m_currentAnim != anim)
+	{
+		m_currentAnim = anim;
+	}
+}
+
 
 
