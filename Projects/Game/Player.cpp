@@ -48,7 +48,7 @@ namespace
 
 	// アニメーション関連
 	constexpr int kAnimGroundNum = 18;				// 地上アニメーションの枚数
-	constexpr int kAnimGroundFrame = 6;				// 地上アニメーションのフレーム数
+	constexpr int kAnimGroundFrame = 5;				// 地上アニメーションのフレーム数
 	//constexpr int kAnimJumpFrame = 4;					// ジャンプアニメーションのフレーム数
 }
 
@@ -106,7 +106,7 @@ void Player::Init()
 	m_isAttackable = false;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
-	m_moveAnim.SetAnimation(m_graphHandle, { kGraphWidth,kGraphHeight }, 18, 6, true);
+	m_moveAnim.SetAnimation(m_graphHandle, { kGraphWidth,kGraphHeight }, kAnimGroundNum, kAnimGroundFrame, true);
 	m_currentAnim = m_moveAnim;
 }
 
