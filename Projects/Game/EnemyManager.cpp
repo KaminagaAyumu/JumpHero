@@ -188,7 +188,7 @@ void EnemyManager::SpawnEnemy(const Position2& pos)
 		enemyForm = TransformEnemy::EnemyForm::Skull;
 	}
 
-	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm, m_graphHandles[0]);
+	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm, m_transformAnimations);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }
@@ -249,7 +249,7 @@ void EnemyManager::SpawnEnemy(const Position2& pos, int spawnNum)
 {
 	auto enemyForm = (TransformEnemy::EnemyForm)spawnNum;
 
-	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm, m_graphHandles[0]);
+	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm, m_transformAnimations);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
 }

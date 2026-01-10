@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "EnemyBase.h"
-#include <vector>
+#include <unordered_map>
+#include <string>
 
 class Player;
 class Map;
@@ -32,8 +33,8 @@ public:
 	/// <param name="player">敵の初期位置</param>
 	/// <param name="player">プレイヤーのポインタ</param>
 	/// <param name="map">マップのポインタ</param>
-	/// <param name="graphHandle">変わる姿</param>
-	TransformEnemy(const Position2& pos,Player* player, Map* map, EnemyForm changeForm, int graphHandle);
+	/// <param name="animations">アニメーションのデータ</param>
+	TransformEnemy(const Position2& pos,Player* player, Map* map, EnemyForm changeForm, std::unordered_map<std::string, Animation>& animations);
 	
 	// デストラクタ(今は特に使わないのでdefault)
 	virtual ~TransformEnemy() = default;
@@ -161,11 +162,9 @@ private:
 	Vector2 m_velocity;
 
 	// アニメーション関連
-	std::vector<Animation> m_animations; // 各状態のアニメーション格納用配列
+	std::unordered_map<std::string, Animation> m_animations; // アニメーション格納用マップ
 
 	AnimState m_animState; // 現在のアニメーション状態
 
-	Animation m_animNormalWalk; // 通常状態の歩きアニメーション
-	
 };
 

@@ -1,9 +1,9 @@
 ﻿#include "TransformEnemy.h"
 #include "../Utility/Camera.h"
-#include "DxLib.h"
 #include "../Utility/Map.h"
 #include "Player.h"
 #include <algorithm>
+#include "DxLib.h"
 
 namespace
 {
@@ -43,7 +43,7 @@ namespace
 	constexpr int	kAnimNormalWalkFrame	= 5;		// 通常歩きアニメーションのフレーム数
 }
 
-TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm, int graphHandle) :
+TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm, std::unordered_map<std::string, Animation>& animations) :
 	EnemyBase(player, map),
 	m_updateFunc(&TransformEnemy::AppearUpdate),
 	m_drawFunc(&TransformEnemy::AppearDraw),
@@ -60,7 +60,6 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_isUpDirection(true),
 	m_velocity{}
 {
-	m_graphHandle = graphHandle;
 	m_direction = {};
 	m_pos = pos;
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
@@ -68,9 +67,13 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	// アニメーションの設定
 	m_animState = AnimState::Appear;
 
-	m_animNormalWalk.SetAnimation(m_graphHandle, { kGraphWidth, kGraphHeight }, kAnimNormalWalkNum, kAnimNormalWalkFrame, true);
-	m_animNormalWalk.SetScale(kGraphScale);
-	m_currentAnim = m_animNormalWalk; // 現在のアニメーションを更新
+	m_animations = animations;
+
+	// アニメーションのスケール設定(数が増えたら関数化します)
+	m_animations["NormalWalk"].SetScale(kGraphScale);
+	m_animations["NormalFall"].SetScale(kGraphScale);
+
+	ChangeAnimation(m_animations["NormalWalk"]);
 
 }
 
@@ -89,6 +92,15 @@ void TransformEnemy::Update(Input& input)
 	else
 	{
 		m_frameCount++; // フレーム数は常に更新し続ける
+	}
+
+	if (!m_isGround)
+	{
+		ChangeAnimation(m_animations["NormalFall"]);
+	}
+	else
+	{
+		ChangeAnimation(m_animations["NormalWalk"]);
 	}
 
 	m_currentAnim.Update(); // アニメーションの更新
