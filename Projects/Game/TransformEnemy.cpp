@@ -67,8 +67,6 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
 	// アニメーションの設定
 	m_animState = AnimState::Appear;
-	m_animations.resize(static_cast<size_t>(AnimState::AnimNum)); // アニメーション配列のリサイズ
-	
 
 	m_animNormalWalk.SetAnimation(m_graphHandle, { kGraphWidth, kGraphHeight }, kAnimNormalWalkNum, kAnimNormalWalkFrame, true);
 	m_animNormalWalk.SetScale(kGraphScale);

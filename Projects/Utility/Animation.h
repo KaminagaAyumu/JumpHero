@@ -15,7 +15,7 @@ public:
 
 
 	/// <summary>
-	/// アニメーションを設定する
+	/// アニメーションを設定する(画像が1行しかない場合)
 	/// </summary>
 	/// <param name="handle">アニメーションさせたい画像</param>
 	/// <param name="animSize">表示させたいサイズ</param>
