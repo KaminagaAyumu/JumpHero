@@ -38,7 +38,7 @@ EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameMana
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
 	LoadSpawnPositions(map); // 敵スポーン位置の読み込み
 
-	int handle = LoadGraph(L"data/img/enemy_Base.png");
+	int handle = LoadGraph(L"data/img/transform_enemy.png");
 	m_graphHandles.push_back(handle);
 }
 
