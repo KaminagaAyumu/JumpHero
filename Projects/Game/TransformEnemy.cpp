@@ -65,13 +65,10 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	m_colRect = { m_pos,kEnemyWidth,kEnemyHeight };
 	m_colCircle = { m_pos,kEnemyWidth / 2 };
 	// アニメーションの設定
-	m_animState = AnimState::Appear;
-
 	m_animations = animations;
 
-	// アニメーションのスケール設定(数が増えたら関数化します)
-	m_animations["NormalWalk"].SetScale(kGraphScale);
-	m_animations["NormalFall"].SetScale(kGraphScale);
+	// アニメーションの拡大率を設定
+	SetAnimScale();
 
 	ChangeAnimation(m_animations["NormalWalk"]);
 
@@ -418,6 +415,12 @@ void TransformEnemy::ItemDraw()
 	m_colRect.Draw(drawX, drawY);
 #endif
 
+}
+
+void TransformEnemy::SetAnimScale()
+{
+	m_animations["NormalWalk"].SetScale(kGraphScale);
+	m_animations["NormalFall"].SetScale(kGraphScale);
 }
 
 bool TransformEnemy::IsCanCollision() const

@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <param name="player">敵の初期位置</param>
+	/// <param name="pos">敵の初期位置</param>
 	/// <param name="player">プレイヤーのポインタ</param>
 	/// <param name="map">マップのポインタ</param>
 	/// <param name="animations">アニメーションのデータ</param>
@@ -49,21 +49,6 @@ public:
 	virtual void ChangeToItem(int time)override;
 
 private:
-
-	enum class AnimState
-	{
-		Appear, // 出現
-		NormalWalk, // 通常歩き
-		NormalFly, // 通常飛行
-		Transform, // 変身中
-		SeekerFly, // プレイヤー追尾
-		FireBallFly, // 火の玉飛行
-		SkullFly, // どくろ飛行
-		Item, // アイテム化
-		Dead, // 倒された後
-		
-		AnimNum // アニメーション総数取得用
-	};
 
 	// 当たり判定用の構造体
 	// どこから当たったかを保存する
@@ -99,6 +84,11 @@ private:
 	void FireBallDraw(); // プレイヤーの縦座標を追い続ける時の描画処理
 	void SkullDraw(); // プレイヤーの横座標を追い続けるときの描画処理
 	void ItemDraw(); // 敵がアイテム化中の描画処理
+
+	/// <summary>
+	/// アニメーションのスケールをまとめて設定する
+	/// </summary>
+	void SetAnimScale();
 
 	/// <summary>
 	/// 当たり判定を行うかどうか
@@ -163,8 +153,6 @@ private:
 
 	// アニメーション関連
 	std::unordered_map<std::string, Animation> m_animations; // アニメーション格納用マップ
-
-	AnimState m_animState; // 現在のアニメーション状態
 
 };
 
