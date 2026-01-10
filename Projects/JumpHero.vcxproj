@@ -155,6 +155,7 @@
     <ClCompile Include="Game\TextManager.cpp" />
     <ClCompile Include="Game\TutorialManager.cpp" />
     <ClCompile Include="Game\StayEnemy.cpp" />
+    <ClCompile Include="Utility\AnimationLoader.cpp" />
     <ClCompile Include="Utility\Sound\SoundManager.cpp" />
     <ClCompile Include="Utility\UI\UIText.cpp" />
     <ClCompile Include="Utility\UI\UITextWindow.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Game\TextManager.h" />
     <ClInclude Include="Game\TutorialManager.h" />
     <ClInclude Include="Game\StayEnemy.h" />
+    <ClInclude Include="Utility\AnimationLoader.h" />
     <ClInclude Include="Utility\Sound\SoundManager.h" />
     <ClInclude Include="Utility\UI\UIText.h" />
     <ClInclude Include="Utility\UI\UITextWindow.h" />
