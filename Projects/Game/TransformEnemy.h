@@ -163,6 +163,8 @@ private:
 	// アニメーション関連
 	std::vector<Animation> m_animations; // 各状態のアニメーション格納用配列
 
+	AnimState m_animState; // 現在のアニメーション状態
+
 	Animation m_animNormalWalk; // 通常状態の歩きアニメーション
 	
 };

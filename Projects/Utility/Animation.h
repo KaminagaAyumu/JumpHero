@@ -23,6 +23,17 @@ public:
 	/// <param name="animFrame">アニメーションが動くフレーム数</param>
 	/// <param name="isLoop">ループするかどうか</param>
 	void SetAnimation(int handle, const Size& animSize, int animNum, int animFrame, bool isLoop);
+	
+	/// <summary>
+	/// アニメーションを設定する
+	/// </summary>
+	/// <param name="handle"></param>
+	/// <param name="animSize"></param>
+	/// <param name="animIndex"></param>
+	/// <param name="animNum"></param>
+	/// <param name="animFrame"></param>
+	/// <param name="isLoop"></param>
+	void SetAnimation(int handle, const Size& animSize, int animIndex, int animNum, int animFrame, bool isLoop);
 
 	/// <summary>
 	/// アニメーションの更新処理

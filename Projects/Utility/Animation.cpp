@@ -32,6 +32,17 @@ void Animation::SetAnimation(int handle, const Size& animSize, int animNum, int 
 	m_frameCount = 0;
 }
 
+void Animation::SetAnimation(int handle, const Size& animSize, int animIndex, int animNum, int animFrame, bool isLoop)
+{
+	m_handle = handle;
+	m_animSize = animSize;
+	m_animNum = animNum;
+	m_animFrame = animFrame;
+	m_isLoop = isLoop;
+	m_animIndex = animIndex;
+	m_frameCount = 0;
+}
+
 void Animation::Update()
 {
 	if (m_animNum <= kAnimNumMin)
