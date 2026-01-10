@@ -1,6 +1,7 @@
 ﻿#include <vector>
 #include <list>
 #include <memory>
+#include "../Utility/Animation.h"
 #include "../Utility/Geometry.h"
 #include "EnemyManager.h"
 #include "../Utility/Camera.h"
@@ -10,6 +11,7 @@
 #include "EnemyBase.h"
 #include "TransformEnemy.h"
 #include "Player.h"
+#include "../Utility/AnimationLoader.h"
 #include "DxLib.h"
 
 namespace
@@ -38,8 +40,16 @@ EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameMana
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
 	LoadSpawnPositions(map); // 敵スポーン位置の読み込み
 
+	// 敵画像の読み込み
 	int handle = LoadGraph(L"data/img/transform_enemy.png");
 	m_graphHandles.push_back(handle);
+
+	// 敵アニメーションの読み込み
+	if (AnimationLoader::LoadAnimationData(L"data/animation/transform_enemy.csv", handle, m_transformAnimations))
+	{
+		printfDx(L"変身敵アニメーションデータのロードに成功\n");
+	}
+
 }
 
 EnemyManager::~EnemyManager()

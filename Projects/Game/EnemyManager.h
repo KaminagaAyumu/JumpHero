@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <string>
+#include <unordered_map>
 
 class Camera;
 class GameManager;
@@ -72,6 +74,8 @@ private:
 	std::vector<Position2> m_spawnPositions; // 敵の生成位置リスト
 
 	std::vector<int> m_graphHandles; // 敵の画像ハンドルリスト
+
+	std::unordered_map<std::string, Animation> m_transformAnimations; // 変身する敵のアニメーションリスト
 
 	int m_frameCount; // フレーム数をカウント
 	int m_itemTime; // アイテム状態の時間
