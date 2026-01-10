@@ -91,6 +91,11 @@ private:
 	void SetAnimScale();
 
 	/// <summary>
+	/// 現在の状態をチェックしてアニメーションを変更する
+	/// </summary>
+	void CheckAnimation();
+
+	/// <summary>
 	/// 当たり判定を行うかどうか
 	/// </summary>
 	/// <returns>true : 行う false : 行わない</returns>

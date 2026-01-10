@@ -70,7 +70,7 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, E
 	// アニメーションの拡大率を設定
 	SetAnimScale();
 
-	ChangeAnimation(m_animations["NormalWalk"]);
+	ChangeAnimation(m_animations["Appear"]);
 
 }
 
@@ -91,14 +91,7 @@ void TransformEnemy::Update(Input& input)
 		m_frameCount++; // フレーム数は常に更新し続ける
 	}
 
-	if (!m_isGround)
-	{
-		ChangeAnimation(m_animations["NormalFall"]);
-	}
-	else
-	{
-		ChangeAnimation(m_animations["NormalWalk"]);
-	}
+	CheckAnimation(); // アニメーションのチェック
 
 	m_currentAnim.Update(); // アニメーションの更新
 
@@ -107,6 +100,10 @@ void TransformEnemy::Update(Input& input)
 
 void TransformEnemy::Draw()
 {
+	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 	(this->*m_drawFunc)();
 }
 
@@ -323,11 +320,6 @@ void TransformEnemy::NormalDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
-
-	/*DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
-			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
-			0x0000ff, true);*/
 
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
@@ -348,10 +340,7 @@ void TransformEnemy::SeekerDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
-			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
-			0xff00ff, true);
-
+	
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -363,10 +352,7 @@ void TransformEnemy::FireBallDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
-			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
-			0xff0066, true);
-
+	
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -378,10 +364,7 @@ void TransformEnemy::SkullDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	DrawBox(static_cast<int>(drawX - kEnemyWidth / 2), static_cast<int>(drawY - kEnemyHeight / 2),
-			static_cast<int>(drawX + kEnemyWidth / 2), static_cast<int>(drawY + kEnemyHeight / 2),
-			0x22bb22, true);
-
+	
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -421,6 +404,30 @@ void TransformEnemy::SetAnimScale()
 {
 	m_animations["NormalWalk"].SetScale(kGraphScale);
 	m_animations["NormalFall"].SetScale(kGraphScale);
+	m_animations["Appear"].SetScale(kGraphScale);
+}
+
+void TransformEnemy::CheckAnimation()
+{
+	// 現在の更新処理に応じてアニメーションを変更する
+	// 出現中、変身中は出現アニメーション
+	if (m_updateFunc == &TransformEnemy::AppearUpdate || m_updateFunc == &TransformEnemy::TransformUpdate)
+	{
+		ChangeAnimation(m_animations["Appear"]);
+	}
+	// 通常状態の時
+	else if (m_updateFunc == &TransformEnemy::NormalUpdate)
+	{
+		// 地面にいるかどうかでアニメーションを変更
+		if (m_isGround)
+		{
+			ChangeAnimation(m_animations["NormalWalk"]);
+		}
+		else
+		{
+			ChangeAnimation(m_animations["NormalFall"]);
+		}
+	}
 }
 
 bool TransformEnemy::IsCanCollision() const
