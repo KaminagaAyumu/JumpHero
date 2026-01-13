@@ -4,6 +4,7 @@
 // プロトタイプ宣言
 class Bg;
 class SoundManager;
+class UIManager;
 
 /// <summary>
 /// タイトルシーンクラス
@@ -46,7 +47,7 @@ private:
 
 	std::shared_ptr<Bg> m_bg;
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャークラス
-
+	std::shared_ptr<UIManager> m_pUIManager; // UIマネージャークラス
 
 };
 

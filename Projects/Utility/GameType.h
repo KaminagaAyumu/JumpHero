@@ -5,6 +5,14 @@ class Actor;
 // オブジェクト(Actor)の区別をつける列挙体など
 namespace Types
 {
+	enum class FontType : int
+	{
+		Small,
+		Midium,
+		Large,
+		Default
+	};
+
 	/// <summary>
 	/// オブジェクトが何なのかを説明するための列挙体
 	/// </summary>

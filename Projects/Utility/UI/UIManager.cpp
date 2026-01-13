@@ -4,20 +4,23 @@
 #include "UIText.h"
 #include "DxLib.h"
 
+namespace
+{
+	const wchar_t* kMainFontName = L"アンニャントロマン"; // メインで使うフォント名
+
+	constexpr int kSmallFontSize = 28;
+	constexpr int kMediumFontSize = 40;
+	constexpr int kLargeFontSize = 60;
+
+}
+
 UIManager::UIManager()
 {
 	// UIコンテナを初期化
 	m_pUIElements.clear();
-	int handle = CreateFontToHandle(
-		L"アンニャントロマン",
-		28,
-		4,
-		DX_FONTTYPE_ANTIALIASING_8X8,
-		-1,
-		0,
-		FALSE
-	);
-	m_fontHandles.push_back(handle);
+
+	// フォントデータを読み込んで設定
+	LoadFonts();
 }
 
 UIManager::~UIManager()
@@ -73,4 +76,54 @@ std::weak_ptr<UIText> UIManager::CreateText(int handle, const std::string& text,
 	ptr->Init(m_fontHandles[0], text, pos);
 	m_pUIElements.push_back(ptr);
 	return ptr;
+}
+
+std::weak_ptr<UIText> UIManager::CreateText(Types::FontType fontType, const std::string& text, const Position2& pos)
+{
+	auto ptr = std::make_shared<UIText>();
+	ptr->Init(m_fontHandles[static_cast<int>(fontType)], text, pos);
+	m_pUIElements.push_back(ptr);
+	return ptr;
+}
+
+void UIManager::LoadFonts()
+{
+	// フォントハンドル(小さいフォント)を作成
+	int handle = CreateFontToHandle(
+		kMainFontName,
+		kSmallFontSize,
+		-1,
+		DX_FONTTYPE_ANTIALIASING_8X8,
+		-1,
+		0,
+		FALSE
+	);
+	// ハンドルを格納
+	m_fontHandles.push_back(handle);
+
+	// フォントハンドル(中くらいのフォント)を作成
+	handle = CreateFontToHandle(
+		kMainFontName,
+		kMediumFontSize,
+		-1,
+		DX_FONTTYPE_ANTIALIASING_8X8,
+		-1,
+		0,
+		FALSE
+	);
+	// ハンドルを格納
+	m_fontHandles.push_back(handle);
+
+	// フォントハンドル(大きいフォント)を作成
+	handle = CreateFontToHandle(
+		kMainFontName,
+		kLargeFontSize,
+		-1,
+		DX_FONTTYPE_ANTIALIASING_8X8,
+		-1,
+		0,
+		FALSE
+	);
+	// ハンドルを格納
+	m_fontHandles.push_back(handle);
 }

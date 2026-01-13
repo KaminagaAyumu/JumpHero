@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 #include "../Geometry.h"
+#include "../GameType.h"
 
 class Map;
 class UIBase;
@@ -40,9 +41,23 @@ public:
 	/// <returns></returns>
 	std::weak_ptr<UIText> CreateText(int handle, const std::string& text, const Position2& pos);
 
+	/// <summary>
+	/// テキストを作成する関数
+	/// </summary>
+	/// <param name="fontType">フォントのタイプ</param>
+	/// <param name="text">テキストの内容</param>
+	/// <param name="pos">表示する座標</param>
+	/// <returns></returns>
+	std::weak_ptr<UIText> CreateText(Types::FontType fontType, const std::string& text, const Position2& pos);
+
 private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列
 	std::list<std::shared_ptr<UIBase>> m_pUIElements; // UIの要素を格納するコンテナ
+
+	/// <summary>
+	/// フォントをロードする関数(初期化時に呼ぶ)
+	/// </summary>
+	void LoadFonts();
 
 };
 

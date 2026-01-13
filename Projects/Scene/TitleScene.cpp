@@ -7,14 +7,18 @@
 #include "../Utility/Game.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Sound/SoundManager.h"
+#include "../Utility/UI/UIManager.h"
 #include "../Utility/Application.h"
+#include "../Utility/GameType.h"
 #include <string>
 #include "DxLib.h"
 
-namespace 
+namespace
 {
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
+
+	constexpr int kStartTextMargin = 50; // スタート方法を示すテキストの表示位置調整
 }
 
 
@@ -30,6 +34,9 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_soundManager->LoadSoundClip("select", L"data/sound/selectBGM.wav", SoundBus::BGM, 1.0f, true);
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/testSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->PlayBGM("test",0.0f);
+	m_pUIManager = std::make_shared<UIManager>();
+	auto test = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
+		Game::kScreenHeight / 2 + kStartTextMargin});
 }
 
 TitleScene::~TitleScene()
@@ -62,6 +69,7 @@ void TitleScene::FadeInUpdate(Input& input)
 void TitleScene::NormalUpdate(Input& input)
 {
 	m_soundManager->Update();
+	m_pUIManager->Update();
 	// STARTボタンもしくはAボタンが押されたら
 	if (input.IsTriggered("OK"))
 	{
@@ -97,6 +105,8 @@ void TitleScene::NormalDraw()
 		m_titleImageHandle,
 		TRUE
 	);
+
+	m_pUIManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"TitleScene: NormalDraw", 0xFFFFFF);
 	//DrawString(Game::kScreenWidth / 2 - 20,
