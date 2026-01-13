@@ -1,4 +1,7 @@
 ﻿#pragma once
+#include "EventStructs.h"
+
+using namespace Events;
 
 /// <summary>
 /// ゲーム中のイベントを管理するクラス
