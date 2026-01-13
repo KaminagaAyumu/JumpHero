@@ -224,6 +224,14 @@ void TransformEnemy::SeekerUpdate(Input&)
 
 	Position2 steer = m_direction * kSeekerMoveSpeed;
 	TransformMoveOperation(steer);
+	if ((m_pPlayer->GetPos().x - m_pos.x) > 0.0f)
+	{
+		m_isRightDirection = true;
+	}
+	else
+	{
+		m_isRightDirection = false;
+	}
 }
 
 void TransformEnemy::FireBallUpdate(Input&)
@@ -405,6 +413,7 @@ void TransformEnemy::SetAnimScale()
 	m_animations["NormalWalk"].SetScale(kGraphScale);
 	m_animations["NormalFall"].SetScale(kGraphScale);
 	m_animations["Appear"].SetScale(kGraphScale);
+	m_animations["Seeker"].SetScale(kGraphScale);
 }
 
 void TransformEnemy::CheckAnimation()
@@ -427,6 +436,10 @@ void TransformEnemy::CheckAnimation()
 		{
 			ChangeAnimation(m_animations["NormalFall"]);
 		}
+	}
+	else if (m_updateFunc == &TransformEnemy::SeekerUpdate)
+	{
+		ChangeAnimation(m_animations["Seeker"]);
 	}
 }
 
