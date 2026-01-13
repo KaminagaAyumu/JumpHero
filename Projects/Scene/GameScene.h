@@ -18,6 +18,7 @@ class SoundManager;
 class EventManager;
 struct EventControls;
 struct EventSensors;
+class PositionRegistry;
 
 /// <summary>
 /// ゲームのメインとなるシーン
@@ -79,6 +80,8 @@ private:
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 
 	std::shared_ptr<SoundManager> m_pSoundManager; // サウンドマネージャークラス
+
+	std::unique_ptr<PositionRegistry> m_pPositionRegistry; // イベントで使う座標を取得するクラスを持つ
 
 	std::shared_ptr<EventSensors> m_pEventSensors; // イベントの発動条件を設定するように持つ
 

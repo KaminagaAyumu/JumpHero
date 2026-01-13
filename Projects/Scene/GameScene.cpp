@@ -10,7 +10,6 @@
 #include "../Utility/Sound/SoundManager.h"
 #include "../Game/Player.h"
 #include "../Game/Chest.h"
-#include "../Game/EnemyBase.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
@@ -22,6 +21,7 @@
 #include "../Game/Event/EventManager.h"
 #include "../Game/Event/EventControls.h"
 #include "../Game/Event/EventSensors.h"
+#include "../Game/PositionRegistry.h"
 #include "DxLib.h"
 #include <cassert>
 
@@ -59,11 +59,24 @@ m_fadeColor(0x000000)
 	m_pSoundManager->LoadSoundClip("game", L"data/sound/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
 	m_pSoundManager->CrossFadeBGM("game", 120.0f);
 
+	m_pPositionRegistry = std::make_unique<PositionRegistry>();
+	m_pPositionRegistry->InitPositions(m_pMap); // マップのデータから座標情報を取得
+
+	// イベントセンサーのポインタを取得
+	m_pEventSensors = std::make_shared<EventSensors>();
+	m_pEventControls = std::make_shared<EventControls>();
+
+	// イベントの内容を格納
+	SetEventFunc();
+
 	m_pEventManager = std::make_unique<EventManager>();
 	if (!m_pEventManager->LoadCommonEventData(stageNo))
 	{
 		assert(false && "イベントデータの読み込みに失敗しました");
 	}
+
+	// イベントのデータをイベントマネージャーに渡す
+	m_pEventManager->SetEvents(m_pEventControls, m_pEventSensors);
 
 }
 
@@ -186,23 +199,27 @@ void GameScene::FadeDraw()
 
 void GameScene::SetEventFunc()
 {
-	m_pEventSensors = std::make_unique<EventSensors>();
+	// -----------------------------------------------------
+	// イベントセンサーの関数
+	// -----------------------------------------------------
 
 	// 指定番号の宝箱が開いたかどうかの関数を定義
-	m_pEventSensors->isOpenChestFunc = [this](int chestNum)
+	m_pEventSensors->isOpenChestFunc = [this](int chestNo)
 		{
 			float tileSize = m_pMap->GetTileSize();
-			//int x = m_pMap->WorldPosToMapPos(m_chestPos[chestNum].x, tileSize);
-			//int y = m_pMap->WorldPosToMapPos(m_chestPos[chestNum].y, tileSize);
-			/*if (m_pMap->GetPositioningData(x, y) == 0)
+			int x = m_pMap->WorldPosToMapPos(m_pPositionRegistry->GetChestPos(chestNo).x, tileSize);
+			int y = m_pMap->WorldPosToMapPos(m_pPositionRegistry->GetChestPos(chestNo).y, tileSize);
+			if (m_pMap->GetPositioningData(x, y) == 0)
 			{
 				return true;
-			}*/
+			}
 			return false;
 		};
 
 
-	m_pEventControls = std::make_unique<EventControls>();
+	// -----------------------------------------------------
+	// イベントコントロールの関数
+	// -----------------------------------------------------
 
 	m_pEventControls->DropItemFunc = [this](int chestNo, const std::string& itemType)
 		{
@@ -220,10 +237,10 @@ void GameScene::SetEventFunc()
 			{
 				type = Types::ItemType::ChangeToCoin;
 				// 通常のアイテム(コイン)をまず生成
-				//m_pGameManager->DropItem(m_chestPos[chestNo], Types::ItemType::Coin);
+				m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), Types::ItemType::Coin);
 			}
 
-			//m_pGameManager->DropItem(m_chestPos[chestNo], type);
+			m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type);
 		};
 }
 
