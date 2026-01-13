@@ -195,6 +195,7 @@
     <ClInclude Include="Game\ChestManager.h" />
     <ClInclude Include="Game\EventControls.h" />
     <ClInclude Include="Game\EventManager.h" />
+    <ClInclude Include="Game\EventSensors.h" />
     <ClInclude Include="Game\EventStructs.h" />
     <ClInclude Include="Game\LifeUp.h" />
     <ClInclude Include="Game\UpgradeMedal.h" />
