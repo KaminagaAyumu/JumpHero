@@ -31,15 +31,6 @@ public:
 	/// <param name="pos"></param>
 	/// <returns></returns>
 	std::weak_ptr<UITextWindow> CreateTextWindow(const std::string& text, const Size& size, const Position2& pos);
-	
-	/// <summary>
-	/// テキストを作成する関数
-	/// </summary>
-	/// <param name="handle">フォントのハンドル</param>
-	/// <param name="text"></param>
-	/// <param name="pos"></param>
-	/// <returns></returns>
-	std::weak_ptr<UIText> CreateText(int handle, const std::string& text, const Position2& pos);
 
 	/// <summary>
 	/// テキストを作成する関数

@@ -8,9 +8,17 @@ namespace
 {
 	const wchar_t* kMainFontName = L"アンニャントロマン"; // メインで使うフォント名
 
-	constexpr int kSmallFontSize = 28;
-	constexpr int kMediumFontSize = 40;
-	constexpr int kLargeFontSize = 60;
+	// 小サイズのフォントハンドルの設定
+	constexpr int kSmallFontSize		= 28;	// 文字の大きさ
+	constexpr int kSmallFontEdgeSize	= 1;	// 文字の縁取りの大きさ
+
+	// 中サイズのフォントハンドルの設定
+	constexpr int kMediumFontSize		= 40;	// 文字の大きさ
+	constexpr int kMediumFontEdgeSize	= 2;	// 文字の縁取りの大きさ
+
+	// 大サイズのフォントハンドルの設定
+	constexpr int kLargeFontSize		= 60;	// 文字の大きさ
+	constexpr int kLargeFontEdgeSize	= 2; 	// 文字の縁取りの大きさ
 
 }
 
@@ -70,14 +78,6 @@ std::weak_ptr<UITextWindow> UIManager::CreateTextWindow(const std::string& text,
 	return ptr;
 }
 
-std::weak_ptr<UIText> UIManager::CreateText(int handle, const std::string& text, const Position2& pos)
-{
-	auto ptr = std::make_shared<UIText>();
-	ptr->Init(m_fontHandles[0], text, pos);
-	m_pUIElements.push_back(ptr);
-	return ptr;
-}
-
 std::weak_ptr<UIText> UIManager::CreateText(Types::FontType fontType, const std::string& text, const Position2& pos)
 {
 	auto ptr = std::make_shared<UIText>();
@@ -88,40 +88,40 @@ std::weak_ptr<UIText> UIManager::CreateText(Types::FontType fontType, const std:
 
 void UIManager::LoadFonts()
 {
-	// フォントハンドル(小さいフォント)を作成
+	// フォントハンドル(小サイズ)を作成
 	int handle = CreateFontToHandle(
 		kMainFontName,
 		kSmallFontSize,
 		-1,
-		DX_FONTTYPE_ANTIALIASING_8X8,
+		DX_FONTTYPE_ANTIALIASING_EDGE_8X8,
 		-1,
-		0,
+		kSmallFontEdgeSize,
 		FALSE
 	);
 	// ハンドルを格納
 	m_fontHandles.push_back(handle);
 
-	// フォントハンドル(中くらいのフォント)を作成
+	// フォントハンドル(中サイズ)を作成
 	handle = CreateFontToHandle(
 		kMainFontName,
 		kMediumFontSize,
 		-1,
-		DX_FONTTYPE_ANTIALIASING_8X8,
+		DX_FONTTYPE_ANTIALIASING_EDGE_8X8,
 		-1,
-		0,
+		kMediumFontEdgeSize,
 		FALSE
 	);
 	// ハンドルを格納
 	m_fontHandles.push_back(handle);
 
-	// フォントハンドル(大きいフォント)を作成
+	// フォントハンドル(大サイズ)を作成
 	handle = CreateFontToHandle(
 		kMainFontName,
 		kLargeFontSize,
 		-1,
-		DX_FONTTYPE_ANTIALIASING_8X8,
+		DX_FONTTYPE_ANTIALIASING_EDGE_8X8,
 		-1,
-		0,
+		kLargeFontEdgeSize,
 		FALSE
 	);
 	// ハンドルを格納
