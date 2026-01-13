@@ -116,6 +116,8 @@ void GameScene::NormalUpdate(Input& input)
 		return;
 	}
 
+	m_pEventManager->Update();
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
@@ -221,7 +223,7 @@ void GameScene::SetEventFunc()
 	// イベントコントロールの関数
 	// -----------------------------------------------------
 
-	m_pEventControls->DropItemFunc = [this](int chestNo, const std::string& itemType)
+	m_pEventControls->dropItemFunc = [this](int chestNo, const std::string& itemType)
 		{
 			Types::ItemType type; // 生成するアイテムが何かを判別する
 			// 宝箱の番号を取得

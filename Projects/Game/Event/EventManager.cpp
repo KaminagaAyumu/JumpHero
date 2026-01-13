@@ -43,10 +43,10 @@ void EventManager::Update()
 		}
 	}
 
-	if (CheckTrigger(m_eventData[m_eventIndex]))
+	/*if (CheckTrigger(m_eventData[m_eventIndex]))
 	{
 		RunAction(m_eventData[m_eventIndex]);
-	}
+	}*/
 }
 
 void EventManager::Draw() const
@@ -192,15 +192,60 @@ ActionType EventManager::ToActionType(const std::string& strData)
 
 bool EventManager::CheckTrigger(const EventData& data)
 {
+	// 関数を呼ぶためにlockする
+	auto sensors = m_pSensors.lock();
+	if (!sensors) return false; // lock出来なかった場合処理を終わる
+
+	switch (data.triggerType)
+	{
+	case TriggerType::OpenChest:
+	{
+		int chestNo = GetParamNum(data.triggerParam);
+		return sensors->isOpenChestFunc(chestNo);
+	}
+		break;
+	default:
+		break;
+	}
+
 	return false;
 }
 
 void EventManager::RunAction(const EventData& data)
 {
+	// 関数を呼ぶためにlockする
+	auto controls = m_pControls.lock();
+	if (!controls) return; // lock出来なかった場合処理を終わる
+
+	switch (data.actionType)
+	{
+	case ActionType::DropItem:
+	{
+		int chestNo = GetParamNum(data.triggerParam);
+		controls->dropItemFunc(chestNo, data.actionParam);
+	}
+		break;
+	default:
+		break;
+	}
 
 }
 
 void EventManager::RunCommonAction(const EventData& data)
 {
+	// 関数を呼ぶためにlockする
+	auto controls = m_pControls.lock();
+	if (!controls) return; // lock出来なかった場合処理を終わる
 
+	switch (data.actionType)
+	{
+	case ActionType::DropItem:
+	{
+		int chestNo = GetParamNum(data.triggerParam);
+		controls->dropItemFunc(chestNo, data.actionParam);
+	}
+		break;
+	default:
+		break;
+	}
 }
