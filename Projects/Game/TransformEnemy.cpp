@@ -258,6 +258,15 @@ void TransformEnemy::SkullUpdate(Input&)
 
 	Position2 steer = m_direction * kSeekerMoveSpeed;
 	TransformMoveOperation(steer);
+
+	if ((m_pPlayer->GetPos().x - m_pos.x) > 0.0f)
+	{
+		m_isRightDirection = true;
+	}
+	else
+	{
+		m_isRightDirection = false;
+	}
 }
 
 void TransformEnemy::ItemUpdate(Input&)
@@ -414,6 +423,7 @@ void TransformEnemy::SetAnimScale()
 	m_animations["NormalFall"].SetScale(kGraphScale);
 	m_animations["Appear"].SetScale(kGraphScale);
 	m_animations["Seeker"].SetScale(kGraphScale);
+	m_animations["Skull"].SetScale(kGraphScale);
 }
 
 void TransformEnemy::CheckAnimation()
@@ -440,6 +450,10 @@ void TransformEnemy::CheckAnimation()
 	else if (m_updateFunc == &TransformEnemy::SeekerUpdate)
 	{
 		ChangeAnimation(m_animations["Seeker"]);
+	}
+	else if (m_updateFunc == &TransformEnemy::SkullUpdate)
+	{
+		ChangeAnimation(m_animations["Skull"]);
 	}
 }
 
