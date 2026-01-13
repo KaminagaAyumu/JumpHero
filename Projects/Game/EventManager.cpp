@@ -1,6 +1,5 @@
 ﻿#include "EventControls.h"
 #include "EventSensors.h"
-
 #include "EventManager.h"
 
 EventManager::EventManager() : 

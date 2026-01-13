@@ -22,6 +22,9 @@ private:
 	EventControls m_controls;
 	EventSensors m_sensors;
 
+	std::vector<EventData> m_eventData; // イベントデータ群
+	std::vector<CommonEventData> m_commonEventData; // 共通イベントデータ群
+
 	/// <summary>
 	/// イベント条件を文字列から変換する用の関数
 	/// </summary>
