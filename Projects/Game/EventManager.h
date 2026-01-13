@@ -19,6 +19,9 @@ private:
 
 	int m_eventIndex; // イベントの進行状況
 
+	EventControls m_controls;
+	EventSensors m_sensors;
+
 	/// <summary>
 	/// イベント条件を文字列から変換する用の関数
 	/// </summary>

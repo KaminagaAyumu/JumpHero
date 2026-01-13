@@ -1,4 +1,7 @@
-﻿#include "EventManager.h"
+﻿#include "EventControls.h"
+#include "EventSensors.h"
+
+#include "EventManager.h"
 
 EventManager::EventManager() : 
 	m_eventIndex(0)
