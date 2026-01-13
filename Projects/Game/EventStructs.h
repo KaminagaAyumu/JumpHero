@@ -39,7 +39,7 @@ namespace Events
 	};
 
 	/// <summary>
-	/// ゲーム内で行われるイベントをまとめる構造体
+	/// ゲーム内で順番に行われるイベントをまとめる構造体
 	/// </summary>
 	struct EventData
 	{
@@ -50,6 +50,9 @@ namespace Events
 		std::string actionParam; // イベントで必要なデータ
 	};
 
+	/// <summary>
+	/// ゲーム内で条件を満たしたら行われるイベントをまとめる構造体
+	/// </summary>
 	struct CommonEventData : EventData
 	{
 		bool isOnce = false; // 一度しか行わないかどうか
