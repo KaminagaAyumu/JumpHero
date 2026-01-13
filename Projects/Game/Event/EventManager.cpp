@@ -1,5 +1,6 @@
 ﻿#include "EventControls.h"
 #include "EventSensors.h"
+#include <memory>
 #include "EventManager.h"
 
 EventManager::EventManager() : 
@@ -13,12 +14,35 @@ EventManager::~EventManager()
 
 void EventManager::Update()
 {
+	for (auto& common : m_commonEventData)
+	{
+		// すでにアクションが行われていて一度しか行わないイベントなら行わない
+		if (common.isOnce && common.isInvoked) continue;
+		if (CheckTrigger(common))
+		{
+			RunCommonAction(common);
+			if (common.isOnce)
+			{
+				common.isInvoked = true;
+			}
+		}
+	}
 
+	if (CheckTrigger(m_eventData[m_eventIndex]))
+	{
+		RunAction(m_eventData[m_eventIndex]);
+	}
 }
 
 void EventManager::Draw() const
 {
 
+}
+
+void EventManager::SetEvents(const std::shared_ptr<EventControls>& controls, const std::shared_ptr<EventSensors>& sensors)
+{
+	m_pControls = controls;
+	m_pSensors = sensors;
 }
 
 TriggerType EventManager::ToTriggerType(const std::string strData)

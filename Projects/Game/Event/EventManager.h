@@ -15,12 +15,19 @@ public:
 	void Update();
 	void Draw() const;
 
+	/// <summary>
+	/// イベントをセットする
+	/// </summary>
+	/// <param name="controls"></param>
+	/// <param name="sensors"></param>
+	void SetEvents(const std::shared_ptr<EventControls>& controls, const std::shared_ptr<EventSensors>& sensors);
+
 private:
 
 	int m_eventIndex; // イベントの進行状況
 
-	EventControls m_controls;
-	EventSensors m_sensors;
+	std::weak_ptr<EventControls> m_pControls;
+	std::weak_ptr<EventSensors> m_pSensors;
 
 	std::vector<EventData> m_eventData; // イベントデータ群
 	std::vector<CommonEventData> m_commonEventData; // 共通イベントデータ群
