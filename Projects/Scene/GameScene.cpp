@@ -239,10 +239,10 @@ void GameScene::SetEventFunc()
 			{
 				type = Types::ItemType::ChangeToCoin;
 				// 通常のアイテム(コイン)をまず生成
-				m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), Types::ItemType::Coin);
+				m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), Types::ItemType::Coin, false);
 			}
 
-			m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type);
+			m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type, false);
 		};
 }
 

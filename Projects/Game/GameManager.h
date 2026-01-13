@@ -86,7 +86,8 @@ public:
 	/// </summary>
 	/// <param name="pos">生成座標</param>
 	/// <param name="type">アイテムの種類</param>
-	void DropItem(const Position2& pos, const Types::ItemType& type);
+	/// <param name="isTutorial">現在がチュートリアルかどうか</param>
+	void DropItem(const Position2& pos, const Types::ItemType& type, bool isTutorial);
 
 	/// <summary>
 	/// 敵の変身先を指定して生成する通知をEnemyManagerに送る関数

@@ -256,9 +256,14 @@ void GameManager::DropItem(const Position2& pos)
 	}
 }
 
-void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
+void GameManager::DropItem(const Position2& pos, const Types::ItemType& type, bool isTutorial)
 {
 	m_pItemManager->SpawnItem(pos, type);
+	// チュートリアルでない場合
+	if (IsDropChangeToCoin() && !isTutorial) // 敵をコインに変えるアイテムを落とすか判定
+	{
+		m_pItemManager->SpawnItem(pos, Types::ItemType::ChangeToCoin);
+	}
 }
 
 void GameManager::SpawnEnemy(const Position2& pos, int formNum)
