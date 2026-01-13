@@ -9,6 +9,9 @@ namespace
 	constexpr float kCoinDefaultWidth = 30.0f;
 	constexpr float kCoinDefaultHeight = 30.0f;
 
+	constexpr int kGraphWidth = 16; // コインの画像1枚の幅
+	constexpr int kGraphHeight = 16; // コインの画像1枚の高さ
+
 	constexpr float kCoinScale = 1.0f;
 }
 
@@ -18,6 +21,7 @@ Coin::Coin(const Position2& pos, int handle)
 	m_colRect = { {m_pos},kCoinDefaultWidth,kCoinDefaultHeight };
 	m_colCircle = { {m_pos},kCoinDefaultWidth / 2 };
 	m_graphHandle = handle;
+	m_currentAnim.SetAnimation(handle, Size{ kGraphWidth, kGraphHeight }, 5, 5, true);
 }
 
 void Coin::Init()
@@ -29,6 +33,7 @@ void Coin::Update(Input&)
 {
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
+	m_currentAnim.Update();
 }
 
 void Coin::Draw()
@@ -37,7 +42,8 @@ void Coin::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawRotaGraph(drawX, drawY, kCoinScale, 0.0, m_graphHandle, true);
+		//DrawRotaGraph(drawX, drawY, kCoinScale, 0.0, m_graphHandle, true);
+		m_currentAnim.Draw({ drawX, drawY }, false);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);
