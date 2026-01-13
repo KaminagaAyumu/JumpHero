@@ -1,7 +1,22 @@
-﻿#include "EventControls.h"
-#include "EventSensors.h"
-#include <memory>
+﻿#include <memory>
 #include "EventManager.h"
+#include <fstream>
+#include <sstream>
+
+
+namespace
+{
+	constexpr int kEventPathSizeMax = 255; // ファイルのパスの最大サイズ
+
+	constexpr int kEventDataSize = 5;
+	constexpr int kCommonEventDataSize = 6;
+	constexpr int kEventId = 0;
+	constexpr int kTriggerType = 1;
+	constexpr int kTriggerParam = 2;
+	constexpr int kActionType = 3;
+	constexpr int kActionParam = 4;
+	constexpr int kOnce = 5;
+}
 
 EventManager::EventManager() : 
 	m_eventIndex(0)
@@ -45,7 +60,104 @@ void EventManager::SetEvents(const std::shared_ptr<EventControls>& controls, con
 	m_pSensors = sensors;
 }
 
-TriggerType EventManager::ToTriggerType(const std::string strData)
+bool EventManager::LoadEventData(int stageNo)
+{
+	std::ifstream file("data/eventData.csv");
+	if (!file) // ファイルの読み込みに失敗した場合
+	{
+		return false; // ロード失敗とする
+	}
+	std::string line;
+	bool isHeader = true;
+
+
+	while (std::getline(file, line))
+	{
+		// 最初の一行は読み込まない
+		if (isHeader)
+		{
+			isHeader = false;
+			continue;
+		}
+
+		std::istringstream stream(line);
+		std::string field;
+		std::vector<std::string> row;
+		while (getline(stream, field, ','))
+		{
+			row.push_back(field);
+		}
+
+		EventData data;
+		if (row.size() >= kEventDataSize)
+		{
+			data.id = std::stoi(row[kEventId]);
+			data.triggerType = ToTriggerType(row[kTriggerType]);
+			data.triggerParam = row[kTriggerParam];
+			data.actionType = ToActionType(row[kActionType]);
+			data.actionParam = row[kActionParam];
+			m_eventData.push_back(data);
+		}
+	}
+
+	return true;
+}
+
+bool EventManager::LoadCommonEventData(int stageNo)
+{
+	// ステージ番号に対応したパスを取得する変数
+	wchar_t filePath[kEventPathSizeMax];
+
+	std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_common.csv", stageNo);
+
+	std::ifstream file(filePath);
+	if (!file) // ファイルの読み込みに失敗した場合
+	{
+		return false; // ロード失敗とする
+	}
+	std::string line;
+	bool isHeader = true;
+
+
+	while (std::getline(file, line))
+	{
+		// 最初の一行は読み込まない
+		if (isHeader)
+		{
+			isHeader = false;
+			continue;
+		}
+
+		std::istringstream stream(line);
+		std::string field;
+		std::vector<std::string> row;
+		while (getline(stream, field, ','))
+		{
+			row.push_back(field);
+		}
+
+		CommonEventData data;
+		if (row.size() >= kCommonEventDataSize)
+		{
+			data.id = std::stoi(row[kEventId]);
+			data.triggerType = ToTriggerType(row[kTriggerType]);
+			data.triggerParam = row[kTriggerParam];
+			data.actionType = ToActionType(row[kActionType]);
+			data.actionParam = row[kActionParam];
+			data.isOnce = row[kOnce] == "TRUE" ? true : false; // TRUEという文字列ならtrue、それ以外ならfalseにする
+			m_commonEventData.push_back(data);
+		}
+	}
+
+	return true;
+}
+
+int EventManager::GetParamNum(const std::string& param)
+{
+	return std::stoi(param);
+}
+
+TriggerType EventManager::ToTriggerType(const std::string& strData)
 {
 	if (strData == "GameStart") return TriggerType::GameStart;
 	if (strData == "EnterArea") return TriggerType::EnterArea;
@@ -59,7 +171,7 @@ TriggerType EventManager::ToTriggerType(const std::string strData)
 	return TriggerType::NoTrigger; // ここまで来たら不正な値なのでNoTriggerを返す
 }
 
-ActionType EventManager::ToActionType(const std::string strData)
+ActionType EventManager::ToActionType(const std::string& strData)
 {
 	if (strData == "ShowText") return ActionType::ShowText;
 	if (strData == "DropItem") return ActionType::DropItem;

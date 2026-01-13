@@ -15,6 +15,7 @@ class ItemBase;
 class GameManager;
 class CollisionManager;
 class SoundManager;
+class EventManager;
 
 /// <summary>
 /// ゲームのメインとなるシーン
@@ -71,5 +72,8 @@ private:
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 
 	std::shared_ptr<SoundManager> m_pSoundManager; // サウンドマネージャークラス
+
+	std::unique_ptr<EventManager> m_pEventManager; // イベントマネージャークラス
+
 };
 

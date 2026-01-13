@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "EventStructs.h"
+#include "EventControls.h"
+#include "EventSensors.h"
 
 using namespace Events;
 
@@ -22,6 +24,18 @@ public:
 	/// <param name="sensors"></param>
 	void SetEvents(const std::shared_ptr<EventControls>& controls, const std::shared_ptr<EventSensors>& sensors);
 
+	/// <summary>
+	/// 指定されたステージのイベントデータをロードする
+	/// </summary>
+	/// <param name="stageNo">ステージ番号</param>
+	bool LoadEventData(int stageNo);
+
+	/// <summary>
+	/// 指定されたステージの共通イベントデータをロードする
+	/// </summary>
+	/// <param name="stageNo">ステージ番号</param>
+	bool LoadCommonEventData(int stageNo);
+
 private:
 
 	int m_eventIndex; // イベントの進行状況
@@ -33,18 +47,25 @@ private:
 	std::vector<CommonEventData> m_commonEventData; // 共通イベントデータ群
 
 	/// <summary>
+	/// パラメータの数値を整数型に変換する関数
+	/// </summary>
+	/// <param name="param">パラメータの数値文字列</param>
+	/// <returns>整数化した数</returns>
+	int GetParamNum(const std::string& param);
+
+	/// <summary>
 	/// イベント条件を文字列から変換する用の関数
 	/// </summary>
 	/// <param name="strData">文字列データ</param>
 	/// <returns>変換後のイベント条件</returns>
-	TriggerType ToTriggerType(const std::string strData);
+	TriggerType ToTriggerType(const std::string& strData);
 
 	/// <summary>
 	/// イベントで行う内容を文字列から変換する用の関数
 	/// </summary>
 	/// <param name="strData">文字列データ</param>
 	/// <returns>変換後のイベント内容</returns>
-	ActionType ToActionType(const std::string strData);
+	ActionType ToActionType(const std::string& strData);
 
 	/// <summary>
 	/// イベントトリガーを判定

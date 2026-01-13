@@ -19,7 +19,9 @@
 #include "../Game/CollisionManager.h"
 #include "../Game/ChestManager.h"
 #include "../Game/ItemManager.h"
+#include "../Game/Event/EventManager.h"
 #include "DxLib.h"
+#include <cassert>
 
 namespace
 {
@@ -54,6 +56,13 @@ m_fadeColor(0x000000)
 	m_pSoundManager = Application::GetInstance().GetSoundManager();
 	m_pSoundManager->LoadSoundClip("game", L"data/sound/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
 	m_pSoundManager->CrossFadeBGM("game", 120.0f);
+
+	m_pEventManager = std::make_unique<EventManager>();
+	if (!m_pEventManager->LoadCommonEventData(stageNo))
+	{
+		assert(false && "イベントデータの読み込みに失敗しました");
+	}
+
 }
 
 GameScene::~GameScene()
