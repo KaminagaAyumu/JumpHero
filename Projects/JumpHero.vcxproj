@@ -145,7 +145,7 @@
     <ClCompile Include="Game\Coin.cpp" />
     <ClCompile Include="Game\EnemyManager.cpp" />
     <ClCompile Include="Game\ChestManager.cpp" />
-    <ClCompile Include="Game\EventManager.cpp" />
+    <ClCompile Include="Game\Event\EventManager.cpp" />
     <ClCompile Include="Game\ItemManager.cpp" />
     <ClCompile Include="Game\LifeUp.cpp" />
     <ClCompile Include="Game\UpgradeMedal.cpp" />
@@ -193,10 +193,10 @@
     <ClInclude Include="Game\Coin.h" />
     <ClInclude Include="Game\EnemyManager.h" />
     <ClInclude Include="Game\ChestManager.h" />
-    <ClInclude Include="Game\EventControls.h" />
-    <ClInclude Include="Game\EventManager.h" />
-    <ClInclude Include="Game\EventSensors.h" />
-    <ClInclude Include="Game\EventStructs.h" />
+    <ClInclude Include="Game\Event\EventControls.h" />
+    <ClInclude Include="Game\Event\EventManager.h" />
+    <ClInclude Include="Game\Event\EventSensors.h" />
+    <ClInclude Include="Game\Event\EventStructs.h" />
     <ClInclude Include="Game\LifeUp.h" />
     <ClInclude Include="Game\UpgradeMedal.h" />
     <ClInclude Include="Scene\MiniGameScene.h" />

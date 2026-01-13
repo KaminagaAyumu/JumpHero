@@ -144,7 +144,7 @@
     <ClCompile Include="Game\StayEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Game\EventManager.cpp">
+    <ClCompile Include="Game\Event\EventManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Utility\UI\UIText.cpp">
@@ -269,7 +269,7 @@
     <ClInclude Include="Game\TutorialManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\EventControls.h">
+    <ClInclude Include="Game\Event\EventControls.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Utility\UI\UIManager.h">
@@ -290,7 +290,7 @@
     <ClInclude Include="Game\StayEnemy.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\EventManager.h">
+    <ClInclude Include="Game\Event\EventManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Utility\UI\UIText.h">
@@ -299,10 +299,10 @@
     <ClInclude Include="Utility\AnimationLoader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\EventStructs.h">
+    <ClInclude Include="Game\Event\EventStructs.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Game\EventSensors.h">
+    <ClInclude Include="Game\Event\EventSensors.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include "TextManager.h"
 #include "../Utility/Geometry.h"
-#include "EventStructs.h"
+#include "Event/EventStructs.h"
 
 class Input;
 class GameManager;
