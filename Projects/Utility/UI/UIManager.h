@@ -46,7 +46,7 @@ public:
 	/// </summary>
 	/// <param name="fontType">フォントのタイプ</param>
 	/// <param name="text">テキストの内容</param>
-	/// <param name="pos">表示する座標</param>
+	/// <param name="pos">表示する中心座標</param>
 	/// <returns></returns>
 	std::weak_ptr<UIText> CreateText(Types::FontType fontType, const std::string& text, const Position2& pos);
 
