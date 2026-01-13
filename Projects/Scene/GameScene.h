@@ -16,6 +16,8 @@ class GameManager;
 class CollisionManager;
 class SoundManager;
 class EventManager;
+struct EventControls;
+struct EventSensors;
 
 /// <summary>
 /// ゲームのメインとなるシーン
@@ -58,6 +60,11 @@ private:
 	using DrawFunc_t = void (GameScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 	
+	/// <summary>
+	/// イベントの内容を設定する関数
+	/// </summary>
+	void SetEventFunc();
+
 	// 背景画像を管理するクラスのポインタ
 	std::shared_ptr<Bg> m_bg;
 
@@ -72,6 +79,10 @@ private:
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 
 	std::shared_ptr<SoundManager> m_pSoundManager; // サウンドマネージャークラス
+
+	std::shared_ptr<EventSensors> m_pEventSensors; // イベントの発動条件を設定するように持つ
+
+	std::shared_ptr<EventControls> m_pEventControls; // 行うイベントを設定するように持つ
 
 	std::unique_ptr<EventManager> m_pEventManager; // イベントマネージャークラス
 

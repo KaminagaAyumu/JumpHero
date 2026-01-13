@@ -20,6 +20,8 @@
 #include "../Game/ChestManager.h"
 #include "../Game/ItemManager.h"
 #include "../Game/Event/EventManager.h"
+#include "../Game/Event/EventControls.h"
+#include "../Game/Event/EventSensors.h"
 #include "DxLib.h"
 #include <cassert>
 
@@ -180,5 +182,48 @@ void GameScene::FadeDraw()
 #ifdef _DEBUG
 	DrawString(0, 0, L"GameScene: FadeDraw", 0xffffff);
 #endif
+}
+
+void GameScene::SetEventFunc()
+{
+	m_pEventSensors = std::make_unique<EventSensors>();
+
+	// 指定番号の宝箱が開いたかどうかの関数を定義
+	m_pEventSensors->isOpenChestFunc = [this](int chestNum)
+		{
+			float tileSize = m_pMap->GetTileSize();
+			//int x = m_pMap->WorldPosToMapPos(m_chestPos[chestNum].x, tileSize);
+			//int y = m_pMap->WorldPosToMapPos(m_chestPos[chestNum].y, tileSize);
+			/*if (m_pMap->GetPositioningData(x, y) == 0)
+			{
+				return true;
+			}*/
+			return false;
+		};
+
+
+	m_pEventControls = std::make_unique<EventControls>();
+
+	m_pEventControls->DropItemFunc = [this](int chestNo, const std::string& itemType)
+		{
+			Types::ItemType type; // 生成するアイテムが何かを判別する
+			// 宝箱の番号を取得
+			if (itemType == "coin")
+			{
+				type = Types::ItemType::Coin;
+			}
+			if (itemType == "medal")
+			{
+				type = Types::ItemType::UpgradeMedal;
+			}
+			if (itemType == "toitem")
+			{
+				type = Types::ItemType::ChangeToCoin;
+				// 通常のアイテム(コイン)をまず生成
+				//m_pGameManager->DropItem(m_chestPos[chestNo], Types::ItemType::Coin);
+			}
+
+			//m_pGameManager->DropItem(m_chestPos[chestNo], type);
+		};
 }
 
