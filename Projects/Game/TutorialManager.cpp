@@ -55,7 +55,7 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	{
 		test2Ptr->AppearFromCenter(4.0f);
 	}
-	auto test3 = m_pUIManager->CreateText(-1, "testあああ123", { 170,400 });
+	auto test3 = m_pUIManager->CreateText(Types::FontType::Small, "testあああ123", { 170,400 });
 	LoadEventData();
 	InitEventPos();
 	LoadCommonEventData();
