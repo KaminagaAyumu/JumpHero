@@ -76,7 +76,7 @@ m_fadeColor(0x000000)
 	SetEventFunc();
 
 	m_pEventManager = std::make_unique<EventManager>();
-	if (!m_pEventManager->LoadCommonEventData(stageNo))
+	if (!m_pEventManager->LoadCommonEventData(stageNo) || !m_pEventManager->LoadEventData(stageNo))
 	{
 		assert(false && "イベントデータの読み込みに失敗しました");
 	}
@@ -184,6 +184,8 @@ void GameScene::NormalDraw()
 			pActor->Draw();
 		}
 	}
+
+	m_pUIManager->Draw();
 
 	m_pGameManager->Draw();
 #ifdef _DEBUG

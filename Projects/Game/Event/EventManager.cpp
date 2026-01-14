@@ -111,11 +111,17 @@ void EventManager::SetEvents(const std::shared_ptr<EventControls>& controls, con
 
 bool EventManager::LoadEventData(int stageNo)
 {
-	std::ifstream file("data/eventData.csv");
+	// ステージ番号に対応したパスを取得する変数
+	wchar_t filePath[kEventPathSizeMax];
+
+	std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_event.csv", stageNo);
+
+	std::ifstream file(filePath);
 	if (!file) // ファイルの読み込みに失敗した場合
 	{
 		return false; // ロード失敗とする
 	}
+
 	std::string line;
 	bool isHeader = true;
 
@@ -247,6 +253,9 @@ bool EventManager::CheckTrigger(const EventData& data)
 
 	switch (data.triggerType)
 	{
+	case TriggerType::GameStart:
+		return true;
+		break;
 	case TriggerType::OpenChest:
 	{
 		int chestNo = GetParamNum(data.triggerParam);
@@ -273,7 +282,7 @@ void EventManager::RunAction(const EventData& data)
 		// テキストのIDを取得
 		const std::string textId = data.actionParam;
 
-		controls->showTextWindowFunc(textId, kTextWindowSize, kTextWindowPos, kTextWindowAppearDuration);
+		m_currentTextWindow = controls->showTextWindowFunc(textId, kTextWindowSize, kTextWindowPos, kTextWindowAppearDuration);
 	}
 	break;
 	case ActionType::DropItem:
