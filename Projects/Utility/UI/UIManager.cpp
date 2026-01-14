@@ -78,6 +78,16 @@ std::weak_ptr<UITextWindow> UIManager::CreateTextWindow(const std::string& text,
 	return ptr;
 }
 
+std::weak_ptr<UITextWindow> UIManager::CreateTextWindowPaged(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float appearDuration)
+{
+	auto ptr = std::make_shared<UITextWindow>();
+	ptr->Init("", size, pos);
+	ptr->SetPages(id, pages);
+	ptr->ShowPaging(appearDuration);
+	m_pUIElements.push_back(ptr);
+	return ptr;
+}
+
 std::weak_ptr<UIText> UIManager::CreateText(Types::FontType fontType, const std::string& text, const Position2& pos)
 {
 	auto ptr = std::make_shared<UIText>();

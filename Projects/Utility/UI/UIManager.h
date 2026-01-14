@@ -4,6 +4,7 @@
 #include <vector>
 #include "../Geometry.h"
 #include "../GameType.h"
+#include "../../Game/TextManager.h"
 
 class Map;
 class UIBase;
@@ -31,6 +32,17 @@ public:
 	/// <param name="pos"></param>
 	/// <returns></returns>
 	std::weak_ptr<UITextWindow> CreateTextWindow(const std::string& text, const Size& size, const Position2& pos);
+
+	/// <summary>
+	/// ページ付きのテキストウィンドウを作成する関数
+	/// </summary>
+	/// <param name="id"></param>
+	/// <param name="pages"></param>
+	/// <param name="size"></param>
+	/// <param name="pos"></param>
+	/// <param name="appearDuration"></param>
+	/// <returns></returns>
+	std::weak_ptr<UITextWindow> CreateTextWindowPaged(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float appearDuration);
 
 	/// <summary>
 	/// テキストを作成する関数
