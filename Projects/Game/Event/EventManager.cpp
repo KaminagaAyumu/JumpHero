@@ -27,6 +27,7 @@ namespace
 
 EventManager::EventManager() : 
 	m_eventIndex(0),
+	m_timeCount(0),
 	m_isWaitingInput(false)
 {
 }
@@ -40,6 +41,8 @@ void EventManager::Update()
 	auto controls = m_pControls.lock();
 	auto sensors = m_pSensors.lock();
 	if (!sensors) return;
+
+	m_timeCount++;
 
 	for (auto& common : m_commonEventData)
 	{
@@ -255,6 +258,14 @@ bool EventManager::CheckTrigger(const EventData& data)
 	{
 	case TriggerType::GameStart:
 		return true;
+		break;
+	case TriggerType::TimeElapsed:
+		int endTime = GetParamNum(data.triggerParam);
+		if (m_timeCount >= endTime)
+		{
+			m_timeCount = 0;
+			return true;
+		}
 		break;
 	case TriggerType::OpenChest:
 	{
