@@ -361,5 +361,14 @@ void GameScene::SetEventFunc()
 			m_pGameManager->ReturnCameraPlayer();
 		};
 
+	// バリアのアクティブ状態をセットする関数
+	m_pEventControls->setBarrierActiveFunc = [this](int barrierNo)
+		{
+			// 指定IDのバリアをアクティブ状態にする
+			m_pPositionRegistry->SetBarrierActive(barrierNo, true);
+			// バリアをセットする
+			m_pGameManager->SetBarrierPlayer(m_pPositionRegistry->GetBarrierPos(barrierNo));
+		};
+
 }
 

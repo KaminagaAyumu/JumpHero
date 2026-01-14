@@ -34,4 +34,7 @@ struct EventControls
 	// カメラが見るターゲットを戻す関数(基本的にプレイヤーに戻す)
 	std::function<void()> returnCameraFunc;
 
+	// バリアをアクティブ状態にしてセットする関数
+	std::function<void(int barrierNo)> setBarrierActiveFunc;
+
 };

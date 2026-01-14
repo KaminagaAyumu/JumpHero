@@ -151,6 +151,12 @@ public:
 	bool IsPowerUpPlayer();
 
 	/// <summary>
+	/// プレイヤーが進めないバリアの座標をセットする
+	/// </summary>
+	/// <param name="barrier">バリアの座標</param>
+	void SetBarrierPlayer(const ActivePosition2& barrier);
+
+	/// <summary>
 	/// カメラの補正が終わったかどうか
 	/// </summary>
 	/// <returns>true : 終わった false : 終わっていない</returns>

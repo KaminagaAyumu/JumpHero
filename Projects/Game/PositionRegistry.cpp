@@ -122,6 +122,18 @@ const ActivePosition2& PositionRegistry::GetBarrierPos(int id) const
 	return{};
 }
 
+bool PositionRegistry::SetBarrierActive(int id, bool isActive)
+{
+	auto it = m_barrierPos.find(id);
+	if (it == m_barrierPos.end())
+	{
+		return false;
+	}
+	// 指定バリアのアクティブ状態を変更する
+	it->second.isActive = isActive;
+	return true;
+}
+
 const Position2& PositionRegistry::GetCameraPos(int id) const
 {
 	auto it = m_cameraPos.find(id);

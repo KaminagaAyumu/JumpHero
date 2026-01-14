@@ -334,6 +334,11 @@ bool GameManager::IsPowerUpPlayer()
 	return m_pPlayer->IsPowerUp();
 }
 
+void GameManager::SetBarrierPlayer(const ActivePosition2& barrier)
+{
+	m_pPlayer->SetBarrier(barrier);
+}
+
 bool GameManager::IsCameraLerpEnd()
 {
 	return m_pCamera->IsLerpEnd();

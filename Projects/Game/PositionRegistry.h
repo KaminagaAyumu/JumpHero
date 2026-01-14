@@ -41,6 +41,14 @@ public:
 	/// <param name="id">指定ID</param>
 	/// <returns>バリアの座標</returns>
 	const ActivePosition2& GetBarrierPos(int id)const;
+
+	/// <summary>
+	/// 指定したバリアのアクティブ状態をセットする
+	/// </summary>
+	/// <param name="id">指定ID</param>
+	/// <param name="isActive">アクティブかどうか</param>
+	/// <returns>true : セットが出来た false : セットができなかった</returns>
+	bool SetBarrierActive(int id, bool isActive);
 	
 	/// <summary>
 	/// カメラのターゲット座標を取得する
