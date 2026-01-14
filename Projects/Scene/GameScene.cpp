@@ -129,6 +129,13 @@ void GameScene::NormalUpdate(Input& input)
 
 	m_pEventManager->Update();
 
+	// ゲームを止めるフラグが立っていたら
+	if (m_pEventManager->IsFreezeGame())
+	{
+		// オブジェクトの更新を止める
+		return;
+	}
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 

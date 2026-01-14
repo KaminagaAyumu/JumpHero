@@ -30,7 +30,8 @@ namespace
 EventManager::EventManager() :
 	m_eventIndex(0),
 	m_timeCount(0),
-	m_isWaitingInput(false)
+	m_isWaitingInput(false),
+	m_isFreezeGame(false)
 {
 }
 
@@ -339,8 +340,10 @@ void EventManager::RunAction(const EventData& data)
 	}	
 	break;
 	case ActionType::FreezeGame:
+		m_isFreezeGame = true;
 		break;
 	case ActionType::UnFreezeGame:
+		m_isFreezeGame = false;
 		break;
 	case ActionType::FreezePlayer:
 		break;

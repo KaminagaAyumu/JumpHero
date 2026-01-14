@@ -38,11 +38,18 @@ public:
 	/// <param name="stageNo">ステージ番号</param>
 	bool LoadCommonEventData(int stageNo);
 
+	/// <summary>
+	/// ゲームが止まっているかどうかを返す
+	/// </summary>
+	/// <returns>true : 止まっている false : 止まっていない</returns>
+	bool IsFreezeGame()const { return m_isFreezeGame; };
+
 private:
 
 	int m_eventIndex; // イベントの進行状況
 	int m_timeCount; // 経過時間を測るイベントを行うときに使う
 	bool m_isWaitingInput; // テキストウィンドウのページをめくるときに使う
+	bool m_isFreezeGame; // ゲームを止めるフラグ
 
 	std::weak_ptr<EventControls> m_pControls;
 	std::weak_ptr<EventSensors> m_pSensors;
