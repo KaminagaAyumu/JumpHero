@@ -2,6 +2,7 @@
 #include "EventManager.h"
 #include <fstream>
 #include <sstream>
+#include "../../Utility/Input.h"
 
 
 namespace
@@ -27,8 +28,10 @@ EventManager::~EventManager()
 {
 }
 
-void EventManager::Update()
+void EventManager::Update(Input& input)
 {
+	m_isInput = input.IsTriggered("OK");
+
 	for (auto& common : m_commonEventData)
 	{
 		// すでにアクションが行われていて一度しか行わないイベントなら行わない

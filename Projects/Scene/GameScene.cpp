@@ -15,6 +15,7 @@
 #include "../Utility/Camera.h"
 #include "../Game/ItemBase.h"
 #include "../Game/GameManager.h"
+#include "../Utility/UI/UIManager.h"
 #include "../Game/CollisionManager.h"
 #include "../Game/ChestManager.h"
 #include "../Game/ItemManager.h"
@@ -34,6 +35,8 @@ namespace
 
 	constexpr int kMiniGameStageNo = 1; // ミニゲーム用ステージ番号
 
+	constexpr float kWindowAppearDuration = 10.0f; // ウィンドウが出現するまでの時間
+
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 }
 
@@ -52,6 +55,8 @@ m_fadeColor(0x000000)
 
 	m_pGameManager = std::make_shared<GameManager>(m_pMap.get(),m_pActors);
 	m_pGameManager->Init();
+
+	m_pUIManager = std::make_unique<UIManager>();
 	
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
@@ -116,7 +121,7 @@ void GameScene::NormalUpdate(Input& input)
 		return;
 	}
 
-	m_pEventManager->Update();
+	m_pEventManager->Update(input);
 
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
@@ -218,11 +223,23 @@ void GameScene::SetEventFunc()
 			return false;
 		};
 
+	m_pEventSensors->isPressedButtonFunc = [this]()
+		{
+
+			return false;
+		};
+
 
 	// -----------------------------------------------------
 	// イベントコントロールの関数
 	// -----------------------------------------------------
 
+	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos)
+		{
+			// ページ付きのテキストウィンドウを作成
+			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, kWindowAppearDuration);
+			return ptr;
+		};
 	m_pEventControls->dropItemFunc = [this](int chestNo, const std::string& itemType)
 		{
 			Types::ItemType type; // 生成するアイテムが何かを判別する

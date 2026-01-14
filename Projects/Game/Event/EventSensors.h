@@ -15,4 +15,7 @@ struct EventSensors
 
 	// 指定されたアイテムを取得したかどうかの関数
 	std::function<bool(const std::string& id)> isGetItemFunc;
+
+	// ボタンが押されたかどうかの関数
+	std::function<bool()> isPressedButtonFunc;
 };

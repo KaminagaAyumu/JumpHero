@@ -13,6 +13,7 @@ class Map;
 class Camera;
 class ItemBase;
 class GameManager;
+class UIManager;
 class CollisionManager;
 class SoundManager;
 class EventManager;
@@ -77,6 +78,8 @@ private:
 
 	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
+	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
+
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 
 	std::shared_ptr<SoundManager> m_pSoundManager; // サウンドマネージャークラス

@@ -5,6 +5,8 @@
 
 using namespace Events;
 
+class Input;
+
 /// <summary>
 /// ゲーム中のイベントを管理するクラス
 /// </summary>
@@ -14,7 +16,7 @@ public:
 	EventManager();
 	virtual ~EventManager();
 
-	void Update();
+	void Update(Input& input);
 	void Draw() const;
 
 	/// <summary>
@@ -39,9 +41,12 @@ public:
 private:
 
 	int m_eventIndex; // イベントの進行状況
+	bool m_isInput; // ページをめくるときに使う
 
 	std::weak_ptr<EventControls> m_pControls;
 	std::weak_ptr<EventSensors> m_pSensors;
+
+	std::weak_ptr<UITextWindow> m_currentTextWindow; // ウィンドウを表示するイベントで使う
 
 	std::vector<EventData> m_eventData; // イベントデータ群
 	std::vector<CommonEventData> m_commonEventData; // 共通イベントデータ群
