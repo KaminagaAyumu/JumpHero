@@ -295,6 +295,10 @@ bool EventManager::CheckTrigger(const EventData& data)
 	case TriggerType::GetItem:
 		return sensors->isGetItemFunc(data.triggerParam);
 		break;
+	case TriggerType::EnemySpawn: // 使っていないので今後使わないなら削除
+		break;
+	case TriggerType::PlayerPowerUp:
+		return sensors->isPowerUpFunc();
 	default:
 		break;
 	}

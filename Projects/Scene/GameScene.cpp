@@ -262,6 +262,12 @@ void GameScene::SetEventFunc()
 			return m_pGameManager->IsItemPicked(type);
 		};
 
+	// プレイヤーがパワーアップしているかどうかの関数を定義
+	m_pEventSensors->isPowerUpFunc = [this]()
+		{
+			return m_pGameManager->IsPowerUpPlayer();
+		};
+
 	// OKボタンが押されたかどうかの関数を定義
 	m_pEventSensors->isPressedButtonFunc = [this]()
 		{

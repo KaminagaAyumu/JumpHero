@@ -123,6 +123,12 @@ public:
 	bool IsExceededPlayer(const Position2& area);
 
 	/// <summary>
+	/// プレイヤーがパワーアップしているかどうかを判定
+	/// </summary>
+	/// <returns>true : パワーアップしている false : パワーアップしていない</returns>
+	bool IsPowerUpPlayer();
+
+	/// <summary>
 	/// カメラの補正が終わったかどうか
 	/// </summary>
 	/// <returns>true : 終わった false : 終わっていない</returns>

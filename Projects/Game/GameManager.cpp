@@ -309,6 +309,11 @@ bool GameManager::IsExceededPlayer(const Position2& area)
 	return m_pPlayer->GetPos().x >= area.x;
 }
 
+bool GameManager::IsPowerUpPlayer()
+{
+	return m_pPlayer->IsPowerUp();
+}
+
 bool GameManager::IsCameraLerpEnd()
 {
 	return m_pCamera->IsLerpEnd();
