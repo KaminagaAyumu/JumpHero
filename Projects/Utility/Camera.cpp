@@ -10,10 +10,12 @@ namespace
 }
 
 Camera::Camera(const Size& size) :
+	m_mode(Mode::None),
 	scroll{},
 	m_pos{},
 	m_mapSize(size),
-	m_pTargetPos(nullptr)
+	m_pTargetPos(nullptr),
+	m_fixedTarget{}
 {
 }
 
@@ -30,14 +32,22 @@ void Camera::Update()
 {
 	assert(m_pTargetPos != nullptr && L"カメラのターゲット取得失敗");
 
-	// カメラの座標を補正
-	if (IsLerpEnd()) // 補正が終わっていたら
+	if (m_mode == Mode::None)
 	{
-		m_pos = *m_pTargetPos; // カメラの座標をターゲットに固定
+		// モードなしの場合ポジション補正を行わない
 	}
 	else
 	{
-		m_pos = Geometry::LerpVec2(m_pos, *m_pTargetPos, kLerpSpeed); // 補正してカメラを動かす
+		const Position2 target = GetCurrentTarget(); // 現在のターゲットを取得
+		// カメラの座標を補正
+		if (IsLerpEnd()) // 補正が終わっていたら
+		{
+			m_pos = target; // カメラの座標をターゲットに固定
+		}
+		else
+		{
+			m_pos = Geometry::LerpVec2(m_pos, target, kLerpSpeed); // 補正してカメラを動かす
+		}
 	}
 
 	// スクロール量の計算
@@ -68,12 +78,40 @@ void Camera::Update()
 	}
 }
 
+void Camera::SetTarget(const Position2& pos)
+{
+	m_mode = Mode::Fixed;
+	m_fixedTarget = pos;
+}
+
+void Camera::SetTargetProvider(std::function<Position2()> provider)
+{
+	m_mode = Mode::Provider;
+	m_targetProvider = std::move(provider); // 関数オブジェクトの内容の所有権を受け取る
+}
+
 const Rect2D& Camera::GetNowScreenArea() const
 {
 	return { scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenWidth };
 }
 
-bool Camera::IsLerpEnd() const
+bool Camera::IsLerpEnd()
 {
-	return Geometry::GetDistance(m_pos, *m_pTargetPos) <= kLerpEndDistance;
+	return Geometry::GetDistance(m_pos, GetCurrentTarget()) <= kLerpEndDistance;
+}
+
+Position2 Camera::GetCurrentTarget()
+{
+	switch (m_mode)
+	{
+	case Mode::Fixed:
+		return m_fixedTarget;
+	case Mode::Provider:
+		return m_targetProvider();
+	default:
+		break;
+	}
+
+	// ターゲットが何もない場合は今の座標を返す
+	return m_pos;
 }
