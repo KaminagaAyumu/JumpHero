@@ -259,6 +259,11 @@ bool EventManager::CheckTrigger(const EventData& data)
 	case TriggerType::GameStart:
 		return true;
 		break;
+	case TriggerType::EnterArea:
+	{
+		int areaNo = GetParamNum(data.triggerParam);
+
+	}
 	case TriggerType::TimeElapsed:
 		int endTime = GetParamNum(data.triggerParam);
 		if (m_timeCount >= endTime)

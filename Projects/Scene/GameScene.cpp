@@ -218,6 +218,12 @@ void GameScene::SetEventFunc()
 	// イベントセンサーの関数
 	// -----------------------------------------------------
 
+	// 指定エリアに入ったかどうかの関数を定義
+	m_pEventSensors->isEnterAreaFunc = [this](int areaNo)
+		{
+			return false;
+		};
+
 	// 指定番号の宝箱が開いたかどうかの関数を定義
 	m_pEventSensors->isOpenChestFunc = [this](int chestNo)
 		{
@@ -231,6 +237,7 @@ void GameScene::SetEventFunc()
 			return false;
 		};
 
+	// OKボタンが押されたかどうかの関数を定義
 	m_pEventSensors->isPressedButtonFunc = [this]()
 		{
 			return m_isInputOK;
