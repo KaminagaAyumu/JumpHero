@@ -299,6 +299,8 @@ bool EventManager::CheckTrigger(const EventData& data)
 		break;
 	case TriggerType::PlayerPowerUp:
 		return sensors->isPowerUpFunc();
+	case TriggerType::NoTrigger:
+		return true; // 条件なしなので常にtrue
 	default:
 		break;
 	}
