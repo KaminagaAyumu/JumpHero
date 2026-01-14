@@ -37,4 +37,7 @@ struct EventControls
 	// バリアをアクティブ状態にしてセットする関数
 	std::function<void(int barrierNo)> setBarrierActiveFunc;
 
+	// バリアを非アクティブ状態にしてセットする関数
+	std::function<void(int barrierNo)> setBarrierInActiveFunc;
+
 };

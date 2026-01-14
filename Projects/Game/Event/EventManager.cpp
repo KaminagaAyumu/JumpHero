@@ -31,6 +31,7 @@ EventManager::EventManager() :
 	m_eventIndex(0),
 	m_timeCount(0),
 	m_isWaitingInput(false),
+	m_isActionHold(false),
 	m_isFreezeGame(false)
 {
 }
@@ -94,10 +95,21 @@ void EventManager::Update()
 		return; // これより先には進まない(イベントの進行を止める)
 	}
 
+	// アクションを止めているとき
+	if (m_isActionHold)
+	{
+		if (sensors->isCameraLerpEndFunc())
+		{
+			m_isActionHold = false;
+			m_eventIndex++;
+		}
+		return;
+	}
+
 	if (CheckTrigger(m_eventData[m_eventIndex]))
 	{
 		RunAction(m_eventData[m_eventIndex]);
-		if (!m_isWaitingInput) // WaitInputではない時はそのまま次のイベントへ
+		if (!m_isWaitingInput && !m_isActionHold) // WaitInputではない時、ActionHold(カメラのlerp待ち)ではない時はそのまま次のイベントへ
 		{
 			m_eventIndex++;
 		}
@@ -353,6 +365,7 @@ void EventManager::RunAction(const EventData& data)
 		break;
 	case ActionType::LookCamera:
 		controls->lookCameraFunc(data.actionParam);
+		m_isActionHold = true; // カメラの補正が終わるまで次のイベントに行かないようにする
 		break;
 	case ActionType::ReturnCamera:
 		controls->returnCameraFunc();
@@ -363,6 +376,20 @@ void EventManager::RunAction(const EventData& data)
 		m_isWaitingInput = true; // ボタンが押されるまで待つようにする
 		break;
 	case ActionType::SetBarrier:
+	{
+		int barrierNo = GetParamNum(data.actionParam);
+		controls->setBarrierActiveFunc(barrierNo);
+	}
+		break;
+	case ActionType::UnlockBarrier:
+	{
+		int barrierNo = GetParamNum(data.actionParam);
+		controls->setBarrierInActiveFunc(barrierNo);
+	}
+		break;
+	case ActionType::ActiveGoal:
+		break;
+	case ActionType::NoAction:
 		break;
 	default:
 		break;
@@ -378,12 +405,65 @@ void EventManager::RunCommonAction(const EventData& data)
 
 	switch (data.actionType)
 	{
+	case ActionType::ShowText:
+	{
+		// テキストのIDを取得
+		const std::string textId = data.actionParam;
+
+		m_currentTextWindow = controls->showTextWindowFunc(textId, kTextWindowSize, kTextWindowPos, kTextWindowAppearDuration);
+	}
+	break;
 	case ActionType::DropItem:
 	{
 		int chestNo = GetParamNum(data.triggerParam);
 		controls->dropItemFunc(chestNo, data.actionParam);
 	}
 	break;
+	case ActionType::SpawnEnemy:
+	{
+		auto sensors = m_pSensors.lock();
+		controls->spawnEnemiesFunc(sensors->getSpawnPositionsFunc(), kSpawnEnemyDefaultFormNo);
+	}
+	break;
+	case ActionType::FreezeGame:
+		m_isFreezeGame = true;
+		break;
+	case ActionType::UnFreezeGame:
+		m_isFreezeGame = false;
+		break;
+	case ActionType::FreezePlayer:
+		controls->changePlayerFreezeFunc();
+		break;
+	case ActionType::UnFreezePlayer:
+		controls->changePlayerFreezeFunc();
+		break;
+	case ActionType::LookCamera:
+		controls->lookCameraFunc(data.actionParam);
+		break;
+	case ActionType::ReturnCamera:
+		controls->returnCameraFunc();
+		break;
+	case ActionType::PowerUp:
+		break; // 現状何もしていない(パワーアップ固定などをするためのもの)
+	case ActionType::WaitInput:
+		m_isWaitingInput = true; // ボタンが押されるまで待つようにする
+		break;
+	case ActionType::SetBarrier:
+	{
+		int barrierNo = GetParamNum(data.actionParam);
+		controls->setBarrierActiveFunc(barrierNo);
+	}
+	break;
+	case ActionType::UnlockBarrier:
+	{
+		int barrierNo = GetParamNum(data.actionParam);
+		controls->setBarrierInActiveFunc(barrierNo);
+	}
+	break;
+	case ActionType::ActiveGoal:
+		break;
+	case ActionType::NoAction:
+		break;
 	default:
 		break;
 	}

@@ -22,6 +22,9 @@ struct EventSensors
 	// ボタンが押されたかどうかの関数
 	std::function<bool()> isPressedButtonFunc;
 
+	// カメラの補間が終わったかどうかの関数
+	std::function<bool()> isCameraLerpEndFunc;
+
 	// 敵のスポーン位置すべてを取得する関数 
 	std::function<const std::vector<Position2>&()> getSpawnPositionsFunc;
 };

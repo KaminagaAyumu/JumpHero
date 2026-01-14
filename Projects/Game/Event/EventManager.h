@@ -49,6 +49,7 @@ private:
 	int m_eventIndex; // イベントの進行状況
 	int m_timeCount; // 経過時間を測るイベントを行うときに使う
 	bool m_isWaitingInput; // テキストウィンドウのページをめくるときに使う
+	bool m_isActionHold; // イベントの更新を止めるフラグ
 	bool m_isFreezeGame; // ゲームを止めるフラグ
 
 	std::weak_ptr<EventControls> m_pControls;

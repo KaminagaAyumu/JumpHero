@@ -285,6 +285,12 @@ void GameScene::SetEventFunc()
 			return m_isInputOK;
 		};
 
+	// カメラの補正が終わったかどうかの関数を定義
+	m_pEventSensors->isCameraLerpEndFunc = [this]()
+		{
+			return m_pGameManager->IsCameraLerpEnd();
+		};
+
 	// 敵のスポーン位置を取得する関数を定義
 	m_pEventSensors->getSpawnPositionsFunc = [this]()
 		{
@@ -367,6 +373,14 @@ void GameScene::SetEventFunc()
 			// 指定IDのバリアをアクティブ状態にする
 			m_pPositionRegistry->SetBarrierActive(barrierNo, true);
 			// バリアをセットする
+			m_pGameManager->SetBarrierPlayer(m_pPositionRegistry->GetBarrierPos(barrierNo));
+		};
+
+	// バリアを非アクティブにする関数
+	m_pEventControls->setBarrierInActiveFunc = [this](int barrierNo)
+		{
+			m_pPositionRegistry->SetBarrierActive(barrierNo, false);
+
 			m_pGameManager->SetBarrierPlayer(m_pPositionRegistry->GetBarrierPos(barrierNo));
 		};
 
