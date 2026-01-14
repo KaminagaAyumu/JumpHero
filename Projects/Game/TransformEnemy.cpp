@@ -424,6 +424,7 @@ void TransformEnemy::SetAnimScale()
 	m_animations["Appear"].SetScale(kGraphScale);
 	m_animations["Seeker"].SetScale(kGraphScale);
 	m_animations["Skull"].SetScale(kGraphScale);
+	m_animations["FireBall"].SetScale(kGraphScale);
 }
 
 void TransformEnemy::CheckAnimation()
@@ -454,6 +455,10 @@ void TransformEnemy::CheckAnimation()
 	else if (m_updateFunc == &TransformEnemy::SkullUpdate)
 	{
 		ChangeAnimation(m_animations["Skull"]);
+	}
+	else if (m_updateFunc == &TransformEnemy::FireBallUpdate)
+	{
+		ChangeAnimation(m_animations["FireBall"]);
 	}
 }
 
