@@ -1,4 +1,5 @@
-﻿#include "UITextWindow.h"
+﻿#include "../../Game/TextManager.h"
+#include "UITextWindow.h"
 #include "../StringFunction.h"
 #include <cmath>
 #include "DxLib.h"
@@ -21,7 +22,8 @@ UITextWindow::UITextWindow() :
 	m_appearDuration(0.0f),
 	m_isChangePos(false),
 	m_isChangeSize(false),
-	m_aliveFrame(kDefaultAliveTime)
+	m_aliveFrame(kDefaultAliveTime),
+	m_textPager{}
 {
 }
 
@@ -35,6 +37,14 @@ void UITextWindow::Init(std::string text, Size size, const Position2& target)
 	m_targetSize = size; // 目標サイズを設定
 	m_targetPos = target; // 目標位置を設定
 	m_pos = m_startPos; // 初期位置を設定
+}
+
+void UITextWindow::SetPages(const std::string& id, const std::vector<TextData>& pages)
+{
+	m_textPager.id = id;
+	m_textPager.pages = pages;
+	m_textPager.index = 0;
+	m_textPager.isActive = false; // セット時には非アクティブにする
 }
 
 void UITextWindow::Update()

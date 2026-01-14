@@ -2,6 +2,7 @@
 #include <string>
 #include "UIBase.h"
 #include "../Geometry.h"
+#include <vector>
 
 /// <summary>
 /// テキストとウィンドウを表示するUIクラス
@@ -19,6 +20,13 @@ public:
 	/// <param name="size">ウィンドウのサイズ</param>
 	/// <param name="target">表示する中心座標</param>
 	void Init(std::string text, Size size, const Position2& target);
+
+	/// <summary>
+	/// 複数ページのテキストデータをセットする
+	/// </summary>
+	/// <param name="id">テキストのID</param>
+	/// <param name="pages">テキストの内容</param>
+	void SetPages(const std::string& id, const std::vector<TextData>& pages);
 
 	void Update()override;
 	void Draw()const override;
@@ -46,6 +54,17 @@ public:
 	};
 
 private:
+	/// <summary>
+	/// テキストデータをページで管理する構造体
+	/// </summary>
+	struct TextPager
+	{
+		std::string id; // 識別ID
+		std::vector<TextData> pages; // ページごとのテキストデータ
+		int index = 0; // ページ数
+		bool isActive = false; // ページ送りが進行中か
+	};
+
 	Position2 m_pos; // 現在の表示座標(中心座標)
 	Position2 m_startPos; // アニメーション開始位置の座標
 	Position2 m_targetPos; // 指定位置に移動するための座標
@@ -58,6 +77,8 @@ private:
 	bool m_isChangePos; // 位置変更アニメーション中かどうか
 	bool m_isChangeSize; // サイズ変更アニメーション中かどうか
 	int m_aliveFrame; // ウィンドウが表示されてからのフレーム数
+
+	TextPager m_textPager; // ページ付きのテキストデータを管理するために使う
 
 };
 
