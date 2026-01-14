@@ -35,8 +35,6 @@ namespace
 
 	constexpr int kMiniGameStageNo = 1; // ミニゲーム用ステージ番号
 
-	constexpr float kWindowAppearDuration = 10.0f; // ウィンドウが出現するまでの時間
-
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 }
 
@@ -234,10 +232,10 @@ void GameScene::SetEventFunc()
 	// イベントコントロールの関数
 	// -----------------------------------------------------
 
-	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos)
+	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float duration)
 		{
 			// ページ付きのテキストウィンドウを作成
-			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, kWindowAppearDuration);
+			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration);
 			return ptr;
 		};
 	m_pEventControls->dropItemFunc = [this](int chestNo, const std::string& itemType)

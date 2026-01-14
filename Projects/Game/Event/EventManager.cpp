@@ -222,6 +222,8 @@ void EventManager::RunAction(const EventData& data)
 
 	switch (data.actionType)
 	{
+	case ActionType::ShowText:
+
 	case ActionType::DropItem:
 	{
 		int chestNo = GetParamNum(data.triggerParam);

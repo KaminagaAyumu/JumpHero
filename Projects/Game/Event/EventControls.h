@@ -16,7 +16,7 @@ struct EventControls
 	std::function<void(const std::string& textId)> showHintFunc;
 
 	// テキストウィンドウを表示する関数
-	std::function<std::weak_ptr<UITextWindow>(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos)> showTextWindowFunc;
+	std::function<std::weak_ptr<UITextWindow>(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float duration)> showTextWindowFunc;
 
 	// アイテムをドロップする関数
 	std::function<void(int chestNo, const std::string& itemType)> dropItemFunc;
