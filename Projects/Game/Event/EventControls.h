@@ -28,4 +28,7 @@ struct EventControls
 	// プレイヤーのフリーズ状態を変更する関数
 	std::function<void()> changePlayerFreezeFunc;
 
+	// カメラが見るターゲットをセットする関数
+	std::function<void(const std::string& key)> lookCameraFunc;
+
 };

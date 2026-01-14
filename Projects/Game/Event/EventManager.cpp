@@ -352,6 +352,7 @@ void EventManager::RunAction(const EventData& data)
 		controls->changePlayerFreezeFunc();
 		break;
 	case ActionType::LookCamera:
+		controls->lookCameraFunc(data.actionParam);
 		break;
 	case ActionType::ReturnCamera:
 		break;

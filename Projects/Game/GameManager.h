@@ -121,6 +121,18 @@ public:
 	void SetCameraTarget(const Position2* pos);
 
 	/// <summary>
+	/// カメラのターゲットをセットする
+	/// </summary>
+	/// <param name="pos">カメラの座標</param>
+	void SetCameraTarget(const Position2& pos);
+
+	/// <summary>
+	/// カメラのターゲットを示す関数オブジェクトをセットする
+	/// </summary>
+	/// <param name="provider">関数オブジェクト</param>
+	void SetCameraTargetProvider(std::function<Position2()> provider);
+
+	/// <summary>
 	/// プレイヤーが指定の座標を超えたかどうかを判定する
 	/// </summary>
 	/// <param name="area">指定エリア</param>

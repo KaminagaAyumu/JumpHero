@@ -36,6 +36,10 @@ namespace
 
 	constexpr int kMiniGameStageNo = 1; // ミニゲーム用ステージ番号
 
+
+	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
+	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
+
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 }
 
@@ -336,6 +340,18 @@ void GameScene::SetEventFunc()
 	m_pEventControls->changePlayerFreezeFunc = [this]()
 		{
 			m_pGameManager->ChangeFreezePlayer();
+		};
+
+	m_pEventControls->lookCameraFunc = [this](const std::string& key)
+		{
+			if (key == "spawnPos")
+			{
+				m_pGameManager->SetCameraTarget(m_pPositionRegistry->GetCameraPos(kSpawnPosChipNo));
+			}
+			else if (key == "goalPos")
+			{
+				m_pGameManager->SetCameraTarget(m_pPositionRegistry->GetCameraPos(kGoalPosChipNo));
+			}
 		};
 }
 
