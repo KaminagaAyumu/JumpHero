@@ -16,6 +16,7 @@
 #include "../Game/ItemBase.h"
 #include "../Game/GameManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Game/TextManager.h"
 #include "../Game/CollisionManager.h"
 #include "../Game/ChestManager.h"
 #include "../Game/ItemManager.h"
@@ -55,6 +56,8 @@ m_fadeColor(0x000000)
 	m_pGameManager->Init();
 
 	m_pUIManager = std::make_unique<UIManager>();
+
+	m_pTextManager = std::make_unique<TextManager>();
 	
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
@@ -118,6 +121,9 @@ void GameScene::NormalUpdate(Input& input)
 		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 		return;
 	}
+
+	// OKボタンが押されたかどうかを判定する
+	m_isInputOK = input.IsTriggered("OK");
 
 	m_pEventManager->Update(input);
 
@@ -223,8 +229,7 @@ void GameScene::SetEventFunc()
 
 	m_pEventSensors->isPressedButtonFunc = [this]()
 		{
-
-			return false;
+			return m_isInputOK;
 		};
 
 
@@ -232,9 +237,10 @@ void GameScene::SetEventFunc()
 	// イベントコントロールの関数
 	// -----------------------------------------------------
 
-	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float duration)
+	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const Size& size, const Position2& pos, float duration)
 		{
 			// ページ付きのテキストウィンドウを作成
+			auto pages = m_pTextManager->GetAllPageText(id);
 			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration);
 			return ptr;
 		};

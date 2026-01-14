@@ -1,9 +1,9 @@
 ﻿#include <memory>
 #include "EventManager.h"
+#include "../../Utility/Input.h"
+#include "../../Utility/Game.h"
 #include <fstream>
 #include <sstream>
-#include "../../Utility/Input.h"
-
 
 namespace
 {
@@ -17,6 +17,11 @@ namespace
 	constexpr int kActionType = 3;
 	constexpr int kActionParam = 4;
 	constexpr int kOnce = 5;
+
+	const Size kTextWindowSize = { 500,500 }; // テキストウィンドウのサイズ
+	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100}; // テキストウィンドウの座標
+	constexpr float kTextWindowAppearDuration = 10.0f; // テキストウィンドウが出てくるまでの時間
+
 }
 
 EventManager::EventManager() : 
@@ -223,7 +228,13 @@ void EventManager::RunAction(const EventData& data)
 	switch (data.actionType)
 	{
 	case ActionType::ShowText:
+	{
+		// テキストのIDを取得
+		const std::string textId = data.actionParam;
 
+		controls->showTextWindowFunc(textId, kTextWindowSize, kTextWindowPos, kTextWindowAppearDuration);
+	}
+	break;
 	case ActionType::DropItem:
 	{
 		int chestNo = GetParamNum(data.triggerParam);

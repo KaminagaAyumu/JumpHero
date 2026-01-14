@@ -14,6 +14,7 @@ class Camera;
 class ItemBase;
 class GameManager;
 class UIManager;
+class TextManager;
 class CollisionManager;
 class SoundManager;
 class EventManager;
@@ -48,6 +49,8 @@ private:
 	
 	int m_chestOpenNum; // 宝箱を開ける用
 
+	bool m_isInputOK; // OKボタンで進むイベントを指定するためのもの
+
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理
 	void NormalUpdate(Input& input); // 通常時の更新処理
@@ -79,6 +82,8 @@ private:
 	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
 	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
+
+	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを管理するために取得
 
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 
