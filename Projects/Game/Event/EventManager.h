@@ -60,6 +60,13 @@ private:
 	int GetParamNum(const std::string& param);
 
 	/// <summary>
+	/// イベントが終了したかどうかを判定する
+	/// </summary>
+	/// <param name="eventNo">イベントの番号</param>
+	/// <returns>true : イベントが終わっている false : イベントが終わっていない</returns>
+	bool IsEventEnd(int eventNo) const;
+
+	/// <summary>
 	/// イベント条件を文字列から変換する用の関数
 	/// </summary>
 	/// <param name="strData">文字列データ</param>

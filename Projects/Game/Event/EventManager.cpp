@@ -215,6 +215,12 @@ int EventManager::GetParamNum(const std::string& param)
 	return std::stoi(param);
 }
 
+bool EventManager::IsEventEnd(int eventNo) const
+{
+	// 指定した番号がイベントインデックス以上なら指定されたイベントは終わっている
+	return eventNo <= m_eventIndex;
+}
+
 TriggerType EventManager::ToTriggerType(const std::string& strData)
 {
 	if (strData == "GameStart") return TriggerType::GameStart;
@@ -275,6 +281,11 @@ bool EventManager::CheckTrigger(const EventData& data)
 		}
 	}
 		break;
+	case TriggerType::EventEnd:
+	{
+		int eventNo = GetParamNum(data.triggerParam);
+		return IsEventEnd(eventNo);
+	}
 	case TriggerType::OpenChest:
 	{
 		int chestNo = GetParamNum(data.triggerParam);
