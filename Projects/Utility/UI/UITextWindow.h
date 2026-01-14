@@ -31,7 +31,25 @@ public:
 	void Update()override;
 	void Draw()const override;
 
+	/// <summary>
+	/// ページを進める
+	/// </summary>
+	/// <returns>true : まだ進められる false : もう進められない</returns>
+	bool AdvancePages();
+
+	/// <summary>
+	/// ウィンドウを閉じる
+	/// </summary>
+	/// <param name="disappearDuration">ウィンドウが閉じるまでの時間</param>
+	void CloseWindow(float disappearDuration);
+
 	bool IsAlive()const override;
+
+	/// <summary>
+	/// ページ付きのウィンドウを表示する(AppearFromCenterで表示します)
+	/// </summary>
+	/// <param name="duration">表示が終わるまでの時間</param>
+	void ShowPaging(float duration);
 
 	/// <summary>
 	/// ウィンドウを右から表示する(スライドして動いてくる)
@@ -80,5 +98,9 @@ private:
 
 	TextPager m_textPager; // ページ付きのテキストデータを管理するために使う
 
+	/// <summary>
+	/// 現在のページのテキストを適用する
+	/// </summary>
+	void ApplyCurrentPageText();
 };
 
