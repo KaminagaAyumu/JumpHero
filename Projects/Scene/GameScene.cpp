@@ -238,6 +238,30 @@ void GameScene::SetEventFunc()
 			return false;
 		};
 
+	// 指定されたアイテムが取得されたかどうかの関数を定義
+	m_pEventSensors->isGetItemFunc = [this](const std::string& id)
+		{
+			auto type = Types::ItemType::Coin;
+			if (id == "coin") // テスト用
+			{
+				type = Types::ItemType::Coin;
+			}
+			if (id == "medal")
+			{
+				type = Types::ItemType::UpgradeMedal;
+			}
+			if (id == "toitem")
+			{
+				type = Types::ItemType::ChangeToCoin;
+			}
+			if (id == "balloon")
+			{
+				type = Types::ItemType::Balloon;
+			}
+
+			return m_pGameManager->IsItemPicked(type);
+		};
+
 	// OKボタンが押されたかどうかの関数を定義
 	m_pEventSensors->isPressedButtonFunc = [this]()
 		{

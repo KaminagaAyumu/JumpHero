@@ -20,12 +20,12 @@ namespace
 	constexpr int kOnce = 5;
 
 	const Size kTextWindowSize = { 700,300 }; // テキストウィンドウのサイズ
-	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100}; // テキストウィンドウの座標
+	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100 }; // テキストウィンドウの座標
 	constexpr float kTextWindowAppearDuration = 2.0f; // テキストウィンドウが出てくるまでの時間
 
 }
 
-EventManager::EventManager() : 
+EventManager::EventManager() :
 	m_eventIndex(0),
 	m_timeCount(0),
 	m_isWaitingInput(false)
@@ -94,7 +94,7 @@ void EventManager::Update()
 	if (CheckTrigger(m_eventData[m_eventIndex]))
 	{
 		RunAction(m_eventData[m_eventIndex]);
-		if(!m_isWaitingInput) // WaitInputではない時はそのまま次のイベントへ
+		if (!m_isWaitingInput) // WaitInputではない時はそのまま次のイベントへ
 		{
 			m_eventIndex++;
 		}
@@ -280,7 +280,7 @@ bool EventManager::CheckTrigger(const EventData& data)
 			return true;
 		}
 	}
-		break;
+	break;
 	case TriggerType::EventEnd:
 	{
 		int eventNo = GetParamNum(data.triggerParam);
@@ -291,6 +291,9 @@ bool EventManager::CheckTrigger(const EventData& data)
 		int chestNo = GetParamNum(data.triggerParam);
 		return sensors->isOpenChestFunc(chestNo);
 	}
+	break;
+	case TriggerType::GetItem:
+		return sensors->isGetItemFunc(data.triggerParam);
 		break;
 	default:
 		break;
@@ -320,7 +323,7 @@ void EventManager::RunAction(const EventData& data)
 		int chestNo = GetParamNum(data.triggerParam);
 		controls->dropItemFunc(chestNo, data.actionParam);
 	}
-		break;
+	break;
 	case ActionType::WaitInput:
 		m_isWaitingInput = true; // ボタンが押されるまで待つようにする
 		break;
@@ -343,7 +346,7 @@ void EventManager::RunCommonAction(const EventData& data)
 		int chestNo = GetParamNum(data.triggerParam);
 		controls->dropItemFunc(chestNo, data.actionParam);
 	}
-		break;
+	break;
 	default:
 		break;
 	}
