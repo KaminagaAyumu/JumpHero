@@ -116,6 +116,13 @@ public:
 	void SetCameraTarget(const Position2* pos);
 
 	/// <summary>
+	/// プレイヤーが指定の座標を超えたかどうかを判定する
+	/// </summary>
+	/// <param name="area">指定エリア</param>
+	/// <returns>true : 超えている false : 超えていない</returns>
+	bool IsExceededPlayer(const Position2& area);
+
+	/// <summary>
 	/// カメラの補正が終わったかどうか
 	/// </summary>
 	/// <returns>true : 終わった false : 終わっていない</returns>

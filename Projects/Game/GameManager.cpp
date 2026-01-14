@@ -304,6 +304,11 @@ void GameManager::SetCameraTarget(const Position2* pos)
 	m_pCamera->SetTarget(pos);
 }
 
+bool GameManager::IsExceededPlayer(const Position2& area)
+{
+	return m_pPlayer->GetPos().x >= area.x;
+}
+
 bool GameManager::IsCameraLerpEnd()
 {
 	return m_pCamera->IsLerpEnd();

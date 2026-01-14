@@ -221,7 +221,8 @@ void GameScene::SetEventFunc()
 	// 指定エリアに入ったかどうかの関数を定義
 	m_pEventSensors->isEnterAreaFunc = [this](int areaNo)
 		{
-			return false;
+			// プレイヤーを持っているゲームマネージャーがエリアに入ったかどうかを判定する
+			return m_pGameManager->IsExceededPlayer(m_pPositionRegistry->GetAreaPos(areaNo));
 		};
 
 	// 指定番号の宝箱が開いたかどうかの関数を定義

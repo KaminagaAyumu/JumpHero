@@ -262,15 +262,18 @@ bool EventManager::CheckTrigger(const EventData& data)
 	case TriggerType::EnterArea:
 	{
 		int areaNo = GetParamNum(data.triggerParam);
-
+		return sensors->isEnterAreaFunc(areaNo);
 	}
+	break;
 	case TriggerType::TimeElapsed:
+	{
 		int endTime = GetParamNum(data.triggerParam);
 		if (m_timeCount >= endTime)
 		{
 			m_timeCount = 0;
 			return true;
 		}
+	}
 		break;
 	case TriggerType::OpenChest:
 	{
