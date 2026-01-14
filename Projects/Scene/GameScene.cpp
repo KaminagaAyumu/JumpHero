@@ -274,11 +274,17 @@ void GameScene::SetEventFunc()
 			return m_isInputOK;
 		};
 
+	// 敵のスポーン位置を取得する関数を定義
+	m_pEventSensors->getSpawnPositionsFunc = [this]()
+		{
+			return m_pPositionRegistry->GetSpawnPosAll();
+		};
 
 	// -----------------------------------------------------
 	// イベントコントロールの関数
 	// -----------------------------------------------------
 
+	// テキストウィンドウを表示する関数を定義
 	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const Size& size, const Position2& pos, float duration)
 		{
 			// ページ付きのテキストウィンドウを作成
@@ -286,6 +292,8 @@ void GameScene::SetEventFunc()
 			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration);
 			return ptr;
 		};
+	
+	// アイテムをドロップする関数を定義
 	m_pEventControls->dropItemFunc = [this](int chestNo, const std::string& itemType)
 		{
 			Types::ItemType type; // 生成するアイテムが何かを判別する
@@ -306,6 +314,14 @@ void GameScene::SetEventFunc()
 			}
 
 			m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type, false);
+		};
+
+	m_pEventControls->spawnEnemiesFunc = [this](std::vector<Position2> pos, int formNo)
+		{
+			for (const auto& pos : pos)
+			{
+				m_pGameManager->SpawnEnemy(pos, formNo);
+			}
 		};
 }
 

@@ -23,6 +23,8 @@ namespace
 	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100 }; // テキストウィンドウの座標
 	constexpr float kTextWindowAppearDuration = 2.0f; // テキストウィンドウが出てくるまでの時間
 
+	constexpr int kSpawnEnemyDefaultFormNo = 1;
+
 }
 
 EventManager::EventManager() :
@@ -330,6 +332,26 @@ void EventManager::RunAction(const EventData& data)
 		controls->dropItemFunc(chestNo, data.actionParam);
 	}
 	break;
+	case ActionType::SpawnEnemy:
+	{
+		auto sensors = m_pSensors.lock();
+		controls->spawnEnemiesFunc(sensors->getSpawnPositionsFunc(), kSpawnEnemyDefaultFormNo);
+	}	
+	break;
+	case ActionType::FreezeGame:
+		break;
+	case ActionType::UnFreezeGame:
+		break;
+	case ActionType::FreezePlayer:
+		break;
+	case ActionType::UnFreezePlayer:
+		break;
+	case ActionType::LookCamera:
+		break;
+	case ActionType::ReturnCamera:
+		break;
+	case ActionType::PowerUp:
+		break;
 	case ActionType::WaitInput:
 		m_isWaitingInput = true; // ボタンが押されるまで待つようにする
 		break;

@@ -1,9 +1,10 @@
 ﻿#pragma once
+#include "../TextManager.h"
+#include "../../Utility/Geometry.h"
 #include <functional>
 #include <string>
 #include <memory>
-#include "../TextManager.h"
-#include "../../Utility/Geometry.h"
+#include <vector>
 
 class UITextWindow;
 
@@ -20,5 +21,8 @@ struct EventControls
 
 	// アイテムをドロップする関数
 	std::function<void(int chestNo, const std::string& itemType)> dropItemFunc;
+
+	// 敵を生成する関数
+	std::function<void(const std::vector<Position2>& pos, int formNo)> spawnEnemiesFunc;
 
 };
