@@ -25,4 +25,7 @@ struct EventControls
 	// 敵を生成する関数
 	std::function<void(const std::vector<Position2>& pos, int formNo)> spawnEnemiesFunc;
 
+	// プレイヤーのフリーズ状態を変更する関数
+	std::function<void()> changePlayerFreezeFunc;
+
 };

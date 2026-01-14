@@ -294,6 +294,11 @@ void GameManager::PowerUpPlayer()
 	}
 }
 
+void GameManager::ChangeFreezePlayer()
+{
+	m_pPlayer->FreezeChange();
+}
+
 void GameManager::OpenChestToPosition(int x, int y)
 {
 	m_pChestManager->OpenChestAtPosition(x,y);

@@ -103,6 +103,11 @@ public:
 	void PowerUpPlayer();
 
 	/// <summary>
+	/// プレイヤーのフリーズ状態を変える
+	/// </summary>
+	void ChangeFreezePlayer();
+
+	/// <summary>
 	/// 座標指定した場所の宝箱を開ける
 	/// </summary>
 	/// <param name="x">X座標</param>

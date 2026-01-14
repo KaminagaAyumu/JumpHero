@@ -346,8 +346,10 @@ void EventManager::RunAction(const EventData& data)
 		m_isFreezeGame = false;
 		break;
 	case ActionType::FreezePlayer:
+		controls->changePlayerFreezeFunc();
 		break;
 	case ActionType::UnFreezePlayer:
+		controls->changePlayerFreezeFunc();
 		break;
 	case ActionType::LookCamera:
 		break;

@@ -323,12 +323,19 @@ void GameScene::SetEventFunc()
 			m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type, false);
 		};
 
+	// 敵を指定座標にスポーンさせる関数を定義
 	m_pEventControls->spawnEnemiesFunc = [this](std::vector<Position2> pos, int formNo)
 		{
 			for (const auto& pos : pos)
 			{
 				m_pGameManager->SpawnEnemy(pos, formNo);
 			}
+		};
+
+	// プレイヤーのフリーズ状態を変更する関数を定義
+	m_pEventControls->changePlayerFreezeFunc = [this]()
+		{
+			m_pGameManager->ChangeFreezePlayer();
 		};
 }
 
