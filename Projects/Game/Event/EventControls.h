@@ -31,4 +31,7 @@ struct EventControls
 	// カメラが見るターゲットをセットする関数
 	std::function<void(const std::string& key)> lookCameraFunc;
 
+	// カメラが見るターゲットを戻す関数(基本的にプレイヤーに戻す)
+	std::function<void()> returnCameraFunc;
+
 };

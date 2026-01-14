@@ -342,6 +342,7 @@ void GameScene::SetEventFunc()
 			m_pGameManager->ChangeFreezePlayer();
 		};
 
+	// カメラが見るターゲットを変更する関数を定義
 	m_pEventControls->lookCameraFunc = [this](const std::string& key)
 		{
 			if (key == "spawnPos")
@@ -353,5 +354,12 @@ void GameScene::SetEventFunc()
 				m_pGameManager->SetCameraTarget(m_pPositionRegistry->GetCameraPos(kGoalPosChipNo));
 			}
 		};
+
+	// カメラが見るターゲットをプレイヤーに戻す関数を定義
+	m_pEventControls->returnCameraFunc = [this]()
+		{
+			m_pGameManager->ReturnCameraPlayer();
+		};
+
 }
 

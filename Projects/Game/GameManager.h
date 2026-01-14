@@ -133,6 +133,11 @@ public:
 	void SetCameraTargetProvider(std::function<Position2()> provider);
 
 	/// <summary>
+	/// カメラが見るターゲットをプレイヤーに戻す
+	/// </summary>
+	void ReturnCameraPlayer();
+
+	/// <summary>
 	/// プレイヤーが指定の座標を超えたかどうかを判定する
 	/// </summary>
 	/// <param name="area">指定エリア</param>

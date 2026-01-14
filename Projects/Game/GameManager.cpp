@@ -319,6 +319,11 @@ void GameManager::SetCameraTargetProvider(std::function<Position2()> provider)
 	m_pCamera->SetTargetProvider(provider);
 }
 
+void GameManager::ReturnCameraPlayer()
+{
+	m_pCamera->SetTargetProvider([this]() {return m_pPlayer->GetPos(); });
+}
+
 bool GameManager::IsExceededPlayer(const Position2& area)
 {
 	return m_pPlayer->GetPos().x >= area.x;

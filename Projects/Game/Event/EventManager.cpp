@@ -355,11 +355,14 @@ void EventManager::RunAction(const EventData& data)
 		controls->lookCameraFunc(data.actionParam);
 		break;
 	case ActionType::ReturnCamera:
+		controls->returnCameraFunc();
 		break;
 	case ActionType::PowerUp:
-		break;
+		break; // 現状何もしていない(パワーアップ固定などをするためのもの)
 	case ActionType::WaitInput:
 		m_isWaitingInput = true; // ボタンが押されるまで待つようにする
+		break;
+	case ActionType::SetBarrier:
 		break;
 	default:
 		break;
