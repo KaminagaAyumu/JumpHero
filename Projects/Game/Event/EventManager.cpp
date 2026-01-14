@@ -2,6 +2,7 @@
 #include "EventManager.h"
 #include "../../Utility/Input.h"
 #include "../../Utility/Game.h"
+#include "../../Utility/UI/UITextWindow.h"
 #include <fstream>
 #include <sstream>
 
@@ -25,7 +26,8 @@ namespace
 }
 
 EventManager::EventManager() : 
-	m_eventIndex(0)
+	m_eventIndex(0),
+	m_isWaitingInput(false)
 {
 }
 
@@ -33,9 +35,11 @@ EventManager::~EventManager()
 {
 }
 
-void EventManager::Update(Input& input)
+void EventManager::Update()
 {
-	m_isInput = input.IsTriggered("OK");
+	auto controls = m_pControls.lock();
+	auto sensors = m_pSensors.lock();
+	if (!sensors) return;
 
 	for (auto& common : m_commonEventData)
 	{
@@ -51,10 +55,47 @@ void EventManager::Update(Input& input)
 		}
 	}
 
-	/*if (CheckTrigger(m_eventData[m_eventIndex]))
+	// 固定イベントが終わったらイベントの判定を行わない
+	if (m_eventIndex >= static_cast<int>(m_eventData.size()))
+	{
+		return;
+	}
+
+	// ボタンの入力待ちの場合
+	if (m_isWaitingInput)
+	{
+		// OKボタンが押されていたら
+		if (sensors->isPressedButtonFunc())
+		{
+			// テキストウィンドウを取得したら
+			if (auto window = m_currentTextWindow.lock())
+			{
+				// テキストのページがまだ進められるかどうかを判定
+				bool stillOpen = window->AdvancePages();
+				if (!stillOpen)
+				{
+					m_isWaitingInput = false; // 入力待ち状態を終わる
+					m_currentTextWindow.reset(); // テキストウィンドウの監視を終わる
+					m_eventIndex++; // イベントを進める
+				}
+			}
+			else // テキストウィンドウがない場合は解除
+			{
+				m_isWaitingInput = false;
+				m_eventIndex++;
+			}
+		}
+		return; // これより先には進まない(イベントの進行を止める)
+	}
+
+	if (CheckTrigger(m_eventData[m_eventIndex]))
 	{
 		RunAction(m_eventData[m_eventIndex]);
-	}*/
+		if(!m_isWaitingInput) // WaitInputではない時はそのまま次のイベントへ
+		{
+			m_eventIndex++;
+		}
+	}
 }
 
 void EventManager::Draw() const
@@ -240,6 +281,9 @@ void EventManager::RunAction(const EventData& data)
 		int chestNo = GetParamNum(data.triggerParam);
 		controls->dropItemFunc(chestNo, data.actionParam);
 	}
+		break;
+	case ActionType::WaitInput:
+		m_isWaitingInput = true; // ボタンが押されるまで待つようにする
 		break;
 	default:
 		break;

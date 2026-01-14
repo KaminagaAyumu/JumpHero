@@ -26,3 +26,6 @@ info_jump_2,2,ジャンプ中にもう一度Aボタンを押すとその場で少し浮かぶ！
 info_chest,1,宝箱の上でAボタン！
 info_item,1,出てきたアイテムに触れてみよう！
 info_balloon,1,風船に触れてみよう！
+stage1_test,1,テスト用です
+stage1_test,2,次のページで終わりです
+stage1_test,3,終わります

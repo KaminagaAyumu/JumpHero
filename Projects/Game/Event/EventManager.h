@@ -16,7 +16,7 @@ public:
 	EventManager();
 	virtual ~EventManager();
 
-	void Update(Input& input);
+	void Update();
 	void Draw() const;
 
 	/// <summary>
@@ -41,7 +41,7 @@ public:
 private:
 
 	int m_eventIndex; // イベントの進行状況
-	bool m_isInput; // ページをめくるときに使う
+	bool m_isWaitingInput; // テキストウィンドウのページをめくるときに使う
 
 	std::weak_ptr<EventControls> m_pControls;
 	std::weak_ptr<EventSensors> m_pSensors;
