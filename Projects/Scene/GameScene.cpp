@@ -125,6 +125,8 @@ void GameScene::NormalUpdate(Input& input)
 	// OKボタンが押されたかどうかを判定する
 	m_isInputOK = input.IsTriggered("OK");
 
+	m_pUIManager->Update();
+
 	m_pEventManager->Update();
 
 	// ゲームマネージャーの更新

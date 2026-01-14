@@ -19,9 +19,9 @@ namespace
 	constexpr int kActionParam = 4;
 	constexpr int kOnce = 5;
 
-	const Size kTextWindowSize = { 500,500 }; // テキストウィンドウのサイズ
+	const Size kTextWindowSize = { 700,300 }; // テキストウィンドウのサイズ
 	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100}; // テキストウィンドウの座標
-	constexpr float kTextWindowAppearDuration = 10.0f; // テキストウィンドウが出てくるまでの時間
+	constexpr float kTextWindowAppearDuration = 2.0f; // テキストウィンドウが出てくるまでの時間
 
 }
 

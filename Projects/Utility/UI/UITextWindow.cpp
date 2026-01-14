@@ -138,6 +138,10 @@ void UITextWindow::CloseWindow(float disappearDuration)
 	m_textPager.isActive = false;
 	// ステートを消える際の状態にする
 	m_state = TextWindowState::Disappearing;
+	// 表示率をリセット
+	m_appearRate = 0.0f;
+	// 目標サイズを高さ0に設定
+	m_targetSize = { m_size.width, 0 };
 	// 消えるまでの時間を設定
 	m_appearDuration = disappearDuration;
 }
