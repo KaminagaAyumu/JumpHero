@@ -162,6 +162,7 @@
     <ClCompile Include="Game\StayEnemy.cpp" />
     <ClCompile Include="Utility\AnimationLoader.cpp" />
     <ClCompile Include="Utility\Sound\SoundManager.cpp" />
+    <ClCompile Include="Utility\UI\UISelectList.cpp" />
     <ClCompile Include="Utility\UI\UIText.cpp" />
     <ClCompile Include="Utility\UI\UITextWindow.cpp" />
     <ClCompile Include="Utility\StringFunction.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="Game\StayEnemy.h" />
     <ClInclude Include="Utility\AnimationLoader.h" />
     <ClInclude Include="Utility\Sound\SoundManager.h" />
+    <ClInclude Include="Utility\UI\UISelectList.h" />
     <ClInclude Include="Utility\UI\UIText.h" />
     <ClInclude Include="Utility\UI\UITextWindow.h" />
     <ClInclude Include="Utility\StringFunction.h" />
