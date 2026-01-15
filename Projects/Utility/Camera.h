@@ -23,11 +23,6 @@ public:
 
 	Vector2 scroll; // 画面上のオブジェクトのスクロール量
 
-	/// <summary>
-	/// カメラが見るターゲットをセットする
-	/// </summary>
-	/// <param name="pos">ターゲットの座標のポインタ</param>
-	void SetTarget(const Position2* pos) { m_pTargetPos = pos; }
 
 	/// <summary>
 	/// カメラが見るターゲットをセットする
@@ -69,7 +64,6 @@ private:
 
 	Position2 m_pos; // カメラの座標
 	Size m_mapSize; // マップのサイズ
-	const Position2* m_pTargetPos; // カメラが見るターゲットの座標
 	Position2 m_fixedTarget; // 直接指定する用のターゲット
 	std::function<Position2()> m_targetProvider; // ターゲットを示す関数を取得するためのもの
 

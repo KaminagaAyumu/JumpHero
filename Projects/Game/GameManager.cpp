@@ -51,7 +51,7 @@ GameManager::GameManager(Map* map, std::vector<std::weak_ptr<Actor>>& actors) :
 	m_pItemManager->PushActors(actors);
 	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this, map);
 
-	m_pCamera->SetTarget(&m_pPlayer->GetPos());
+	m_pCamera->SetTargetProvider([this]() {return m_pPlayer->GetPos(); });
 
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
@@ -302,11 +302,6 @@ void GameManager::ChangeFreezePlayer()
 void GameManager::OpenChestToPosition(int x, int y)
 {
 	m_pChestManager->OpenChestAtPosition(x,y);
-}
-
-void GameManager::SetCameraTarget(const Position2* pos)
-{
-	m_pCamera->SetTarget(pos);
 }
 
 void GameManager::SetCameraTarget(const Position2& pos)

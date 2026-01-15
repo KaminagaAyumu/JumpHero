@@ -362,11 +362,11 @@ void TutorialManager::LookCamera(std::string param)
 	// メモ:一時変数などでポジションを入れると破棄されてしまうので注意
 	if (param == "spawnPos")
 	{
-		m_pGameManager->SetCameraTarget(&m_cameraPos[kSpawnPosChipNo]);
+		//m_pGameManager->SetCameraTarget(&m_cameraPos[kSpawnPosChipNo]);
 	}
 	if (param == "goalPos")
 	{
-		m_pGameManager->SetCameraTarget(&m_cameraPos[kGoalPosChipNo]);
+		//m_pGameManager->SetCameraTarget(&m_cameraPos[kGoalPosChipNo]);
 	}
 }
 
@@ -531,7 +531,7 @@ void TutorialManager::RunAction(const EventData& data)
 	}
 		break;
 	case ActionType::ReturnCamera:
-		m_pGameManager->SetCameraTarget(&m_pPlayer->GetPos());
+		//m_pGameManager->SetCameraTarget(&m_pPlayer->GetPos());
 		break;
 	case ActionType::PowerUp:
 		break;
@@ -649,7 +649,7 @@ void TutorialManager::RunCommonAction(const EventData& data)
 	}
 	break;
 	case ActionType::ReturnCamera:
-		m_pGameManager->SetCameraTarget(&m_pPlayer->GetPos());
+		//m_pGameManager->SetCameraTarget(&m_pPlayer->GetPos());
 		break;
 	case ActionType::PowerUp:
 		break;

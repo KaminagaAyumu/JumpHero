@@ -14,7 +14,6 @@ Camera::Camera(const Size& size) :
 	scroll{},
 	m_pos{},
 	m_mapSize(size),
-	m_pTargetPos(nullptr),
 	m_fixedTarget{}
 {
 }
@@ -30,7 +29,6 @@ void Camera::Init(const Size& size)
 
 void Camera::Update()
 {
-	assert(m_pTargetPos != nullptr && L"カメラのターゲット取得失敗");
 
 	if (m_mode == Mode::None)
 	{
