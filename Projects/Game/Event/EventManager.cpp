@@ -47,7 +47,7 @@ void EventManager::Update()
 	auto sensors = m_pSensors.lock();
 	if (!sensors) return;
 
-	m_timeCount++;
+	//m_timeCount++;
 
 	for (auto& common : m_commonEventData)
 	{
@@ -303,12 +303,19 @@ bool EventManager::CheckTrigger(const EventData& data)
 	break;
 	case TriggerType::TimeElapsed:
 	{
+		m_timeCount++;
 		int endTime = GetParamNum(data.triggerParam);
 		if (m_timeCount >= endTime)
 		{
 			m_timeCount = 0;
 			return true;
 		}
+		/*int endTime = GetParamNum(data.triggerParam);
+		if (m_timeCount >= endTime)
+		{
+			m_timeCount = 0;
+			return true;
+		}*/
 	}
 	break;
 	case TriggerType::EventEnd:
