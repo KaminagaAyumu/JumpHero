@@ -334,7 +334,7 @@ void GameScene::SetEventFunc()
 		};
 
 	// 敵を指定座標にスポーンさせる関数を定義
-	m_pEventControls->spawnEnemiesFunc = [this](std::vector<Position2> pos, int formNo)
+	m_pEventControls->spawnEnemiesFunc = [this](const std::vector<Position2>& pos, int formNo)
 		{
 			for (const auto& pos : pos)
 			{
