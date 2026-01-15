@@ -36,7 +36,8 @@ GameManager::GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor
 	m_balloonNum(0),
 	m_balloonCounter(0),
 	m_totalBalloonNum(0),
-	m_isMiniGame(false)
+	m_isMiniGame(false),
+	m_isTutorial(false)
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
@@ -95,7 +96,7 @@ GameManager::~GameManager()
 {
 }
 
-void GameManager::Init()
+void GameManager::Init(bool isTutorial)
 {
 	m_life = kFirstLife;
 	m_medalNum = 0;
@@ -103,6 +104,7 @@ void GameManager::Init()
 	m_balloonCounter = 0;
 	m_totalBalloonNum = 0;
 	m_isMiniGame = false;
+	m_isTutorial = isTutorial;
 }
 
 void GameManager::MiniGameInit(std::weak_ptr<Map> map)
@@ -257,11 +259,11 @@ void GameManager::DropItem(const Position2& pos)
 	}
 }
 
-void GameManager::DropItem(const Position2& pos, const Types::ItemType& type, bool isTutorial)
+void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 {
 	m_pItemManager->SpawnItem(pos, type);
 	// チュートリアルでない場合
-	if (IsDropChangeToCoin() && !isTutorial) // 敵をコインに変えるアイテムを落とすか判定
+	if (IsDropChangeToCoin() && !m_isTutorial) // 敵をコインに変えるアイテムを落とすか判定
 	{
 		m_pItemManager->SpawnItem(pos, Types::ItemType::ChangeToCoin);
 	}

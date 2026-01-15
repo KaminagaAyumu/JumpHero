@@ -495,10 +495,10 @@ void TutorialManager::RunAction(const EventData& data)
 		{
 			type = Types::ItemType::ChangeToCoin;
 			// 通常のアイテム(コイン)をまず生成
-			m_pGameManager->DropItem(m_chestPos[chestNum], Types::ItemType::Coin, true);
+			m_pGameManager->DropItem(m_chestPos[chestNum], Types::ItemType::Coin);
 		}
 		
-		m_pGameManager->DropItem(m_chestPos[chestNum], type, true);
+		m_pGameManager->DropItem(m_chestPos[chestNum], type);
 	}
 		break;
 	case ActionType::SpawnEnemy:
@@ -613,10 +613,10 @@ void TutorialManager::RunCommonAction(const EventData& data)
 		{
 			type = Types::ItemType::ChangeToCoin;
 			// 通常のアイテム(コイン)をまず生成
-			m_pGameManager->DropItem(m_chestPos[chestNum], Types::ItemType::Coin, true);
+			m_pGameManager->DropItem(m_chestPos[chestNum], Types::ItemType::Coin);
 		}
 
-		m_pGameManager->DropItem(m_chestPos[chestNum], type, true);
+		m_pGameManager->DropItem(m_chestPos[chestNum], type);
 	}
 	break;
 	case ActionType::SpawnEnemy:

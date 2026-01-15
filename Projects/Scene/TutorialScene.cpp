@@ -40,7 +40,7 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_pMap->Init();
 
 	m_pGameManager = std::make_shared<GameManager>(m_pMap, m_pActors);
-	m_pGameManager->Init();
+	m_pGameManager->Init(true);
 
 	m_pTutorialManager = std::make_unique<TutorialManager>(m_pGameManager.get(), m_pTextManager.get(), m_pMap.get(), m_pGameManager->GetPlayer());
 

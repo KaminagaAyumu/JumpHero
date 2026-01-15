@@ -57,7 +57,8 @@ m_fadeColor(0x000000)
 	m_pMap->Init();
 
 	m_pGameManager = std::make_shared<GameManager>(m_pMap,m_pActors);
-	m_pGameManager->Init();
+	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
+	m_pGameManager->Init(isTutorial);
 
 	m_pUIManager = std::make_unique<UIManager>();
 
@@ -327,10 +328,10 @@ void GameScene::SetEventFunc()
 			{
 				type = Types::ItemType::ChangeToCoin;
 				// 通常のアイテム(コイン)をまず生成
-				m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), Types::ItemType::Coin, false);
+				m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), Types::ItemType::Coin);
 			}
 
-			m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type, false);
+			m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type);
 		};
 
 	// 敵を指定座標にスポーンさせる関数を定義

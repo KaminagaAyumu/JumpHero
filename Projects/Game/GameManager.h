@@ -29,7 +29,11 @@ public:
 	GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor>>& actors);
 	virtual ~GameManager();
 
-	void Init();
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="isTutorial">チュートリアルかどうかを判別する(trueならチュートリアル)</param>
+	void Init(bool isTutorial);
 	void MiniGameInit(std::weak_ptr<Map> map); // 一旦マップを取得するだけで使う
 	void Update(Input& input);
 	void Draw() const;
@@ -86,8 +90,7 @@ public:
 	/// </summary>
 	/// <param name="pos">生成座標</param>
 	/// <param name="type">アイテムの種類</param>
-	/// <param name="isTutorial">現在がチュートリアルかどうか</param>
-	void DropItem(const Position2& pos, const Types::ItemType& type, bool isTutorial);
+	void DropItem(const Position2& pos, const Types::ItemType& type);
 
 	/// <summary>
 	/// 敵の変身先を指定して生成する通知をEnemyManagerに送る関数
@@ -213,6 +216,7 @@ private:
 	int m_balloonCounter; // 風船の数のカウンタ
 	int m_totalBalloonNum; // そのステージに存在する風船の総数
 	bool m_isMiniGame; // ミニゲーム中かどうか
+	bool m_isTutorial; // チュートリアルかどうか
 
 	std::unordered_map<Types::ItemType, std::function<void()>> m_itemCollectFunc;
 
@@ -228,7 +232,7 @@ private:
 	std::deque<ItemPickUpEvent> m_itemPickEvent; // アイテムを取得したかどうかのイベント
 
 	// 各オブジェクト管理クラスの参照用
-	std::weak_ptr<Map> m_pMap;
+	std::weak_ptr<Map> m_pMap; // マップはゲームシーンにshared_ptrで持たせるのでweak_ptr
 	std::unique_ptr<Camera> m_pCamera;
 	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
