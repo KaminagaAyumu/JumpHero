@@ -32,16 +32,14 @@ namespace
 
 	// 演出関連
 	constexpr float	kItemWarningRate		= 0.20f;	// アイテム化が終わりそうなことを示す時間の割合
-	constexpr float kWarningFrashCycle		= 0.30f;	// 点滅の周期
+	constexpr float kWarningFrashCycle		= 0.15f;	// 点滅の周期
 	constexpr int	kMaxFadeRate			= 255;		// フェード率の最大値
 
 	// アニメーション関連
 	constexpr int	kGraphWidth				= 64;		// 敵画像1枚の幅
 	constexpr int	kGraphHeight			= 64;		// 敵画像1枚の高さ
 	constexpr float	kGraphScale				= 0.625;	// 敵画像の拡大率(サイズが40*40になる)
-
-	constexpr int	kAnimNormalWalkNum		= 12;		// 通常歩きアニメーションの枚数
-	constexpr int	kAnimNormalWalkFrame	= 5;		// 通常歩きアニメーションのフレーム数
+	constexpr float kCoinScale				= 0.25;		// コイン画像の拡大率(サイズが16*16になる)
 }
 
 TransformEnemy::TransformEnemy(const Position2& pos, Player* player, std::weak_ptr<Map> map, EnemyForm changeForm, std::unordered_map<std::string, Animation>& animations) :
@@ -101,10 +99,6 @@ void TransformEnemy::Update(Input& input)
 
 void TransformEnemy::Draw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-
-	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 	(this->*m_drawFunc)();
 }
 
@@ -338,6 +332,7 @@ void TransformEnemy::NormalDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
@@ -350,6 +345,8 @@ void TransformEnemy::TransformDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
+
 	DrawString(drawX, drawY, L"変身中です", 0xffffff);
 }
 
@@ -358,7 +355,8 @@ void TransformEnemy::SeekerDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
+
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -370,7 +368,8 @@ void TransformEnemy::FireBallDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
-	
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
+
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -382,6 +381,7 @@ void TransformEnemy::SkullDraw()
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 	
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
@@ -401,14 +401,12 @@ void TransformEnemy::ItemDraw()
 		auto sinRate = 1.0f - sinf(m_itemFormTime / (m_maxItemFormTime * kItemWarningRate * kWarningFrashCycle) * DX_PI_F * 2);
 		auto rate = static_cast<float>(m_itemFormTime) / (m_maxItemFormTime * kItemWarningRate) / 2;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * sinRate));
-		DrawString(drawX, drawY, L"もうすぐ敵に戻ります", 0xff0000);
-		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else // それ以前なら
 	{
-		DrawString(drawX, drawY, L"アイテムに変化中", 0xff0000);
-		DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 	}
 
 #ifdef _DEBUG
@@ -426,6 +424,7 @@ void TransformEnemy::SetAnimScale()
 	m_animations["Seeker"].SetScale(kGraphScale);
 	m_animations["Skull"].SetScale(kGraphScale);
 	m_animations["FireBall"].SetScale(kGraphScale);
+	m_animations["Coin"].SetScale(kCoinScale);
 }
 
 void TransformEnemy::CheckAnimation()
@@ -460,6 +459,10 @@ void TransformEnemy::CheckAnimation()
 	else if (m_updateFunc == &TransformEnemy::FireBallUpdate)
 	{
 		ChangeAnimation(m_animations["FireBall"]);
+	}
+	else if (m_updateFunc == &TransformEnemy::ItemUpdate)
+	{
+		ChangeAnimation(m_animations["Coin"]);
 	}
 }
 
