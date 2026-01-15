@@ -19,7 +19,8 @@ public:
 	/// <param name="text">表示するテキストの内容</param>
 	/// <param name="size">ウィンドウのサイズ</param>
 	/// <param name="target">表示する中心座標</param>
-	void Init(std::string text, Size size, const Position2& target);
+	/// <param name="fontHandle">フォントのハンドル</param>
+	void Init(std::string text, Size size, const Position2& target, int fontHandle);
 
 	/// <summary>
 	/// 複数ページのテキストデータをセットする
@@ -27,12 +28,6 @@ public:
 	/// <param name="id">テキストのID</param>
 	/// <param name="pages">テキストの内容</param>
 	void SetPages(const std::string& id, const std::vector<TextData>& pages);
-
-	/// <summary>
-	/// フォントのハンドルをセットする
-	/// </summary>
-	/// <param name="handle">フォントのハンドル</param>
-	void SetHandle(int handle);
 
 	void Update()override;
 	void Draw()const override;

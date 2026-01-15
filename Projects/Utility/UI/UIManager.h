@@ -30,8 +30,9 @@ public:
 	/// <param name="text"></param>
 	/// <param name="size"></param>
 	/// <param name="pos"></param>
+	/// <param name="fontType">フォントのタイプ</param>
 	/// <returns></returns>
-	std::weak_ptr<UITextWindow> CreateTextWindow(const std::string& text, const Size& size, const Position2& pos);
+	std::weak_ptr<UITextWindow> CreateTextWindow(const std::string& text, const Size& size, const Position2& pos, Types::FontType fontType);
 
 	/// <summary>
 	/// ページ付きのテキストウィンドウを作成する関数
@@ -41,8 +42,9 @@ public:
 	/// <param name="size"></param>
 	/// <param name="pos"></param>
 	/// <param name="appearDuration"></param>
+	/// <param name="fontType">フォントのタイプ</param>
 	/// <returns></returns>
-	std::weak_ptr<UITextWindow> CreateTextWindowPaged(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float appearDuration);
+	std::weak_ptr<UITextWindow> CreateTextWindowPaged(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float appearDuration, Types::FontType fontType);
 
 	/// <summary>
 	/// テキストを作成する関数

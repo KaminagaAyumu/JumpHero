@@ -10,7 +10,7 @@ namespace
 {
 	constexpr int	kOneFrameNanoSec = 16667; // 1フレームのナノ秒(60FPS)
 
-	const wchar_t* kFontPath = L"data/toroman.ttf"; // プロジェクト内にあるフォントデータのパス
+	const wchar_t* kFontPath = L"data/craftmincho.otf"; // プロジェクト内にあるフォントデータのパス
 }
 
 Application::Application()

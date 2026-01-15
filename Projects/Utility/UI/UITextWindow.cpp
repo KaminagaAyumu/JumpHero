@@ -32,12 +32,13 @@ UITextWindow::~UITextWindow()
 {
 }
 
-void UITextWindow::Init(std::string text, Size size, const Position2& target)
+void UITextWindow::Init(std::string text, Size size, const Position2& target, int fontHandle)
 {
 	m_text = text; // テキストの内容を設定
 	m_targetSize = size; // 目標サイズを設定
 	m_targetPos = target; // 目標位置を設定
 	m_pos = m_startPos; // 初期位置を設定
+	m_fontHandle = fontHandle;
 }
 
 void UITextWindow::SetPages(const std::string& id, const std::vector<TextData>& pages)
@@ -46,11 +47,6 @@ void UITextWindow::SetPages(const std::string& id, const std::vector<TextData>& 
 	m_textPager.pages = pages;
 	m_textPager.index = 0;
 	m_textPager.isActive = false; // セット時には非アクティブにする
-}
-
-void UITextWindow::SetHandle(int handle)
-{
-	m_fontHandle = handle;
 }
 
 void UITextWindow::Update()

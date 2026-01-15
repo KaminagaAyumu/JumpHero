@@ -45,17 +45,7 @@ TutorialManager::TutorialManager(GameManager* gameManager, TextManager* textMana
 	m_pPlayer = player;
 	m_pUIManager = std::make_shared<UIManager>();
 	m_pUIManager->Init();
-	auto test = m_pUIManager->CreateTextWindow("目標", { 200,50 }, { 170,500 });
-	if (auto testPtr = test.lock())
-	{
-		testPtr->ShowFromRight(4.0f);
-	}
-	auto test2 = m_pUIManager->CreateTextWindow("説明", { 200,50 }, { 170,570 });
-	if (auto test2Ptr = test2.lock())
-	{
-		test2Ptr->AppearFromCenter(4.0f);
-	}
-	auto test3 = m_pUIManager->CreateText(Types::FontType::Small, "testあああ123", { 170,400 });
+	auto test = m_pUIManager->CreateText(Types::FontType::Small, "testあああ123", { 170,400 });
 	LoadEventData();
 	InitEventPos();
 	LoadCommonEventData();

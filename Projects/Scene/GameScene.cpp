@@ -307,7 +307,8 @@ void GameScene::SetEventFunc()
 		{
 			// ページ付きのテキストウィンドウを作成
 			auto pages = m_pTextManager->GetAllPageText(id);
-			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration);
+			// テキストウィンドウの内容を初期化(文字は最小サイズにする)
+			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration,Types::FontType::Small);
 			return ptr;
 		};
 	
