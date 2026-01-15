@@ -292,7 +292,7 @@ void GameScene::SetEventFunc()
 		};
 
 	// 敵のスポーン位置を取得する関数を定義
-	m_pEventSensors->getSpawnPositionsFunc = [this]()
+	m_pEventSensors->getSpawnPositionsFunc = [this]()->const std::vector<Position2>&
 		{
 			return m_pPositionRegistry->GetSpawnPosAll();
 		};
@@ -336,9 +336,9 @@ void GameScene::SetEventFunc()
 	// 敵を指定座標にスポーンさせる関数を定義
 	m_pEventControls->spawnEnemiesFunc = [this](const std::vector<Position2>& pos, int formNo)
 		{
-			for (const auto& pos : pos)
+			for (const auto& enemyPos : pos)
 			{
-				m_pGameManager->SpawnEnemy(pos, formNo);
+				m_pGameManager->SpawnEnemy(enemyPos, formNo);
 			}
 		};
 

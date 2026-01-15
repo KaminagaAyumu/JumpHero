@@ -5,6 +5,7 @@
 #include "../../Utility/UI/UITextWindow.h"
 #include <fstream>
 #include <sstream>
+#include "DxLib.h" // printfDxを出すためだけに使っているので消していい
 
 namespace
 {
