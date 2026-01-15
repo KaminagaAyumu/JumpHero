@@ -23,6 +23,7 @@ UITextWindow::UITextWindow() :
 	m_isChangePos(false),
 	m_isChangeSize(false),
 	m_aliveFrame(kDefaultAliveTime),
+	m_fontHandle(-1),
 	m_textPager{}
 {
 }
@@ -45,6 +46,11 @@ void UITextWindow::SetPages(const std::string& id, const std::vector<TextData>& 
 	m_textPager.pages = pages;
 	m_textPager.index = 0;
 	m_textPager.isActive = false; // セット時には非アクティブにする
+}
+
+void UITextWindow::SetHandle(int handle)
+{
+	m_fontHandle = handle;
 }
 
 void UITextWindow::Update()
@@ -95,9 +101,19 @@ void UITextWindow::Draw() const
 		m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
 		GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
 	auto text = StringFunction::WStringFromString(m_text);
-	int width = GetDrawFormatStringWidth(L"%s", text.c_str());
-	DrawString(m_pos.x - width / 2, m_pos.y,
+	int width = 0; // 文字を中央ぞろえで表示するための変数
+	if (m_fontHandle != -1) // フォントのハンドルがある場合
+	{
+		width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
+		DrawStringToHandle(m_pos.x - width / 2, m_pos.y,
+		text.c_str(), GetColor(255, 255, 255), m_fontHandle);
+	}
+	else // フォントのハンドルがない場合
+	{
+		width = GetDrawFormatStringWidth(L"%s", text.c_str());
+		DrawString(m_pos.x - width / 2, m_pos.y,
 		text.c_str(), GetColor(255, 255, 255)); // テキストを描画
+	}
 }
 
 bool UITextWindow::AdvancePages()

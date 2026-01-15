@@ -84,6 +84,7 @@ std::weak_ptr<UITextWindow> UIManager::CreateTextWindowPaged(const std::string& 
 	ptr->Init("", size, pos);
 	ptr->SetPages(id, pages);
 	ptr->ShowPaging(appearDuration);
+	ptr->SetHandle(m_fontHandles[0]);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }

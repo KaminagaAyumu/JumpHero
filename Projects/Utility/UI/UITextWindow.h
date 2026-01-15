@@ -28,6 +28,12 @@ public:
 	/// <param name="pages">テキストの内容</param>
 	void SetPages(const std::string& id, const std::vector<TextData>& pages);
 
+	/// <summary>
+	/// フォントのハンドルをセットする
+	/// </summary>
+	/// <param name="handle">フォントのハンドル</param>
+	void SetHandle(int handle);
+
 	void Update()override;
 	void Draw()const override;
 
@@ -95,6 +101,7 @@ private:
 	bool m_isChangePos; // 位置変更アニメーション中かどうか
 	bool m_isChangeSize; // サイズ変更アニメーション中かどうか
 	int m_aliveFrame; // ウィンドウが表示されてからのフレーム数
+	int m_fontHandle; // フォントデータを使う際のハンドル
 
 	TextPager m_textPager; // ページ付きのテキストデータを管理するために使う
 
