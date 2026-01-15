@@ -52,7 +52,7 @@ namespace
 	//constexpr int kAnimJumpFrame = 4;					// ジャンプアニメーションのフレーム数
 }
 
-Player::Player(Map* map, GameManager* gameManager) :
+Player::Player(std::weak_ptr<Map> map, GameManager* gameManager) :
 	Actor(Types::ActorType::Player),
 	m_direction{},
 	m_velocity{},
@@ -85,7 +85,8 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_pos = m_pMap->GetStartPosToMap();
+	auto pMap = m_pMap.lock();
+	m_pos = pMap->GetStartPosToMap();
 	m_entryEndPos = m_pos + Vector2{ kEntryEndXOffset,0.0f };
 	m_direction = {};
 	m_velocity = {};
@@ -109,7 +110,7 @@ void Player::Init()
 	m_moveAnim.SetAnimation(m_graphHandle, { kGraphWidth,kGraphHeight }, kAnimGroundNum, kAnimGroundFrame, true);
 }
 
-void Player::InitMap(Map* map)
+void Player::InitMap(std::weak_ptr<Map> map)
 {
 	m_pMap = map;
 }
@@ -230,9 +231,12 @@ void Player::MoveOperation(Input& input)
 	// 未来の位置を計算
 	tryPosX.x += dx;
 
+	// マップを使えるようにlockする
+	auto pMap = m_pMap.lock();
+
 	// 当たり判定用の矩形を作成して移動可能範囲を取得
 	Rect2D rectX(tryPosX, kPlayerWidth, kPlayerHeight - kMapColMargin);
-	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
+	Rect2D rangeX = pMap->GetCanMoveRange(rectX);
 
 	// プレイヤーの左右端の座標を取得
 	float leftX = tryPosX.x - kPlayerWidth * 0.5f;
@@ -265,7 +269,7 @@ void Player::MoveOperation(Input& input)
 
 	// 当たり判定用の矩形を作成して移動可能範囲を取得
 	Rect2D rectY(tryPosY, kPlayerWidth, kPlayerHeight);
-	Rect2D rangeY = m_pMap->GetCanMoveRange(rectY);
+	Rect2D rangeY = pMap->GetCanMoveRange(rectY);
 
 	// プレイヤーの上下端の座標を取得
 	float topY = tryPosY.y - kPlayerHeight * 0.5f;
@@ -303,18 +307,18 @@ void Player::MoveOperation(Input& input)
 	{
 		const float oldBottom = m_prevPosY + kPlayerHeight * 0.5f; // 前回の下端のY座標
 
-		const float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
-		int leftTileX = m_pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
-		int rightTileX = m_pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
+		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
+		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
-		float candidateTop = m_pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
+		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
 
 		for (int x = leftTileX; x <= rightTileX; x++) // プレイヤーの幅が大きい時を考慮
 		{
-			int chipNo = m_pMap->GetMapChipNum(x, footTileY);
-			if (m_pMap->IsOnlyTopTile(chipNo))
+			int chipNo = pMap->GetMapChipNum(x, footTileY);
+			if (pMap->IsOnlyTopTile(chipNo))
 			{
 				float tileTop = footTileY * tileSize; // タイルの上端のY座標
 
@@ -379,26 +383,30 @@ void Player::CheckHitToChest(Input& input)
 	// 宝箱が見つかった際に見つかった座標を指定できるようにするための変数
 	int chestX = -1;
 	int chestY = -1;
-	float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
+	
+	// マップを使えるようにlockする
+	auto pMap = m_pMap.lock();
+
+	float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
 
 	const float top = m_pos.y - kPlayerHeight * 0.5f; // プレイヤーの上端のY座標
 	const float bottom = m_pos.y + kPlayerHeight * 0.5f; // プレイヤーの下端のY座標
 	const float left = m_pos.x - kPlayerWidth * 0.5f; // プレイヤーの左端のX座標
 	const float right = m_pos.x + kPlayerWidth * 0.5f; // プレイヤーの右端のX座標
 
-	int topY = m_pMap->WorldPosToMapPos(top, tileSize); // プレイヤーの上端のマップ座標Y
-	int bottomY = m_pMap->WorldPosToMapPos(bottom, tileSize); // プレイヤーの下端のマップ座標Y
-	int leftX = m_pMap->WorldPosToMapPos(left, tileSize); // プレイヤーの左端のマップ座標X
-	int rightX = m_pMap->WorldPosToMapPos(right, tileSize); // プレイヤーの右端のマップ座標X
+	int topY = pMap->WorldPosToMapPos(top, tileSize); // プレイヤーの上端のマップ座標Y
+	int bottomY = pMap->WorldPosToMapPos(bottom, tileSize); // プレイヤーの下端のマップ座標Y
+	int leftX = pMap->WorldPosToMapPos(left, tileSize); // プレイヤーの左端のマップ座標X
+	int rightX = pMap->WorldPosToMapPos(right, tileSize); // プレイヤーの右端のマップ座標X
 
 	const float leftProbe = left - kChestConfirmRange; // プレイヤーの左端の少し左のX座標
-	int leftProbeX = m_pMap->WorldPosToMapPos(leftProbe, tileSize);
+	int leftProbeX = pMap->WorldPosToMapPos(leftProbe, tileSize);
 	
 	for (int y = topY; y <= bottomY; y++)
 	{
-		// int chipNo = m_pMap->GetMapChipNum(leftProbeX,y);
-		int chipNo = m_pMap->GetPositioningData(leftProbeX, y);
-		if(m_pMap->IsChestTile(chipNo))
+		// int chipNo = pMap->GetMapChipNum(leftProbeX,y);
+		int chipNo = pMap->GetPositioningData(leftProbeX, y);
+		if(pMap->IsChestTile(chipNo))
 		{
 			isLeftSide = true;
 			
@@ -422,13 +430,13 @@ void Player::CheckHitToChest(Input& input)
 	}
 
 	const float rightProbe = right + kChestConfirmRange; // プレイヤーの右端の少し右のX座標
-	int rightProbeX = m_pMap->WorldPosToMapPos(rightProbe, tileSize);
+	int rightProbeX = pMap->WorldPosToMapPos(rightProbe, tileSize);
 
 	for (int y = topY; y <= bottomY; y++)
 	{
-		//int chipNo = m_pMap->GetMapChipNum(rightProbeX, y);
-		int chipNo = m_pMap->GetPositioningData(rightProbeX, y);
-		if (m_pMap->IsChestTile(chipNo))
+		//int chipNo = pMap->GetMapChipNum(rightProbeX, y);
+		int chipNo = pMap->GetPositioningData(rightProbeX, y);
+		if (pMap->IsChestTile(chipNo))
 		{
 			isRightSide = true;
 			if(chestX != -1 && chestY != -1)
@@ -633,24 +641,28 @@ bool Player::IsOnChestTop(Position2Int& chestPos)
 	// 宝箱が見つかった際に見つかった座標を指定できるようにするための変数
 	int chestX = -1;
 	int chestY = -1;
-	float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
+
+	// マップを使えるようにlockする
+	auto pMap = m_pMap.lock();
+
+	float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
 
 	const float bottom = m_pos.y + kPlayerHeight * 0.5f; // プレイヤーの下端のY座標
 	const float left = m_pos.x - kPlayerWidth * 0.5f; // プレイヤーの左端のX座標
 	const float right = m_pos.x + kPlayerWidth * 0.5f; // プレイヤーの右端のX座標
 
-	int bottomY = m_pMap->WorldPosToMapPos(bottom, tileSize); // プレイヤーの下端のマップ座標Y
-	int leftX = m_pMap->WorldPosToMapPos(left, tileSize); // プレイヤーの左端のマップ座標X
-	int rightX = m_pMap->WorldPosToMapPos(right, tileSize); // プレイヤーの右端のマップ座標X
+	int bottomY = pMap->WorldPosToMapPos(bottom, tileSize); // プレイヤーの下端のマップ座標Y
+	int leftX = pMap->WorldPosToMapPos(left, tileSize); // プレイヤーの左端のマップ座標X
+	int rightX = pMap->WorldPosToMapPos(right, tileSize); // プレイヤーの右端のマップ座標X
 
 	// プレイヤーの下端の少し下のマップチップを取得
 	const float foot = bottom + kChestConfirmRange; // プレイヤーの下端の少し下のY座標
-	int footY = m_pMap->WorldPosToMapPos(foot, tileSize); // プレイヤーの下端の少し下のマップ座標Y
+	int footY = pMap->WorldPosToMapPos(foot, tileSize); // プレイヤーの下端の少し下のマップ座標Y
 
 	for (int x = leftX; x <= rightX; x++) // プレイヤーの幅が大きい時を考慮
 	{
-		int chipNo = m_pMap->GetPositioningData(x, footY);
-		if (m_pMap->IsChestTile(chipNo))
+		int chipNo = pMap->GetPositioningData(x, footY);
+		if (pMap->IsChestTile(chipNo))
 		{
 			chestX = x;
 			chestY = footY;

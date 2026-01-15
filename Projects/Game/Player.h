@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Actor.h"
+#include <memory>
 
 class Input;
 class Map;
@@ -12,13 +13,13 @@ class Player : public Actor
 {
 public:
 	// コンストラクタ
-	Player(Map* map, GameManager* gameManager);
+	Player(std::weak_ptr<Map> map, GameManager* gameManager);
 
 	// デストラクタ
 	virtual ~Player();
 
 	void Init() override;
-	void InitMap(Map* map);
+	void InitMap(std::weak_ptr<Map> map);
 	void Update(Input&) override;
 	void Draw() override;
 
@@ -113,8 +114,8 @@ private:
 
 	Animation m_moveAnim; // 移動アニメーション
 
-	// マップの生ポインタ
-	Map* m_pMap;
+	// マップのポインタ
+	std::weak_ptr<Map> m_pMap;
 
 	// ゲームマネージャーの生ポインタ
 	GameManager* m_pGameManager;

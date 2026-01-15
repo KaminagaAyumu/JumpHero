@@ -43,7 +43,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pMap = std::make_shared<Map>(stageNo,true);
 	m_pMap->Init();
 
-	m_pGameManager->MiniGameInit(m_pMap.get());
+	m_pGameManager->MiniGameInit(m_pMap);
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 

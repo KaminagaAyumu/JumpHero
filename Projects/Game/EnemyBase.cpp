@@ -18,7 +18,7 @@ namespace
 	constexpr float kChipScale = 1.40625f; // マップの拡大率
 }
 
-EnemyBase::EnemyBase(Player* player, Map* map) :
+EnemyBase::EnemyBase(Player* player, std::weak_ptr<Map> map) :
 	Actor(Types::ActorType::Enemy),
 	m_pPlayer(player),
 	m_pMap(map),

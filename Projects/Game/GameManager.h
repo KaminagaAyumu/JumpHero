@@ -26,11 +26,11 @@ class Map;
 class GameManager
 {
 public:
-	GameManager(Map* map, std::vector<std::weak_ptr<Actor>>& actors);
+	GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor>>& actors);
 	virtual ~GameManager();
 
 	void Init();
-	void MiniGameInit(Map* map); // 一旦マップを取得するだけで使う
+	void MiniGameInit(std::weak_ptr<Map> map); // 一旦マップを取得するだけで使う
 	void Update(Input& input);
 	void Draw() const;
 
@@ -113,12 +113,6 @@ public:
 	/// <param name="x">X座標</param>
 	/// <param name="y">Y座標</param>
 	void OpenChestToPosition(int x, int y);
-
-	/// <summary>
-	/// カメラのターゲットをセットする
-	/// </summary>
-	/// <param name="pos">カメラの座標</param>
-	void SetCameraTarget(const Position2* pos);
 
 	/// <summary>
 	/// カメラのターゲットをセットする
@@ -234,7 +228,7 @@ private:
 	std::deque<ItemPickUpEvent> m_itemPickEvent; // アイテムを取得したかどうかのイベント
 
 	// 各オブジェクト管理クラスの参照用
-	Map* m_pMap;
+	std::weak_ptr<Map> m_pMap;
 	std::unique_ptr<Camera> m_pCamera;
 	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;

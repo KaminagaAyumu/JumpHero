@@ -27,7 +27,7 @@ namespace
 	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
 }
 
-GameManager::GameManager(Map* map, std::vector<std::weak_ptr<Actor>>& actors) :
+GameManager::GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor>>& actors) :
 	m_frameCount(0),
 	m_score(0),
 	m_currentScore(0),
@@ -39,7 +39,8 @@ GameManager::GameManager(Map* map, std::vector<std::weak_ptr<Actor>>& actors) :
 	m_isMiniGame(false)
 {
 	m_pMap = map;
-	m_pCamera = std::make_unique<Camera>(m_pMap->GetMapSize());
+	auto pMap = m_pMap.lock();
+	m_pCamera = std::make_unique<Camera>(pMap->GetMapSize());
 	m_pPlayer = std::make_shared<Player>(map,this);
 	m_pPlayer->SetCamera(m_pCamera.get());
 	m_pPlayer->Init();
@@ -104,13 +105,14 @@ void GameManager::Init()
 	m_isMiniGame = false;
 }
 
-void GameManager::MiniGameInit(Map* map)
+void GameManager::MiniGameInit(std::weak_ptr<Map> map)
 {
 	m_pMap = map;
-	m_pPlayer->InitMap(map);
+	auto pMap = m_pMap.lock();
+	m_pPlayer->InitMap(pMap);
 	m_pPlayer->Init();
-	m_pCamera->Init(m_pMap->GetMapSize());
-	m_pEnemyManager->Init(map);
+	m_pCamera->Init(pMap->GetMapSize());
+	m_pEnemyManager->Init(pMap);
 	m_pChestManager->Init();
 	m_pItemManager->Init();
 	m_pItemManager->FirstSpawnItem(map);
@@ -125,11 +127,6 @@ void GameManager::Update(Input& input)
 	if (input.IsTriggered("LShift") && input.IsPressed("Up"))
 	{
 		clsDx();
-	}
-	// デバッグ用にプレイヤーをゴール位置に強引に移動させる(上入力しながらRボタン)
-	if(input.IsPressed("RShift") && input.IsPressed("Up"))
-	{
-		m_pPlayer->DebugClear(m_pMap->GetGoalPosToMap());
 	}
 #endif
 	m_frameCount++;
@@ -208,6 +205,8 @@ bool GameManager::IsSkipCollision() const
 
 bool GameManager::IsClear() const
 {
+	// ここの内容は今後イベントマネージャーに任せます
+
 	if (m_isMiniGame)
 	{
 		if(m_totalBalloonNum > 0) // ミニゲーム中でまだ風船が残っているならクリアにしない
@@ -215,8 +214,10 @@ bool GameManager::IsClear() const
 			return false;
 		}
 	}
+	auto pMap = m_pMap.lock();
+
 	// ゴールの座標
-	Position2 goalPos = m_pMap->GetGoalPosToMap();
+	Position2 goalPos = pMap->GetGoalPosToMap();
 	// ゴールの範囲を設定
 	Rect2D goalRange = { goalPos, kGoalWidth, kGoalHeight };
 	// プレイヤーの矩形を取得

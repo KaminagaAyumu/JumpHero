@@ -17,10 +17,10 @@ class Input;
 class EnemyManager
 {
 public:
-	EnemyManager(Camera* camera,Player* player, GameManager* gameManager, Map* map);
+	EnemyManager(Camera* camera,Player* player, GameManager* gameManager, std::weak_ptr<Map> map);
 	virtual ~EnemyManager();
 
-	void Init(Map* map);
+	void Init(std::weak_ptr<Map> map);
 
 	void Update(Input&);
 
@@ -52,8 +52,7 @@ private:
 	/// <summary>
 	/// 敵の生成位置をマップから読み込む
 	/// </summary>
-	/// <param name="map">読み込むマップ</param>
-	void LoadSpawnPositions(Map* map);
+	void LoadSpawnPositions();
 
 	// 座標のデータを受け取って敵を生成
 	void SpawnEnemy(const Position2& pos);
@@ -68,7 +67,7 @@ private:
 	Camera* m_pCamera; // 敵が使うカメラを参照
 	Player* m_pPlayer; // 敵が使うプレイヤーを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
-	Map* m_pMap; // 敵生成用にマップを参照
+	std::weak_ptr<Map> m_pMap; // 敵生成用にマップを参照
 	std::list<std::shared_ptr<EnemyBase>> m_enemies;
 
 	std::vector<Position2> m_spawnPositions; // 敵の生成位置リスト

@@ -50,7 +50,7 @@ private:
 
 	std::unique_ptr<TextManager> m_pTextManager;			// テキスト管理クラス
 	std::unique_ptr<TutorialManager> m_pTutorialManager;	// チュートリアルイベント管理クラス
-	std::unique_ptr<Map> m_pMap;							// マップクラス
+	std::shared_ptr<Map> m_pMap;							// マップクラス
 	std::unique_ptr<Bg> m_pBg;								// 背景クラス
 	std::shared_ptr<GameManager> m_pGameManager;			// ゲーム管理クラス
 	std::unique_ptr<CollisionManager> m_pCollisionManager;	// 衝突管理クラス

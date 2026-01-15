@@ -28,7 +28,7 @@ namespace
 	constexpr int kEnemyCoinAddScore = 1000;
 }
 
-EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameManager, Map* map) :
+EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameManager, std::weak_ptr<Map> map) :
 	m_pCamera(camera),
 	m_pPlayer(player),
 	m_pGameManager(gameManager),
@@ -38,7 +38,7 @@ EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameMana
 {
 	m_enemies.clear(); // 敵リストを初期化
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
-	LoadSpawnPositions(map); // 敵スポーン位置の読み込み
+	LoadSpawnPositions(); // 敵スポーン位置の読み込み
 
 	// 敵画像の読み込み
 	int handle = LoadGraph(L"data/img/transform_enemy.png");
@@ -60,12 +60,12 @@ EnemyManager::~EnemyManager()
 	}
 }
 
-void EnemyManager::Init(Map* map)
+void EnemyManager::Init(std::weak_ptr<Map> map)
 {
 	m_pMap = map;
 	m_enemies.clear(); // 敵リストを初期化
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
-	LoadSpawnPositions(map); // 敵スポーン位置の読み込み
+	LoadSpawnPositions(); // 敵スポーン位置の読み込み
 }
 
 void EnemyManager::Update(Input& input)
@@ -155,16 +155,18 @@ void EnemyManager::Draw()
 
 }
 
-void EnemyManager::LoadSpawnPositions(Map* map)
+void EnemyManager::LoadSpawnPositions()
 {
-	for (int y = 0; y < map->GetMapHeight(); y++)
+	// マップを使えるようにlockしておく
+	auto pMap = m_pMap.lock();
+	for (int y = 0; y < pMap->GetMapHeight(); y++)
 	{
-		for (int x = 0; x < map->GetMapWidth(); x++)
+		for (int x = 0; x < pMap->GetMapWidth(); x++)
 		{
-			if (map->GetPositioningData(x, y) == kSpawnChipNo)
+			if (pMap->GetPositioningData(x, y) == kSpawnChipNo)
 			{
 				// マップチップの1マスのサイズを取得(拡大を含む)
-				float tileSize = map->GetTileSize();
+				float tileSize = pMap->GetTileSize();
 				// スポーン位置はマップの中心にする
 				Position2 pos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
 				// スポーン位置リストに追加

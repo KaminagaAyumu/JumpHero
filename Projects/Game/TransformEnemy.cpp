@@ -1,4 +1,5 @@
-﻿#include "TransformEnemy.h"
+﻿#include <memory>
+#include "TransformEnemy.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Map.h"
 #include "Player.h"
@@ -43,7 +44,7 @@ namespace
 	constexpr int	kAnimNormalWalkFrame	= 5;		// 通常歩きアニメーションのフレーム数
 }
 
-TransformEnemy::TransformEnemy(const Position2& pos, Player* player, Map* map, EnemyForm changeForm, std::unordered_map<std::string, Animation>& animations) :
+TransformEnemy::TransformEnemy(const Position2& pos, Player* player, std::weak_ptr<Map> map, EnemyForm changeForm, std::unordered_map<std::string, Animation>& animations) :
 	EnemyBase(player, map),
 	m_updateFunc(&TransformEnemy::AppearUpdate),
 	m_drawFunc(&TransformEnemy::AppearDraw),
@@ -510,7 +511,11 @@ void TransformEnemy::MoveOperation()
 	tryPosX.x += dx;
 
 	Rect2D rectX(tryPosX, kEnemyWidth, kEnemyHeight - margin);
-	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
+	
+	// マップを使えるようにlockしておく
+	auto pMap = m_pMap.lock();
+
+	Rect2D rangeX = pMap->GetCanMoveRange(rectX);
 
 	float leftX = tryPosX.x - kEnemyWidth * 0.5f;
 	float rightX = tryPosX.x + kEnemyWidth * 0.5f;
@@ -538,7 +543,7 @@ void TransformEnemy::MoveOperation()
 	tryPosY.y += dy;
 
 	Rect2D rectY(tryPosY, kEnemyWidth, kEnemyHeight);
-	Rect2D rangeY = m_pMap->GetCanMoveRange(rectY);
+	Rect2D rangeY = pMap->GetCanMoveRange(rectY);
 
 	float topY = tryPosY.y - kEnemyHeight * 0.5f;
 	float bottomY = tryPosY.y + kEnemyHeight * 0.5f;
@@ -569,18 +574,18 @@ void TransformEnemy::MoveOperation()
 	{
 		const float oldBottom = m_prevPosY + kEnemyHeight * 0.5f; // 前回の下端のY座標
 
-		const float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
-		int leftTileX = m_pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
-		int rightTileX = m_pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
+		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
+		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
-		float candidateTop = m_pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
+		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
 
 		for (int x = leftTileX; x <= rightTileX; x++) // 敵の幅が大きい時を考慮
 		{
-			int chipNo = m_pMap->GetMapChipNum(x, footTileY);
-			if (m_pMap->IsOnlyTopTile(chipNo))
+			int chipNo = pMap->GetMapChipNum(x, footTileY);
+			if (pMap->IsOnlyTopTile(chipNo))
 			{
 				float tileTop = footTileY * tileSize; // タイルの上端のY座標
 
@@ -623,12 +628,12 @@ void TransformEnemy::MoveOperation()
 		const float aheadX = m_isRightDirection ? (m_pos.x + kEnemyWidth * 0.5f) : (m_pos.x - kEnemyWidth * 0.5f);
 		const float aheadY = m_pos.y + kEnemyHeight * 0.5f; // 足元のY座標
 		const float probeY = aheadY + 1.0f; // 足元より少し下のY座標
-		const float tileSize = m_pMap->GetTileSize(); // マップチップのサイズ
-		int tx = m_pMap->WorldPosToMapPos(aheadX, tileSize); // X座標のマップ位置
-		int ty = m_pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
+		const float tileSize = pMap->GetTileSize(); // マップチップのサイズ
+		int tx = pMap->WorldPosToMapPos(aheadX, tileSize); // X座標のマップ位置
+		int ty = pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
 
-		int chipNo = m_pMap->GetMapChipNum(tx, ty); // マップチップ番号を取得
-		if (m_pMap->IsSpaceTile(chipNo)) // 前方のマップチップが空白の場合
+		int chipNo = pMap->GetMapChipNum(tx, ty); // マップチップ番号を取得
+		if (pMap->IsSpaceTile(chipNo)) // 前方のマップチップが空白の場合
 		{
 			// 足元に地面がないので方向転換
 			m_isRightDirection = !m_isRightDirection;
@@ -661,7 +666,11 @@ void TransformEnemy::TransformMoveOperation(const Position2& steer)
 	tryPosX.x += dx;
 
 	Rect2D rectX(tryPosX, kEnemyWidth, kEnemyHeight);
-	Rect2D rangeX = m_pMap->GetCanMoveRange(rectX);
+
+	// マップを使えるようにlockしておく
+	auto pMap = m_pMap.lock();
+
+	Rect2D rangeX = pMap->GetCanMoveRange(rectX);
 
 	float leftX = tryPosX.x - kEnemyWidth * 0.5f;
 	float rightX = tryPosX.x + kEnemyWidth * 0.5f;
@@ -689,7 +698,7 @@ void TransformEnemy::TransformMoveOperation(const Position2& steer)
 	tryPosY.y += dy;
 
 	Rect2D rectY(tryPosY, kEnemyWidth, kEnemyHeight);
-	Rect2D rangeY = m_pMap->GetCanMoveRange(rectY);
+	Rect2D rangeY = pMap->GetCanMoveRange(rectY);
 
 	float topY = tryPosY.y - kEnemyHeight * 0.5f;
 	float bottomY = tryPosY.y + kEnemyHeight * 0.5f;
@@ -720,18 +729,18 @@ void TransformEnemy::TransformMoveOperation(const Position2& steer)
 	{
 		const float oldBottom = m_prevPosY + kEnemyHeight * 0.5f; // 前回の下端のY座標
 
-		const float tileSize = m_pMap->GetTileSize(); // マップのタイルサイズを取得
-		int leftTileX = m_pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
-		int rightTileX = m_pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-		int footTileY = m_pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
+		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
+		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
-		float candidateTop = m_pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
+		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
 
 		for (int x = leftTileX; x <= rightTileX; x++) // 敵の幅が大きい時を考慮
 		{
-			int chipNo = m_pMap->GetMapChipNum(x, footTileY);
-			if (m_pMap->IsOnlyTopTile(chipNo))
+			int chipNo = pMap->GetMapChipNum(x, footTileY);
+			if (pMap->IsOnlyTopTile(chipNo))
 			{
 				float tileTop = footTileY * tileSize; // タイルの上端のY座標
 

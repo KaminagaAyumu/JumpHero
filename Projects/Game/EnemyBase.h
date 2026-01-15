@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Actor.h"
+#include <memory>
 
 // プロトタイプ宣言
 class Player;
@@ -13,7 +14,7 @@ class Input;
 class EnemyBase : public Actor
 {
 public:
-	EnemyBase(Player* player, Map* map);
+	EnemyBase(Player* player, std::weak_ptr<Map> map);
 	virtual ~EnemyBase();
 	virtual void Init() abstract;
 	virtual void Update(Input&) abstract;
@@ -42,8 +43,8 @@ protected:
 	// 更新処理で受け取るのが面倒なためコンストラクタで受け取る
 	Player* m_pPlayer;
 
-	// マップと当たり判定を取る用(取得していいのかわからないがとりあえずこれでやってみる)
-	Map* m_pMap;
+	// マップと当たり判定を取る用(一応weak_ptrにしておく)
+	std::weak_ptr<Map> m_pMap;
 
 	// 移動方向
 	Vector2 m_direction;

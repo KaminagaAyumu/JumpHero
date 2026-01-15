@@ -34,7 +34,7 @@ public:
 	/// <param name="player">プレイヤーのポインタ</param>
 	/// <param name="map">マップのポインタ</param>
 	/// <param name="animations">アニメーションのデータ</param>
-	TransformEnemy(const Position2& pos,Player* player, Map* map, EnemyForm changeForm, std::unordered_map<std::string, Animation>& animations);
+	TransformEnemy(const Position2& pos,Player* player, std::weak_ptr<Map> map, EnemyForm changeForm, std::unordered_map<std::string, Animation>& animations);
 	
 	// デストラクタ(今は特に使わないのでdefault)
 	virtual ~TransformEnemy() = default;

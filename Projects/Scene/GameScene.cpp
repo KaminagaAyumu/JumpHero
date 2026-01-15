@@ -56,7 +56,7 @@ m_fadeColor(0x000000)
 	m_pMap = std::make_shared<Map>(stageNo,false);
 	m_pMap->Init();
 
-	m_pGameManager = std::make_shared<GameManager>(m_pMap.get(),m_pActors);
+	m_pGameManager = std::make_shared<GameManager>(m_pMap,m_pActors);
 	m_pGameManager->Init();
 
 	m_pUIManager = std::make_unique<UIManager>();

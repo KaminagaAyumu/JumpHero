@@ -73,22 +73,23 @@ size_t ChestManager::GetChestNum()
 	return m_chests.size();
 }
 
-void ChestManager::SpawnChest(Map* map)
+void ChestManager::SpawnChest(std::weak_ptr<Map> map)
 {
-	for (int x = 0; x < map->GetMapWidth(); x++)
+	auto pMap = map.lock(); // マップを見るようにする
+	for (int x = 0; x < pMap->GetMapWidth(); x++)
 	{
-		for (int y = 0; y < map->GetMapHeight(); y++)
+		for (int y = 0; y < pMap->GetMapHeight(); y++)
 		{
-			if (map->GetPositioningData(x, y) == kChestChipNo)
+			if (pMap->GetPositioningData(x, y) == kChestChipNo)
 			{
-				auto chest = std::make_shared<Chest>(x, y, map,m_chestGraphHandle,false);
+				auto chest = std::make_shared<Chest>(x, y, pMap,m_chestGraphHandle,false);
 				chest->SetCamera(m_pCamera);
 				m_chests.push_back(chest);
 				m_chestMap.emplace(TilePos{ x,y }, chest.get());
 			}
-			else if (map->GetPositioningData(x, y) == kHiddenChestChipNo)
+			else if (pMap->GetPositioningData(x, y) == kHiddenChestChipNo)
 			{
-				auto chest = std::make_shared<Chest>(x, y, map, m_chestGraphHandle, true);
+				auto chest = std::make_shared<Chest>(x, y, pMap, m_chestGraphHandle, true);
 				chest->SetCamera(m_pCamera);
 				m_chests.push_back(chest);
 				m_chestMap.emplace(TilePos{ x,y }, chest.get());

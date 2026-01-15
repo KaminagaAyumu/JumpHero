@@ -1,4 +1,5 @@
-﻿#include "StayEnemy.h"
+﻿#include <memory>
+#include "StayEnemy.h"
 
 namespace
 {
@@ -18,7 +19,7 @@ namespace
 	constexpr int	kMaxFadeRate = 255;		// フェード率の最大値
 }
 
-StayEnemy::StayEnemy(const Position2& pos, Player* player, Map* map) :
+StayEnemy::StayEnemy(const Position2& pos, Player* player, std::weak_ptr<Map> map) :
 	EnemyBase(player, map),
 	m_frameCount(0),
 	m_itemTime(0),

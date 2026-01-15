@@ -1,4 +1,5 @@
-﻿#include "Chest.h"
+﻿#include <memory>
+#include "Chest.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
 #include "Player.h"
@@ -20,18 +21,18 @@ Chest::Chest() :
 	Actor(Types::ActorType::Chest),
 	m_graphHandle(-1),
 	m_state(ChestState::Normal),
-	m_pMap(nullptr),
 	m_chipPos{}
 {
 }
 
-Chest::Chest(int x, int y, Map* map, int handle, bool isHidden) :
+Chest::Chest(int x, int y, std::weak_ptr<Map> map, int handle, bool isHidden) :
 	Actor(Types::ActorType::Chest),
 	m_pMap(map),
 	m_chipPos{x,y}
 {
+	auto pMap = m_pMap.lock();
 	// マップチップ一つのサイズを取得
-	float tileSize = m_pMap->GetTileSize();
+	float tileSize = pMap->GetTileSize();
 	// 座標をマップ座標から変換
 	// 座標基準を左上から中心にする
 	m_pos = { static_cast<float>(m_chipPos.x) * tileSize + tileSize * 0.5f,static_cast<float>(m_chipPos.y) * tileSize + tileSize * 0.5f };
@@ -96,8 +97,12 @@ void Chest::AppearChest()
 {
 	// 通常の状態に変更
 	m_state = ChestState::Normal;
+
+	// マップを使えるようにlockしておく
+	auto pMap = m_pMap.lock();
+
 	// マップのデータを通常の状態と同じ番号にする
-	m_pMap->SetMapChip(m_chipPos.x, m_chipPos.y, kChestMapChipNo);
+	pMap->SetMapChip(m_chipPos.x, m_chipPos.y, kChestMapChipNo);
 }
 
 void Chest::OpenChest()
@@ -105,14 +110,9 @@ void Chest::OpenChest()
 	// 開いた状態に変更
 	m_state = ChestState::Opened;
 
-#ifdef _DEBUG
-	if (m_pMap == nullptr)
-	{
-		printfDx(L"Chest : マップのデータが入っていません\n");
-		return;
-	}
-#endif
+	// マップを使えるようにlockしておく
+	auto pMap = m_pMap.lock();
 
 	// マップのデータから宝箱のデータを消去する
-	m_pMap->ResetChestData(m_chipPos.x, m_chipPos.y);
+	pMap->ResetChestData(m_chipPos.x, m_chipPos.y);
 }

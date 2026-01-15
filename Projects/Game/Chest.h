@@ -10,7 +10,7 @@ class Chest : public Actor
 {
 public:
 	Chest();
-	Chest(int x, int y, Map* map, int handle, bool isHidden);
+	Chest(int x, int y, std::weak_ptr<Map> map, int handle, bool isHidden);
 	virtual ~Chest();
 	virtual void Init() override;
 	virtual void Update(Input&) override;
@@ -43,7 +43,7 @@ private:
 
 	ChestState m_state; // 宝箱の状態
 
-	Map* m_pMap; // マップのデータを変更できるようにポインタを取得
+	std::weak_ptr<Map> m_pMap; // マップのデータを変更できるようにポインタを取得
 	Position2Int m_chipPos; // マップチップ位置(左上座標)
 
 };

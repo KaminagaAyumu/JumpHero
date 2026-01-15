@@ -47,7 +47,7 @@ public:
 	/// ゲーム開始時の最初のアイテム生成
 	/// </summary>
 	/// <param name="map">現在のマップのポインタ</param>
-	void FirstSpawnItem(Map* map);
+	void FirstSpawnItem(std::weak_ptr<Map> map);
 
 	/// <summary>
 	/// ゲーム内オブジェクトにアイテムを追加する

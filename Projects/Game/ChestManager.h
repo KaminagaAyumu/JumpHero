@@ -29,7 +29,7 @@ public:
 	void Draw();
 
 	// マップのデータを受け取って宝箱を生成
-	void SpawnChest(Map* map);
+	void SpawnChest(std::weak_ptr<Map> map);
 
 	void OpenChestAtPosition(int tileX, int tileY);
 

@@ -164,16 +164,17 @@ void ItemManager::SpawnItem(const Position2& pos, Types::ItemType itemType)
 	
 }
 
-void ItemManager::FirstSpawnItem(Map* map)
+void ItemManager::FirstSpawnItem(std::weak_ptr<Map> map)
 {
-	for (int y = 0; y < map->GetMapHeight(); y++)
+	auto pMap = map.lock();
+	for (int y = 0; y < pMap->GetMapHeight(); y++)
 	{
-		for (int x = 0; x < map->GetMapWidth(); x++)
+		for (int x = 0; x < pMap->GetMapWidth(); x++)
 		{
-			if (map->GetPositioningData(x, y) == kBallonChipNo)
+			if (pMap->GetPositioningData(x, y) == kBallonChipNo)
 			{
 				// マップチップの1マスのサイズを取得(拡大を含む)
-				float tileSize = map->GetTileSize();
+				float tileSize = pMap->GetTileSize();
 				// 風船のスポーン位置はマップの中心にする
 				Position2 pos = { x * tileSize + tileSize * 0.5f,y * tileSize + tileSize * 0.5f };
 				// 風船生成

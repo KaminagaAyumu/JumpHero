@@ -6,7 +6,7 @@
 /// </summary>
 class StayEnemy : public EnemyBase
 {
-	StayEnemy(const Position2& pos, Player* player, Map* map);
+	StayEnemy(const Position2& pos, Player* player, std::weak_ptr<Map> map);
 
 	virtual ~StayEnemy() = default;
 	virtual void Init() override;
