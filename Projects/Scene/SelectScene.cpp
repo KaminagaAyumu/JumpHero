@@ -95,17 +95,9 @@ void SelectScene::FadeOutUpdate(Input&)
 	m_frameCount++;
 	if (m_frameCount >= kFadeInterval)
 	{
-		// フェードアウト完了
-		if (m_selectIndex == 0)
-		{
-			// チュートリアルシーンに遷移
-			m_controller.ChangeScene(std::make_shared<TutorialScene>(m_controller));
-		}
-		else
-		{
-			// ゲームシーンに遷移
-			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_selectIndex));
-		}
+		
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_selectIndex));
+
 		return; // 念のため処理を抜ける
 	}
 }

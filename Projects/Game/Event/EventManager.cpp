@@ -8,7 +8,7 @@
 
 namespace
 {
-	constexpr int kEventPathSizeMax = 255; // ファイルのパスの最大サイズ
+	constexpr int kEventPathSizeMax = 40; // ファイルのパスの最大サイズ
 
 	constexpr int kEventDataSize = 5;
 	constexpr int kCommonEventDataSize = 6;
@@ -132,7 +132,14 @@ bool EventManager::LoadEventData(int stageNo)
 	// ステージ番号に対応したパスを取得する変数
 	wchar_t filePath[kEventPathSizeMax];
 
-	std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_event.csv", stageNo);
+	if (stageNo == 0)
+	{
+		std::swprintf(filePath, kEventPathSizeMax, L"data/event/tutorial_event.csv");
+	}
+	else
+	{
+		std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_event.csv", stageNo);
+	}
 
 	std::ifstream file(filePath);
 	if (!file) // ファイルの読み込みに失敗した場合
@@ -183,7 +190,7 @@ bool EventManager::LoadCommonEventData(int stageNo)
 
 	if (stageNo == 0)
 	{
-		//filePath = L"data/event/commonEventData.csv";
+		std::swprintf(filePath, kEventPathSizeMax, L"data/event/tutorial_common.csv");
 	}
 	else
 	{
