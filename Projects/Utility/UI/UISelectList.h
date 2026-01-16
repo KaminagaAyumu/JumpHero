@@ -29,7 +29,7 @@ public:
 	void Init(int fontHandle, const Size& size, const Position2& pos);
 
 	// リスト全体に直接関係のない変数を変更できる処理を追加したい(オプションごとに変わるようにしたい)
-	
+
 	/// <summary>
 	/// 選択肢を追加する
 	/// </summary>
@@ -63,6 +63,12 @@ public:
 	/// 選択された時の処理
 	/// </summary>
 	void TriggerSelect();
+
+	/// <summary>
+	/// 現在のカーソルの位置を返す
+	/// </summary>
+	/// <returns>カーソルの位置</returns>
+	int GetCursor() const { return m_cursor; }
 
 private:
 	Position2 m_pos; // 表示座標(リスト全体の中心)
