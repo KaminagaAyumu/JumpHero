@@ -1,7 +1,6 @@
 ﻿#include "Application.h"
 #include "Input.h"
 #include "Sound/SoundManager.h"
-#include "UI/UIManager.h"
 #include "../Scene/SceneController.h"
 #include "../Scene/TitleScene.h"
 #include "Game.h"
@@ -16,10 +15,7 @@ namespace
 
 Application::Application()
 {
-	m_pSoundManager = std::make_shared<SoundManager>();
-
-	m_pUIManager = std::make_shared<UIManager>();
-
+	m_soundManager = std::make_shared<SoundManager>();
 	// フォントデータをプロジェクトから読み込んで追加する(このプロジェクトの起動時にしか使えない)
 	AddFontResourceExW(kFontPath, FR_PRIVATE, nullptr);
 }
@@ -74,7 +70,7 @@ void Application::Run()
 		// ここにゲームの処理を書く
 		input.Update(); // 入力情報の更新
 
-		m_pSoundManager->Update(); // サウンドマネージャーの更新処理
+		m_soundManager->Update(); // サウンドマネージャーの更新処理
 
 		controller.Update(input); // シーンの更新処理
 		controller.Draw(); // シーンの描画処理
