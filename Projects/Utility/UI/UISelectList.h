@@ -71,11 +71,6 @@ public:
 	int GetCursor() const { return m_cursor; }
 
 private:
-	/// <summary>
-	/// リストを閉じる
-	/// </summary>
-	void Close();
-
 	Position2 m_pos; // 表示座標(リスト全体の中心)
 	Size m_size; // リスト全体のサイズ
 	std::vector<OptionItem> m_items; // 選択肢の内容をまとめる
@@ -86,7 +81,5 @@ private:
 	int m_frameCount; // 表示してからのフレーム数
 
 	int m_cursor; // カーソルがどこにいるか
-
-	bool m_isAlive; // 存在フラグ
 };
 

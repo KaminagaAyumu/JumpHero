@@ -6,10 +6,6 @@
 #include "../Game/GameManager.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
-#include "../Utility/GameType.h"
-#include "../Utility/Application.h"
-#include "../Utility/UI/UIManager.h"
-#include "../Utility/UI/UISelectList.h"
 #include "DxLib.h"
 
 
@@ -34,24 +30,11 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 	m_updateFunc(&ClearScene::FadeInUpdate),
 	m_drawFunc(&ClearScene::FadeDraw),
 	m_fadeColor(0xffffff),
+	m_selectIndex(0),
 	m_resultScore(0),
 	m_gameScore(0)
 {
 	m_frameCount = kFadeInterval;
-	// UIマネージャーを取得する
-	m_pUIManager = Application::GetInstance().GetUIManager();
-
-	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, {200,200}, {Game::kScreenWidth / 2, 500});
-	auto list = m_pSelectList.lock();
-	list->AddOption("ステージセレクトへ", [this]() 
-		{
-			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
-		});
-	list->AddOption("タイトルへ", [this]() 
-		{
-			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
-		});
-
 }
 
 ClearScene::~ClearScene()
@@ -109,16 +92,21 @@ void ClearScene::NormalUpdate(Input& input)
 
 	if (input.IsTriggered("Up"))
 	{
-		auto list = m_pSelectList.lock();
-		list->MoveCursor(-1);
+		m_selectIndex--;
 	}
 	if (input.IsTriggered("Down"))
 	{
-		auto list = m_pSelectList.lock();
-		list->MoveCursor(1);
+		m_selectIndex++;
 	}
 
-	
+	if (m_selectIndex < 0)
+	{
+		m_selectIndex = 1;
+	}
+	if (m_selectIndex > 1)
+	{
+		m_selectIndex = 0;
+	}
 
 	// 決定ボタンを押したとき
 	if (input.IsTriggered("OK"))
@@ -137,8 +125,15 @@ void ClearScene::FadeOutUpdate(Input&)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		auto list = m_pSelectList.lock();
-		list->TriggerSelect();
+
+		if (m_selectIndex == 0)
+		{
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
+		}
+		else
+		{
+			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+		}
 		return; // 念のため処理を抜ける
 	}
 }
@@ -149,7 +144,10 @@ void ClearScene::NormalDraw()
 	//DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
 	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
 
-	m_pUIManager->Draw();
+	int cursorY = Game::kScreenHeight / 2 + kSelectDispMargin + (m_selectIndex * kSelectDispMargin);
+	DrawString(Game::kScreenWidth / 2, cursorY, L"→", (m_selectIndex == 0) ? 0xff0000 : 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kSelectDispMargin, L"ステージセレクトへ", 0xffffff);
+	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kSelectDispMargin, L"タイトルへ", 0xffffff);
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"ClearScene: NormalDraw", 0xffffff);
