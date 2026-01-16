@@ -2,6 +2,7 @@
 #include "UIManager.h"
 #include "UITextWindow.h"
 #include "UIText.h"
+#include "UISelectList.h"
 #include "DxLib.h"
 
 namespace
@@ -92,6 +93,14 @@ std::weak_ptr<UIText> UIManager::CreateText(Types::FontType fontType, const std:
 {
 	auto ptr = std::make_shared<UIText>();
 	ptr->Init(m_fontHandles[static_cast<int>(fontType)], text, pos);
+	m_pUIElements.push_back(ptr);
+	return ptr;
+}
+
+std::weak_ptr<UISelectList> UIManager::CreateSelectList(Types::FontType fontType, const Size& size, const Position2& pos)
+{
+	auto ptr = std::make_shared<UISelectList>();
+	ptr->Init(m_fontHandles[static_cast<int>(fontType)], size, pos);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }

@@ -34,7 +34,7 @@ void UISelectList::AddOption(const std::string& text, std::function<void()> onSe
 	}
 }
 
-void UISelectList::Init(int fontHandle, Size size, const Position2& pos)
+void UISelectList::Init(int fontHandle, const Size& size, const Position2& pos)
 {
 	m_fontHandle = fontHandle;
 	m_size = size;

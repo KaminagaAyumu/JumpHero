@@ -32,7 +32,7 @@ UITextWindow::~UITextWindow()
 {
 }
 
-void UITextWindow::Init(std::string text, Size size, const Position2& target, int fontHandle)
+void UITextWindow::Init(std::string text, const Size& size, const Position2& target, int fontHandle)
 {
 	m_text = text; // テキストの内容を設定
 	m_targetSize = size; // 目標サイズを設定

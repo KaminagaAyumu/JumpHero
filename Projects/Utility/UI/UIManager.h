@@ -10,6 +10,7 @@ class Map;
 class UIBase;
 class UITextWindow;
 class UIText;
+class UISelectList;
 
 /// <summary>
 /// UI関連の管理用クラス
@@ -54,6 +55,15 @@ public:
 	/// <param name="pos">表示する中心座標</param>
 	/// <returns></returns>
 	std::weak_ptr<UIText> CreateText(Types::FontType fontType, const std::string& text, const Position2& pos);
+
+	/// <summary>
+	/// 選択できるリストを作成する関数
+	/// </summary>
+	/// <param name="fontType">フォントのタイプ</param>
+	/// <param name="size">リスト全体のサイズ</param>
+	/// <param name="pos">表示する中心座標</param>
+	/// <returns></returns>
+	std::weak_ptr<UISelectList> CreateSelectList(Types::FontType fontType, const Size& size, const Position2& pos);
 
 private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列

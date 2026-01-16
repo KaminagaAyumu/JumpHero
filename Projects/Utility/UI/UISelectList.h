@@ -26,7 +26,7 @@ public:
 	/// <param name="fontHandle">フォントのハンドル</param>
 	/// <param name="size">リスト全体の大きさ</param>
 	/// <param name="pos">リスト全体からの中心座標</param>
-	void Init(int fontHandle, Size size, const Position2& pos);
+	void Init(int fontHandle, const Size& size, const Position2& pos);
 
 	// リスト全体に直接関係のない変数を変更できる処理を追加したい(オプションごとに変わるようにしたい)
 	

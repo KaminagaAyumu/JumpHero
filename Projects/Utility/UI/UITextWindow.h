@@ -20,7 +20,7 @@ public:
 	/// <param name="size">ウィンドウのサイズ</param>
 	/// <param name="target">表示する中心座標</param>
 	/// <param name="fontHandle">フォントのハンドル</param>
-	void Init(std::string text, Size size, const Position2& target, int fontHandle);
+	void Init(std::string text, const Size& size, const Position2& target, int fontHandle);
 
 	/// <summary>
 	/// 複数ページのテキストデータをセットする
