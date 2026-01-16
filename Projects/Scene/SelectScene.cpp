@@ -5,8 +5,11 @@
 #include "TutorialScene.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
+#include "../Utility/GameType.h"
 #include "../Utility/Application.h"
 #include "../Utility/Sound/SoundManager.h"
+#include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UISelectList.h"
 #include "DxLib.h"
 
 namespace
@@ -15,8 +18,8 @@ namespace
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
-	constexpr int kMinSelectIndex = 0; // 選択肢の最小インデックス
-	constexpr int kSelectOptionNum = 3; // 選択肢の数
+	const Size kSelectListSize = { 400, 700 };
+	const Position2 kSelectListPos = { 300, 350 };
 
 }
 
@@ -24,13 +27,29 @@ SelectScene::SelectScene(SceneController& controller) :
 	SceneBase(controller),
 	m_updateFunc(&SelectScene::FadeInUpdate),
 	m_drawFunc(&SelectScene::FadeDraw),
-	m_fadeColor(0x000000),
-	m_selectIndex(kMinSelectIndex)
+	m_fadeColor(0x000000)
 {
 	m_frameCount = kFadeInterval;
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/cursorSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->LoadSoundClip("ok_se", L"data/sound/okSE.mp3", SoundBus::SE, 1.0f, false);
+
+	m_pUIManager = std::make_unique<UIManager>();
+
+	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, kSelectListSize, kSelectListPos);
+	auto list = m_pSelectList.lock();
+	list->AddOption("チュートリアル",[this]()
+		{
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 0));
+		});
+	list->AddOption("ステージ1", [this]()
+		{
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 1));
+		});
+	list->AddOption("ステージ2", [this]()
+		{
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 2));
+		});
 }
 
 SelectScene::~SelectScene()
@@ -61,21 +80,20 @@ void SelectScene::FadeInUpdate(Input&)
 
 void SelectScene::NormalUpdate(Input& input)
 {
+	m_pUIManager->Update();
 	if (input.IsTriggered("Down"))
 	{
 		m_soundManager->Play("cursor_se", 1.0f, true);
-		if(m_selectIndex < kSelectOptionNum)
-		{
-			m_selectIndex++;
-		}
+		
+		auto list = m_pSelectList.lock();
+		list->MoveCursor(1);
 	}
 	if (input.IsTriggered("Up"))
 	{
 		m_soundManager->Play("cursor_se", 1.0f, true);
-		if(m_selectIndex > kMinSelectIndex)
-		{
-			m_selectIndex--;
-		}
+		
+		auto list = m_pSelectList.lock();
+		list->MoveCursor(-1);
 	}
 
 	if (input.IsTriggered("OK"))
@@ -95,9 +113,9 @@ void SelectScene::FadeOutUpdate(Input&)
 	m_frameCount++;
 	if (m_frameCount >= kFadeInterval)
 	{
-		
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_selectIndex));
-
+		auto list = m_pSelectList.lock();
+		list->TriggerSelect();
+		//m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_selectIndex));
 		return; // 念のため処理を抜ける
 	}
 }
@@ -105,18 +123,11 @@ void SelectScene::FadeOutUpdate(Input&)
 void SelectScene::NormalDraw()
 {
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
-	DrawBox(20, m_selectIndex * 50 + 100, 300, m_selectIndex * 50 + 150, 0xff5500, TRUE);
+
+	m_pUIManager->Draw();
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SelectScene: NormalDraw", 0xffffff);
-	if (m_selectIndex > 0)
-	{
-		DrawFormatString(0, 30, 0xffffff, L"stage : %d", m_selectIndex);
-	}
-	else
-	{
-		DrawString(0, 30, L"stage : tutorial",0xffffff);
-	}
 #endif
 }
 

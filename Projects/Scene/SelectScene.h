@@ -3,6 +3,8 @@
 
 // 前方宣言
 class SoundManager;
+class UIManager;
+class UISelectList;
 
 /// <summary>
 /// セレクトシーン
@@ -26,7 +28,6 @@ public:
 
 private:
 	unsigned int m_fadeColor; // 単色フェード用の色
-	int m_selectIndex; // 選択中のステージインデックス
 
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理
@@ -42,6 +43,10 @@ private:
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャーへのポインタ
+
+	std::unique_ptr<UIManager> m_pUIManager; // UIを使用するためのポインタ
+
+	std::weak_ptr<UISelectList> m_pSelectList; // 選択できるリストを管理するためのポインタ
 
 };
 

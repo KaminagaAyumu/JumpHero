@@ -4,7 +4,8 @@
 
 namespace
 {
-	constexpr int kPaddingY = 10; // リストの上下端からテキストまでの余白
+	constexpr int kDefaultPaddingY = 10; // リストの上下端からテキストまでの余白の初期値
+	constexpr int kDefaultItemSpacing = 100; // テキストとテキストの間の余白の初期値
 }
 
 UISelectList::UISelectList() : 
@@ -12,7 +13,7 @@ UISelectList::UISelectList() :
 	m_size{},
 	m_fontHandle(-1),
 	m_color(0),
-	m_itemSpacing(0),
+	m_itemSpacing(kDefaultItemSpacing),
 	m_frameCount(0),
 	m_cursor(0)
 {
@@ -60,18 +61,31 @@ void UISelectList::Draw() const
 	const int left = m_pos.x - halfW;
 	const int right = m_pos.x + halfW;
 
-	int y = top + kPaddingY;
+	DrawBox(left, top, right, bottom, 0xff2200, false);
+
+	int y = top + kDefaultPaddingY;
 
 	for (int i = 0; i < static_cast<int>(m_items.size()); i++)
 	{
 		const bool isSelected = (i == m_cursor);
 
+		if (isSelected)
+		{
+			int offsetY = static_cast<int>(std::sin(m_frameCount * 0.12f) * 3.5f);
+			DrawBox(left + kDefaultPaddingY,
+				y - 4 + offsetY,
+				right - kDefaultPaddingY,
+				y + m_itemSpacing - 4 + offsetY,
+				0x444444, true);
+		}
+
 		const auto& text = m_items[i].text;
 		auto wText = StringFunction::WStringFromString(text); // ワイド文字列に変換
-		DrawStringToHandle(left + m_itemSpacing, y, wText.c_str(),isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
+		auto width = GetDrawStringWidthToHandle(wText.c_str(), static_cast<int>(m_items[i].text.length()), m_fontHandle);
+		DrawStringToHandle(left + kDefaultPaddingY, y, wText.c_str(),isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
 		y += m_itemSpacing;
 		// y座標がサイズを超えたらループを抜ける
-		if (y > bottom - kPaddingY)
+		if (y > bottom - kDefaultPaddingY)
 		{
 			break;
 		}
