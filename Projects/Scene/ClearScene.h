@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
-
 class GameManager;
+class UIManager;
+class UISelectList;
 
 /// <summary>
 /// クリアシーン
@@ -26,12 +27,10 @@ public:
 
 private:
 	unsigned int m_fadeColor; // 単色フェード用の色
-	int m_selectIndex; // 選択中のカーソルインデックス
 
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理
 	void NormalUpdate(Input& input); // 通常時の更新処理
-	void MissUpdate(Input&); // プレイヤーがミスになった時の更新処理
 	void FadeOutUpdate(Input& input); // フェードアウト中の更新処理
 	using UpdateFunc_t = void (ClearScene::*)(Input& input); // 更新処理用関数ポインタの型定義
 	UpdateFunc_t m_updateFunc; // 現在の更新処理用関数ポインタ
@@ -43,6 +42,10 @@ private:
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
 	std::shared_ptr<GameManager> m_pGameManager;
+
+	std::shared_ptr<UIManager> m_pUIManager;
+
+	std::weak_ptr<UISelectList> m_pSelectList;
 
 	// リザルト表示用スコア
 	int m_resultScore;
