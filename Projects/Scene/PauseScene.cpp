@@ -8,7 +8,6 @@
 #include "../Utility/GameType.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UISelectList.h"
-#include "../Utility/Application.h"
 
 #include "DxLib.h"
 
@@ -30,7 +29,7 @@ PauseScene::PauseScene(SceneController& controller) :
 {
 	m_frameCount = kPopInterval;
 
-	m_pUIManager = Application::GetInstance().GetUIManager();
+	m_pUIManager = std::make_unique<UIManager>();
 
 	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, { 300,300 }, {Game::kScreenWidth / 2, Game::kScreenHeight / 2});
 	auto list = m_pSelectList.lock();

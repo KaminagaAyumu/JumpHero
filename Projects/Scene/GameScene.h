@@ -81,7 +81,7 @@ private:
 
 	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
-	std::shared_ptr<UIManager> m_pUIManager; // UIを管理するために取得
+	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
 
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを管理するために取得
 

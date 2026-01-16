@@ -18,6 +18,8 @@ Application::Application()
 {
 	m_pSoundManager = std::make_shared<SoundManager>();
 
+	m_pUIManager = std::make_shared<UIManager>();
+
 	// フォントデータをプロジェクトから読み込んで追加する(このプロジェクトの起動時にしか使えない)
 	AddFontResourceExW(kFontPath, FR_PRIVATE, nullptr);
 }
@@ -58,9 +60,6 @@ void Application::Run()
 	Input input;
 	SceneController controller;
 
-	// コンストラクタでmake_sharedするとフォントのハンドルが取得できなくなるのでここでmake_sharedする
-	m_pUIManager = std::make_shared<UIManager>();
-
 	// 最初のシーンをタイトルシーンに設定
 	controller.ChangeScene(std::make_shared<TitleScene>(controller));
 	while (ProcessMessage() != -1)
@@ -76,7 +75,6 @@ void Application::Run()
 		input.Update(); // 入力情報の更新
 
 		m_pSoundManager->Update(); // サウンドマネージャーの更新処理
-		m_pUIManager->Update(); // UIマネージャーの更新処理
 
 		controller.Update(input); // シーンの更新処理
 		controller.Draw(); // シーンの描画処理

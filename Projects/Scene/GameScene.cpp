@@ -60,7 +60,7 @@ m_fadeColor(0x000000)
 	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
 	m_pGameManager->Init(isTutorial);
 
-	m_pUIManager = Application::GetInstance().GetUIManager();
+	m_pUIManager = std::make_unique<UIManager>();
 
 	m_pTextManager = std::make_unique<TextManager>();
 	
