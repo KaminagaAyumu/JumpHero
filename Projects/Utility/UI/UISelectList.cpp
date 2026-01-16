@@ -64,9 +64,11 @@ void UISelectList::Draw() const
 
 	for (int i = 0; i < static_cast<int>(m_items.size()); i++)
 	{
+		const bool isSelected = (i == m_cursor);
+
 		const auto& text = m_items[i].text;
 		auto wText = StringFunction::WStringFromString(text); // ワイド文字列に変換
-		DrawStringToHandle(left + m_itemSpacing, y, wText.c_str(), m_color, m_fontHandle);
+		DrawStringToHandle(left + m_itemSpacing, y, wText.c_str(),isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
 		y += m_itemSpacing;
 		// y座標がサイズを超えたらループを抜ける
 		if (y > bottom - kPaddingY)
