@@ -79,7 +79,8 @@ void UISelectList::Draw() const
 
 bool UISelectList::IsAlive() const
 {
-	return false;
+	// 存在判定を変えられるようにしなければならない
+	return true;
 }
 
 void UISelectList::MoveCursor(int dir)
