@@ -15,7 +15,8 @@ UISelectList::UISelectList() :
 	m_color(0),
 	m_itemSpacing(kDefaultItemSpacing),
 	m_frameCount(0),
-	m_cursor(0)
+	m_cursor(0),
+	m_isAlive(true)
 {
 	m_items.clear();
 }
@@ -96,7 +97,7 @@ void UISelectList::Draw() const
 bool UISelectList::IsAlive() const
 {
 	// 存在判定を変えられるようにしなければならない
-	return true;
+	return m_isAlive;
 }
 
 void UISelectList::MoveCursor(int dir)
@@ -132,4 +133,13 @@ void UISelectList::TriggerSelect()
 			m_items[m_cursor].onSelect();
 		}
 	}
+
+	// セレクトリストを閉じる
+	Close();
+}
+
+void UISelectList::Close()
+{
+	// 現在は存在フラグをfalseにするだけ
+	m_isAlive = false;
 }
