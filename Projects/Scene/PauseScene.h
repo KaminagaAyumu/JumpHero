@@ -44,7 +44,7 @@ private:
 	using DrawFunc_t = void (PauseScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
-	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
+	std::shared_ptr<UIManager> m_pUIManager; // UIを管理するために取得
 	std::weak_ptr<UISelectList> m_pSelectList; // 選択できるリストを取得
 
 };

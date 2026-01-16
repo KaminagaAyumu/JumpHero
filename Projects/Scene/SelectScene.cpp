@@ -34,7 +34,7 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/cursorSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->LoadSoundClip("ok_se", L"data/sound/okSE.mp3", SoundBus::SE, 1.0f, false);
 
-	m_pUIManager = std::make_unique<UIManager>();
+	m_pUIManager = Application::GetInstance().GetUIManager();
 
 	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, kSelectListSize, kSelectListPos);
 	auto list = m_pSelectList.lock();
@@ -80,7 +80,7 @@ void SelectScene::FadeInUpdate(Input&)
 
 void SelectScene::NormalUpdate(Input& input)
 {
-	m_pUIManager->Update();
+	//m_pUIManager->Update();
 	if (input.IsTriggered("Down"))
 	{
 		m_soundManager->Play("cursor_se", 1.0f, true);

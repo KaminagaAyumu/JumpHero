@@ -34,7 +34,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_soundManager->LoadSoundClip("select", L"data/sound/selectBGM.wav", SoundBus::BGM, 1.0f, true);
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/testSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->PlayBGM("test",0.0f);
-	m_pUIManager = std::make_shared<UIManager>();
+	m_pUIManager = Application::GetInstance().GetUIManager();
 	auto test = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2 + kStartTextMargin});
 }
@@ -69,7 +69,7 @@ void TitleScene::FadeInUpdate(Input& input)
 void TitleScene::NormalUpdate(Input& input)
 {
 	m_soundManager->Update();
-	m_pUIManager->Update();
+	//m_pUIManager->Update();
 	// STARTボタンもしくはAボタンが押されたら
 	if (input.IsTriggered("OK"))
 	{

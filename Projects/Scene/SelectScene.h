@@ -44,7 +44,7 @@ private:
 
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャーへのポインタ
 
-	std::unique_ptr<UIManager> m_pUIManager; // UIを使用するためのポインタ
+	std::shared_ptr<UIManager> m_pUIManager; // UIを使用するためのポインタ
 
 	std::weak_ptr<UISelectList> m_pSelectList; // 選択できるリストを管理するためのポインタ
 
