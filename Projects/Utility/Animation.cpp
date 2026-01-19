@@ -14,6 +14,7 @@ Animation::Animation() :
 	m_animFrame(0),
 	m_animIndex(0),
 	m_isLoop(false),
+	m_isEnd(false),
 	m_animAngle(0.0f),
 	m_animScale(1.0f),
 	m_frameCount(0),
@@ -62,6 +63,7 @@ void Animation::Update()
 			}
 			else
 			{
+				m_isEnd = true;
 				m_animCount = m_animNum - kAnimNumMin; // ループしないなら最後のフレームで止める(カウントが0から始まるため-1)
 			}
 		}

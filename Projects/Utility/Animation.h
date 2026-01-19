@@ -52,6 +52,12 @@ public:
 	void SetScale(float scale) { m_animScale = scale; } // 拡大率を設定する
 	void SetAngle(float angle) { m_animAngle = angle; } // 回転角度を設定する
 
+	/// <summary>
+	/// ループしないアニメーションが終わったかどうかを判定する関数
+	/// </summary>
+	/// <returns>true : 終わっている false : 終わっていない</returns>
+	bool IsEnd()const { return m_isEnd; }
+
 	// アニメーションの変更を検出するために使用する
 	bool operator!=(const Animation& anim) const;
 
@@ -63,6 +69,7 @@ private:
 	int m_animFrame; // アニメーションさせたい画像のフレーム数
 	int m_animIndex; // アニメーションさせたい画像の番号(Y座標)
 	bool m_isLoop; // アニメーションをループさせるかどうか
+	bool m_isEnd; // アニメーションが終わったかどうか
 
 	// アニメーションに必須でない変数群
 	float m_animScale; // アニメーションの拡大率
