@@ -14,7 +14,7 @@ class UITextWindow;
 struct EventControls
 {
 	// ヒントを表示する関数
-	std::function<void(const std::string& textId)> showHintFunc;
+	std::function<void(const std::string& id, const Size& size, const Position2& pos, float duration)> showHintFunc;
 
 	// テキストウィンドウを表示する関数
 	std::function<std::weak_ptr<UITextWindow>(const std::string& id, const Size& size, const Position2& pos, float duration)> showTextWindowFunc;

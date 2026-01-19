@@ -22,6 +22,10 @@ namespace
 
 	const Size kTextWindowSize = { 700,300 }; // テキストウィンドウのサイズ
 	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100 }; // テキストウィンドウの座標
+	
+	const Size kHintWindowSize = { 100,50 }; // ヒントテキストウィンドウのサイズ
+	const Position2 kHintWindowPos = { Game::kScreenWidth - 120, 70 }; // ヒントテキストウィンドウの座標
+	
 	constexpr float kTextWindowAppearDuration = 2.0f; // テキストウィンドウが出てくるまでの時間
 
 	constexpr int kSpawnEnemyDefaultFormNo = 1;
@@ -355,6 +359,12 @@ void EventManager::RunAction(const EventData& data)
 	switch (data.actionType)
 	{
 	case ActionType::ShowHint:
+	{
+		// テキストのIDを取得
+		const std::string textId = data.actionParam;
+
+		controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
+	}
 		break;
 	case ActionType::ShowText:
 	{
@@ -431,7 +441,13 @@ void EventManager::RunCommonAction(const EventData& data)
 	switch (data.actionType)
 	{
 	case ActionType::ShowHint:
-		break;
+	{
+		// テキストのIDを取得
+		const std::string textId = data.actionParam;
+
+		controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
+	}
+	break;
 	case ActionType::ShowText:
 	{
 		// テキストのIDを取得

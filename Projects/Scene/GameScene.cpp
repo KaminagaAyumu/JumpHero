@@ -311,6 +311,15 @@ void GameScene::SetEventFunc()
 	// イベントコントロールの関数
 	// -----------------------------------------------------
 
+	m_pEventControls->showHintFunc = [this](const std::string& id, const Size& size, const Position2& pos, float duration)
+		{
+			// ページ付きのテキストウィンドウを作成
+			auto pages = m_pTextManager->GetAllPageText(id);
+			// テキストウィンドウの内容を初期化(文字は最小サイズにする)
+			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration, Types::FontType::Small);
+			
+		};
+
 	// テキストウィンドウを表示する関数を定義
 	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const Size& size, const Position2& pos, float duration)
 		{
