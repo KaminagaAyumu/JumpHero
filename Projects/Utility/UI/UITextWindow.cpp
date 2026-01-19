@@ -99,6 +99,11 @@ void UITextWindow::Draw() const
 	// ウィンドウの画像ハンドルを取得していれば
 	if (m_windowGraphHandle != -1)
 	{
+		// 黒で背景を描画
+		DrawBox(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
+			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
+			GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
+
 		DrawExtendGraph(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
 			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
 			m_windowGraphHandle, true); // ウィンドウの背景を描画
