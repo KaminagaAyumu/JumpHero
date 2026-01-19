@@ -10,6 +10,7 @@ class Map;
 class UIBase;
 class UITextWindow;
 class UIText;
+class UIFormatText;
 class UISelectList;
 
 /// <summary>
@@ -55,6 +56,15 @@ public:
 	/// <param name="pos">表示する中心座標</param>
 	/// <returns></returns>
 	std::weak_ptr<UIText> CreateText(Types::FontType fontType, const std::string& text, const Position2& pos);
+
+	/// <summary>
+	/// フォーマットを指定できるテキストを作成する関数
+	/// </summary>
+	/// <param name="fontType">フォントのタイプ</param>
+	/// <param name="text">テキストの内容</param>
+	/// <param name="pos">表示する中心座標</param>
+	/// <returns></returns>
+	std::weak_ptr<UIFormatText> CreateFormatText(Types::FontType fontType, const std::string& text, const Position2& pos);
 
 	/// <summary>
 	/// 選択できるリストを作成する関数

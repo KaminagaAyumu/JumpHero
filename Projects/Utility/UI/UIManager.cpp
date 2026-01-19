@@ -2,6 +2,7 @@
 #include "UIManager.h"
 #include "UITextWindow.h"
 #include "UIText.h"
+#include "UIFormatText.h"
 #include "UISelectList.h"
 #include "DxLib.h"
 
@@ -92,6 +93,14 @@ std::weak_ptr<UITextWindow> UIManager::CreateTextWindowPaged(const std::string& 
 std::weak_ptr<UIText> UIManager::CreateText(Types::FontType fontType, const std::string& text, const Position2& pos)
 {
 	auto ptr = std::make_shared<UIText>();
+	ptr->Init(m_fontHandles[static_cast<int>(fontType)], text, pos);
+	m_pUIElements.push_back(ptr);
+	return ptr;
+}
+
+std::weak_ptr<UIFormatText> UIManager::CreateFormatText(Types::FontType fontType, const std::string& text, const Position2& pos)
+{
+	auto ptr = std::make_shared<UIFormatText>();
 	ptr->Init(m_fontHandles[static_cast<int>(fontType)], text, pos);
 	m_pUIElements.push_back(ptr);
 	return ptr;
