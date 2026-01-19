@@ -34,11 +34,11 @@ namespace
 	const std::wstring kGraphFileName[] =
 	{
 		L"data/img/balloon_red.png", // 風船
-		L"data/upgrade_medal.png", // 強化メダル
-		L"data/life_up.png", // 1UP
-		L"data/coin.png", // スコア加算用コイン
-		L"data/change_to_coin.png", // 敵をコインに変える
-		L"data/attack_item.png", // 攻撃アイテム
+		L"data/img/upgrade_medal.png", // 強化メダル
+		L"data/img/life_up.png", // 1UP
+		L"data/img/coin.png", // スコア加算用コイン
+		L"data/img/change_to_coin.png", // 敵をコインに変える
+		L"data/img/attack_item.png", // 攻撃アイテム
 	};
 
 	// 画像枚数が違うときにエラーを出せるようにする
