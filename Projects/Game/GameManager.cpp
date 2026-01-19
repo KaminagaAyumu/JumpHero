@@ -175,7 +175,6 @@ void GameManager::Update(Input& input)
 void GameManager::Draw() const
 {
 	// 仮の表示用
-	DrawFormatString(10, 80, 0xffffff, L"スコア:%d", m_score);
 	DrawFormatString(10, 100, 0xffffff, L"残機:%d", m_life);
 	DrawFormatString(10, 120, 0xffffff, L"メダルの所持数:%d", m_medalNum);
 	DrawFormatString(10, 140, 0xffffff, L"風船を取った数:%d", m_balloonNum);
