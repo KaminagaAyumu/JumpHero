@@ -3,6 +3,7 @@
 #include "../Utility/Game.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
+#include "../Utility/AnimationLoader.h"
 #include "GameManager.h"
 #include "Chest.h"
 #include "DxLib.h"
@@ -20,6 +21,8 @@ namespace
 
 	constexpr int	kGraphWidth = 45;					// プレイヤー画像の幅
 	constexpr int	kGraphHeight = 45;					// プレイヤー画像の高さ
+
+	constexpr float kGraphScale = 1.40625f;	// 画像の拡大率
 
 	constexpr float kPlayerWidth = 40.0f;				// プレイヤーの実際の幅
 	constexpr float kPlayerHeight = 40.0f;				// プレイヤーの実際の高さ
@@ -91,7 +94,7 @@ void Player::Init()
 	m_direction = {};
 	m_velocity = {};
 	m_barrierPos = {};
-	m_graphHandle = LoadGraph(L"data/Idle.png");
+	m_graphHandle = LoadGraph(L"data/img/player.png");
 	m_colCircle = { m_pos,kPlayerWidth * 0.5f };
 	m_colRect = { m_pos,kPlayerWidth,kPlayerHeight };
 	m_frameCount = 0;
@@ -107,7 +110,13 @@ void Player::Init()
 	m_isAttackable = false;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
-	m_moveAnim.SetAnimation(m_graphHandle, { kGraphWidth,kGraphHeight }, kAnimGroundNum, kAnimGroundFrame, true);
+	AnimationLoader::LoadAnimationData(L"data/animation/player.csv", m_graphHandle, m_animations);
+	
+	m_animations["Idle"].SetScale(kGraphScale);
+	m_animations["Jump"].SetScale(kGraphScale);
+	m_animations["Walk"].SetScale(kGraphScale);
+
+	ChangeAnimation(m_animations["Idle"]);
 }
 
 void Player::InitMap(std::weak_ptr<Map> map)
@@ -463,8 +472,18 @@ void Player::CheckAnimation()
 {
 	if (m_isGround) // 地面についている時
 	{
-		// 移動アニメーションに変更
-		ChangeAnimation(m_moveAnim);
+		if (m_velocity.x != 0.0f)
+		{
+			ChangeAnimation(m_animations["Idle"]);
+		}
+		else
+		{
+			ChangeAnimation(m_animations["Walk"]);
+		}
+	}
+	else
+	{
+		ChangeAnimation(m_animations["Jump"]);
 	}
 	// 他の処理も今後実装
 }
@@ -585,9 +604,8 @@ void Player::EntryDraw()
 
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
-	DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-
+	m_currentAnim.Draw({ drawX, drawY }, false);
+	
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);

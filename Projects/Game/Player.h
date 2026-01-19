@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Actor.h"
 #include <memory>
+#include <unordered_map>
+#include <string>
 
 class Input;
 class Map;
@@ -112,7 +114,7 @@ private:
 	bool m_isFreeze; // 止まっているかどうか
 	bool m_isAttackable; // 攻撃可能かどうか
 
-	Animation m_moveAnim; // 移動アニメーション
+	std::unordered_map<std::string, Animation> m_animations; // アニメーション
 
 	// マップのポインタ
 	std::weak_ptr<Map> m_pMap;
