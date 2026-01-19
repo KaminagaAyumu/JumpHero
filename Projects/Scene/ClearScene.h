@@ -4,6 +4,7 @@
 class GameManager;
 class UIManager;
 class UISelectList;
+class UIText;
 class UIFormatText;
 
 /// <summary>
@@ -51,6 +52,8 @@ private:
 	std::weak_ptr<UISelectList> m_pSelectList;
 
 	std::weak_ptr<UIFormatText> m_pScoreText; // スコアを表示するために取得
+
+	std::weak_ptr<UIText> m_pClearText; // クリアという文字を表示するために取得
 
 	// リザルト表示用スコア
 	int m_resultScore;

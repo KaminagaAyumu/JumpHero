@@ -22,7 +22,7 @@ namespace
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
-	constexpr int kClearDispMargin = -30;
+	constexpr int kClearDispMargin = 50;
 	constexpr int kScoreDispMargin = -60;
 
 }
@@ -57,6 +57,8 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 		{
 			return std::string("スコア:") + std::to_string(GetScore());
 		});
+
+	m_pClearText = m_pUIManager->CreateText(Types::FontType::Large, "クリア！", { Game::kScreenWidth / 2, kClearDispMargin });
 }
 
 ClearScene::~ClearScene()
