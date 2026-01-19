@@ -31,6 +31,8 @@ UIManager::UIManager()
 
 	// フォントデータを読み込んで設定
 	LoadFonts();
+
+	m_windowGraphHandle = LoadGraph(L"data/UIyoko.png");
 }
 
 UIManager::~UIManager()
@@ -39,6 +41,7 @@ UIManager::~UIManager()
 	{
 		DeleteFontToHandle(handle);
 	}
+	DeleteGraph(m_windowGraphHandle);
 }
 
 void UIManager::Init()
@@ -75,7 +78,7 @@ void UIManager::Draw()
 std::weak_ptr<UITextWindow> UIManager::CreateTextWindow(const std::string& text, const Size& size, const Position2& pos, Types::FontType fontType)
 {
 	auto ptr = std::make_shared<UITextWindow>();
-	ptr->Init(text, size, pos, m_fontHandles[static_cast<int>(fontType)]);
+	ptr->Init(text, size, pos, m_fontHandles[static_cast<int>(fontType)],m_windowGraphHandle);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }
@@ -83,7 +86,7 @@ std::weak_ptr<UITextWindow> UIManager::CreateTextWindow(const std::string& text,
 std::weak_ptr<UITextWindow> UIManager::CreateTextWindowPaged(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float appearDuration, Types::FontType fontType)
 {
 	auto ptr = std::make_shared<UITextWindow>();
-	ptr->Init("", size, pos, m_fontHandles[static_cast<int>(fontType)]);
+	ptr->Init("", size, pos, m_fontHandles[static_cast<int>(fontType)], m_windowGraphHandle);
 	ptr->SetPages(id, pages);
 	ptr->ShowPaging(appearDuration);
 	m_pUIElements.push_back(ptr);

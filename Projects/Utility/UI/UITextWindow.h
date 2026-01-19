@@ -20,7 +20,8 @@ public:
 	/// <param name="size">ウィンドウのサイズ</param>
 	/// <param name="target">表示する中心座標</param>
 	/// <param name="fontHandle">フォントのハンドル</param>
-	void Init(std::string text, const Size& size, const Position2& target, int fontHandle);
+	/// <param name="windowGraphHandle">ウィンドウの画像ハンドル</param>
+	void Init(std::string text, const Size& size, const Position2& target, int fontHandle, int windowGraphHandle);
 
 	/// <summary>
 	/// 複数ページのテキストデータをセットする
@@ -97,6 +98,7 @@ private:
 	bool m_isChangeSize; // サイズ変更アニメーション中かどうか
 	int m_aliveFrame; // ウィンドウが表示されてからのフレーム数
 	int m_fontHandle; // フォントデータを使う際のハンドル
+	int m_windowGraphHandle; // ウィンドウの画像を使う際のハンドル
 
 	TextPager m_textPager; // ページ付きのテキストデータを管理するために使う
 

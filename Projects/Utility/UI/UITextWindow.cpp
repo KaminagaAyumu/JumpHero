@@ -24,6 +24,7 @@ UITextWindow::UITextWindow() :
 	m_isChangeSize(false),
 	m_aliveFrame(kDefaultAliveTime),
 	m_fontHandle(-1),
+	m_windowGraphHandle(-1),
 	m_textPager{}
 {
 }
@@ -32,13 +33,15 @@ UITextWindow::~UITextWindow()
 {
 }
 
-void UITextWindow::Init(std::string text, const Size& size, const Position2& target, int fontHandle)
+void UITextWindow::Init(std::string text, const Size& size, const Position2& target, int fontHandle, int windowGraphHandle)
 {
 	m_text = text; // テキストの内容を設定
 	m_targetSize = size; // 目標サイズを設定
 	m_targetPos = target; // 目標位置を設定
 	m_pos = m_startPos; // 初期位置を設定
+	// ハンドルを取得
 	m_fontHandle = fontHandle;
+	m_windowGraphHandle = windowGraphHandle;
 }
 
 void UITextWindow::SetPages(const std::string& id, const std::vector<TextData>& pages)
@@ -93,9 +96,21 @@ void UITextWindow::Update()
 
 void UITextWindow::Draw() const
 {
-	DrawBox(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
-		m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
-		GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
+	// ウィンドウの画像ハンドルを取得していれば
+	if (m_windowGraphHandle != -1)
+	{
+		DrawExtendGraph(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
+			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
+			m_windowGraphHandle, false); // ウィンドウの背景を描画
+	}
+	else // ハンドルを取得していなければ
+	{
+		// 黒で背景を描画
+		DrawBox(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
+			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
+			GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
+	}
+
 	auto text = StringFunction::WStringFromString(m_text);
 	int width = 0; // 文字を中央ぞろえで表示するための変数
 	if (m_fontHandle != -1) // フォントのハンドルがある場合

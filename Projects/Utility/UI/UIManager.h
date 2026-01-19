@@ -77,6 +77,8 @@ public:
 
 private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列
+	int m_windowGraphHandle; // ウィンドウの画像ハンドル
+
 	std::list<std::shared_ptr<UIBase>> m_pUIElements; // UIの要素を格納するコンテナ
 
 	/// <summary>
