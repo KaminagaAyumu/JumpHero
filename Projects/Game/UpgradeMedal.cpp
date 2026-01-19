@@ -9,6 +9,12 @@ namespace
 	constexpr float kMedalDefaultWidth = 40.0f;
 	constexpr float kMedalDefaultHeight = 40.0f;
 
+	constexpr int kGraphWidth = 16; // メダルの画像1枚の幅
+	constexpr int kGraphHeight = 16; // メダルの画像1枚の高さ
+
+	constexpr int kAnimNum = 4; // メダルの画像のアニメーションの枚数
+	constexpr int kAnimFrame = 5; // アニメーションの更新フレーム
+
 	constexpr float kMedalScale = 1.40625f;
 }
 
@@ -18,6 +24,8 @@ UpgradeMedal::UpgradeMedal(const Position2& pos, int handle)
 	m_colRect = { {m_pos},kMedalDefaultWidth,kMedalDefaultHeight };
 	m_colCircle = { {m_pos},kMedalDefaultWidth / 2 };
 	m_graphHandle = handle;
+	m_currentAnim.SetAnimation(handle, Size{ kGraphWidth, kGraphHeight }, kAnimNum, kAnimFrame, true);
+	m_currentAnim.SetScale(kMedalScale);
 }
 
 void UpgradeMedal::Init()
@@ -29,6 +37,7 @@ void UpgradeMedal::Update(Input&)
 {
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
+	m_currentAnim.Update();
 }
 
 void UpgradeMedal::Draw()
@@ -37,7 +46,8 @@ void UpgradeMedal::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawRotaGraph(drawX, drawY, kMedalScale, 0.0, m_graphHandle, TRUE);
+		//DrawRotaGraph(drawX, drawY, kMedalScale, 0.0, m_graphHandle, TRUE);
+		m_currentAnim.Draw({ drawX,drawY }, false);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);
