@@ -33,7 +33,7 @@ namespace
 	// 画像ファイル名の配列
 	const std::wstring kGraphFileName[] =
 	{
-		L"data/balloon_red.png", // 風船
+		L"data/img/balloon_red.png", // 風船
 		L"data/upgrade_medal.png", // 強化メダル
 		L"data/life_up.png", // 1UP
 		L"data/coin.png", // スコア加算用コイン

@@ -9,6 +9,12 @@ namespace
 	constexpr float kBalloonDefaultWidth = 30.0f;
 	constexpr float kBalloonDefaultHeight = 30.0f;
 
+	constexpr int kGraphWidth = 32;
+	constexpr int kGraphHeight = 34;
+
+	constexpr int kAnimNum = 3;
+	constexpr int kAnimFrame = 8;
+
 	constexpr float kBalloonScale = 1.0f;
 }
 
@@ -18,6 +24,9 @@ Balloon::Balloon(const Position2& pos, int handle)
 	m_colRect = { {m_pos},kBalloonDefaultWidth,kBalloonDefaultHeight };
 	m_colCircle = { {m_pos},kBalloonDefaultWidth / 2 };
 	m_graphHandle = handle;
+
+	m_currentAnim.SetAnimation(handle, Size{ kGraphWidth,kGraphHeight }, kAnimNum, kAnimFrame, true);
+	//m_currentAnim.SetScale(kBalloonScale);
 }
 
 void Balloon::Init()
@@ -29,6 +38,7 @@ void Balloon::Update(Input&)
 {
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
+	m_currentAnim.Update();
 }
 
 void Balloon::Draw()
@@ -37,7 +47,7 @@ void Balloon::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawRotaGraph(drawX, drawY, kBalloonScale, 0.0f, m_graphHandle, true);
+		m_currentAnim.Draw({ drawX,drawY }, false);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);
