@@ -1,0 +1,4 @@
+name,width,height,animNum,animFrame,animIndex,isLoop
+Idle,32,32,4,5,0,1
+Jump,32,32,8,5,1,1
+Walk,32,32,6,5,2,1
