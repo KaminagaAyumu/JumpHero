@@ -47,7 +47,9 @@ EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameMana
 	// 敵アニメーションの読み込み
 	if (AnimationLoader::LoadAnimationData(L"data/animation/transform_enemy.csv", handle, m_transformAnimations))
 	{
+#ifdef _DEBUG
 		printfDx(L"変身敵アニメーションデータのロードに成功\n");
+#endif
 	}
 
 }

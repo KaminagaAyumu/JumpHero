@@ -320,7 +320,8 @@ void TransformEnemy::AppearDraw()
 {
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	DrawString(drawX, drawY, L"敵が出てきます", 0xffffff);
+	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
+
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -346,8 +347,6 @@ void TransformEnemy::TransformDraw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 
 	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
-
-	DrawString(drawX, drawY, L"変身中です", 0xffffff);
 }
 
 void TransformEnemy::SeekerDraw()
