@@ -32,7 +32,7 @@ UIManager::UIManager()
 	// フォントデータを読み込んで設定
 	LoadFonts();
 
-	m_windowGraphHandle = LoadGraph(L"data/UIyoko.png");
+	m_windowGraphHandle = LoadGraph(L"data/frame.png");
 }
 
 UIManager::~UIManager()

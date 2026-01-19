@@ -101,7 +101,7 @@ void UITextWindow::Draw() const
 	{
 		DrawExtendGraph(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
 			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
-			m_windowGraphHandle, false); // ウィンドウの背景を描画
+			m_windowGraphHandle, true); // ウィンドウの背景を描画
 	}
 	else // ハンドルを取得していなければ
 	{
