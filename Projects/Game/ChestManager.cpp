@@ -15,7 +15,7 @@ namespace
 }
 
 
-ChestManager::ChestManager(Camera* camera, GameManager* gameManager) :
+ChestManager::ChestManager(std::weak_ptr<Camera> camera, GameManager* gameManager) :
 	m_pCamera(camera),
 	m_pGameManager(gameManager)
 {

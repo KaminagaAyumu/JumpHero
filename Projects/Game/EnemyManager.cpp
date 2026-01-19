@@ -28,7 +28,7 @@ namespace
 	constexpr int kEnemyCoinAddScore = 1000;
 }
 
-EnemyManager::EnemyManager(Camera* camera, Player* player, GameManager* gameManager, std::weak_ptr<Map> map) :
+EnemyManager::EnemyManager(std::weak_ptr<Camera> camera, Player* player, GameManager* gameManager, std::weak_ptr<Map> map) :
 	m_pCamera(camera),
 	m_pPlayer(player),
 	m_pGameManager(gameManager),
@@ -142,14 +142,16 @@ void EnemyManager::Draw()
 		if(pos.x == nearPos.x && pos.y == nearPos.y)
 		{
 			// 最近点は色を変える
-			int drawX = static_cast<int>(pos.x - m_pCamera->scroll.x);
-			int drawY = static_cast<int>(pos.y - m_pCamera->scroll.y);
+			auto camera = m_pCamera.lock();
+			int drawX = static_cast<int>(pos.x - camera->scroll.x);
+			int drawY = static_cast<int>(pos.y - camera->scroll.y);
 			// スポーン位置を表示(デバッグ用)
 			DrawCircle(drawX, drawY, 10, GetColor(0, 255, 0), FALSE);
 			continue;
 		}
-		int drawX = static_cast<int>(pos.x - m_pCamera->scroll.x);
-		int drawY = static_cast<int>(pos.y - m_pCamera->scroll.y);
+		auto camera = m_pCamera.lock();
+		int drawX = static_cast<int>(pos.x - camera->scroll.x);
+		int drawY = static_cast<int>(pos.y - camera->scroll.y);
 		// スポーン位置を表示(デバッグ用)
 		DrawCircle(drawX, drawY, 10, GetColor(255, 0, 0), FALSE);
 	}

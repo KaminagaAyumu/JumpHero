@@ -316,8 +316,9 @@ void TransformEnemy::DeadUpdate(Input&)
 
 void TransformEnemy::AppearDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 
 #ifdef _DEBUG
@@ -328,8 +329,9 @@ void TransformEnemy::AppearDraw()
 
 void TransformEnemy::NormalDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 
 	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 
@@ -341,16 +343,18 @@ void TransformEnemy::NormalDraw()
 
 void TransformEnemy::TransformDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 
 	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 }
 
 void TransformEnemy::SeekerDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 
 	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 
@@ -362,8 +366,9 @@ void TransformEnemy::SeekerDraw()
 
 void TransformEnemy::FireBallDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 
 	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 
@@ -375,8 +380,9 @@ void TransformEnemy::FireBallDraw()
 
 void TransformEnemy::SkullDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 
 	m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 	
@@ -388,8 +394,9 @@ void TransformEnemy::SkullDraw()
 
 void TransformEnemy::ItemDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 
 	// 残り時間が75%消費されたら
 	if (m_itemFormTime < m_maxItemFormTime * kItemWarningRate)

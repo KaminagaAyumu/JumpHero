@@ -45,7 +45,7 @@ namespace
 	static_assert(kGraphNum == _countof(kGraphFileName), "画像枚数の定義が間違っています");
 }
 
-ItemManager::ItemManager(Camera* camera, GameManager* gameManager) :
+ItemManager::ItemManager(std::weak_ptr<Camera> camera, GameManager* gameManager) :
 	m_pCamera(camera),
 	m_pGameManager(gameManager),
 	m_firstBalloonNum(0)

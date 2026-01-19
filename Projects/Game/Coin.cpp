@@ -41,8 +41,9 @@ void Coin::Update(Input&)
 
 void Coin::Draw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 	if (m_isExist)
 	{
 		//DrawRotaGraph(drawX, drawY, kCoinScale, 0.0, m_graphHandle, true);

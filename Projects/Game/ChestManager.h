@@ -19,7 +19,7 @@ class GameManager;
 class ChestManager
 {
 public:
-	ChestManager(Camera* camera, GameManager* gameManager);
+	ChestManager(std::weak_ptr<Camera> camera, GameManager* gameManager);
 	virtual ~ChestManager();
 
 	void Init();
@@ -63,7 +63,7 @@ private:
 
 	int m_chestGraphHandle; // 宝箱の画像ハンドル
 
-	Camera* m_pCamera; // 宝箱で使うカメラを参照
+	std::weak_ptr<Camera> m_pCamera; // 宝箱で使うカメラを参照
 	GameManager* m_pGameManager; // イベント通知をするクラスを参照
 	std::list<std::shared_ptr<Chest>> m_chests;
 	std::unordered_map<TilePos, Chest*, Hash> m_chestMap; // タイル座標から宝箱を取得するためのマップ

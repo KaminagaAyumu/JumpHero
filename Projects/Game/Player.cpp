@@ -615,8 +615,9 @@ void Player::EntryDraw()
 		DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Ready、", 0xff0000);
 	}
 
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 	
 #ifdef _DEBUG
@@ -627,8 +628,9 @@ void Player::EntryDraw()
 
 void Player::JumpDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xaaffff, true);
 	//DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
@@ -640,8 +642,9 @@ void Player::JumpDraw()
 
 void Player::GroundDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
 	//DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
@@ -654,8 +657,9 @@ void Player::GroundDraw()
 
 void Player::MissDraw()
 {
-	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
-	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xff00aa, true);
 	//DrawRectRotaGraph(drawX, drawY, kGraphWidth, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);

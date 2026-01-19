@@ -2,6 +2,7 @@
 #include "../Utility/Geometry.h"
 #include "../Utility/GameType.h"
 #include "../Utility/Animation.h"
+#include <memory>
 
 class Input;
 class Camera;
@@ -26,7 +27,7 @@ public:
 	virtual void Update(Input&)	abstract;   // 更新処理
 	virtual void Draw()		abstract;   // 描画処理
 
-	void SetCamera(Camera* camera); // カメラの参照をセットする関数
+	void SetCamera(std::weak_ptr<Camera> camera); // カメラの参照をセットする関数
 
 	//////////////////////////////////////////////
 	         //////当たり判定用関数//////
@@ -72,7 +73,7 @@ protected:
 	Rect2D m_colRect; // 当たり判定用の矩形
 	Types::ActorType m_type; // オブジェクトのタイプ
 
-	Camera* m_pCamera; // カメラへの参照
+	std::weak_ptr<Camera> m_pCamera; // カメラへの参照
 	Animation m_currentAnim; // 現在のアニメーション
 
 	/// <summary>

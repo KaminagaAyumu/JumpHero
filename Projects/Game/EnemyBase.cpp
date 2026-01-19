@@ -39,7 +39,8 @@ void EnemyBase::IsCollision(const Types::CollisionInfo& info)
 
 bool EnemyBase::IsOnScreen() const
 {
-	Rect2D screenRange = m_pCamera->GetNowScreenArea();
+	auto camera = m_pCamera.lock();
+	Rect2D screenRange = camera->GetNowScreenArea();
 	// 矩形の範囲内に居たらtrue、それ以外はfalse
 	return m_pos.x >= screenRange.GetLeft() && m_pos.x <= screenRange.GetRight() && m_pos.y >= screenRange.GetTop() && m_pos.y <= screenRange.GetBottom();
 }

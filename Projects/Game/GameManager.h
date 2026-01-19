@@ -239,7 +239,7 @@ private:
 
 	// 各オブジェクト管理クラスの参照用
 	std::weak_ptr<Map> m_pMap; // マップはゲームシーンにshared_ptrで持たせるのでweak_ptr
-	std::unique_ptr<Camera> m_pCamera;
+	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;

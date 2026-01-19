@@ -43,15 +43,15 @@ GameManager::GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor
 	auto pMap = m_pMap.lock();
 	m_pCamera = std::make_unique<Camera>(pMap->GetMapSize());
 	m_pPlayer = std::make_shared<Player>(map,this);
-	m_pPlayer->SetCamera(m_pCamera.get());
+	m_pPlayer->SetCamera(m_pCamera);
 	m_pPlayer->Init();
-	m_pChestManager = std::make_unique<ChestManager>(m_pCamera.get(), this);
+	m_pChestManager = std::make_unique<ChestManager>(m_pCamera, this);
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
-	m_pItemManager = std::make_unique<ItemManager>(m_pCamera.get(),this);
+	m_pItemManager = std::make_unique<ItemManager>(m_pCamera,this);
 	m_pItemManager->FirstSpawnItem(map);
 	m_pItemManager->PushActors(actors);
-	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera.get(), m_pPlayer.get(), this, map);
+	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera, m_pPlayer.get(), this, map);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pPlayer->GetPos(); });
 
