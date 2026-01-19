@@ -51,14 +51,12 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 		});
 
-	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin });
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { Game::kScreenWidth / 2 + kScoreDispMargin, Game::kScreenHeight / 2 + kScoreDispMargin });
 	auto score = m_pScoreText.lock();
 	score->SetProvider([this]() 
 		{
 			return std::string("スコア:") + std::to_string(GetScore());
 		});
-
-
 }
 
 ClearScene::~ClearScene()

@@ -27,6 +27,11 @@ public:
 	/// <param name="provider">プロバイダ</param>
 	void SetProvider(std::function<std::string()> provider);
 
+	/// <summary>
+	/// 中央ぞろえでテキストを表示するようにする
+	/// </summary>
+	void SetCenter();
+
 private:
 	Position2 m_pos; // 表示座標
 	std::string m_text; // 表示するテキスト
@@ -35,6 +40,7 @@ private:
 	int m_color; // 文字の色
 	int m_frameCount; // 表示してからのフレーム数
 	bool m_isAlive; // 存在フラグ
+	bool m_isCenter; // 中央ぞろえでテキストを表示するかどうか
 
 	/// <summary>
 	/// プロバイダからテキストデータを変更する

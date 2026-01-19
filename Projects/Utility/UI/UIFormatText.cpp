@@ -12,7 +12,8 @@ UIFormatText::UIFormatText() :
 	m_fontHandle(-1),
 	m_color(kDefaultColor),
 	m_frameCount(0),
-	m_isAlive(true)
+	m_isAlive(true),
+	m_isCenter(false)
 {
 }
 
@@ -43,8 +44,19 @@ void UIFormatText::Draw() const
 	auto text = StringFunction::WStringFromString(m_text);
 	// テキストの幅を取得
 	int width = GetDrawStringWidthToHandle(text.c_str(), static_cast<int>(m_text.length()), m_fontHandle);
-	// テキストを描画
-	DrawStringToHandle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), text.c_str(), m_color, m_fontHandle);
+	// 中央ぞろえかどうかを判定
+	if (m_isCenter)
+	{
+		// テキストを中央揃えにするためにX座標を調整
+		int adjustedX = static_cast<int>(m_pos.x) - width / 2;
+		// テキストを描画
+		DrawStringToHandle(adjustedX, static_cast<int>(m_pos.y), text.c_str(), m_color, m_fontHandle);
+	}
+	else
+	{
+		// 左端から表示
+		DrawStringToHandle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), text.c_str(), m_color, m_fontHandle);
+	}
 }
 
 bool UIFormatText::IsAlive() const
@@ -58,6 +70,11 @@ void UIFormatText::SetProvider(std::function<std::string()> provider)
 	m_provider = std::move(provider);
 	// セットと同時に実際のテキストの内容も変更
 	CheckProvider();
+}
+
+void UIFormatText::SetCenter()
+{
+	m_isCenter = true;
 }
 
 void UIFormatText::CheckProvider()

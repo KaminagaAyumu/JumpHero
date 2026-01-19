@@ -28,5 +28,6 @@ private:
 	int m_fontHandle; // フォントのハンドル
 	int m_color; // 文字の色
 	int m_frameCount; // 表示してからのフレーム数
+	bool m_isAlive; // 存在フラグ
 };
 

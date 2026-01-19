@@ -12,7 +12,8 @@ UIText::UIText() :
 	m_pos{},
 	m_fontHandle(-1),
 	m_color(kDefaultColor),
-	m_frameCount(0)
+	m_frameCount(0),
+	m_isAlive(true)
 {
 }
 
@@ -46,5 +47,5 @@ void UIText::Draw() const
 
 bool UIText::IsAlive() const
 {
-	return m_frameCount <= kAliveTime;
+	return m_isAlive;
 }
