@@ -147,6 +147,7 @@
     <ClCompile Include="Game\Balloon.cpp" />
     <ClCompile Include="Game\ChangeToCoin.cpp" />
     <ClCompile Include="Game\Coin.cpp" />
+    <ClCompile Include="Game\Effect\Charge.cpp" />
     <ClCompile Include="Game\Effect\EffectBase.cpp" />
     <ClCompile Include="Game\EnemyManager.cpp" />
     <ClCompile Include="Game\ChestManager.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Game\Balloon.h" />
     <ClInclude Include="Game\ChangeToCoin.h" />
     <ClInclude Include="Game\Coin.h" />
+    <ClInclude Include="Game\Effect\Charge.h" />
     <ClInclude Include="Game\Effect\EffectBase.h" />
     <ClInclude Include="Game\EnemyManager.h" />
     <ClInclude Include="Game\ChestManager.h" />
