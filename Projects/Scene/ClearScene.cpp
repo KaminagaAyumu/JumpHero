@@ -152,10 +152,6 @@ void ClearScene::FadeOutUpdate(Input&)
 
 void ClearScene::NormalDraw()
 {
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kClearDispMargin, L"Clear!", 0xffffff);
-	//DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
-	//DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
-
 	m_pUIManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"ClearScene: NormalDraw", 0xffffff);
@@ -164,10 +160,7 @@ void ClearScene::NormalDraw()
 
 void ClearScene::FadeDraw()
 {
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kClearDispMargin, L"Clear!", 0xffffff);
-	//DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
-	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
-
+	m_pUIManager->Draw();
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);

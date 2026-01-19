@@ -113,6 +113,8 @@ private:
 	bool m_isJumpStart; // ジャンプ開始したかどうか
 	bool m_isFreeze; // 止まっているかどうか
 	bool m_isAttackable; // 攻撃可能かどうか
+	bool m_isWalk; // 歩いているかどうか
+	bool m_isTurn; // 反転しているかどうか
 
 	std::unordered_map<std::string, Animation> m_animations; // アニメーション
 

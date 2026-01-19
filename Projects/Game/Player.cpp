@@ -74,6 +74,8 @@ Player::Player(std::weak_ptr<Map> map, GameManager* gameManager) :
 	m_isJumpStart(false),
 	m_isFreeze(false),
 	m_isAttackable(false),
+	m_isWalk(false),
+	m_isTurn(false),
 	m_pMap(map),
 	m_pGameManager(gameManager),
 	m_update(&Player::EntryUpdate),
@@ -115,6 +117,7 @@ void Player::Init()
 	m_animations["Idle"].SetScale(kGraphScale);
 	m_animations["Jump"].SetScale(kGraphScale);
 	m_animations["Walk"].SetScale(kGraphScale);
+	m_animations["Fall"].SetScale(kGraphScale);
 
 	ChangeAnimation(m_animations["Idle"]);
 }
@@ -203,14 +206,25 @@ void Player::MoveOperation(Input& input)
 	// 左右移動の処理
 	const bool movingLeft = input.IsPressed("Left");
 	const bool movingRight = input.IsPressed("Right");
-	
+
+	if (movingLeft || movingRight)
+	{
+		m_isWalk = true;
+	}
+	else
+	{
+		m_isWalk = false;
+	}
+
 	if (movingLeft) // 左ボタンが押されている時
 	{
 		dx -= kNormalMoveSpeed; // 左に移動
+		m_isTurn = true;
 	}
 	if (movingRight) // 右ボタンが押されている時
 	{
 		dx += kNormalMoveSpeed; // 右に移動
+		m_isTurn = false;
 	}
 
 	// 重力の処理
@@ -472,20 +486,19 @@ void Player::CheckAnimation()
 {
 	if (m_isGround) // 地面についている時
 	{
-		if (m_velocity.x != 0.0f)
+		if (m_isWalk)
 		{
-			ChangeAnimation(m_animations["Idle"]);
+			ChangeAnimation(m_animations["Walk"]);
 		}
 		else
 		{
-			ChangeAnimation(m_animations["Walk"]);
+			ChangeAnimation(m_animations["Idle"]);
 		}
 	}
 	else
 	{
-		ChangeAnimation(m_animations["Jump"]);
+		ChangeAnimation(m_animations["Fall"]);
 	}
-	// 他の処理も今後実装
 }
 
 void Player::EntryUpdate(Input&)
@@ -604,7 +617,7 @@ void Player::EntryDraw()
 
 	int drawX = static_cast<int>(m_pos.x - m_pCamera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
-	m_currentAnim.Draw({ drawX, drawY }, false);
+	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 	
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
@@ -618,7 +631,7 @@ void Player::JumpDraw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xaaffff, true);
 	//DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-	m_currentAnim.Draw({ drawX, drawY }, false);
+	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -631,7 +644,7 @@ void Player::GroundDraw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
 	//DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-	m_currentAnim.Draw({ drawX, drawY }, false);
+	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
@@ -645,7 +658,7 @@ void Player::MissDraw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xff00aa, true);
 	//DrawRectRotaGraph(drawX, drawY, kGraphWidth, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
-	m_currentAnim.Draw({ drawX, drawY }, false);
+	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Miss!", 0xffffff);
 #ifdef _DEBUG
