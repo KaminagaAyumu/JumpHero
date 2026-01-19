@@ -267,6 +267,7 @@ TriggerType EventManager::ToTriggerType(const std::string& strData)
 
 ActionType EventManager::ToActionType(const std::string& strData)
 {
+	if (strData == "ShowHint") return ActionType::ShowHint;
 	if (strData == "ShowText") return ActionType::ShowText;
 	if (strData == "DropItem") return ActionType::DropItem;
 	if (strData == "SpawnEnemy") return ActionType::SpawnEnemy;
@@ -353,6 +354,8 @@ void EventManager::RunAction(const EventData& data)
 
 	switch (data.actionType)
 	{
+	case ActionType::ShowHint:
+		break;
 	case ActionType::ShowText:
 	{
 		// テキストのIDを取得
@@ -427,6 +430,8 @@ void EventManager::RunCommonAction(const EventData& data)
 
 	switch (data.actionType)
 	{
+	case ActionType::ShowHint:
+		break;
 	case ActionType::ShowText:
 	{
 		// テキストのIDを取得

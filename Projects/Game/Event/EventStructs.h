@@ -21,6 +21,7 @@ namespace Events
 	// イベントで何を行うか
 	enum class ActionType
 	{
+		ShowHint, // ヒントを表示する
 		ShowText, // テキストを表示する
 		DropItem, // アイテムを生成する
 		SpawnEnemy, // 敵をスポーンさせる
