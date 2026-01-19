@@ -80,7 +80,7 @@ void ClearScene::FadeInUpdate(Input&)
 
 void ClearScene::NormalUpdate(Input& input)
 {
-	m_gameScore = m_pGameManager->GetScore();
+	m_gameScore = m_pGameManager->GetCurrentScore();
 
 	// スコアの更新処理
 	if (m_resultScore < m_gameScore) // リザルト表示スコアがゲームで獲得したスコアより小さい場合

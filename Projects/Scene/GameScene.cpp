@@ -16,6 +16,7 @@
 #include "../Game/ItemBase.h"
 #include "../Game/GameManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIFormatText.h"
 #include "../Game/TextManager.h"
 #include "../Game/CollisionManager.h"
 #include "../Game/ChestManager.h"
@@ -61,6 +62,13 @@ m_fadeColor(0x000000)
 	m_pGameManager->Init(isTutorial);
 
 	m_pUIManager = std::make_unique<UIManager>();
+
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { 60, 40 });
+	auto score = m_pScoreText.lock();
+	score->SetProvider([this]()
+		{
+			return std::string("スコア:") + std::to_string(m_pGameManager->GetScore());
+		});
 
 	m_pTextManager = std::make_unique<TextManager>();
 	

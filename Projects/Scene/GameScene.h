@@ -14,6 +14,7 @@ class Camera;
 class ItemBase;
 class GameManager;
 class UIManager;
+class UIFormatText;
 class TextManager;
 class CollisionManager;
 class SoundManager;
@@ -82,6 +83,8 @@ private:
 	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
 	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
+
+	std::weak_ptr<UIFormatText> m_pScoreText; // スコアを表示するときに使用
 
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを管理するために取得
 

@@ -180,11 +180,17 @@ public:
 	Player* GetPlayer()const { return m_pPlayer.get(); }
 
 	/// <summary>
+	/// スコアを取得(描画用)
+	/// </summary>
+	/// <returns>演出用のスコア</returns>
+	const int GetScore()const { return m_score; }
+
+	/// <summary>
 	/// 現在のスコアを取得する
 	/// リザルト用
 	/// </summary>
 	/// <returns>スコア</returns>
-	const int GetScore()const { return m_currentScore; }
+	const int GetCurrentScore()const { return m_currentScore; }
 
 	/// <summary>
 	/// 残機を1減らす(仮)
