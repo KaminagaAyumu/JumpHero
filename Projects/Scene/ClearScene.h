@@ -4,6 +4,7 @@
 class GameManager;
 class UIManager;
 class UISelectList;
+class UIFormatText;
 
 /// <summary>
 /// クリアシーン
@@ -41,11 +42,15 @@ private:
 	using DrawFunc_t = void (ClearScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
+	const int GetScore()const { return m_resultScore; };
+
 	std::shared_ptr<GameManager> m_pGameManager;
 
 	std::shared_ptr<UIManager> m_pUIManager;
 
 	std::weak_ptr<UISelectList> m_pSelectList;
+
+	std::weak_ptr<UIFormatText> m_pScoreText; // スコアを表示するために取得
 
 	// リザルト表示用スコア
 	int m_resultScore;

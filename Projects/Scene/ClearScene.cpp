@@ -6,6 +6,7 @@
 #include "../Game/GameManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UISelectList.h"
+#include "../Utility/UI/UIFormatText.h"
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Utility/GameType.h"
@@ -50,6 +51,14 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 		});
 
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin });
+	auto score = m_pScoreText.lock();
+	score->SetProvider([this]() 
+		{
+			return std::string("スコア:") + std::to_string(GetScore());
+		});
+
+
 }
 
 ClearScene::~ClearScene()
@@ -80,6 +89,8 @@ void ClearScene::FadeInUpdate(Input&)
 
 void ClearScene::NormalUpdate(Input& input)
 {
+	m_pUIManager->Update();
+
 	m_gameScore = m_pGameManager->GetCurrentScore();
 
 	// スコアの更新処理
@@ -143,7 +154,7 @@ void ClearScene::NormalDraw()
 {
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kClearDispMargin, L"Clear!", 0xffffff);
 	//DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"OKボタンでタイトルへ", 0xffffff);
-	DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
+	//DrawFormatString(Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin, 0xffffff, L"score : %d", m_resultScore);
 
 	m_pUIManager->Draw();
 #ifdef _DEBUG
