@@ -190,7 +190,6 @@ void TransformEnemy::TransformUpdate(Input&)
 			m_currentForm = m_nextForm; // 現在の状態を更新
 			break;
 		default:
-			printfDx(L"変身不可\n");
 			break;
 		}
 
@@ -290,7 +289,6 @@ void TransformEnemy::ItemUpdate(Input&)
 			m_drawFunc = &TransformEnemy::SkullDraw;
 			break;
 		default:
-			printfDx(L"変身不可\n");
 			break;
 		}
 
