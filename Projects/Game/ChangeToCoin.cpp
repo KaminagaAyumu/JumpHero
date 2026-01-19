@@ -9,10 +9,16 @@ namespace
 	constexpr float kChangeToCoinDefaultWidth = 40.0f;
 	constexpr float kChangeToCoinDefaultHeight = 40.0f;
 
+	constexpr int kGraphWidth = 16;
+	constexpr int kGraphHeight = 16;
+
+	constexpr int kAnimNum = 9; // コインの画像のアニメーションの枚数
+	constexpr int kAnimFrame = 5; // アニメーションの更新フレーム
+
 	constexpr float kPopChestUpPositionY = 40.0f; // 宝箱から出たときの上昇位置Y
 	constexpr float kDropSpeed = 2.0f; // 宝箱から出たときの落下速度
 
-	constexpr float kScale = 1.0f; // 拡大率
+	constexpr float kScale = 3.0f; // 拡大率
 }
 
 ChangeToCoin::ChangeToCoin(const Position2& pos, int handle, bool isPopChest)
@@ -30,6 +36,8 @@ ChangeToCoin::ChangeToCoin(const Position2& pos, int handle, bool isPopChest)
 	{
 		m_updateFunc = &ChangeToCoin::FloatingUpdate;
 	}
+	m_currentAnim.SetAnimation(handle, Size{ kGraphWidth,kGraphHeight }, kAnimNum, kAnimFrame, true);
+	m_currentAnim.SetScale(kScale);
 }
 
 void ChangeToCoin::Init()
@@ -41,6 +49,7 @@ void ChangeToCoin::Update(Input&)
 {
 	m_colRect.pos = m_pos;
 	m_colCircle.pos = m_pos;
+	m_currentAnim.Update();
 	(this->*m_updateFunc)();
 }
 
@@ -50,8 +59,7 @@ void ChangeToCoin::Draw()
 	int drawY = static_cast<int>(m_pos.y - m_pCamera->scroll.y);
 	if (m_isExist)
 	{
-		DrawRotaGraph(drawX, drawY, kScale, 0.0f, m_graphHandle, true);
-		//DrawCircle(drawX, drawY, static_cast<int>(m_colCircle.radius), 0xddffff, true);
+		m_currentAnim.Draw({ drawX, drawY }, false);
 #ifdef _DEBUG
 		m_colCircle.Draw(drawX, drawY);
 		m_colRect.Draw(drawX, drawY);

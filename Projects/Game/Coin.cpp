@@ -12,6 +12,9 @@ namespace
 	constexpr int kGraphWidth = 16; // コインの画像1枚の幅
 	constexpr int kGraphHeight = 16; // コインの画像1枚の高さ
 
+	constexpr int kAnimNum = 5; // コインの画像のアニメーションの枚数
+	constexpr int kAnimFrame = 5; // アニメーションの更新フレーム
+
 	constexpr float kCoinScale = 1.0f;
 }
 
@@ -21,7 +24,7 @@ Coin::Coin(const Position2& pos, int handle)
 	m_colRect = { {m_pos},kCoinDefaultWidth,kCoinDefaultHeight };
 	m_colCircle = { {m_pos},kCoinDefaultWidth / 2 };
 	m_graphHandle = handle;
-	m_currentAnim.SetAnimation(handle, Size{ kGraphWidth, kGraphHeight }, 5, 5, true);
+	m_currentAnim.SetAnimation(handle, Size{ kGraphWidth, kGraphHeight }, kAnimNum, kAnimFrame, true);
 }
 
 void Coin::Init()
