@@ -43,10 +43,8 @@ void UIFormatText::Draw() const
 	auto text = StringFunction::WStringFromString(m_text);
 	// テキストの幅を取得
 	int width = GetDrawStringWidthToHandle(text.c_str(), static_cast<int>(m_text.length()), m_fontHandle);
-	// テキストを中央揃えにするためにX座標を調整
-	int adjustedX = static_cast<int>(m_pos.x) - width / 2;
 	// テキストを描画
-	DrawStringToHandle(adjustedX, static_cast<int>(m_pos.y), text.c_str(), m_color, m_fontHandle);
+	DrawStringToHandle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), text.c_str(), m_color, m_fontHandle);
 }
 
 bool UIFormatText::IsAlive() const

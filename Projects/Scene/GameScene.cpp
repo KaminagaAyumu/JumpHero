@@ -41,6 +41,7 @@ namespace
 	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
 	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
 
+	constexpr float kScoreTextPosY = 20.0f;
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 }
 
@@ -63,7 +64,7 @@ m_fadeColor(0x000000)
 
 	m_pUIManager = std::make_unique<UIManager>();
 
-	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { 60, 40 });
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { 0, kScoreTextPosY });
 	auto score = m_pScoreText.lock();
 	score->SetProvider([this]()
 		{
