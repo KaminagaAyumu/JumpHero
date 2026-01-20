@@ -192,7 +192,6 @@
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneController.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
-    <ClCompile Include="Scene\TutorialScene.cpp" />
     <ClCompile Include="Game\TransformEnemy.cpp" />
     <ClCompile Include="Utility\UI\UIBase.cpp" />
     <ClCompile Include="Utility\UI\UIManager.cpp" />
@@ -251,7 +250,6 @@
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneController.h" />
     <ClInclude Include="Scene\TitleScene.h" />
-    <ClInclude Include="Scene\TutorialScene.h" />
     <ClInclude Include="Game\TransformEnemy.h" />
     <ClInclude Include="Utility\UI\UIBase.h" />
     <ClInclude Include="Utility\UI\UIManager.h" />
