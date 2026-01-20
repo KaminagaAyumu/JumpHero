@@ -55,8 +55,21 @@ EffectManager::~EffectManager()
 
 void EffectManager::Update()
 {
+	if (m_effekseerEffects.empty())
+	{
+		return;
+	}
+
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer2D();
+
+	// Effekseerのエフェクトの削除処理
+	m_effekseerEffects.remove_if(
+		[](std::shared_ptr<EffekseerEffect> effect)
+		{
+			return !effect->IsAlive();
+		}
+	);
 }
 
 void EffectManager::Draw()

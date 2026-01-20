@@ -75,6 +75,8 @@ void TitleScene::NormalUpdate(Input& input)
 {
 	m_soundManager->Update();
 	m_pUIManager->Update();
+	m_pEffectManager->Update();
+
 	// STARTボタンもしくはAボタンが押されたら
 	if (input.IsTriggered("OK"))
 	{
@@ -90,8 +92,7 @@ void TitleScene::NormalUpdate(Input& input)
 	{
 		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::CoinGet, { 400,400 });
 	}
-	// Effekseerにより再生中のエフェクトを更新する。
-	m_pEffectManager->Update();
+	
 }
 
 void TitleScene::FadeOutUpdate(Input& input)

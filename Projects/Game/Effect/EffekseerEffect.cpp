@@ -16,5 +16,5 @@ EffekseerEffect::~EffekseerEffect()
 
 bool EffekseerEffect::IsAlive()const
 {
-	return IsEffekseer2DEffectPlaying(m_effect);
+	return IsEffekseer2DEffectPlaying(m_effect) == 0;
 }
