@@ -26,8 +26,11 @@ struct EventSensors
 	std::function<bool()> isCameraLerpEndFunc;
 
 	// 風船の取得状態の関数
-	std::function<bool(const std::string& balloonNum)> isGetBalloonFunc;
+	std::function<bool(int balloonNum)> isGetBalloonFunc;
 
 	// 敵のスポーン位置すべてを取得する関数 
 	std::function<const std::vector<Position2>&()> getSpawnPositionsFunc;
+
+	// 風船の総数を取得する関数
+	std::function<int()> getTotalBalloonNumFunc;
 };

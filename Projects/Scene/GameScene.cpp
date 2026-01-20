@@ -318,10 +318,22 @@ void GameScene::SetEventFunc()
 			return m_pCamera->IsLerpEnd();
 		};
 
+	// 風船を指定数取得したかどうかの関数を定義
+	m_pEventSensors->isGetBalloonFunc = [this](int balloonNum)
+		{
+			return m_pGameManager->IsGetBalloon(balloonNum);
+		};
+
 	// 敵のスポーン位置を取得する関数を定義
 	m_pEventSensors->getSpawnPositionsFunc = [this]()->const std::vector<Position2>&
 		{
 			return m_pPositionRegistry->GetSpawnPosAll();
+		};
+
+	// 風船の総数を取得する関数を定義
+	m_pEventSensors->getTotalBalloonNumFunc = [this]()
+		{
+			return m_pGameManager->GetTotalBalloonNum();
 		};
 
 	// -----------------------------------------------------

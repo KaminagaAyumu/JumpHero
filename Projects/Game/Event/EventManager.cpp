@@ -344,7 +344,19 @@ bool EventManager::CheckTrigger(const EventData& data)
 		return sensors->isPowerUpFunc();
 		break;
 	case TriggerType::GetBalloon:
-		return sensors->isGetBalloonFunc(data.triggerParam);
+	{
+		int balloonNum;
+		if (data.triggerParam == "all") // もしすべての風船を取得する条件の場合
+		{
+			// 風船の総数を取得する関数を呼ぶ
+			balloonNum = sensors->getTotalBalloonNumFunc();
+		}
+		else
+		{
+			balloonNum = GetParamNum(data.triggerParam);
+		}
+		return sensors->isGetBalloonFunc(balloonNum);
+	}
 		break;
 	case TriggerType::NoTrigger:
 		return true; // 条件なしなので常にtrue

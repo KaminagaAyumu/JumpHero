@@ -113,7 +113,7 @@ void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std
 	m_medalNum = 0;
 	m_balloonNum = 0;
 	m_balloonCounter = 0;
-	m_totalBalloonNum = 0;
+	m_totalBalloonNum = m_pItemManager->GetFirstBalloonNum();
 	m_isMiniGame = false;
 	m_isTutorial = isTutorial;
 }
@@ -325,6 +325,12 @@ bool GameManager::IsExceededPlayer(const Position2& area)
 bool GameManager::IsPowerUpPlayer()
 {
 	return m_pPlayer->IsPowerUp();
+}
+
+bool GameManager::IsGetBalloon(int balloonNum)
+{
+	// 風船を取得した数分のカウンタから比較
+	return m_balloonNum >= balloonNum;
 }
 
 void GameManager::SetBarrierPlayer(const ActivePosition2& barrier)

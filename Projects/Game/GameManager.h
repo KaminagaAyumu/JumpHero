@@ -133,6 +133,13 @@ public:
 	bool IsPowerUpPlayer();
 
 	/// <summary>
+	/// 指定された風船の数を取得したかどうかを判定
+	/// </summary>
+	/// <param name="balloonNum">風船の数</param>
+	/// <returns>true : 取得した false : 取得していない</returns>
+	bool IsGetBalloon(int balloonNum);
+
+	/// <summary>
 	/// プレイヤーが進めないバリアの座標をセットする
 	/// </summary>
 	/// <param name="barrier">バリアの座標</param>
@@ -169,6 +176,12 @@ public:
 	/// </summary>
 	/// <returns>スコア</returns>
 	const int GetCurrentScore()const { return m_currentScore; }
+
+	/// <summary>
+	/// ゲーム内の風船の総数を取得する
+	/// </summary>
+	/// <returns>風船の総数</returns>
+	const int GetTotalBalloonNum()const { return m_totalBalloonNum; }
 
 	/// <summary>
 	/// 残機を1減らす(仮)
