@@ -347,6 +347,11 @@ const size_t GameManager::GetActorNum() const
 	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum() + m_pEnemyManager->GetEnemyNum();
 }
 
+const Position2& GameManager::GetPlayerPos() const
+{
+	return m_pPlayer->GetPos();
+}
+
 void GameManager::NotifyItemEvent(Types::ItemType type)
 {
 	m_itemPickEvent.push_back({ type, m_frameCount });

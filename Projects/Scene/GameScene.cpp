@@ -57,14 +57,14 @@ m_fadeColor(0x000000)
 	m_bg->Init();
 	m_pMap = std::make_shared<Map>(stageNo,false);
 	m_pMap->Init();
-	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
+	//m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
 
 	m_pGameManager = std::make_shared<GameManager>(m_pMap,m_pActors);
 	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
 	m_pGameManager->Init(isTutorial);
 
-	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
+	//m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 
 	m_pUIManager = std::make_unique<UIManager>();
 

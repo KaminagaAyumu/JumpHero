@@ -183,7 +183,7 @@ public:
 	/// プレイヤーの座標を返す
 	/// </summary>
 	/// <returns>プレイヤーの座標</returns>
-	const Position2& GetPlayerPos()const { return m_pPlayer->GetPos(); }
+	const Position2& GetPlayerPos()const;
 
 	/// <summary>
 	/// スコアを取得(描画用)
