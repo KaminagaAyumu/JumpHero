@@ -27,9 +27,10 @@ ChestManager::~ChestManager()
 	DeleteGraph(m_chestGraphHandle);
 }
 
-void ChestManager::Init()
+void ChestManager::Init(std::weak_ptr<Camera> camera)
 {
 	m_chests.clear();
+	m_pCamera = camera;
 }
 
 void ChestManager::Update(Input& input)

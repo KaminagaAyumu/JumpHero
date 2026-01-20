@@ -34,7 +34,7 @@ public:
 	/// </summary>
 	/// <param name="isTutorial">チュートリアルかどうかを判別する(trueならチュートリアル)</param>
 	void Init(bool isTutorial);
-	void MiniGameInit(std::weak_ptr<Map> map); // 一旦マップを取得するだけで使う
+	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera); // 一旦マップを取得するだけで使う
 	void Update(Input& input);
 	void Draw() const;
 

@@ -67,10 +67,11 @@ ItemManager::~ItemManager()
 	}
 }
 
-void ItemManager::Init()
+void ItemManager::Init(std::weak_ptr<Camera> camera)
 {
 	m_pItems.clear();
 	m_firstBalloonNum = 0;
+	m_pCamera = camera;
 }
 
 void ItemManager::Update(Input& input)

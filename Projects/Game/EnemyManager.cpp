@@ -62,9 +62,10 @@ EnemyManager::~EnemyManager()
 	}
 }
 
-void EnemyManager::Init(std::weak_ptr<Map> map)
+void EnemyManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera)
 {
 	m_pMap = map;
+	m_pCamera = camera;
 	m_enemies.clear(); // 敵リストを初期化
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
 	LoadSpawnPositions(); // 敵スポーン位置の読み込み

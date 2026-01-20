@@ -20,7 +20,7 @@ public:
 	EnemyManager(std::weak_ptr<Camera> camera,Player* player, GameManager* gameManager, std::weak_ptr<Map> map);
 	virtual ~EnemyManager();
 
-	void Init(std::weak_ptr<Map> map);
+	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera);
 
 	void Update(Input&);
 

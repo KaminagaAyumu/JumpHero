@@ -104,15 +104,16 @@ void GameManager::Init(bool isTutorial)
 	m_isTutorial = isTutorial;
 }
 
-void GameManager::MiniGameInit(std::weak_ptr<Map> map)
+void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera)
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
 	m_pPlayer->InitMap(pMap);
+	m_pPlayer->SetCamera(camera);
 	m_pPlayer->Init();
-	m_pEnemyManager->Init(pMap);
-	m_pChestManager->Init();
-	m_pItemManager->Init();
+	m_pEnemyManager->Init(pMap,camera);
+	m_pChestManager->Init(camera);
+	m_pItemManager->Init(camera);
 	m_pItemManager->FirstSpawnItem(map);
 	m_totalBalloonNum = m_pItemManager->GetFirstBalloonNum();
 	m_isMiniGame = true;

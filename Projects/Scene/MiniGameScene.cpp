@@ -46,7 +46,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
-	m_pGameManager->MiniGameInit(m_pMap);
+	m_pGameManager->MiniGameInit(m_pMap,m_pCamera);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 

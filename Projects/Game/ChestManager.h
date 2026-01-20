@@ -22,7 +22,7 @@ public:
 	ChestManager(std::weak_ptr<Camera> camera, GameManager* gameManager);
 	virtual ~ChestManager();
 
-	void Init();
+	void Init(std::weak_ptr<Camera> camera);
 
 	void Update(Input& input);
 
