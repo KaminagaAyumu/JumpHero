@@ -74,6 +74,9 @@ private:
 	// 背景画像を管理するクラスのポインタ
 	std::shared_ptr<Bg> m_bg;
 
+	// ゲーム内座標での描画を管理するクラスのポインタ
+	std::shared_ptr<Camera> m_pCamera;
+
 	// ゲームシーン内の状態管理用ポインタ
 	std::shared_ptr<GameManager> m_pGameManager;
 

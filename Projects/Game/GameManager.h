@@ -180,6 +180,12 @@ public:
 	Player* GetPlayer()const { return m_pPlayer.get(); }
 
 	/// <summary>
+	/// プレイヤーの座標を返す
+	/// </summary>
+	/// <returns>プレイヤーの座標</returns>
+	const Position2& GetPlayerPos()const { return m_pPlayer->GetPos(); }
+
+	/// <summary>
 	/// スコアを取得(描画用)
 	/// </summary>
 	/// <returns>演出用のスコア</returns>
