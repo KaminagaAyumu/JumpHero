@@ -265,7 +265,7 @@ TriggerType EventManager::ToTriggerType(const std::string& strData)
 	if (strData == "GetItem") return TriggerType::GetItem;
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
 	if (strData == "PlayerPowerUp") return TriggerType::PlayerPowerUp;
-	if (strData == "GotBalloonAll") return TriggerType::GotBalloonAll;
+	if (strData == "GetBalloon") return TriggerType::GetBalloon;
 	if (strData == "NoTrigger") return TriggerType::NoTrigger;
 	return TriggerType::NoTrigger; // ここまで来たら不正な値なのでNoTriggerを返す
 }
@@ -343,8 +343,8 @@ bool EventManager::CheckTrigger(const EventData& data)
 	case TriggerType::PlayerPowerUp:
 		return sensors->isPowerUpFunc();
 		break;
-	case TriggerType::GotBalloonAll:
-		return sensors->isGotBalloonAllFunc();
+	case TriggerType::GetBalloon:
+		return sensors->isGetBalloonFunc(data.triggerParam);
 		break;
 	case TriggerType::NoTrigger:
 		return true; // 条件なしなので常にtrue

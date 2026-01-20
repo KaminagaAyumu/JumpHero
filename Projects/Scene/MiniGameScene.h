@@ -54,6 +54,11 @@ private:
 
 	void GetBalloonNum() const; // 風船の数を取得する関数
 
+	/// <summary>
+	/// イベントの内容を設定する関数
+	/// </summary>
+	void SetEventFunc();
+
 	// 背景画像を管理するクラスのポインタ
 	std::shared_ptr<Bg> m_bg;
 

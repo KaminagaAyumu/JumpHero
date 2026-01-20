@@ -234,3 +234,7 @@ bool MiniGameScene::IsEndDescription() const
 void MiniGameScene::GetBalloonNum() const
 {
 }
+
+void MiniGameScene::SetEventFunc()
+{
+}

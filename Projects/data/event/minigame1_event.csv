@@ -1,2 +1,2 @@
 ID,TriggerType,TriggerParam,ActionType,ActionParam
-1,GotBalloonAll,0,ActiveGoal,0
+1,GetBalloon,5,ActiveGoal,0
