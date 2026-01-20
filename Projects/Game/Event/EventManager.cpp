@@ -265,6 +265,7 @@ TriggerType EventManager::ToTriggerType(const std::string& strData)
 	if (strData == "GetItem") return TriggerType::GetItem;
 	if (strData == "EnemySpawn") return TriggerType::EnemySpawn;
 	if (strData == "PlayerPowerUp") return TriggerType::PlayerPowerUp;
+	if (strData == "GotBalloonAll") return TriggerType::GotBalloonAll;
 	if (strData == "NoTrigger") return TriggerType::NoTrigger;
 	return TriggerType::NoTrigger; // ここまで来たら不正な値なのでNoTriggerを返す
 }
@@ -341,6 +342,10 @@ bool EventManager::CheckTrigger(const EventData& data)
 		break;
 	case TriggerType::PlayerPowerUp:
 		return sensors->isPowerUpFunc();
+		break;
+	case TriggerType::GotBalloonAll:
+		return sensors->isGotBalloonAllFunc();
+		break;
 	case TriggerType::NoTrigger:
 		return true; // 条件なしなので常にtrue
 	default:
@@ -423,6 +428,7 @@ void EventManager::RunAction(const EventData& data)
 	}
 		break;
 	case ActionType::ActiveGoal:
+		controls->activeGoalFunc();
 		break;
 	case ActionType::NoAction:
 		break;
@@ -504,6 +510,7 @@ void EventManager::RunCommonAction(const EventData& data)
 	}
 	break;
 	case ActionType::ActiveGoal:
+		controls->activeGoalFunc();
 		break;
 	case ActionType::NoAction:
 		break;

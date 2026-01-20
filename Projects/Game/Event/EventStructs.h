@@ -15,6 +15,7 @@ namespace Events
 		GetItem, // アイテムを取得した
 		EnemySpawn, // 敵がスポーンした
 		PlayerPowerUp, // プレイヤーがパワーアップ状態になった
+		GotBalloonAll, // 風船をすべて取得した
 		NoTrigger, // 条件なし
 	};
 
