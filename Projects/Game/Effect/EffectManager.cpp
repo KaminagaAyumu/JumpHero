@@ -58,6 +58,11 @@ void EffectManager::Update()
 		return;
 	}
 
+	for (auto& effect : m_effekseerEffects)
+	{
+		effect->Update();
+	}
+
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer2D();
 
@@ -78,5 +83,11 @@ void EffectManager::Draw()
 
 void EffectManager::CreateEffekseerEffect(Types::EffectType type, const Position2& pos)
 {
-	m_effekseerEffects.push_back(std::make_shared<EffekseerEffect>(m_effectHandles[(int)type], pos));
+	auto effect = std::make_shared<EffekseerEffect>(m_effectHandles[(int)type], pos);
+	// カメラがセットされている場合
+	if (auto camera = m_pCamera.lock())
+	{
+		effect->SetCamera(camera); // エフェクトにカメラをセットする
+	}
+	m_effekseerEffects.push_back(effect);
 }
