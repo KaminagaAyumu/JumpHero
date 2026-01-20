@@ -36,6 +36,12 @@ public:
 	/// <param name="intervalFrame">進めるまでのフレーム数</param>
 	void EnableAutoPage(int intervalFrame);
 
+	/// <summary>
+	/// ウィンドウ内でテキストをスライドするようにする
+	/// </summary>
+	/// <param name="scrollSpeed">スクロール速度</param>
+	void EnableScrollMode(int scrollSpeed);
+
 	void Update()override;
 	void Draw()const override;
 
@@ -103,9 +109,16 @@ private:
 	bool m_isChangePos; // 位置変更アニメーション中かどうか
 	bool m_isChangeSize; // サイズ変更アニメーション中かどうか
 	bool m_isAutoPageMode; // 複数ページがある際に自動でページをめくるかどうか
+	bool m_isScrollMode; // テキストをウィンドウ内でスクロールさせるかどうか
 	int m_aliveFrame; // ウィンドウが表示されてからのフレーム数
+	
 	int m_pageCount; // ページをめくるフレームカウンタ
 	int m_pageIntervalFrame; // ページをめくるまでのフレーム数
+
+	int m_scrollSpeed;
+	int m_scrollOffset;
+	int m_scrollWaitTimer;
+
 	int m_fontHandle; // フォントデータを使う際のハンドル
 	int m_windowGraphHandle; // ウィンドウの画像を使う際のハンドル
 

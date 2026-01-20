@@ -1,6 +1,7 @@
 ﻿#include "../../Game/TextManager.h"
 #include "UITextWindow.h"
 #include "../StringFunction.h"
+#include "../Game.h"
 #include <cmath>
 #include "DxLib.h"
 
@@ -9,6 +10,8 @@ namespace
 	constexpr float kStartPosLeftX = -400.0f; // 画面外左側の開始位置X座標
 
 	constexpr int kDefaultAliveTime = 660; // デフォルトの表示時間（フレーム数）
+
+	constexpr int kScrollWaitFrame = 60; // スクロールを止める時間
 }
 
 UITextWindow::UITextWindow() :
@@ -23,8 +26,13 @@ UITextWindow::UITextWindow() :
 	m_isChangePos(false),
 	m_isChangeSize(false),
 	m_isAutoPageMode(false),
+	m_isScrollMode(false),
 	m_aliveFrame(kDefaultAliveTime),
 	m_pageCount(0),
+	m_pageIntervalFrame(0),
+	m_scrollSpeed(0),
+	m_scrollOffset(0),
+	m_scrollWaitTimer(0),
 	m_fontHandle(-1),
 	m_windowGraphHandle(-1),
 	m_textPager{}
@@ -59,6 +67,14 @@ void UITextWindow::EnableAutoPage(int intervalFrame)
 	m_isAutoPageMode = true;
 	m_pageIntervalFrame = intervalFrame;
 	m_pageCount = 0;
+}
+
+void UITextWindow::EnableScrollMode(int scrollSpeed)
+{
+	m_isScrollMode = true;
+	m_scrollSpeed = scrollSpeed;
+	m_scrollOffset = 0;
+	m_scrollWaitTimer = 0;
 }
 
 void UITextWindow::Update()
@@ -98,7 +114,47 @@ void UITextWindow::Update()
 					m_textPager.index = 0;
 				}
 				ApplyCurrentPageText();
+
+				// テキストの内容が変わるのでスクロール関連の処理もリセット
+				m_scrollOffset = 0;
+				m_scrollWaitTimer = kScrollWaitFrame;
 			}
+		}
+
+		if (m_isScrollMode)
+		{
+			auto text = StringFunction::WStringFromString(m_text);
+			int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
+
+			// テキストの幅がウィンドウよりも大きい場合
+			if (textWidth > m_size.width)
+			{
+				// スクロールを行う
+				if (m_scrollWaitTimer > 0)
+				{
+					// スクロールを待つ時間
+					m_scrollWaitTimer--;
+				}
+				else
+				{
+					// スクロールのオフセットをスピード分増加
+					m_scrollOffset += m_scrollSpeed;
+					// スクロールが最大(テキストの右端が見える状態)になった場合
+					if (m_scrollOffset > textWidth - m_size.width)
+					{
+						// スクロールを最大値にする
+						m_scrollOffset = textWidth - m_size.width;
+						// スクロールを待つ時間を設定
+						m_scrollWaitTimer = kScrollWaitFrame;
+					}
+				}
+			}
+			else // テキストの幅がウィンドウよりも小さい場合
+			{
+				// オフセットは不要なので0にしておく
+				m_scrollOffset = 0;
+			}
+			
 		}
 	}
 }
@@ -125,20 +181,38 @@ void UITextWindow::Draw() const
 			GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
 	}
 
+	const int halfW = m_size.width / 2;
+	const int halfH = m_size.height / 2;
+	const int top = static_cast<int>(m_pos.y) - halfH;
+	const int bottom = static_cast<int>(m_pos.y) + halfH;
+	const int left = static_cast<int>(m_pos.x) - halfW;
+	const int right = static_cast<int>(m_pos.x) + halfW;
+
+	SetDrawArea(left, top, right, bottom); // 描画可能範囲をウィンドウの中のみにする
+
 	auto text = StringFunction::WStringFromString(m_text);
-	int width = 0; // 文字を中央ぞろえで表示するための変数
-	if (m_fontHandle != -1) // フォントのハンドルがある場合
+	if (m_isScrollMode)
 	{
-		width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
-		DrawStringToHandle(m_pos.x - width / 2, m_pos.y,
-		text.c_str(), GetColor(255, 255, 255), m_fontHandle);
+		int drawX = left - m_scrollOffset;
+		DrawStringToHandle(drawX, top, text.c_str(), 0xffffff, m_fontHandle);
 	}
-	else // フォントのハンドルがない場合
+	else
 	{
-		width = GetDrawFormatStringWidth(L"%s", text.c_str());
-		DrawString(m_pos.x - width / 2, m_pos.y,
-		text.c_str(), GetColor(255, 255, 255)); // テキストを描画
+		int width = 0; // 文字を中央ぞろえで表示するための変数
+		if (m_fontHandle != -1) // フォントのハンドルがある場合
+		{
+			width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
+			DrawStringToHandle(m_pos.x - width / 2, m_pos.y,
+			text.c_str(), GetColor(255, 255, 255), m_fontHandle);
+		}
+		else // フォントのハンドルがない場合
+		{
+			width = GetDrawFormatStringWidth(L"%s", text.c_str());
+			DrawString(m_pos.x - width / 2, m_pos.y,
+			text.c_str(), GetColor(255, 255, 255)); // テキストを描画
+		}
 	}
+	SetDrawArea(0, 0, Game::kScreenWidth, Game::kScreenHeight); // 描画可能範囲をリセット
 }
 
 bool UITextWindow::AdvancePages()

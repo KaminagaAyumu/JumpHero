@@ -23,11 +23,12 @@ namespace
 	const Size kTextWindowSize = { 700,300 }; // テキストウィンドウのサイズ
 	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100 }; // テキストウィンドウの座標
 	
-	const Size kHintWindowSize = { 300,50 }; // ヒントテキストウィンドウのサイズ
-	const Position2 kHintWindowPos = { Game::kScreenWidth - 160, 70 }; // ヒントテキストウィンドウの座標
+	const Size kHintWindowSize = { 350,50 }; // ヒントテキストウィンドウのサイズ
+	const Position2 kHintWindowPos = { Game::kScreenWidth - 200, 70 }; // ヒントテキストウィンドウの座標
 	
 	constexpr float kTextWindowAppearDuration = 2.0f; // テキストウィンドウが出てくるまでの時間
 	constexpr int kWindowAutoPageFlipFrame = 600; // テキストウィンドウを自動で次に動かす時間
+	constexpr int kWindowScrollSpeed = 1; // テキストウィンドウのスクロールのフレーム数
 
 	constexpr int kSpawnEnemyDefaultFormNo = 1;
 
@@ -500,6 +501,7 @@ void EventManager::RunCommonAction(const EventData& data)
 		m_currentHintWindow = controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
 		auto justWindow = m_currentHintWindow.lock();
 		justWindow->EnableAutoPage(kWindowAutoPageFlipFrame);
+		justWindow->EnableScrollMode(kWindowScrollSpeed);
 	}
 	break;
 	case ActionType::ShowText:
