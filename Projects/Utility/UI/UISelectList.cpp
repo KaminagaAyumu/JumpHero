@@ -56,10 +56,10 @@ void UISelectList::Draw() const
 
 	const int halfW = m_size.width / 2;
 	const int halfH = m_size.height / 2;
-	const int top = m_pos.y - halfH;
-	const int bottom = m_pos.y + halfH;
-	const int left = m_pos.x - halfW;
-	const int right = m_pos.x + halfW;
+	const int top = static_cast<int>(m_pos.y) - halfH;
+	const int bottom = static_cast<int>(m_pos.y) + halfH;
+	const int left = static_cast<int>(m_pos.x) - halfW;
+	const int right = static_cast<int>(m_pos.x) + halfW;
 
 	DrawBox(left, top, right, bottom, 0xff2200, false);
 

@@ -534,7 +534,7 @@ void TutorialManager::RunAction(const EventData& data)
 				if (m_textPager.index >= m_textPager.pages.size())
 				{
 					m_textPager.isActive = false;
-					m_textPager.index = m_textPager.pages.size() - 1;
+					m_textPager.index = static_cast<int>(m_textPager.pages.size()) - 1;
 				}
 			}
 		}
