@@ -30,6 +30,12 @@ public:
 	/// <param name="pages">テキストの内容</param>
 	void SetPages(const std::string& id, const std::vector<TextData>& pages);
 
+	/// <summary>
+	/// ページを自動で進めるようにする
+	/// </summary>
+	/// <param name="intervalFrame">進めるまでのフレーム数</param>
+	void EnableAutoPage(int intervalFrame);
+
 	void Update()override;
 	void Draw()const override;
 
@@ -96,7 +102,10 @@ private:
 	float m_appearDuration; // 表示アニメーションの時間
 	bool m_isChangePos; // 位置変更アニメーション中かどうか
 	bool m_isChangeSize; // サイズ変更アニメーション中かどうか
+	bool m_isAutoPageMode; // 複数ページがある際に自動でページをめくるかどうか
 	int m_aliveFrame; // ウィンドウが表示されてからのフレーム数
+	int m_pageCount; // ページをめくるフレームカウンタ
+	int m_pageIntervalFrame; // ページをめくるまでのフレーム数
 	int m_fontHandle; // フォントデータを使う際のハンドル
 	int m_windowGraphHandle; // ウィンドウの画像を使う際のハンドル
 

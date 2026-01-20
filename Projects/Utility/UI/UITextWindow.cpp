@@ -22,7 +22,9 @@ UITextWindow::UITextWindow() :
 	m_appearDuration(0.0f),
 	m_isChangePos(false),
 	m_isChangeSize(false),
+	m_isAutoPageMode(false),
 	m_aliveFrame(kDefaultAliveTime),
+	m_pageCount(0),
 	m_fontHandle(-1),
 	m_windowGraphHandle(-1),
 	m_textPager{}
@@ -52,6 +54,13 @@ void UITextWindow::SetPages(const std::string& id, const std::vector<TextData>& 
 	m_textPager.isActive = false; // セット時には非アクティブにする
 }
 
+void UITextWindow::EnableAutoPage(int intervalFrame)
+{
+	m_isAutoPageMode = true;
+	m_pageIntervalFrame = intervalFrame;
+	m_pageCount = 0;
+}
+
 void UITextWindow::Update()
 {
 	m_aliveFrame--;
@@ -73,25 +82,25 @@ void UITextWindow::Update()
 			m_size.height = static_cast<int>(std::lerp(m_size.height, m_targetSize.height, m_appearRate)); // 線形補間でサイズを更新
 		}
 	}
-	// 時間で消える処理
-	//if (m_aliveFrame <= 0)
-	//{
-	//	if (m_state == TextWindowState::Visible)
-	//	{
-	//		m_state = TextWindowState::Disappearing;
-	//		m_appearRate = 0.0f;
-	//		//m_appearDuration = 10.0f; // 消えるアニメーションの時間を設定
-	//		if (m_isChangePos)
-	//		{
-	//			m_targetPos = m_startPos; // 目標位置を開始位置に設定
-	//			m_startPos = m_pos; // 現在の位置を開始位置に設定
-	//		}
-	//		if (m_isChangeSize)
-	//		{
-	//			m_targetSize = { m_size.width, 0 }; // 目標サイズを高さ0に設定
-	//		}
-	//	}
-	//}
+
+	if (m_state == TextWindowState::Visible)
+	{
+		if (m_isAutoPageMode)
+		{
+			m_pageCount++;
+			if (m_pageCount >= m_pageIntervalFrame)
+			{
+				m_pageCount = 0.0f;
+
+				m_textPager.index++;
+				if (m_textPager.index >= m_textPager.pages.size())
+				{
+					m_textPager.index = 0;
+				}
+				ApplyCurrentPageText();
+			}
+		}
+	}
 }
 
 void UITextWindow::Draw() const

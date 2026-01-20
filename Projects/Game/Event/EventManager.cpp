@@ -27,6 +27,7 @@ namespace
 	const Position2 kHintWindowPos = { Game::kScreenWidth - 120, 70 }; // ヒントテキストウィンドウの座標
 	
 	constexpr float kTextWindowAppearDuration = 2.0f; // テキストウィンドウが出てくるまでの時間
+	constexpr int kWindowAutoPageFlipFrame = 600; // テキストウィンドウを自動で次に動かす時間
 
 	constexpr int kSpawnEnemyDefaultFormNo = 1;
 
@@ -497,6 +498,8 @@ void EventManager::RunCommonAction(const EventData& data)
 		}
 
 		m_currentHintWindow = controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
+		auto justWindow = m_currentHintWindow.lock();
+		justWindow->EnableAutoPage(kWindowAutoPageFlipFrame);
 	}
 	break;
 	case ActionType::ShowText:
