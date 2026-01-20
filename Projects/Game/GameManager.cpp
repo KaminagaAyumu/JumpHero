@@ -27,7 +27,7 @@ namespace
 	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
 }
 
-GameManager::GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor>>& actors) :
+GameManager::GameManager(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::vector<std::weak_ptr<Actor>>& actors) :
 	m_frameCount(0),
 	m_score(0),
 	m_currentScore(0),
@@ -41,19 +41,16 @@ GameManager::GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
-	m_pCamera = std::make_unique<Camera>(pMap->GetMapSize());
 	m_pPlayer = std::make_shared<Player>(map,this);
-	m_pPlayer->SetCamera(m_pCamera);
+	m_pPlayer->SetCamera(camera);
 	m_pPlayer->Init();
-	m_pChestManager = std::make_unique<ChestManager>(m_pCamera, this);
+	m_pChestManager = std::make_unique<ChestManager>(camera, this);
 	m_pChestManager->SpawnChest(map);
 	m_pChestManager->PushActors(actors);
-	m_pItemManager = std::make_unique<ItemManager>(m_pCamera,this);
+	m_pItemManager = std::make_unique<ItemManager>(camera,this);
 	m_pItemManager->FirstSpawnItem(map);
 	m_pItemManager->PushActors(actors);
-	m_pEnemyManager = std::make_unique<EnemyManager>(m_pCamera, m_pPlayer.get(), this, map);
-
-	m_pCamera->SetTargetProvider([this]() {return m_pPlayer->GetPos(); });
+	m_pEnemyManager = std::make_unique<EnemyManager>(camera, m_pPlayer.get(), this, map);
 
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
@@ -113,7 +110,6 @@ void GameManager::MiniGameInit(std::weak_ptr<Map> map)
 	auto pMap = m_pMap.lock();
 	m_pPlayer->InitMap(pMap);
 	m_pPlayer->Init();
-	m_pCamera->Init(pMap->GetMapSize());
 	m_pEnemyManager->Init(pMap);
 	m_pChestManager->Init();
 	m_pItemManager->Init();
@@ -132,7 +128,6 @@ void GameManager::Update(Input& input)
 	}
 #endif
 	m_frameCount++;
-	m_pCamera->Update();
 
 	// スコアの更新処理
 	if (m_score < m_currentScore) // スコアが現在のスコアより小さい場合
@@ -306,21 +301,6 @@ void GameManager::OpenChestToPosition(int x, int y)
 	m_pChestManager->OpenChestAtPosition(x,y);
 }
 
-void GameManager::SetCameraTarget(const Position2& pos)
-{
-	m_pCamera->SetTarget(pos);
-}
-
-void GameManager::SetCameraTargetProvider(std::function<Position2()> provider)
-{
-	m_pCamera->SetTargetProvider(provider);
-}
-
-void GameManager::ReturnCameraPlayer()
-{
-	m_pCamera->SetTargetProvider([this]() {return m_pPlayer->GetPos(); });
-}
-
 bool GameManager::IsExceededPlayer(const Position2& area)
 {
 	return m_pPlayer->GetPos().x >= area.x;
@@ -334,11 +314,6 @@ bool GameManager::IsPowerUpPlayer()
 void GameManager::SetBarrierPlayer(const ActivePosition2& barrier)
 {
 	m_pPlayer->SetBarrier(barrier);
-}
-
-bool GameManager::IsCameraLerpEnd()
-{
-	return m_pCamera->IsLerpEnd();
 }
 
 const size_t GameManager::GetActorNum() const

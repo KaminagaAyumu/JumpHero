@@ -39,8 +39,8 @@ TutorialScene::TutorialScene(SceneController& controller) :
 	m_pMap = std::make_shared<Map>(0, false);
 	m_pMap->Init();
 
-	m_pGameManager = std::make_shared<GameManager>(m_pMap, m_pActors);
-	m_pGameManager->Init(true);
+	//m_pGameManager = std::make_shared<GameManager>(m_pMap, m_pActors);
+	//m_pGameManager->Init(true);
 
 	m_pTutorialManager = std::make_unique<TutorialManager>(m_pGameManager.get(), m_pTextManager.get(), m_pMap.get(), m_pGameManager->GetPlayer());
 
@@ -135,8 +135,8 @@ void TutorialScene::FadeOutUpdate(Input& input)
 
 void TutorialScene::NormalDraw()
 {
-	m_pBg->Draw(m_pGameManager->GetCamera());
-	m_pMap->Draw(m_pGameManager->GetCamera());
+	//m_pBg->Draw(m_pGameManager->GetCamera());
+	//m_pMap->Draw(m_pGameManager->GetCamera());
 
 	for (auto& actor : m_pActors)
 	{
@@ -158,8 +158,8 @@ void TutorialScene::NormalDraw()
 }
 void TutorialScene::FadeDraw()
 {
-	m_pBg->Draw(m_pGameManager->GetCamera());
-	m_pMap->Draw(m_pGameManager->GetCamera());
+	//m_pBg->Draw(m_pGameManager->GetCamera());
+	//m_pMap->Draw(m_pGameManager->GetCamera());
 
 	for (auto& actor : m_pActors)
 	{

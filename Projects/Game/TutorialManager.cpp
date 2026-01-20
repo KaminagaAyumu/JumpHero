@@ -514,7 +514,7 @@ void TutorialManager::RunAction(const EventData& data)
 		// カメラが見る位置を設定
 		LookCamera(data.actionParam);
 		// カメラの補正が終わっていなければ
-		if (!m_pGameManager->IsCameraLerpEnd())
+		//if (!m_pGameManager->IsCameraLerpEnd())
 		{
 			return; // ここを抜けないようにする
 		}
@@ -632,7 +632,7 @@ void TutorialManager::RunCommonAction(const EventData& data)
 		// カメラが見る位置を設定
 		LookCamera(data.actionParam);
 		// カメラの補正が終わっていなければ
-		if (!m_pGameManager->IsCameraLerpEnd())
+		//if (!m_pGameManager->IsCameraLerpEnd())
 		{
 			return; // ここを抜けないようにする
 		}

@@ -57,14 +57,14 @@ m_fadeColor(0x000000)
 	m_bg->Init();
 	m_pMap = std::make_shared<Map>(stageNo,false);
 	m_pMap->Init();
-	//m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
+	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
 
-	m_pGameManager = std::make_shared<GameManager>(m_pMap,m_pActors);
+	m_pGameManager = std::make_shared<GameManager>(m_pMap,m_pCamera,m_pActors);
 	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
 	m_pGameManager->Init(isTutorial);
 
-	//m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
+	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 
 	m_pUIManager = std::make_unique<UIManager>();
 
@@ -154,6 +154,9 @@ void GameScene::NormalUpdate(Input& input)
 		return;
 	}
 
+	// カメラの更新
+	m_pCamera->Update();
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
@@ -200,8 +203,8 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalDraw()
 {
-	m_bg->Draw(m_pGameManager->GetCamera());
-	m_pMap->Draw(m_pGameManager->GetCamera());
+	m_bg->Draw(m_pCamera.get());
+	m_pMap->Draw(m_pCamera.get());
 
 	for (auto& actor : m_pActors)
 	{
@@ -223,8 +226,8 @@ void GameScene::NormalDraw()
 
 void GameScene::FadeDraw()
 {
-	m_bg->Draw(m_pGameManager->GetCamera());
-	m_pMap->Draw(m_pGameManager->GetCamera());
+	m_bg->Draw(m_pCamera.get());
+	m_pMap->Draw(m_pCamera.get());
 	m_pGameManager->Draw();
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
@@ -302,7 +305,7 @@ void GameScene::SetEventFunc()
 	// カメラの補正が終わったかどうかの関数を定義
 	m_pEventSensors->isCameraLerpEndFunc = [this]()
 		{
-			return m_pGameManager->IsCameraLerpEnd();
+			return m_pCamera->IsLerpEnd();
 		};
 
 	// 敵のスポーン位置を取得する関数を定義
@@ -377,18 +380,18 @@ void GameScene::SetEventFunc()
 		{
 			if (key == "spawnPos")
 			{
-				m_pGameManager->SetCameraTarget(m_pPositionRegistry->GetCameraPos(kSpawnPosChipNo));
+				m_pCamera->SetTarget(m_pPositionRegistry->GetCameraPos(kSpawnPosChipNo));
 			}
 			else if (key == "goalPos")
 			{
-				m_pGameManager->SetCameraTarget(m_pPositionRegistry->GetCameraPos(kGoalPosChipNo));
+				m_pCamera->SetTarget(m_pPositionRegistry->GetCameraPos(kGoalPosChipNo));
 			}
 		};
 
 	// カメラが見るターゲットをプレイヤーに戻す関数を定義
 	m_pEventControls->returnCameraFunc = [this]()
 		{
-			m_pGameManager->ReturnCameraPlayer();
+			m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 		};
 
 	// バリアのアクティブ状態をセットする関数

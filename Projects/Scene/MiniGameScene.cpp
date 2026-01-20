@@ -7,6 +7,7 @@
 #include "../Game/Actor.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
+#include "../Utility/Camera.h"
 #include "../Utility/Game.h"
 #include "../Utility/Input.h"
 #include "DxLib.h"
@@ -43,7 +44,11 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pMap = std::make_shared<Map>(stageNo,true);
 	m_pMap->Init();
 
+	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
+
 	m_pGameManager->MiniGameInit(m_pMap);
+
+	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
@@ -115,6 +120,9 @@ void MiniGameScene::NormalUpdate(Input& input)
 		return;
 	}
 
+	// カメラの更新
+	m_pCamera->Update();
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
@@ -156,8 +164,8 @@ void MiniGameScene::FadeOutUpdate(Input&)
 
 void MiniGameScene::NormalDraw()
 {
-	m_bg->Draw(m_pGameManager->GetCamera());
-	m_pMap->Draw(m_pGameManager->GetCamera());
+	m_bg->Draw(m_pCamera.get());
+	m_pMap->Draw(m_pCamera.get());
 
 	for (auto& actor : m_pActors)
 	{

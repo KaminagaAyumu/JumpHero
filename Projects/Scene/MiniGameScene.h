@@ -6,6 +6,7 @@
 class Bg;
 class GameManager;
 class Map;
+class Camera;
 class Actor;
 class CollisionManager;
 
@@ -60,6 +61,8 @@ private:
 
 	// マップのデータを取得するポインタ
 	std::shared_ptr<Map> m_pMap;
+
+	std::shared_ptr<Camera> m_pCamera;
 
 	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 

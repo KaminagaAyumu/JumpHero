@@ -26,7 +26,7 @@ class Map;
 class GameManager
 {
 public:
-	GameManager(std::weak_ptr<Map> map, std::vector<std::weak_ptr<Actor>>& actors);
+	GameManager(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::vector<std::weak_ptr<Actor>>& actors);
 	virtual ~GameManager();
 
 	/// <summary>
@@ -118,23 +118,6 @@ public:
 	void OpenChestToPosition(int x, int y);
 
 	/// <summary>
-	/// カメラのターゲットをセットする
-	/// </summary>
-	/// <param name="pos">カメラの座標</param>
-	void SetCameraTarget(const Position2& pos);
-
-	/// <summary>
-	/// カメラのターゲットを示す関数オブジェクトをセットする
-	/// </summary>
-	/// <param name="provider">関数オブジェクト</param>
-	void SetCameraTargetProvider(std::function<Position2()> provider);
-
-	/// <summary>
-	/// カメラが見るターゲットをプレイヤーに戻す
-	/// </summary>
-	void ReturnCameraPlayer();
-
-	/// <summary>
 	/// プレイヤーが指定の座標を超えたかどうかを判定する
 	/// </summary>
 	/// <param name="area">指定エリア</param>
@@ -154,23 +137,10 @@ public:
 	void SetBarrierPlayer(const ActivePosition2& barrier);
 
 	/// <summary>
-	/// カメラの補正が終わったかどうか
-	/// </summary>
-	/// <returns>true : 終わった false : 終わっていない</returns>
-	bool IsCameraLerpEnd();
-
-	/// <summary>
 	/// ゲーム内に存在するオブジェクトの数を取得
 	/// </summary>
 	/// <returns>ゲーム内のオブジェクトの数</returns>
 	const size_t GetActorNum()const;
-
-	/// <summary>
-	/// カメラを取得させる
-	/// </summary>
-	/// <returns>カメラポインタ</returns>
-	/// <note>背景とマップはゲームシーンが管理しているので一旦こうしておく</note>
-	Camera* GetCamera()const { return m_pCamera.get(); }
 
 	/// <summary>
 	/// プレイヤーを取得させる
@@ -245,7 +215,6 @@ private:
 
 	// 各オブジェクト管理クラスの参照用
 	std::weak_ptr<Map> m_pMap; // マップはゲームシーンにshared_ptrで持たせるのでweak_ptr
-	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;
