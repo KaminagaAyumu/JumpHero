@@ -60,5 +60,6 @@ namespace Types
 	{
 		CoinGet, // コイン取得時のエフェクト
 		Impact, // 爆発エフェクト
+		Star, // 星エフェクト
 	};
 }

@@ -76,7 +76,7 @@ GameManager::GameManager() :
 		{
 			ChangeEnemyToCoin(); // 敵をすべてアイテム化
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
+			manager->CreateEffekseerEffect(Types::EffectType::Star, pos);
 		};
 	m_itemCollectFunc[Types::ItemType::AttackItem] = [this](const Position2& pos)
 		{

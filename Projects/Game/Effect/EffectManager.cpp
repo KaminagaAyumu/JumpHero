@@ -17,6 +17,7 @@ namespace
 	{
 		kEffectCoinGet, // コイン取得
 		kEffectImpact,
+		kEffectStar,
 		kEffectNum
 	};
 
@@ -25,6 +26,7 @@ namespace
 	{
 		L"data/effect/coin_get.efk", // コイン取得
 		L"data/effect/impact.efk", // 強化メダル
+		L"data/effect/star.efk", // 強化メダル
 	};
 
 	// エフェクトデータの数が違うときにエラーを出せるようにする
