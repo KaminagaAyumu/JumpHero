@@ -56,8 +56,9 @@ namespace Types
 		AttackItem, // 攻撃アイテム
 	};
 
-	enum class EffectType
+	enum class EffectType : int
 	{
-
+		CoinGet, // コイン取得時のエフェクト
+		Impact, // 爆発エフェクト
 	};
 }

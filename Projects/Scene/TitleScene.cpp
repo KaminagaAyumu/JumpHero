@@ -5,9 +5,11 @@
 #include "GameScene.h"
 #include "SelectScene.h"
 #include "../Utility/Game.h"
+#include "../Utility/GameType.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Sound/SoundManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Game/Effect/EffectManager.h"
 #include "../Utility/Application.h"
 #include "../Utility/GameType.h"
 #include <string>
@@ -39,14 +41,12 @@ m_drawFunc(&TitleScene::FadeDraw)
 	auto test = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2 + kStartTextMargin});
 
-	m_effectHandle = LoadEffekseerEffect("data/effect/coin_get.efk");
-	m_currentEffect = 0;
+	m_pEffectManager = std::make_shared<EffectManager>();
 }
 
 TitleScene::~TitleScene()
 {
 	DeleteGraph(m_titleImageHandle);
-	DeleteEffekseerEffect(m_effectHandle);
 }
 
 void TitleScene::Update(Input& input)
@@ -88,11 +88,10 @@ void TitleScene::NormalUpdate(Input& input)
 	}
 	if (input.IsTriggered("Up"))
 	{
-		m_currentEffect = PlayEffekseer2DEffect(m_effectHandle);
-		SetPosPlayingEffekseer2DEffect(m_currentEffect, 400, 400, 0);
+		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::CoinGet, { 400,400 });
 	}
 	// Effekseerにより再生中のエフェクトを更新する。
-	UpdateEffekseer2D();
+	m_pEffectManager->Update();
 }
 
 void TitleScene::FadeOutUpdate(Input& input)
@@ -121,7 +120,7 @@ void TitleScene::NormalDraw()
 	m_pUIManager->Draw();
 
 	// Effekseerにより再生中のエフェクトを描画する。
-	DrawEffekseer2D();
+	m_pEffectManager->Draw();
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"TitleScene: NormalDraw", 0xFFFFFF);
