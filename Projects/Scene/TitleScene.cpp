@@ -39,7 +39,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 	auto test = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2 + kStartTextMargin});
 
-	m_effectHandle = LoadEffekseerEffect("data/effect/test.efk");
+	m_effectHandle = LoadEffekseerEffect("data/effect/coin_get.efk");
 	m_currentEffect = 0;
 }
 
