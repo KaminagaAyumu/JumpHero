@@ -41,33 +41,33 @@ GameManager::GameManager() :
 {
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
-	m_itemCollectFunc[Types::ItemType::Balloon] = [this]()
+	m_itemCollectFunc[Types::ItemType::Balloon] = [this](const Position2& pos)
 		{
 			m_balloonNum++; // 風船の数を加算
 			m_balloonCounter++; // 風船取得カウンターを加算
 			m_totalBalloonNum--; // 総風船数を減算
 		};
 	// 強化メダルを取った時
-	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this]()
+	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this](const Position2& pos)
 		{
 			m_medalNum++; // メダルの数を加算
 		};
 	// 1UPを取った時
-	m_itemCollectFunc[Types::ItemType::LifeUp] = [this]()
+	m_itemCollectFunc[Types::ItemType::LifeUp] = [this](const Position2& pos)
 		{
 			m_life++; // 残機を加算
 		};
 	// コインを取った時
-	m_itemCollectFunc[Types::ItemType::Coin] = [this]()
+	m_itemCollectFunc[Types::ItemType::Coin] = [this](const Position2& pos)
 		{
 			AddScore(kCoinAddScore); // スコアを加算
 		};
 	// 敵をコインに変えるアイテムを取った時
-	m_itemCollectFunc[Types::ItemType::ChangeToCoin] = [this]()
+	m_itemCollectFunc[Types::ItemType::ChangeToCoin] = [this](const Position2& pos)
 		{
 			ChangeEnemyToCoin(); // 敵をすべてアイテム化
 		};
-	m_itemCollectFunc[Types::ItemType::AttackItem] = [this]()
+	m_itemCollectFunc[Types::ItemType::AttackItem] = [this](const Position2& pos)
 		{
 			// 攻撃アイテム取得時の処理
 			m_pPlayer->AttackableStart();
@@ -233,11 +233,11 @@ bool GameManager::IsGameOver() const
 	return m_life <= 0 && !m_pPlayer->IsMiss();
 }
 
-void GameManager::OnItemCollected(const Types::ItemType& type)
+void GameManager::OnItemCollected(const Types::ItemType& type, const Position2& pos)
 {
 	if (m_itemCollectFunc.contains(type))
 	{
-		m_itemCollectFunc[type]();
+		m_itemCollectFunc[type](pos);
 	}
 	else
 	{

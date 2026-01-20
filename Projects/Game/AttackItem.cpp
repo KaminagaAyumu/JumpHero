@@ -48,7 +48,7 @@ void AttackItem::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
 	auto manager = gameManager.lock();
 	// 攻撃アイテムが取得された際の処理を行わせる
-	manager->OnItemCollected(Types::ItemType::AttackItem);
+	manager->OnItemCollected(Types::ItemType::AttackItem, m_pos);
 	manager->NotifyItemEvent(Types::ItemType::AttackItem);
 }
 

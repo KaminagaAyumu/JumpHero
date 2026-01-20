@@ -60,7 +60,7 @@ void UpgradeMedal::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
 	auto manager = gameManager.lock();
 	// 風船が取得された際の処理を行わせる
-	manager->OnItemCollected(Types::ItemType::UpgradeMedal);
+	manager->OnItemCollected(Types::ItemType::UpgradeMedal, m_pos);
 	manager->NotifyItemEvent(Types::ItemType::UpgradeMedal);
 }
 

@@ -17,6 +17,7 @@ class ItemBase;
 class EnemyManager;
 class Input;
 class Map;
+class EffectManager;
 
 
 /// <summary>
@@ -77,7 +78,8 @@ public:
 	/// アイテムを取得した際、アイテムに対応したラムダ式を行う処理
 	/// </summary>
 	/// <param name="type">アイテムの種類</param>
-	void OnItemCollected(const Types::ItemType& type);
+	/// <param name="pos">アイテムの座標</param>
+	void OnItemCollected(const Types::ItemType& type, const Position2& pos);
 
 	/// <summary>
 	/// アイテムを生成するという通知をItemManagerに送る関数
@@ -200,7 +202,7 @@ private:
 	bool m_isMiniGame; // ミニゲーム中かどうか
 	bool m_isTutorial; // チュートリアルかどうか
 
-	std::unordered_map<Types::ItemType, std::function<void()>> m_itemCollectFunc;
+	std::unordered_map<Types::ItemType, std::function<void(const Position2& pos)>> m_itemCollectFunc;
 
 	/// <summary>
 	/// アイテムが取得される時のイベント
@@ -215,6 +217,7 @@ private:
 
 	// 各オブジェクト管理クラスの参照用
 	std::weak_ptr<Map> m_pMap; // マップはゲームシーンにshared_ptrで持たせるのでweak_ptr
+	std::weak_ptr<EffectManager> m_pEffectManager;
 	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;

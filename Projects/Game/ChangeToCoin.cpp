@@ -72,7 +72,7 @@ void ChangeToCoin::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
 	auto manager = gameManager.lock();
 	// 敵をコインに変えるアイテムが取得された際の処理を行わせる
-	manager->OnItemCollected(Types::ItemType::ChangeToCoin);
+	manager->OnItemCollected(Types::ItemType::ChangeToCoin, m_pos);
 	manager->NotifyItemEvent(Types::ItemType::ChangeToCoin);
 }
 

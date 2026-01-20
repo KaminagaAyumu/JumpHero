@@ -60,7 +60,7 @@ void Balloon::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
 	auto manager = gameManager.lock();
 	// 風船が取得された際の処理を行わせる
-	manager->OnItemCollected(Types::ItemType::Balloon);
+	manager->OnItemCollected(Types::ItemType::Balloon, m_pos);
 	manager->NotifyItemEvent(Types::ItemType::Balloon);
 }
 

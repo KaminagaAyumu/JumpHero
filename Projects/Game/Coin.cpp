@@ -59,7 +59,7 @@ void Coin::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
 	auto manager = gameManager.lock();
 	// コインが取得された際の処理を行わせる
-	manager->OnItemCollected(Types::ItemType::Coin);
+	manager->OnItemCollected(Types::ItemType::Coin, m_pos);
 	manager->NotifyItemEvent(Types::ItemType::Coin);
 }
 
