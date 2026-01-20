@@ -316,12 +316,6 @@ bool EventManager::CheckTrigger(const EventData& data)
 			m_timeCount = 0;
 			return true;
 		}
-		/*int endTime = GetParamNum(data.triggerParam);
-		if (m_timeCount >= endTime)
-		{
-			m_timeCount = 0;
-			return true;
-		}*/
 	}
 	break;
 	case TriggerType::EventEnd:
