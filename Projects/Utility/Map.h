@@ -110,6 +110,11 @@ public:
 	/// <param name="value">変更後のマップチップ番号</param>
 	void SetMapChip(int x, int y, int value);
 
+	/// <summary>
+	/// ゴールのマップチップの描画を変更する
+	/// </summary>
+	void SetGoalMapChipOpen();
+
 private:
 
 	int m_mapHandle; // マップの画像ハンドル

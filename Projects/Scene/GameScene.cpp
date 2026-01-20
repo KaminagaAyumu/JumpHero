@@ -435,7 +435,7 @@ void GameScene::SetEventFunc()
 
 	m_pEventControls->activeGoalFunc = [this]()
 		{
-			// ゲームシーンでは何もしないようにする(デフォルトでゴール可能)
+			m_pMap->SetGoalMapChipOpen();
 		};
 
 }

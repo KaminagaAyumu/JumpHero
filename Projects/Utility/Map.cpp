@@ -36,6 +36,13 @@ namespace
 	constexpr int kGoalChipNoUp = 191; // マップチップのゴール地点上部
 	constexpr int kGoalChipNoDown = 211;// マップチップのゴール地点下部
 
+	// 描画の際のマップチップ番号
+	constexpr int kGoalOpenChipNoUp = 192;
+	constexpr int kGoalOpenChipNoDown = 212;
+
+	constexpr int kGoalCloseChipNoUp = 190;
+	constexpr int kGoalCloseChipNoDown = 210;
+
 	constexpr int kThroughChipNoLeft = 264;
 	constexpr int kThroughChipNoCenter = 265;
 	constexpr int kThroughChipNoRight = 266;
@@ -469,6 +476,25 @@ void Map::SetMapChip(int x, int y, int value)
 {
 	//m_chipData[y * m_width + x] = value;
 	m_layerMapData[kMapData][y * m_width + x] = value;
+}
+
+void Map::SetGoalMapChipOpen()
+{
+	for (int y = 0; y < m_height; y++)
+	{
+		for (int x = 0; x < m_width; x++)
+		{
+			int chipNo = m_layerMapData[kEventData][y * m_width + x];
+			if (chipNo == kGoalChipNoUp)
+			{
+				m_layerMapData[kMapData][y * m_width + x] = kGoalOpenChipNoUp;
+			}
+			if (chipNo == kGoalChipNoDown)
+			{
+				m_layerMapData[kMapData][y * m_width + x] = kGoalOpenChipNoDown;
+			}
+		}
+	}
 }
 
 void Map::LoadMapdata(const std::string& fileName)
