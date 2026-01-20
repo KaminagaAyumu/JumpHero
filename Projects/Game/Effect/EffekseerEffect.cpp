@@ -13,3 +13,8 @@ EffekseerEffect::~EffekseerEffect()
 {
 	StopEffekseer2DEffect(m_effect);
 }
+
+bool EffekseerEffect::IsAlive()const
+{
+	return IsEffekseer2DEffectPlaying(m_effect);
+}
