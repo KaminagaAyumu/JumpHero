@@ -68,6 +68,8 @@ void EnemyManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera)
 	m_enemies.clear(); // 敵リストを初期化
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
 	LoadSpawnPositions(); // 敵スポーン位置の読み込み
+	m_frameCount = 0; // 経過フレームを初期化
+	m_itemTime = 0; // アイテム化時間を初期化
 }
 
 void EnemyManager::Update(Input& input)

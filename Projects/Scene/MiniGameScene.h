@@ -62,7 +62,7 @@ private:
 	// 背景画像を管理するクラスのポインタ
 	std::shared_ptr<Bg> m_bg;
 
-	// ゲームシーン内の状態管理用ポインタ
+	// ゲームシーン内の状態管理用ポインタ(GameSceneから引き継ぐ)
 	std::shared_ptr<GameManager> m_pGameManager;
 
 	std::shared_ptr<EffectManager> m_pEffectManager;
