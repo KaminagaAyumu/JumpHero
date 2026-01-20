@@ -96,38 +96,8 @@ void MiniGameScene::FadeInUpdate(Input&)
 	if (m_frameCount <= 0)
 	{
 		// フェードイン完了
-		m_updateFunc = &MiniGameScene::DescriptionUpdate;
-		m_drawFunc = &MiniGameScene::DescriptionDraw;
-		m_frameCount = 0; // 説明で使うためカウンタの値をリセット
-		return; // 念のため処理を抜ける
-	}
-}
-
-void MiniGameScene::DescriptionUpdate(Input& input)
-{
-	m_frameCount++;
-	if (IsEndDescription())
-	{
-		m_frameCount = kDescriptionInterval; // 枠表示用にカウンタを最大値に固定
-		if (input.IsTriggered("OK"))
-		{
-			m_updateFunc = &MiniGameScene::DescriptionEndUpdate;
-			m_frameCount = kDescriptionInterval; // 説明終了で使うためカウンタの値をリセット
-			return; // 念のため処理を抜ける
-		}
-	}
-	
-}
-
-void MiniGameScene::DescriptionEndUpdate(Input& input)
-{
-	m_frameCount--;
-	if (m_frameCount <= 0)
-	{
-		// 説明終了
 		m_updateFunc = &MiniGameScene::NormalUpdate;
 		m_drawFunc = &MiniGameScene::NormalDraw;
-		m_frameCount = 0; // 念のためカウンタの値をリセット
 		return; // 念のため処理を抜ける
 	}
 }
@@ -210,29 +180,11 @@ void MiniGameScene::NormalDraw()
 #endif
 }
 
-void MiniGameScene::DescriptionDraw()
-{
-	int ScreenCenterX = Game::kScreenWidth / 2;
-	int ScreenCenterY = Game::kScreenHeight / 2;
-	// 出現割合の計算 開始時: 0.0f  終了時: 1.0f
-	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kDescriptionInterval);
-
-	int frameHeight = (Game::kScreenHeight - kDescriptionBorderMargin) - ScreenCenterY;
-	frameHeight = static_cast<int>(frameHeight * rate);
-
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	DrawBox(kDescriptionBorderMargin, ScreenCenterY - frameHeight, Game::kScreenWidth - kDescriptionBorderMargin, ScreenCenterY + frameHeight, 0x440044, TRUE);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"ゲームの説明", 0xffffff);
-	DrawString(Game::kScreenWidth / 2, kHeaderMargin, L"ミニゲーム", 0xffffff);
-#ifdef _DEBUG
-	DrawString(0, 0, L"MiniGameScene: DescriptionDraw", 0xffffff);
-#endif
-}
-
 void MiniGameScene::FadeDraw()
 {
+	m_bg->Draw(m_pCamera.get());
+	m_pMap->Draw(m_pCamera.get());
+
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));

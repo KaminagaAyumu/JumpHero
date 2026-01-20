@@ -39,8 +39,6 @@ private:
 
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理
-	void DescriptionUpdate(Input& input); // 説明中の更新処理
-	void DescriptionEndUpdate(Input& input); // 説明終了時の更新処理
 	void NormalUpdate(Input& input); // 通常時の更新処理
 	void FadeOutUpdate(Input& input); // フェードアウト中の更新処理
 	using UpdateFunc_t = void (MiniGameScene::*)(Input& input); // 更新処理用関数ポインタの型定義
@@ -48,7 +46,6 @@ private:
 
 	// 描画処理用関数群
 	void NormalDraw(); // 通常時の描画処理
-	void DescriptionDraw(); // 説明中の描画処理
 	void FadeDraw(); // フェード中の描画処理
 	using DrawFunc_t = void (MiniGameScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
