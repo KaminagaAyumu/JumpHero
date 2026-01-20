@@ -5,6 +5,7 @@
 #include "../Game/GameManager.h"
 #include "../Game/CollisionManager.h"
 #include "../Game/Actor.h"
+#include "../Game/Effect/EffectManager.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
@@ -46,7 +47,10 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
-	m_pGameManager->MiniGameInit(m_pMap,m_pCamera);
+	m_pEffectManager = std::make_shared<EffectManager>();
+	m_pEffectManager->SetCamera(m_pCamera);
+
+	m_pGameManager->MiniGameInit(m_pMap,m_pCamera,m_pEffectManager);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 
@@ -123,6 +127,9 @@ void MiniGameScene::NormalUpdate(Input& input)
 	// カメラの更新
 	m_pCamera->Update();
 
+	// エフェクトマネージャーを更新
+	m_pEffectManager->Update();
+
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
 
@@ -177,6 +184,8 @@ void MiniGameScene::NormalDraw()
 	}
 
 	m_pGameManager->Draw();
+
+	m_pEffectManager->Draw();
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"MiniGameScene: NormalDraw", 0xffffff);

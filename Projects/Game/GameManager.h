@@ -34,8 +34,8 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="isTutorial">チュートリアルかどうかを判別する(trueならチュートリアル)</param>
-	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial);
-	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera); // 一旦マップを取得するだけで使う
+	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager,  std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial);
+	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager); // 一旦マップを取得するだけで使う
 	void Update(Input& input);
 	void Draw() const;
 

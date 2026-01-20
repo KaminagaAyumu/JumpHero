@@ -4,6 +4,7 @@
 #include "ChestManager.h"
 #include "ItemManager.h"
 #include "EnemyManager.h"
+#include "Effect/EffectManager.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Input.h"
 #include "../Utility/Map.h"
@@ -46,31 +47,43 @@ GameManager::GameManager() :
 			m_balloonNum++; // 風船の数を加算
 			m_balloonCounter++; // 風船取得カウンターを加算
 			m_totalBalloonNum--; // 総風船数を減算
+			auto manager = m_pEffectManager.lock();
+			manager->CreateEffekseerEffect(Types::EffectType::Impact, pos);
 		};
 	// 強化メダルを取った時
 	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this](const Position2& pos)
 		{
 			m_medalNum++; // メダルの数を加算
+			auto manager = m_pEffectManager.lock();
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
 		};
 	// 1UPを取った時
 	m_itemCollectFunc[Types::ItemType::LifeUp] = [this](const Position2& pos)
 		{
 			m_life++; // 残機を加算
+			auto manager = m_pEffectManager.lock();
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
 		};
 	// コインを取った時
 	m_itemCollectFunc[Types::ItemType::Coin] = [this](const Position2& pos)
 		{
 			AddScore(kCoinAddScore); // スコアを加算
+			auto manager = m_pEffectManager.lock();
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
 		};
 	// 敵をコインに変えるアイテムを取った時
 	m_itemCollectFunc[Types::ItemType::ChangeToCoin] = [this](const Position2& pos)
 		{
 			ChangeEnemyToCoin(); // 敵をすべてアイテム化
+			auto manager = m_pEffectManager.lock();
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
 		};
 	m_itemCollectFunc[Types::ItemType::AttackItem] = [this](const Position2& pos)
 		{
 			// 攻撃アイテム取得時の処理
 			m_pPlayer->AttackableStart();
+			auto manager = m_pEffectManager.lock();
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
 		};
 
 
@@ -80,10 +93,11 @@ GameManager::~GameManager()
 {
 }
 
-void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial)
+void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial)
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
+	m_pEffectManager = effectManager;
 	m_pPlayer = std::make_shared<Player>(map, this);
 	m_pPlayer->SetCamera(camera);
 	m_pPlayer->Init();
@@ -104,10 +118,11 @@ void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std
 	m_isTutorial = isTutorial;
 }
 
-void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera)
+void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager)
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
+	m_pEffectManager = effectManager;
 	m_pPlayer->InitMap(pMap);
 	m_pPlayer->SetCamera(camera);
 	m_pPlayer->Init();

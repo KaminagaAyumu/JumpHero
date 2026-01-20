@@ -60,10 +60,12 @@ m_fadeColor(0x000000)
 	m_pMap->Init();
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
+	m_pEffectManager = std::make_shared<EffectManager>();
+	m_pEffectManager->SetCamera(m_pCamera);
 
 	m_pGameManager = std::make_shared<GameManager>();
 	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
-	m_pGameManager->Init(m_pMap, m_pCamera, m_pActors, isTutorial);
+	m_pGameManager->Init(m_pMap, m_pCamera, m_pEffectManager, m_pActors, isTutorial);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 
@@ -83,8 +85,6 @@ m_fadeColor(0x000000)
 	m_pSoundManager = Application::GetInstance().GetSoundManager();
 	m_pSoundManager->LoadSoundClip("game", L"data/sound/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
 	m_pSoundManager->CrossFadeBGM("game", 120.0f);
-
-	m_pEffectManager = std::make_shared<EffectManager>();
 
 	m_pPositionRegistry = std::make_unique<PositionRegistry>();
 	m_pPositionRegistry->InitPositions(m_pMap); // マップのデータから座標情報を取得
@@ -146,8 +146,6 @@ void GameScene::NormalUpdate(Input& input)
 	// OKボタンが押されたかどうかを判定する
 	m_isInputOK = input.IsTriggered("OK");
 
-	m_pEffectManager->Update();
-
 	m_pUIManager->Update();
 
 	m_pEventManager->Update();
@@ -159,8 +157,12 @@ void GameScene::NormalUpdate(Input& input)
 		return;
 	}
 
+
 	// カメラの更新
 	m_pCamera->Update();
+
+	// エフェクトマネージャーを更新
+	m_pEffectManager->Update();
 
 	// ゲームマネージャーの更新
 	m_pGameManager->Update(input);
@@ -222,9 +224,10 @@ void GameScene::NormalDraw()
 
 	m_pUIManager->Draw();
 
+	m_pGameManager->Draw();
+
 	m_pEffectManager->Draw();
 
-	m_pGameManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"GameScene: NormalDraw", 0xffffff);
 #endif

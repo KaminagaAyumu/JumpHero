@@ -5,6 +5,7 @@
 
 class Bg;
 class GameManager;
+class EffectManager;
 class Map;
 class Camera;
 class Actor;
@@ -58,6 +59,8 @@ private:
 
 	// ゲームシーン内の状態管理用ポインタ
 	std::shared_ptr<GameManager> m_pGameManager;
+
+	std::shared_ptr<EffectManager> m_pEffectManager;
 
 	// マップのデータを取得するポインタ
 	std::shared_ptr<Map> m_pMap;
