@@ -319,9 +319,9 @@ void GameScene::SetEventFunc()
 		};
 
 	// 風船を指定数取得したかどうかの関数を定義
-	m_pEventSensors->isGetBalloonFunc = [this](int balloonNum)
+	m_pEventSensors->isGetBalloonFunc = [this](int balloonNum, bool isAll)
 		{
-			return m_pGameManager->IsGetBalloon(balloonNum);
+			return m_pGameManager->IsGetBalloon(balloonNum,isAll);
 		};
 
 	// 敵のスポーン位置を取得する関数を定義

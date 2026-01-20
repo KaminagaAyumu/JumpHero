@@ -327,10 +327,18 @@ bool GameManager::IsPowerUpPlayer()
 	return m_pPlayer->IsPowerUp();
 }
 
-bool GameManager::IsGetBalloon(int balloonNum)
+bool GameManager::IsGetBalloon(int balloonNum, bool isAll)
 {
-	// 風船を取得した数分のカウンタから比較
-	return m_balloonNum >= balloonNum;
+	if (isAll)
+	{
+		// 風船を取得した数分のカウンタから比較
+		return m_balloonNum >= balloonNum;
+	}
+	else
+	{
+		// リセットありの風船のカウンタから比較
+		return m_balloonCounter >= balloonNum;
+	}
 }
 
 void GameManager::SetBarrierPlayer(const ActivePosition2& barrier)

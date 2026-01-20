@@ -350,12 +350,13 @@ bool EventManager::CheckTrigger(const EventData& data)
 		{
 			// 風船の総数を取得する関数を呼ぶ
 			balloonNum = sensors->getTotalBalloonNumFunc();
+			return sensors->isGetBalloonFunc(balloonNum, true);
 		}
 		else
 		{
 			balloonNum = GetParamNum(data.triggerParam);
+			return sensors->isGetBalloonFunc(balloonNum, false);
 		}
-		return sensors->isGetBalloonFunc(balloonNum);
 	}
 		break;
 	case TriggerType::NoTrigger:

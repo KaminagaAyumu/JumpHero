@@ -136,8 +136,9 @@ public:
 	/// 指定された風船の数を取得したかどうかを判定
 	/// </summary>
 	/// <param name="balloonNum">風船の数</param>
+	/// <param name="isAll">すべての風船と判定するかどうか</param>
 	/// <returns>true : 取得した false : 取得していない</returns>
-	bool IsGetBalloon(int balloonNum);
+	bool IsGetBalloon(int balloonNum, bool isAll);
 
 	/// <summary>
 	/// プレイヤーが進めないバリアの座標をセットする
