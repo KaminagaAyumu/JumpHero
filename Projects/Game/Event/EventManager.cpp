@@ -23,8 +23,8 @@ namespace
 	const Size kTextWindowSize = { 700,300 }; // テキストウィンドウのサイズ
 	const Position2 kTextWindowPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 100 }; // テキストウィンドウの座標
 	
-	const Size kHintWindowSize = { 100,50 }; // ヒントテキストウィンドウのサイズ
-	const Position2 kHintWindowPos = { Game::kScreenWidth - 120, 70 }; // ヒントテキストウィンドウの座標
+	const Size kHintWindowSize = { 300,50 }; // ヒントテキストウィンドウのサイズ
+	const Position2 kHintWindowPos = { Game::kScreenWidth - 160, 70 }; // ヒントテキストウィンドウの座標
 	
 	constexpr float kTextWindowAppearDuration = 2.0f; // テキストウィンドウが出てくるまでの時間
 	constexpr int kWindowAutoPageFlipFrame = 600; // テキストウィンドウを自動で次に動かす時間
