@@ -1,4 +1,5 @@
-﻿#include "Charge.h"
+﻿#include <memory>
+#include "Charge.h"
 #include "../../Utility/Geometry.h"
 #include "../../Utility/Camera.h"
 
@@ -33,10 +34,11 @@ void Charge::Update()
 	}
 }
 
-void Charge::Draw(const Camera& camera)
+void Charge::Draw(const std::weak_ptr<Camera> camera)
 {
-	int drawX = static_cast<int>(m_pos.x - camera.scroll.x);
-	int drawY = static_cast<int>(m_pos.y - camera.scroll.y);
+	auto pCamera = camera.lock();
+	int drawX = static_cast<int>(m_pos.x - pCamera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - pCamera->scroll.y);
 
 	m_animation.Draw({ drawX, drawY }, false);
 }

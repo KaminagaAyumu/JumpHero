@@ -14,7 +14,7 @@ public:
 	virtual ~EffectBase() = default;
 
 	virtual void Update()abstract;
-	virtual void Draw(const Camera&)abstract;
+	virtual void Draw(const std::weak_ptr<Camera>)abstract;
 
 	bool IsAlive()const { return m_isAlive; }
 

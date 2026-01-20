@@ -55,4 +55,9 @@ namespace Types
 		ChangeToCoin, // 敵をコインに変える
 		AttackItem, // 攻撃アイテム
 	};
+
+	enum class EffectType
+	{
+
+	};
 }

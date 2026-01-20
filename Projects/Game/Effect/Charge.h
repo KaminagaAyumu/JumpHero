@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "EffectBase.h"
+
 class Charge : public EffectBase
 {
 public:
@@ -7,7 +8,7 @@ public:
 	virtual ~Charge();
 
 	void Update()override;
-	void Draw(const Camera& camera)override;
+	void Draw(const std::weak_ptr<Camera> camera)override;
 
 private:
 
