@@ -10,6 +10,9 @@ class Map;
 class Camera;
 class Actor;
 class CollisionManager;
+class EventManager;
+struct EventControls;
+struct EventSensors;
 
 /// <summary>
 /// ミニゲーム用シーン
@@ -75,5 +78,11 @@ private:
 	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
+
+	std::shared_ptr<EventSensors> m_pEventSensors; // イベントの発動条件を設定するように持つ
+
+	std::shared_ptr<EventControls> m_pEventControls; // 行うイベントを設定するように持つ
+
+	std::unique_ptr<EventManager> m_pEventManager; // イベントマネージャークラス
 };
 

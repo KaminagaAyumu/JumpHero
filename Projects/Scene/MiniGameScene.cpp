@@ -6,12 +6,14 @@
 #include "../Game/CollisionManager.h"
 #include "../Game/Actor.h"
 #include "../Game/Effect/EffectManager.h"
+#include "../Game/Event/EventManager.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Game.h"
 #include "../Utility/Input.h"
 #include "DxLib.h"
+#include <cassert>
 
 namespace
 {
@@ -55,6 +57,22 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
+
+	// イベントセンサーのポインタを取得
+	m_pEventSensors = std::make_shared<EventSensors>();
+	m_pEventControls = std::make_shared<EventControls>();
+
+	// イベントの内容を格納
+	SetEventFunc();
+
+	m_pEventManager = std::make_unique<EventManager>();
+	if (!m_pEventManager->LoadCommonEventData(stageNo, true) || !m_pEventManager->LoadEventData(stageNo, true))
+	{
+		assert(false && "イベントデータの読み込みに失敗しました");
+	}
+
+	// イベントのデータをイベントマネージャーに渡す
+	m_pEventManager->SetEvents(m_pEventControls, m_pEventSensors);
 
 }
 

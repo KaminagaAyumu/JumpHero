@@ -30,13 +30,15 @@ public:
 	/// 指定されたステージのイベントデータをロードする
 	/// </summary>
 	/// <param name="stageNo">ステージ番号</param>
-	bool LoadEventData(int stageNo);
+	/// <param name="isMiniGame">ミニゲームかどうか</param>
+	bool LoadEventData(int stageNo, bool isMiniGame);
 
 	/// <summary>
 	/// 指定されたステージの共通イベントデータをロードする
 	/// </summary>
 	/// <param name="stageNo">ステージ番号</param>
-	bool LoadCommonEventData(int stageNo);
+	/// <param name="isMiniGame">ミニゲームかどうか</param>
+	bool LoadCommonEventData(int stageNo, bool isMiniGame);
 
 	/// <summary>
 	/// ゲームが止まっているかどうかを返す

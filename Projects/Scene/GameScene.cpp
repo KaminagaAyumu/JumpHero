@@ -97,7 +97,7 @@ m_fadeColor(0x000000)
 	SetEventFunc();
 
 	m_pEventManager = std::make_unique<EventManager>();
-	if (!m_pEventManager->LoadCommonEventData(stageNo) || !m_pEventManager->LoadEventData(stageNo))
+	if (!m_pEventManager->LoadCommonEventData(stageNo, false) || !m_pEventManager->LoadEventData(stageNo, false))
 	{
 		assert(false && "イベントデータの読み込みに失敗しました");
 	}

@@ -132,18 +132,32 @@ void EventManager::SetEvents(const std::shared_ptr<EventControls>& controls, con
 	m_pSensors = sensors;
 }
 
-bool EventManager::LoadEventData(int stageNo)
+bool EventManager::LoadEventData(int stageNo, bool isMiniGame)
 {
 	// ステージ番号に対応したパスを取得する変数
 	wchar_t filePath[kEventPathSizeMax];
 
 	if (stageNo == 0)
 	{
-		std::swprintf(filePath, kEventPathSizeMax, L"data/event/tutorial_event.csv");
+		if (isMiniGame)
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/tuto_minigame_event.csv");
+		}
+		else
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/tutorial_event.csv");
+		}
 	}
 	else
 	{
-		std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_event.csv", stageNo);
+		if (isMiniGame)
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/minigame%d_event.csv", stageNo);
+		}
+		else
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_event.csv", stageNo);
+		}
 	}
 
 	std::ifstream file(filePath);
@@ -188,18 +202,32 @@ bool EventManager::LoadEventData(int stageNo)
 	return true;
 }
 
-bool EventManager::LoadCommonEventData(int stageNo)
+bool EventManager::LoadCommonEventData(int stageNo, bool isMiniGame)
 {
 	// ステージ番号に対応したパスを取得する変数
 	wchar_t filePath[kEventPathSizeMax];
 
 	if (stageNo == 0)
 	{
-		std::swprintf(filePath, kEventPathSizeMax, L"data/event/tutorial_common.csv");
+		if (isMiniGame)
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/tuto_minigame_common.csv");
+		}
+		else
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/tutorial_common.csv");
+		}
 	}
 	else
 	{
-		std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_common.csv", stageNo);
+		if (isMiniGame)
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/minigame%d_common.csv", stageNo);
+		}
+		else
+		{
+			std::swprintf(filePath, kEventPathSizeMax, L"data/event/stage%d_common.csv", stageNo);
+		}
 	}
 
 	std::ifstream file(filePath);
