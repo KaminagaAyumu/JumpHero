@@ -61,9 +61,9 @@ m_fadeColor(0x000000)
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
 
-	m_pGameManager = std::make_shared<GameManager>(m_pMap,m_pCamera,m_pActors);
+	m_pGameManager = std::make_shared<GameManager>();
 	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
-	m_pGameManager->Init(isTutorial);
+	m_pGameManager->Init(m_pMap, m_pCamera, m_pActors, isTutorial);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 

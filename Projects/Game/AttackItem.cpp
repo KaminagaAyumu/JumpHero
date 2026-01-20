@@ -44,11 +44,12 @@ void AttackItem::Draw()
 	}
 }
 
-void AttackItem::OnCollected(GameManager& gameManager)
+void AttackItem::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
+	auto manager = gameManager.lock();
 	// 攻撃アイテムが取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::AttackItem);
-	gameManager.NotifyItemEvent(Types::ItemType::AttackItem);
+	manager->OnItemCollected(Types::ItemType::AttackItem);
+	manager->NotifyItemEvent(Types::ItemType::AttackItem);
 }
 
 void AttackItem::IsCollision(const Types::CollisionInfo& info)

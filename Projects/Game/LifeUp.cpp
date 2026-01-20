@@ -44,10 +44,11 @@ void LifeUp::Draw()
 	}
 }
 
-void LifeUp::OnCollected(GameManager& gameManager)
+void LifeUp::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
+	auto manager = gameManager.lock();
 	// 1UPが取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::LifeUp);
+	manager->OnItemCollected(Types::ItemType::LifeUp);
 }
 
 void LifeUp::IsCollision(const Types::CollisionInfo& info)

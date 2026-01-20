@@ -55,11 +55,12 @@ void Coin::Draw()
 	}
 }
 
-void Coin::OnCollected(GameManager& gameManager)
+void Coin::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
+	auto manager = gameManager.lock();
 	// コインが取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::Coin);
-	gameManager.NotifyItemEvent(Types::ItemType::Coin);
+	manager->OnItemCollected(Types::ItemType::Coin);
+	manager->NotifyItemEvent(Types::ItemType::Coin);
 }
 
 void Coin::IsCollision(const Types::CollisionInfo& info)

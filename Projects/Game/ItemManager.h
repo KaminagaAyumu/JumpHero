@@ -18,7 +18,7 @@ class Map;
 class ItemManager
 {
 public:
-	ItemManager(std::weak_ptr<Camera> camera, GameManager* gameManager);
+	ItemManager(std::weak_ptr<Camera> camera, std::weak_ptr<GameManager> gameManager);
 	~ItemManager();
 
 	/// <summary>
@@ -69,7 +69,7 @@ public:
 
 private:
 	std::weak_ptr<Camera> m_pCamera; // アイテムで使うカメラを取得
-	GameManager* m_pGameManager; // アイテムで使うゲームマネージャーを取得
+	std::shared_ptr<GameManager> m_pGameManager; // アイテムで使うゲームマネージャーを取得
 	std::list<std::shared_ptr<ItemBase>> m_pItems; // シーン上のアイテム管理用コンテナ
 	std::vector<int> m_graphHandles; // アイテムのグラフィックハンドル格納用コンテナ
 	int m_firstBalloonNum; // 初期配置の風船の個数

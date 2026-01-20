@@ -23,17 +23,17 @@ class Map;
 /// ゲーム内の状態を管理するクラス
 /// オブジェクト管理クラスの実体もここで持つ
 /// </summary>
-class GameManager
+class GameManager : public std::enable_shared_from_this<GameManager>
 {
 public:
-	GameManager(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::vector<std::weak_ptr<Actor>>& actors);
+	GameManager();
 	virtual ~GameManager();
 
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
 	/// <param name="isTutorial">チュートリアルかどうかを判別する(trueならチュートリアル)</param>
-	void Init(bool isTutorial);
+	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial);
 	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera); // 一旦マップを取得するだけで使う
 	void Update(Input& input);
 	void Draw() const;

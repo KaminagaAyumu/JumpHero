@@ -68,11 +68,12 @@ void ChangeToCoin::Draw()
 	}
 }
 
-void ChangeToCoin::OnCollected(GameManager& gameManager)
+void ChangeToCoin::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
+	auto manager = gameManager.lock();
 	// 敵をコインに変えるアイテムが取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::ChangeToCoin);
-	gameManager.NotifyItemEvent(Types::ItemType::ChangeToCoin);
+	manager->OnItemCollected(Types::ItemType::ChangeToCoin);
+	manager->NotifyItemEvent(Types::ItemType::ChangeToCoin);
 }
 
 bool ChangeToCoin::IsAppear()

@@ -56,11 +56,12 @@ void Balloon::Draw()
 	}
 }
 
-void Balloon::OnCollected(GameManager& gameManager)
+void Balloon::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
+	auto manager = gameManager.lock();
 	// 風船が取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::Balloon);
-	gameManager.NotifyItemEvent(Types::ItemType::Balloon);
+	manager->OnItemCollected(Types::ItemType::Balloon);
+	manager->NotifyItemEvent(Types::ItemType::Balloon);
 }
 
 void Balloon::IsCollision(const Types::CollisionInfo& info)

@@ -56,11 +56,12 @@ void UpgradeMedal::Draw()
 	}
 }
 
-void UpgradeMedal::OnCollected(GameManager& gameManager)
+void UpgradeMedal::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
+	auto manager = gameManager.lock();
 	// 風船が取得された際の処理を行わせる
-	gameManager.OnItemCollected(Types::ItemType::UpgradeMedal);
-	gameManager.NotifyItemEvent(Types::ItemType::UpgradeMedal);
+	manager->OnItemCollected(Types::ItemType::UpgradeMedal);
+	manager->NotifyItemEvent(Types::ItemType::UpgradeMedal);
 }
 
 void UpgradeMedal::IsCollision(const Types::CollisionInfo& info)

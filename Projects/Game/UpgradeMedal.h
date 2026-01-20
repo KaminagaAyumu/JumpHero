@@ -23,8 +23,8 @@ public:
 	/// <summary>
 	/// アイテムが取得された際の処理
 	/// </summary>
-	/// <param name="gameManager">ゲームマネージャーの参照</param>
-	virtual void OnCollected(GameManager& gameManager)override;
+	/// <param name="gameManager">ゲームマネージャーのポインタ</param>
+	virtual void OnCollected(std::weak_ptr<GameManager> gameManager)override;
 
 private:
 
