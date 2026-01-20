@@ -5,10 +5,13 @@
 #include "../Scene/TitleScene.h"
 #include "Game.h"
 #include "DxLib.h"
+#include "EffekseerForDxLib.h"
 
 namespace
 {
 	constexpr int	kOneFrameNanoSec = 16667; // 1フレームのナノ秒(60FPS)
+
+	constexpr int	kEffectMaxNum = 8000; // Effekseerで画面に表示できる最大パーティクル数
 
 	const wchar_t* kFontPath = L"data/craftmincho.otf"; // プロジェクト内にあるフォントデータのパス
 }
@@ -46,6 +49,44 @@ bool Application::Init()
 
 	// 描画対象をバックバッファに変更
 	SetDrawScreen(DX_SCREEN_BACK);
+
+
+	//------------------------------//
+	// エフェクト関連の初期化
+	//------------------------------//
+
+	// DirectX11を使用するようにする。
+		// Effekseerを使用するには必ず設定する。
+	SetUseDirect3DVersion(DX_DIRECT3D_11);
+
+	// Effekseerを初期化する。
+	// 引数には画面に表示する最大パーティクル数を設定する。
+	if (Effkseer_Init(kEffectMaxNum) == -1)
+	{
+		// 初期化できなかった場合終わる
+		DxLib_End();
+		return false;
+	}
+
+	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
+	// Effekseerを使用する場合は必ず設定する。
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+
+	// DXライブラリのデバイスロストした時のコールバックを設定する。
+	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
+	// ただし、DirectX11を使用する場合は実行する必要はない。
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+
+	// Effekseerに2D描画の設定をする。
+	Effekseer_Set2DSetting(Game::kScreenWidth, Game::kScreenHeight);
+
+	// Zバッファを有効にする。
+	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
+	SetUseZBuffer3D(TRUE);
+
+	// Zバッファへの書き込みを有効にする。
+	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
+	SetWriteZBuffer3D(TRUE);
 
 	return true;
 }
@@ -98,5 +139,6 @@ void Application::Terminate()
 {
 	// 追加したフォントデータを明示的に削除する
 	RemoveFontResourceExW(kFontPath, FR_PRIVATE, nullptr);
+	Effkseer_End();				// Effekseer使用の終了処理
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 }

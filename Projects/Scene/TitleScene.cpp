@@ -12,6 +12,7 @@
 #include "../Utility/GameType.h"
 #include <string>
 #include "DxLib.h"
+#include "EffekseerForDxLib.h"
 
 namespace
 {
@@ -37,11 +38,15 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_pUIManager = std::make_shared<UIManager>();
 	auto test = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2 + kStartTextMargin});
+
+	m_effectHandle = LoadEffekseerEffect("data/effect/test.efk");
+	m_currentEffect = 0;
 }
 
 TitleScene::~TitleScene()
 {
 	DeleteGraph(m_titleImageHandle);
+	DeleteEffekseerEffect(m_effectHandle);
 }
 
 void TitleScene::Update(Input& input)
@@ -81,6 +86,13 @@ void TitleScene::NormalUpdate(Input& input)
 		m_soundManager->CrossFadeBGM("select", 120.0f);
 		return;
 	}
+	if (input.IsTriggered("Up"))
+	{
+		m_currentEffect = PlayEffekseer2DEffect(m_effectHandle);
+		SetPosPlayingEffekseer2DEffect(m_currentEffect, 400, 400, 0);
+	}
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer2D();
 }
 
 void TitleScene::FadeOutUpdate(Input& input)
@@ -107,6 +119,10 @@ void TitleScene::NormalDraw()
 	);
 
 	m_pUIManager->Draw();
+
+	// Effekseerにより再生中のエフェクトを描画する。
+	DrawEffekseer2D();
+
 #ifdef _DEBUG
 	DrawString(0, 0, L"TitleScene: NormalDraw", 0xFFFFFF);
 	//DrawString(Game::kScreenWidth / 2 - 20,
