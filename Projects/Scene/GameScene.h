@@ -6,18 +6,17 @@
 // プロトタイプ宣言
 class Actor;
 class Player;
-class EnemyBase;
 class Chest;
 class Bg;
 class Map;
 class Camera;
-class ItemBase;
 class GameManager;
 class UIManager;
 class UIFormatText;
 class TextManager;
 class CollisionManager;
 class SoundManager;
+class EffectManager;
 class EventManager;
 struct EventControls;
 struct EventSensors;
@@ -94,6 +93,8 @@ private:
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
 
 	std::shared_ptr<SoundManager> m_pSoundManager; // サウンドマネージャークラス
+
+	std::shared_ptr<EffectManager> m_pEffectManager; // エフェクトマネージャークラス
 
 	std::unique_ptr<PositionRegistry> m_pPositionRegistry; // イベントで使う座標を取得するクラスを持つ
 

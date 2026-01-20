@@ -1,8 +1,6 @@
 ﻿#include <vector>
 #include <list>
 #include <memory>
-#include "../../Utility/Geometry.h"
-#include "../../Utility/GameType.h"
 #include "EffectManager.h"
 #include "EffekseerEffect.h"
 #include <cassert>

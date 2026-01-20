@@ -8,6 +8,7 @@
 #include "../Utility/Game.h"
 #include "../Utility/Application.h"
 #include "../Utility/Sound/SoundManager.h"
+#include "../Game/Effect/EffectManager.h"
 #include "../Game/Player.h"
 #include "../Game/Chest.h"
 #include "../Utility/Bg.h"
@@ -83,6 +84,8 @@ m_fadeColor(0x000000)
 	m_pSoundManager->LoadSoundClip("game", L"data/sound/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
 	m_pSoundManager->CrossFadeBGM("game", 120.0f);
 
+	m_pEffectManager = std::make_shared<EffectManager>();
+
 	m_pPositionRegistry = std::make_unique<PositionRegistry>();
 	m_pPositionRegistry->InitPositions(m_pMap); // マップのデータから座標情報を取得
 
@@ -142,6 +145,8 @@ void GameScene::NormalUpdate(Input& input)
 
 	// OKボタンが押されたかどうかを判定する
 	m_isInputOK = input.IsTriggered("OK");
+
+	m_pEffectManager->Update();
 
 	m_pUIManager->Update();
 
@@ -216,6 +221,8 @@ void GameScene::NormalDraw()
 	}
 
 	m_pUIManager->Draw();
+
+	m_pEffectManager->Draw();
 
 	m_pGameManager->Draw();
 #ifdef _DEBUG

@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "../../Utility/Geometry.h"
+#include "../../Utility/GameType.h"
 
 class EffekseerEffect;
 

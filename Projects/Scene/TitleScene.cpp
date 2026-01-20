@@ -11,7 +11,6 @@
 #include "../Utility/UI/UIManager.h"
 #include "../Game/Effect/EffectManager.h"
 #include "../Utility/Application.h"
-#include "../Utility/GameType.h"
 #include <string>
 #include "DxLib.h"
 #include "EffekseerForDxLib.h"
