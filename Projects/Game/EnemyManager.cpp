@@ -25,10 +25,9 @@ namespace
 	// 敵のアイテム化時間
 	constexpr int kChangeToItemTime = 360;
 	
-	constexpr int kEnemyCoinAddScore = 1000;
 }
 
-EnemyManager::EnemyManager(std::weak_ptr<Camera> camera, Player* player, GameManager* gameManager, std::weak_ptr<Map> map) :
+EnemyManager::EnemyManager(std::weak_ptr<Camera> camera, Player* player, std::weak_ptr<GameManager> gameManager, std::weak_ptr<Map> map) :
 	m_pCamera(camera),
 	m_pPlayer(player),
 	m_pGameManager(gameManager),
@@ -104,7 +103,7 @@ void EnemyManager::Update(Input& input)
 		{
 			if(enemy->IsDead()) // アイテム化で取得されたら
 			{
-				m_pGameManager->AddScore(kEnemyCoinAddScore); // コインを取った時と同じ処理をする
+				enemy->OnCollected(m_pGameManager);
 			}
 		}
 	}

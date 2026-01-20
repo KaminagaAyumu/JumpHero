@@ -188,6 +188,13 @@ public:
 	/// <returns></returns>
 	bool IsItemPicked(Types::ItemType itemType);
 
+	/// <summary>
+	/// エフェクトマネージャーにエフェクトの生成を指示する
+	/// </summary>
+	/// <param name="effectType">エフェクトの内容</param>
+	/// <param name="pos">表示する座標</param>
+	void RequestCreateEffect(Types::EffectType effectType, const Position2& pos);
+
 private:
 	int m_frameCount; // フレームカウンタ
 

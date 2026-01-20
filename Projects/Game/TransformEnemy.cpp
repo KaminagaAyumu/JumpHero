@@ -2,6 +2,7 @@
 #include "TransformEnemy.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Map.h"
+#include "GameManager.h"
 #include "Player.h"
 #include <algorithm>
 #include "DxLib.h"
@@ -14,6 +15,8 @@ namespace
 
 	constexpr float kEnemyCoinWidth			= 30.0f;	// 敵がコイン化した際の幅
 	constexpr float kEnemyCoinHeight		= 30.0f;	// 敵がコイン化した際の高さ
+
+	constexpr int	kEnemyCoinAddScore		= 1000;		// 敵コインを取得した際のスコア
 
 	// 更新処理関連
 	constexpr float kGravity				= 0.5f;		// 敵にかかる重力
@@ -111,6 +114,13 @@ void TransformEnemy::ChangeToItem(int time)
 	m_itemFormTime = time;
 	m_maxItemFormTime = time;
 	return; // 念のためreturn
+}
+
+void TransformEnemy::OnCollected(std::weak_ptr<GameManager> gameManager)
+{
+	auto manager = gameManager.lock();
+	manager->AddScore(kEnemyCoinAddScore);
+	manager->RequestCreateEffect(Types::EffectType::CoinGet, m_pos);
 }
 
 void TransformEnemy::IsCollision(const Types::CollisionInfo& info)

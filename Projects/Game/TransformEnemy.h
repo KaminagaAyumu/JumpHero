@@ -48,6 +48,12 @@ public:
 	/// <param name="time">アイテムに変える時間</param>
 	virtual void ChangeToItem(int time)override;
 
+	/// <summary>
+	/// 敵コインが取得された際の処理
+	/// </summary>
+	/// <param name="gameManager">ゲームマネージャーのポインタ</param>
+	virtual void OnCollected(std::weak_ptr<GameManager> gameManager)override;
+
 private:
 
 	// 当たり判定用の構造体

@@ -6,6 +6,7 @@
 class Player;
 class Map;
 class Input;
+class GameManager;
 
 /// <summary>
 /// 敵の基底クラス
@@ -35,6 +36,12 @@ public:
 	/// </summary>
 	/// <param name="time">アイテムに変える時間</param>
 	virtual void ChangeToItem(int time)abstract;
+
+	/// <summary>
+	/// 敵コインが取得された際の処理
+	/// </summary>
+	/// <param name="gameManager">ゲームマネージャーのポインタ</param>
+	virtual void OnCollected(std::weak_ptr<GameManager> gameManager)abstract;
 
 protected:
 

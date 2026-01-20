@@ -31,12 +31,6 @@ EnemyBase::~EnemyBase()
 {
 }
 
-
-
-void EnemyBase::IsCollision(const Types::CollisionInfo& info)
-{
-}
-
 bool EnemyBase::IsOnScreen() const
 {
 	auto camera = m_pCamera.lock();

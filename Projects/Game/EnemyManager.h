@@ -17,7 +17,7 @@ class Input;
 class EnemyManager
 {
 public:
-	EnemyManager(std::weak_ptr<Camera> camera,Player* player, GameManager* gameManager, std::weak_ptr<Map> map);
+	EnemyManager(std::weak_ptr<Camera> camera,Player* player, std::weak_ptr<GameManager> gameManager, std::weak_ptr<Map> map);
 	virtual ~EnemyManager();
 
 	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera);
@@ -66,7 +66,7 @@ private:
 
 	std::weak_ptr<Camera> m_pCamera; // 敵が使うカメラを参照
 	Player* m_pPlayer; // 敵が使うプレイヤーを参照
-	GameManager* m_pGameManager; // イベント通知をするクラスを参照
+	std::weak_ptr<GameManager> m_pGameManager; // イベント通知をするクラスを参照
 	std::weak_ptr<Map> m_pMap; // 敵生成用にマップを参照
 	std::list<std::shared_ptr<EnemyBase>> m_enemies;
 

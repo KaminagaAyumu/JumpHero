@@ -107,7 +107,7 @@ void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std
 	m_pItemManager = std::make_unique<ItemManager>(camera, weak_from_this());
 	m_pItemManager->FirstSpawnItem(map);
 	m_pItemManager->PushActors(actors);
-	m_pEnemyManager = std::make_unique<EnemyManager>(camera, m_pPlayer.get(), this, map);
+	m_pEnemyManager = std::make_unique<EnemyManager>(camera, m_pPlayer.get(), weak_from_this(), map);
 
 	m_life = kFirstLife;
 	m_medalNum = 0;
@@ -359,6 +359,14 @@ bool GameManager::IsItemPicked(Types::ItemType itemType)
 		}
 	}
 	return false;
+}
+
+void GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos)
+{
+	if (auto manager = m_pEffectManager.lock())
+	{
+		manager->CreateEffekseerEffect(effectType, pos);
+	}
 }
 
 bool GameManager::IsDropChangeToCoin()
