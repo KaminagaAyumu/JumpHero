@@ -374,8 +374,12 @@ void EventManager::RunAction(const EventData& data)
 	{
 		// テキストのIDを取得
 		const std::string textId = data.actionParam;
-
-		controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
+		// すでにウィンドウを持っていたら閉じる
+		if (auto window = m_currentHintWindow.lock())
+		{
+			window->CloseWindow(kTextWindowAppearDuration);
+		}
+		m_currentHintWindow = controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
 	}
 		break;
 	case ActionType::ShowText:
@@ -458,7 +462,13 @@ void EventManager::RunCommonAction(const EventData& data)
 		// テキストのIDを取得
 		const std::string textId = data.actionParam;
 
-		controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
+		// すでにウィンドウを持っていたら閉じる
+		if (auto window = m_currentHintWindow.lock())
+		{
+			window->CloseWindow(kTextWindowAppearDuration);
+		}
+
+		m_currentHintWindow = controls->showHintFunc(textId, kHintWindowSize, kHintWindowPos, kTextWindowAppearDuration);
 	}
 	break;
 	case ActionType::ShowText:

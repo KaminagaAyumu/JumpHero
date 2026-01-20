@@ -346,7 +346,7 @@ void GameScene::SetEventFunc()
 			auto pages = m_pTextManager->GetAllPageText(id);
 			// テキストウィンドウの内容を初期化(文字は最小サイズにする)
 			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration, Types::FontType::Small);
-			
+			return ptr;
 		};
 
 	// テキストウィンドウを表示する関数を定義
@@ -431,6 +431,11 @@ void GameScene::SetEventFunc()
 			m_pPositionRegistry->SetBarrierActive(barrierNo, false);
 
 			m_pGameManager->SetBarrierPlayer(m_pPositionRegistry->GetBarrierPos(barrierNo));
+		};
+
+	m_pEventControls->activeGoalFunc = [this]()
+		{
+			
 		};
 
 }

@@ -57,6 +57,8 @@ private:
 
 	std::weak_ptr<UITextWindow> m_currentTextWindow; // ウィンドウを表示するイベントで使う
 
+	std::weak_ptr<UITextWindow> m_currentHintWindow; // ヒントを表示するイベントで使う
+
 	std::vector<EventData> m_eventData; // イベントデータ群
 	std::vector<CommonEventData> m_commonEventData; // 共通イベントデータ群
 
