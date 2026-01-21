@@ -18,6 +18,8 @@ namespace
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
+	constexpr int kPauseTextOffsetY = -300; // ポーズの見出しテキストのオフセット(画面中心からどれだけずらすか)
+
 }
 
 PauseScene::PauseScene(SceneController& controller) :
@@ -30,6 +32,8 @@ PauseScene::PauseScene(SceneController& controller) :
 	m_frameCount = kPopInterval;
 
 	m_pUIManager = std::make_unique<UIManager>();
+
+	m_pUIManager->CreateText(Types::FontType::Large, "ポーズ", {Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kPauseTextOffsetY});
 
 	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, { 300,300 }, {Game::kScreenWidth / 2, Game::kScreenHeight / 2});
 	auto list = m_pSelectList.lock();
