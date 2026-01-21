@@ -16,11 +16,18 @@ namespace
 	const wchar_t* kFontPath = L"data/craftmincho.otf"; // プロジェクト内にあるフォントデータのパス
 }
 
+void Application::RequestGameEnd()
+{
+	m_isGameEnd = true;
+}
+
 Application::Application()
 {
 	m_soundManager = std::make_shared<SoundManager>();
 	// フォントデータをプロジェクトから読み込んで追加する(このプロジェクトの起動時にしか使えない)
 	AddFontResourceExW(kFontPath, FR_PRIVATE, nullptr);
+
+	m_isGameEnd = false;
 }
 
 Application::~Application()
@@ -99,7 +106,8 @@ void Application::Run()
 
 	// 最初のシーンをタイトルシーンに設定
 	controller.ChangeScene(std::make_shared<TitleScene>(controller));
-	while (ProcessMessage() != -1)
+	// ゲームループ
+	while (ProcessMessage() != -1 && !m_isGameEnd)
 	{
 		// このフレームの開始時間を取得
 		LONGLONG start = GetNowHiPerformanceCount();
@@ -120,7 +128,7 @@ void Application::Run()
 		// escキーを押したらゲームを強制終了
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
 		{
-			break;
+			RequestGameEnd();
 		}
 
 		// 描画した内容を画面に反映する

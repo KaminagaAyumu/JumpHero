@@ -39,6 +39,10 @@ public:
 	/// </summary>
 	void Terminate();
 
+	/// <summary>
+	///  ゲームを終了するという命令を飛ばす
+	/// </summary>
+	void RequestGameEnd();
 
 private:
 	Application(); // コンストラクタをprivateで宣言
@@ -46,5 +50,7 @@ private:
 	void operator=(const Application&) = delete; // 代入演算子も使えないようにする
 
 	std::shared_ptr<SoundManager> m_soundManager; // 多くのクラスで使用するためサウンドマネージャーを保持する
+
+	bool m_isGameEnd; // ゲームを終了するためのフラグ
 };
 
