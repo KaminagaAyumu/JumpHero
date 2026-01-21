@@ -133,6 +133,16 @@ void MiniGameScene::NormalUpdate(Input& input)
 
 	m_pUIManager->Update();
 
+	// イベントの更新
+	m_pEventManager->Update();
+
+	// ゲームを止めるフラグが立っていたら
+	if (m_pEventManager->IsFreezeGame())
+	{
+		// オブジェクトの更新を止める
+		return;
+	}
+
 	// カメラの更新
 	m_pCamera->Update();
 

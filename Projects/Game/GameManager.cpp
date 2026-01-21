@@ -46,7 +46,6 @@ GameManager::GameManager() :
 		{
 			m_balloonNum++; // 風船の数を加算
 			m_balloonCounter++; // 風船取得カウンターを加算
-			m_totalBalloonNum--; // 総風船数を減算
 			auto manager = m_pEffectManager.lock();
 			manager->CreateEffekseerEffect(Types::EffectType::Impact, pos);
 		};

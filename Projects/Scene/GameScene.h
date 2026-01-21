@@ -49,6 +49,8 @@ private:
 	
 	int m_chestOpenNum; // 宝箱を開ける用
 
+	int m_stageNo; // ステージの番号を保持しておく
+
 	bool m_isInputOK; // OKボタンで進むイベントを指定するためのもの
 
 	// 更新処理用関数群

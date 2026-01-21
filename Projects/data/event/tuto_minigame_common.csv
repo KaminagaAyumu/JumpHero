@@ -1,2 +1,3 @@
-ID,TriggerType,TriggerParam,ActionType,ActionParam
-1,NoTrigger,0,NoAction,0
+ID,TriggerType,TriggerParam,ActionType,ActionParam,Once
+1,EventEnd,4,ShowHint,info_minigame,TRUE
+2,EventEnd,9,ShowHint,info_goal,TRUE

@@ -53,6 +53,7 @@ m_fadeColor(0x000000)
 {
 	m_frameCount = kFadeInterval;
 	m_chestOpenNum = 0;
+	m_stageNo = stageNo;
 
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
@@ -203,7 +204,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller,m_pGameManager, kMiniGameStageNo));
+		m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller,m_pGameManager, m_stageNo));
 		return; // 念のため処理を抜ける
 	}
 }

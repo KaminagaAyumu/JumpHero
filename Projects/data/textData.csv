@@ -20,6 +20,8 @@ tuto_toitem_1,1,でも大丈夫！手前にある宝箱を開けてみよう！
 tuto_toitem_2,1,敵がコインに変わった！今のうちに取っちゃおう！
 tuto_toitem_2,2,時間経過で元に戻るから注意だ！
 tuto_goal,1,ドアだ！あそこに触れるとゴールになるぞ！
+tuto_minigame_1,1,このマップでは、風船をすべて取るとドアが開くぞ！
+tuto_minigame_2,1,ドアが開いた！触れるとステージクリアだ！
 info_move,1,左右で移動
 info_jump_1,1,Aボタンでジャンプ！
 info_jump_2,1,上入力しながらジャンプで高く、下入力しながらジャンプで低く飛ぶ
@@ -31,6 +33,7 @@ info_balloon,1,風船に触れてみよう！
 info_medal_1,1,Bボタンを押してみよう！
 info_medal_2,1,宝箱に横から触れてみよう！
 info_goal,1,ドアに触れてみよう！
+info_minigame,1,風船をすべて取ろう！
 stage1_test,1,テスト用です
 stage1_test,2,次のページで終わりです
 stage1_test,3,終わります
