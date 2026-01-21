@@ -377,6 +377,7 @@ void MiniGameScene::SetEventFunc()
 	m_pEventControls->activeGoalFunc = [this]()
 		{
 			m_pMap->SetGoalMapChipOpen();
+			m_pGameManager->ActiveGoal();
 		};
 
 }

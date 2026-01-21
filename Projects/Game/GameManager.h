@@ -57,6 +57,11 @@ public:
 	void ChangeEnemyToCoin();
 
 	/// <summary>
+	/// ゴールのアクティブ状態をtrueにする
+	/// </summary>
+	void ActiveGoal(){ m_isOpenGoal = true; }
+
+	/// <summary>
 	/// 当たり判定を行わないかどうか
 	/// </summary>
 	/// <returns>true : 行わない false : 行う</returns>
@@ -222,6 +227,7 @@ private:
 	int m_totalBalloonNum; // そのステージに存在する風船の総数
 	bool m_isMiniGame; // ミニゲーム中かどうか
 	bool m_isTutorial; // チュートリアルかどうか
+	bool m_isOpenGoal; // クリアしたかどうか
 
 	std::unordered_map<Types::ItemType, std::function<void(const Position2& pos)>> m_itemCollectFunc;
 

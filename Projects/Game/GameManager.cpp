@@ -38,7 +38,8 @@ GameManager::GameManager() :
 	m_balloonCounter(0),
 	m_totalBalloonNum(0),
 	m_isMiniGame(false),
-	m_isTutorial(false)
+	m_isTutorial(false),
+	m_isOpenGoal(false)
 {
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
@@ -129,8 +130,10 @@ void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> cam
 	m_pChestManager->Init(camera);
 	m_pItemManager->Init(camera);
 	m_pItemManager->FirstSpawnItem(map);
-	m_totalBalloonNum = m_pItemManager->GetFirstBalloonNum();
-	m_isMiniGame = true;
+	m_balloonNum = 0; // 取得した風船の数をリセット
+	m_totalBalloonNum = m_pItemManager->GetFirstBalloonNum(); // 風船の総数を改めて取得
+	m_isMiniGame = true; // ミニゲームフラグをセット
+	m_isOpenGoal = false; // ゴールのアクティブ状態をリセット
 }
 
 void GameManager::Update(Input& input)
@@ -218,13 +221,12 @@ bool GameManager::IsClear() const
 {
 	// ここの内容は今後イベントマネージャーに任せます
 
-	if (m_isMiniGame)
+	// ゴールが開いていない場合判定しない
+	if (!m_isOpenGoal)
 	{
-		if(m_totalBalloonNum > 0) // ミニゲーム中でまだ風船が残っているならクリアにしない
-		{
-			return false;
-		}
+		return false;
 	}
+
 	auto pMap = m_pMap.lock();
 
 	// ゴールの座標
