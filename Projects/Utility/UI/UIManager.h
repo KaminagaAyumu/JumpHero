@@ -12,6 +12,7 @@ class UITextWindow;
 class UIText;
 class UIFormatText;
 class UISelectList;
+class UIGauge;
 
 /// <summary>
 /// UI関連の管理用クラス
@@ -74,6 +75,12 @@ public:
 	/// <param name="pos">表示する中心座標</param>
 	/// <returns></returns>
 	std::weak_ptr<UISelectList> CreateSelectList(Types::FontType fontType, const Size& size, const Position2& pos);
+
+	/// <summary>
+	/// ゲージを作成する関数
+	/// </summary>
+	/// <returns></returns>
+	std::weak_ptr<UIGauge> CreateGauge(const Size& size, const Position2& pos);
 
 private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列

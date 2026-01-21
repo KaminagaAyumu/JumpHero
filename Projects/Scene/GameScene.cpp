@@ -18,6 +18,7 @@
 #include "../Game/GameManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UIFormatText.h"
+#include "../Utility/UI/UIGauge.h"
 #include "../Game/TextManager.h"
 #include "../Game/CollisionManager.h"
 #include "../Game/ChestManager.h"
@@ -44,6 +45,9 @@ namespace
 
 	constexpr float kScoreTextPosY = 20.0f;
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
+
+	const Size kBalloonGaugeSize = { 200, 20 }; // UIで使用するゲージのサイズ
+	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
 }
 
 GameScene::GameScene(SceneController& controller, int stageNo) : SceneBase(controller),
@@ -78,6 +82,8 @@ m_fadeColor(0x000000)
 		{
 			return std::string("スコア:") + std::to_string(m_pGameManager->GetScore());
 		});
+
+	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
 
 	m_pTextManager = std::make_unique<TextManager>();
 	
@@ -142,6 +148,11 @@ void GameScene::NormalUpdate(Input& input)
 		// ポーズシーンをプッシュする(このシーンに戻ることも可能にする)
 		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 		return;
+	}
+
+	if (auto gauge = m_pDropItemGauge.lock())
+	{
+		gauge->SetValue(m_pGameManager->GetBalloonCounterRate());
 	}
 
 	// OKボタンが押されたかどうかを判定する

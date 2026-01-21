@@ -13,6 +13,7 @@ class Camera;
 class GameManager;
 class UIManager;
 class UIFormatText;
+class UIGauge;
 class TextManager;
 class CollisionManager;
 class SoundManager;
@@ -89,6 +90,8 @@ private:
 	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
 
 	std::weak_ptr<UIFormatText> m_pScoreText; // スコアを表示するときに使用
+
+	std::weak_ptr<UIGauge> m_pDropItemGauge; // 敵をコインに変えるアイテムが出るかわかるようにするUI
 
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを管理するために取得
 

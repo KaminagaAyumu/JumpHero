@@ -4,6 +4,7 @@
 #include "UIText.h"
 #include "UIFormatText.h"
 #include "UISelectList.h"
+#include "UIGauge.h"
 #include "DxLib.h"
 
 namespace
@@ -113,6 +114,14 @@ std::weak_ptr<UISelectList> UIManager::CreateSelectList(Types::FontType fontType
 {
 	auto ptr = std::make_shared<UISelectList>();
 	ptr->Init(m_fontHandles[static_cast<int>(fontType)], size, pos);
+	m_pUIElements.push_back(ptr);
+	return ptr;
+}
+
+std::weak_ptr<UIGauge> UIManager::CreateGauge(const Size& size, const Position2& pos)
+{
+	auto ptr = std::make_shared<UIGauge>();
+	ptr->Init(size, pos);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }
