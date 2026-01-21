@@ -319,6 +319,11 @@ void MiniGameScene::SetEventFunc()
 	// アイテムをドロップする関数を定義
 	m_pEventControls->dropItemFunc = [this](int chestNo, const std::string& itemType)
 		{
+			if (itemType == "changecoin")
+			{
+				// ここが無限に通る
+				//m_pGameManager->SpawnFloatingItem({ 200,200 });
+			}
 			//Types::ItemType type; // 生成するアイテムが何かを判別する
 			//// 宝箱の番号を取得
 			//if (itemType == "coin")

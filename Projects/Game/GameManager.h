@@ -100,6 +100,12 @@ public:
 	void DropItem(const Position2& pos, const Types::ItemType& type);
 
 	/// <summary>
+	/// 空中で動くアイテムを生成
+	/// </summary>
+	/// <param name="pos">生成座標</param>
+	void SpawnFloatingItem(const Position2& pos);
+
+	/// <summary>
 	/// 敵の変身先を指定して生成する通知をEnemyManagerに送る関数
 	/// </summary>
 	/// <param name="pos">生成座標</param>

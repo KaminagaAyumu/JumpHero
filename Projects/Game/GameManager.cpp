@@ -280,6 +280,11 @@ void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 	}
 }
 
+void GameManager::SpawnFloatingItem(const Position2& pos)
+{
+	m_pItemManager->SpawnFloatingChangeToCoin(pos, m_pMap);
+}
+
 void GameManager::SpawnEnemy(const Position2& pos, int formNum)
 {
 	m_pEnemyManager->SpawnEnemy(pos, formNum);
