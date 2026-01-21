@@ -129,5 +129,11 @@ private:
 	/// 現在のページのテキストを適用する
 	/// </summary>
 	void ApplyCurrentPageText();
+
+	/// <summary>
+	/// テキストがウィンドウに収まるか
+	/// </summary>
+	/// <returns>true : 収まる false : 収まらない</returns>
+	bool IsOnWindow();
 };
 

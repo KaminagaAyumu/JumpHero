@@ -101,22 +101,10 @@ void UITextWindow::Update()
 	}
 
 
-	// この処理をどこに入れるのか考え中
-	//auto text = StringFunction::WStringFromString(m_text);
-	//int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
-	//if (textWidth > m_size.width)
-	//{
-
-	//}
-	//else
-	//{
-	//	// オフセットは不要なので0にしておく
-	//	m_scrollOffset = 0;
-
-	//	// テキストを中央ぞろえにする
-	//	m_isCenter = true;
-	//}
-
+	if (IsOnWindow())
+	{
+		m_isCenter = true;
+	}
 
 	if (m_state == TextWindowState::Visible)
 	{
@@ -145,8 +133,13 @@ void UITextWindow::Update()
 			auto text = StringFunction::WStringFromString(m_text);
 			int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
 
-			// テキストの幅がウィンドウよりも大きい場合
-			if (textWidth > m_size.width)
+			// テキストの幅がウィンドウよりも小さい場合
+			if (IsOnWindow())
+			{
+				// オフセットは不要なので0にしておく
+				m_scrollOffset = 0;
+			}
+			else // テキストの幅がウィンドウよりも大きい場合
 			{
 				// スクロールを行う
 				if (m_scrollWaitTimer > 0)
@@ -167,14 +160,6 @@ void UITextWindow::Update()
 						m_scrollWaitTimer = kScrollWaitFrame;
 					}
 				}
-			}
-			else // テキストの幅がウィンドウよりも小さい場合
-			{
-				// オフセットは不要なので0にしておく
-				m_scrollOffset = 0;
-
-				// テキストを中央ぞろえにする
-				m_isCenter = true;
 			}
 			
 		}
@@ -348,4 +333,12 @@ void UITextWindow::ApplyCurrentPageText()
 	const auto& data = m_textPager.pages[m_textPager.index];
 	// 現在のテキストをテキストデータにする
 	m_text = data.textData;
+}
+
+bool UITextWindow::IsOnWindow()
+{
+	auto text = StringFunction::WStringFromString(m_text);
+	int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
+
+	return textWidth < m_size.width;
 }
