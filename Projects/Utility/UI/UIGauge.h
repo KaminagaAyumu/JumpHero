@@ -44,6 +44,7 @@ private:
 	int m_fillHandle; // ゲージの中身のハンドル
 
 	float m_value; // ゲージの量(0.0~1.0)
+	float m_visualValue; // 表示するゲージの量
 
 	int m_fillSrcW;
 	int m_fillSrcH;
