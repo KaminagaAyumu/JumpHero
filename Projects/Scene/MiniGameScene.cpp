@@ -30,6 +30,8 @@ namespace
 	constexpr int kHeaderMargin = 60; // ヘッダー(見出し)の余白
 
 	constexpr float kScoreTextPosY = 20.0f;
+
+	const Position2 kSpawnFlotingItemPos{ 200.0f,200.0f };
 }
 
 MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo) :
@@ -321,9 +323,7 @@ void MiniGameScene::SetEventFunc()
 		{
 			if (itemType == "changecoin")
 			{
-				printfDx(L"コイン生成\n");
-				// ここが無限に通る
-				//m_pGameManager->SpawnFloatingItem({ 200,200 });
+				m_pGameManager->SpawnFloatingItem(kSpawnFlotingItemPos);
 			}
 			//Types::ItemType type; // 生成するアイテムが何かを判別する
 			//// 宝箱の番号を取得

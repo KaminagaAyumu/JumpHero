@@ -131,6 +131,7 @@ void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> cam
 	m_pItemManager->Init(camera);
 	m_pItemManager->FirstSpawnItem(map);
 	m_balloonNum = 0; // 取得した風船の数をリセット
+	m_balloonCounter = 0; // 風船カウンタをリセット
 	m_totalBalloonNum = m_pItemManager->GetFirstBalloonNum(); // 風船の総数を改めて取得
 	m_isMiniGame = true; // ミニゲームフラグをセット
 	m_isOpenGoal = false; // ゴールのアクティブ状態をリセット
@@ -282,6 +283,7 @@ void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 
 void GameManager::SpawnFloatingItem(const Position2& pos)
 {
+	m_balloonCounter = 0;
 	m_pItemManager->SpawnFloatingChangeToCoin(pos, m_pMap);
 }
 
