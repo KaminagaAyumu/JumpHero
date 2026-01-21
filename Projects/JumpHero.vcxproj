@@ -151,6 +151,7 @@
     <ClCompile Include="Game\Effect\EffectBase.cpp" />
     <ClCompile Include="Game\Effect\EffectManager.cpp" />
     <ClCompile Include="Game\Effect\EffekseerEffect.cpp" />
+    <ClCompile Include="Game\Effect\EffekseerResourceManager.cpp" />
     <ClCompile Include="Game\EnemyManager.cpp" />
     <ClCompile Include="Game\ChestManager.cpp" />
     <ClCompile Include="Game\Event\EventManager.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="Game\Effect\EffectBase.h" />
     <ClInclude Include="Game\Effect\EffectManager.h" />
     <ClInclude Include="Game\Effect\EffekseerEffect.h" />
+    <ClInclude Include="Game\Effect\EffekseerResourceManager.h" />
     <ClInclude Include="Game\EnemyManager.h" />
     <ClInclude Include="Game\ChestManager.h" />
     <ClInclude Include="Game\Event\EventControls.h" />
