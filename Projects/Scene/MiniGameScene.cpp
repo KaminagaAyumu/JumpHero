@@ -321,6 +321,7 @@ void MiniGameScene::SetEventFunc()
 		{
 			if (itemType == "changecoin")
 			{
+				printfDx(L"コイン生成\n");
 				// ここが無限に通る
 				//m_pGameManager->SpawnFloatingItem({ 200,200 });
 			}

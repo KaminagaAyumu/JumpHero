@@ -398,6 +398,7 @@ bool GameManager::IsDropChangeToCoin()
 {
 	if(m_balloonCounter >= kBalloonForChangeToCoin) // 風船を5個取ったら
 	{
+		// ここでリセットしているのがよくない
 		m_balloonCounter = 0; // カウンターをリセット
 		return true;
 	}
