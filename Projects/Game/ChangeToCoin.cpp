@@ -21,21 +21,16 @@ namespace
 	constexpr float kScale = 3.0f; // 拡大率
 }
 
-ChangeToCoin::ChangeToCoin(const Position2& pos, int handle, bool isPopChest)
+ChangeToCoin::ChangeToCoin(const Position2& pos, int handle)
 {
 	m_pos = pos;
 	m_startY = pos.y;
 	m_colRect = { {m_pos},kChangeToCoinDefaultWidth,kChangeToCoinDefaultHeight };
 	m_colCircle = { {m_pos},kChangeToCoinDefaultWidth / 2 };
 	m_graphHandle = handle;
-	if(isPopChest) // 宝箱から出た場合
-	{
-		m_updateFunc = &ChangeToCoin::DropUpdate;
-	}
-	else // 宝箱以外からの出現の場合
-	{
-		m_updateFunc = &ChangeToCoin::FloatingUpdate;
-	}
+
+	m_updateFunc = &ChangeToCoin::DropUpdate;
+
 	m_currentAnim.SetAnimation(handle, Size{ kGraphWidth,kGraphHeight }, kAnimNum, kAnimFrame, true);
 	m_currentAnim.SetScale(kScale);
 }
@@ -66,6 +61,11 @@ void ChangeToCoin::Draw()
 		m_colRect.Draw(drawX, drawY);
 #endif
 	}
+}
+
+void ChangeToCoin::SetFloating(std::weak_ptr<Map> map)
+{
+	m_updateFunc = &ChangeToCoin::FloatingUpdate;
 }
 
 void ChangeToCoin::OnCollected(std::weak_ptr<GameManager> gameManager)

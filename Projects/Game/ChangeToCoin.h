@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "ItemBase.h"
 
+class Map; // 浮遊状態で使う
+
 /// <summary>
 /// アイテム : 敵をコインに変えるアイテムクラス
 /// </summary>
@@ -13,13 +15,15 @@ public:
 	/// </summary>
 	/// <param name="pos">生成位置</param>
 	/// <param name="handle">画像ハンドル</param>
-	/// <param name="isPopChest">宝箱から生成かどうか</param>
-	ChangeToCoin(const Position2& pos, int handle, bool isPopChest);
+	ChangeToCoin(const Position2& pos, int handle);
 	virtual ~ChangeToCoin() = default;
 
 	virtual void Init()override;
 	virtual void Update(Input&)override;
 	virtual void Draw()override;
+
+
+	void SetFloating(std::weak_ptr<Map> map);
 
 	/// <summary>
 	/// アイテムが取得された際の処理
@@ -30,6 +34,8 @@ public:
 private:
 
 	float m_startY; // 初期Y座標
+
+	std::weak_ptr<Map> m_pMap; // 浮遊状態の更新処理を行うために取得する
 
 	/// <summary>
 	/// 出現中かどうか

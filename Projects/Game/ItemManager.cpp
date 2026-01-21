@@ -146,7 +146,7 @@ void ItemManager::SpawnItem(const Position2& pos, Types::ItemType itemType)
 		break;
 	case Types::ItemType::ChangeToCoin: // 敵をコインに変える
 	{
-		auto item = std::make_shared<ChangeToCoin>(pos, m_graphHandles[kGraphChangeToCoin], true);
+		auto item = std::make_shared<ChangeToCoin>(pos, m_graphHandles[kGraphChangeToCoin]);
 		item->SetCamera(m_pCamera);
 		m_pItems.push_back(item);
 	}
@@ -163,6 +163,14 @@ void ItemManager::SpawnItem(const Position2& pos, Types::ItemType itemType)
 	}
 
 	
+}
+
+void ItemManager::SpawnFloatingChangeToCoin(const Position2& pos, std::weak_ptr<Map> map)
+{
+	auto item = std::make_shared<ChangeToCoin>(pos, m_graphHandles[kGraphChangeToCoin]);
+	item->SetCamera(m_pCamera);
+	item->SetFloating(map);
+	m_pItems.push_back(item);
 }
 
 void ItemManager::FirstSpawnItem(std::weak_ptr<Map> map)

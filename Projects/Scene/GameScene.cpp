@@ -48,6 +48,9 @@ namespace
 
 	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
+
+	const Size kCoinIconSize = { 40,40 };
+	const Position2 kCoinIconPos = { 35.0f, 50.0f };
 }
 
 GameScene::GameScene(SceneController& controller, int stageNo) : SceneBase(controller),
@@ -87,7 +90,7 @@ m_fadeColor(0x000000)
 
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
 
-	m_pUIManager->CreateImage(m_changeToCoinIconHandle, { 60,60 }, { 500,500 });
+	m_pUIManager->CreateImage(m_changeToCoinIconHandle, kCoinIconSize, kCoinIconPos);
 
 	m_pTextManager = std::make_unique<TextManager>();
 	

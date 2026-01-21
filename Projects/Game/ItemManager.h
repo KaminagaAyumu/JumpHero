@@ -44,6 +44,13 @@ public:
 	void SpawnItem(const Position2& pos, Types::ItemType itemType);
 
 	/// <summary>
+	/// 指定した座標に動く敵をコインに変えるアイテムを生成
+	/// </summary>
+	/// <param name="pos">表示座標</param>
+	/// <param name="map">現在のマップのポインタ</param>
+	void SpawnFloatingChangeToCoin(const Position2& pos, std::weak_ptr<Map> map);
+
+	/// <summary>
 	/// ゲーム開始時の最初のアイテム生成
 	/// </summary>
 	/// <param name="map">現在のマップのポインタ</param>
