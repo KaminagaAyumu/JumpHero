@@ -46,7 +46,7 @@ namespace
 	constexpr float kScoreTextPosY = 20.0f;
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 
-	const Size kBalloonGaugeSize = { 200, 20 }; // UIで使用するゲージのサイズ
+	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
 }
 

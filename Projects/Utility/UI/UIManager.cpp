@@ -34,6 +34,9 @@ UIManager::UIManager()
 	LoadFonts();
 
 	m_windowGraphHandle = LoadGraph(L"data/frame.png");
+
+	m_gaugeFrameHandle = LoadGraph(L"data/img/gauge_frame.png");
+	m_gaugeFillHandle = LoadGraph(L"data/img/gauge_fill.png");
 }
 
 UIManager::~UIManager()
@@ -43,6 +46,8 @@ UIManager::~UIManager()
 		DeleteFontToHandle(handle);
 	}
 	DeleteGraph(m_windowGraphHandle);
+	DeleteGraph(m_gaugeFrameHandle);
+	DeleteGraph(m_gaugeFillHandle);
 }
 
 void UIManager::Init()
@@ -122,6 +127,7 @@ std::weak_ptr<UIGauge> UIManager::CreateGauge(const Size& size, const Position2&
 {
 	auto ptr = std::make_shared<UIGauge>();
 	ptr->Init(size, pos);
+	ptr->SetHandle(m_gaugeFrameHandle, m_gaugeFillHandle);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }

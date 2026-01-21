@@ -45,6 +45,9 @@ private:
 
 	float m_value; // ゲージの量(0.0~1.0)
 
+	int m_fillSrcW;
+	int m_fillSrcH;
+
 	Position2 m_pos; // 表示座標(左上座標)
 	Size m_size; // ゲージの大きさ
 

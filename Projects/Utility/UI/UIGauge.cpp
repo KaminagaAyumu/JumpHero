@@ -4,6 +4,8 @@
 UIGauge::UIGauge() : 
 	m_frameHandle(-1),
 	m_fillHandle(-1),
+	m_fillSrcW(0),
+	m_fillSrcH(0),
 	m_value(0.0f),
 	m_pos{},
 	m_size{}
@@ -18,6 +20,7 @@ void UIGauge::SetHandle(int frameHandle, int fillHandle)
 {
 	m_frameHandle = frameHandle;
 	m_fillHandle = fillHandle;
+	GetGraphSize(m_fillHandle, &m_fillSrcW, &m_fillSrcH);
 }
 
 void UIGauge::Init(const Size& size, const Position2& pos)
@@ -33,22 +36,23 @@ void UIGauge::Update()
 
 void UIGauge::Draw()const
 {
-	DrawBox(static_cast<int>(m_pos.x),
+	// 枠(空ゲージの中身含む)
+	DrawExtendGraph(static_cast<int>(m_pos.x),
 		static_cast<int>(m_pos.y),
 		static_cast<int>(m_pos.x) + m_size.width,
 		static_cast<int>(m_pos.y) + m_size.height,
-		0x000000, true);
+		m_frameHandle, true);
 
-	int filledW = static_cast<int>(m_size.width * m_value + 0.5f);
-	if (filledW > 0)
+	int cutW = static_cast<int>(m_fillSrcW * m_value);
+	if (cutW > 0)
 	{
-		DrawBox(static_cast<int>(m_pos.x),
+		DrawRectExtendGraph(static_cast<int>(m_pos.x),
 			static_cast<int>(m_pos.y),
-			static_cast<int>(m_pos.x) + filledW,
+			static_cast<int>(m_pos.x) + m_size.width * m_value,
 			static_cast<int>(m_pos.y) + m_size.height,
-			0xaaaa44, true);
+			0, 0, m_fillSrcW * m_value, m_fillSrcH, m_fillHandle, true);
 	}
-
+	
 }
 
 bool UIGauge::IsAlive()const

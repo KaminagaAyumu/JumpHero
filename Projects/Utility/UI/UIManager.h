@@ -86,6 +86,9 @@ private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列
 	int m_windowGraphHandle; // ウィンドウの画像ハンドル
 
+	int m_gaugeFrameHandle; // ゲージの枠ハンドル
+	int m_gaugeFillHandle; // ゲージの中身ハンドル
+
 	std::list<std::shared_ptr<UIBase>> m_pUIElements; // UIの要素を格納するコンテナ
 
 	/// <summary>
