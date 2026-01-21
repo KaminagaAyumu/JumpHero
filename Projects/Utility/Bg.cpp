@@ -68,7 +68,7 @@ void Bg::Draw(Camera* camera)
 	scrollPos.x = fmodf(camera->scroll.x, static_cast<float>(bgSize.width));
 	// 縦もスクロールする場合は↓を使う
 	// scrollPos.y = static_cast<int>(camera->scroll.y) % bgSize.y;
-	scrollPos.y = static_cast<int>(camera->scroll.y) / bgSize.height;
+	scrollPos.y = camera->scroll.y / bgSize.height;
 
 	DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
 

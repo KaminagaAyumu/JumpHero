@@ -166,7 +166,7 @@ void Rect2D::Draw(unsigned int color)
 
 void Rect2D::Draw(int posX, int posY)
 {
-    DrawBox(posX - width / 2, posY - height / 2, posX + width / 2, posY + height / 2, 0xff0000, false);
+    DrawBox(posX - static_cast<int>(width) / 2, posY - static_cast<int>(height) / 2, posX + static_cast<int>(width) / 2, posY + static_cast<int>(height) / 2, 0xff0000, false);
 }
 
 float Rect2D::GetLeft() const

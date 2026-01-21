@@ -106,7 +106,7 @@ void UITextWindow::Update()
 			m_pageCount++;
 			if (m_pageCount >= m_pageIntervalFrame)
 			{
-				m_pageCount = 0.0f;
+				m_pageCount = 0;
 
 				m_textPager.index++;
 				if (m_textPager.index >= m_textPager.pages.size())
@@ -165,19 +165,19 @@ void UITextWindow::Draw() const
 	if (m_windowGraphHandle != -1)
 	{
 		// 黒で背景を描画
-		DrawBox(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
-			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
+		DrawBox(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
+			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
 			GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
 
-		DrawExtendGraph(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
-			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
+		DrawExtendGraph(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
+			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
 			m_windowGraphHandle, true); // ウィンドウの背景を描画
 	}
 	else // ハンドルを取得していなければ
 	{
 		// 黒で背景を描画
-		DrawBox(m_pos.x - m_size.width / 2, m_pos.y - m_size.height / 2,
-			m_pos.x + m_size.width / 2, m_pos.y + m_size.height / 2,
+		DrawBox(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
+			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
 			GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
 	}
 
@@ -202,13 +202,13 @@ void UITextWindow::Draw() const
 		if (m_fontHandle != -1) // フォントのハンドルがある場合
 		{
 			width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
-			DrawStringToHandle(m_pos.x - width / 2, m_pos.y,
+			DrawStringToHandle(static_cast<int>(m_pos.x) - width / 2, static_cast<int>(m_pos.y),
 			text.c_str(), GetColor(255, 255, 255), m_fontHandle);
 		}
 		else // フォントのハンドルがない場合
 		{
 			width = GetDrawFormatStringWidth(L"%s", text.c_str());
-			DrawString(m_pos.x - width / 2, m_pos.y,
+			DrawString(static_cast<int>(m_pos.x) - width / 2, static_cast<int>(m_pos.y),
 			text.c_str(), GetColor(255, 255, 255)); // テキストを描画
 		}
 	}
