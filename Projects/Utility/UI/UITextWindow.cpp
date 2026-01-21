@@ -27,6 +27,7 @@ UITextWindow::UITextWindow() :
 	m_isChangeSize(false),
 	m_isAutoPageMode(false),
 	m_isScrollMode(false),
+	m_isCenter(false),
 	m_aliveFrame(kDefaultAliveTime),
 	m_pageCount(0),
 	m_pageIntervalFrame(0),
@@ -153,6 +154,9 @@ void UITextWindow::Update()
 			{
 				// オフセットは不要なので0にしておく
 				m_scrollOffset = 0;
+
+				// テキストを中央ぞろえにする
+				m_isCenter = true;
 			}
 			
 		}
@@ -191,14 +195,27 @@ void UITextWindow::Draw() const
 	SetDrawArea(left, top, right, bottom); // 描画可能範囲をウィンドウの中のみにする
 
 	auto text = StringFunction::WStringFromString(m_text);
+	int width = 0; // 文字を中央ぞろえで表示するための変数
+
+	// 文字をスクロールさせるとき
 	if (m_isScrollMode)
 	{
-		int drawX = left - m_scrollOffset;
-		DrawStringToHandle(drawX, top, text.c_str(), 0xffffff, m_fontHandle);
+		// 中央ぞろえにする場合(テキストをスクロールする必要がない時は中央ぞろえにする)
+		if (m_isCenter)
+		{
+			width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
+			int fontSize = GetFontSizeToHandle(m_fontHandle);
+			DrawStringToHandle(static_cast<int>(m_pos.x) - width / 2, static_cast<int>(m_pos.y) - fontSize / 2,
+			text.c_str(), GetColor(255, 255, 255), m_fontHandle);
+		}
+		else
+		{
+			int drawX = left - m_scrollOffset;
+			DrawStringToHandle(drawX, top, text.c_str(), 0xffffff, m_fontHandle);
+		}
 	}
 	else
 	{
-		int width = 0; // 文字を中央ぞろえで表示するための変数
 		if (m_fontHandle != -1) // フォントのハンドルがある場合
 		{
 			width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());

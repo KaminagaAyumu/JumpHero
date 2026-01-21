@@ -110,6 +110,7 @@ private:
 	bool m_isChangeSize; // サイズ変更アニメーション中かどうか
 	bool m_isAutoPageMode; // 複数ページがある際に自動でページをめくるかどうか
 	bool m_isScrollMode; // テキストをウィンドウ内でスクロールさせるかどうか
+	bool m_isCenter; // 文字を中央ぞろえにするかどうか
 	int m_aliveFrame; // ウィンドウが表示されてからのフレーム数
 	
 	int m_pageCount; // ページをめくるフレームカウンタ
