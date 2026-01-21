@@ -6,6 +6,9 @@
 class Bg;
 class GameManager;
 class EffectManager;
+class UIManager;
+class UIFormatText;
+class TextManager;
 class Map;
 class Camera;
 class Actor;
@@ -37,6 +40,8 @@ public:
 private:
 	unsigned int m_fadeColor; // 単色フェード用の色
 
+	bool m_isInputOK; // OKボタンが押されたかどうかの関数
+
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理
 	void NormalUpdate(Input& input); // 通常時の更新処理
@@ -66,6 +71,12 @@ private:
 	std::shared_ptr<GameManager> m_pGameManager;
 
 	std::shared_ptr<EffectManager> m_pEffectManager;
+
+	std::unique_ptr<UIManager> m_pUIManager;
+
+	std::weak_ptr<UIFormatText> m_pScoreText;
+
+	std::unique_ptr<TextManager> m_pTextManager;
 
 	// マップのデータを取得するポインタ
 	std::shared_ptr<Map> m_pMap;

@@ -6,6 +6,9 @@
 #include "../Game/CollisionManager.h"
 #include "../Game/Actor.h"
 #include "../Game/Effect/EffectManager.h"
+#include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIFormatText.h"
+#include "../Game/TextManager.h"
 #include "../Game/Event/EventManager.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
@@ -26,11 +29,13 @@ namespace
 
 	constexpr int kHeaderMargin = 60; // ヘッダー(見出し)の余白
 
+	constexpr float kScoreTextPosY = 20.0f;
 }
 
 MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo) :
 	SceneBase(controller),
 	m_fadeColor(0xffffff),
+	m_isInputOK(false),
 	m_updateFunc(&MiniGameScene::FadeInUpdate),
 	m_drawFunc(&MiniGameScene::FadeDraw),
 	m_pGameManager(gameManager)
@@ -48,6 +53,17 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pMap->Init();
 
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
+
+	m_pUIManager = std::make_unique<UIManager>();
+
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { 0, kScoreTextPosY });
+	auto score = m_pScoreText.lock();
+	score->SetProvider([this]()
+		{
+			return std::string("スコア:") + std::to_string(m_pGameManager->GetScore());
+		});
+
+	m_pTextManager = std::make_unique<TextManager>();
 
 	m_pEffectManager = std::make_shared<EffectManager>();
 	m_pEffectManager->SetCamera(m_pCamera);
@@ -112,6 +128,11 @@ void MiniGameScene::NormalUpdate(Input& input)
 		return;
 	}
 
+	// OKボタンが押されたかどうかを判定する
+	m_isInputOK = input.IsTriggered("OK");
+
+	m_pUIManager->Update();
+
 	// カメラの更新
 	m_pCamera->Update();
 
@@ -171,6 +192,8 @@ void MiniGameScene::NormalDraw()
 		}
 	}
 
+	m_pUIManager->Draw();
+
 	m_pGameManager->Draw();
 
 	m_pEffectManager->Draw();
@@ -207,4 +230,143 @@ void MiniGameScene::GetBalloonNum() const
 
 void MiniGameScene::SetEventFunc()
 {
+	// -----------------------------------------------------
+	// イベントセンサーの関数
+	// -----------------------------------------------------
+
+
+	// 指定されたアイテムが取得されたかどうかの関数を定義
+	m_pEventSensors->isGetItemFunc = [this](const std::string& id)
+		{
+			auto type = Types::ItemType::Coin;
+			if (id == "coin") // テスト用
+			{
+				type = Types::ItemType::Coin;
+			}
+			if (id == "medal")
+			{
+				type = Types::ItemType::UpgradeMedal;
+			}
+			if (id == "toitem")
+			{
+				type = Types::ItemType::ChangeToCoin;
+			}
+			if (id == "balloon")
+			{
+				type = Types::ItemType::Balloon;
+			}
+
+			return m_pGameManager->IsItemPicked(type);
+		};
+
+	// OKボタンが押されたかどうかの関数を定義
+	m_pEventSensors->isPressedButtonFunc = [this]()
+		{
+			return m_isInputOK;
+		};
+
+	// カメラの補正が終わったかどうかの関数を定義
+	m_pEventSensors->isCameraLerpEndFunc = [this]()
+		{
+			return m_pCamera->IsLerpEnd();
+		};
+
+	// 風船を指定数取得したかどうかの関数を定義
+	m_pEventSensors->isGetBalloonFunc = [this](int balloonNum, bool isAll)
+		{
+			return m_pGameManager->IsGetBalloon(balloonNum, isAll);
+		};
+
+	// 風船の総数を取得する関数を定義
+	m_pEventSensors->getTotalBalloonNumFunc = [this]()
+		{
+			return m_pGameManager->GetTotalBalloonNum();
+		};
+
+	// -----------------------------------------------------
+	// イベントコントロールの関数
+	// -----------------------------------------------------
+
+	m_pEventControls->showHintFunc = [this](const std::string& id, const Size& size, const Position2& pos, float duration)
+		{
+			// ページ付きのテキストウィンドウを作成
+			auto pages = m_pTextManager->GetAllPageText(id);
+			// テキストウィンドウの内容を初期化(文字は最小サイズにする)
+			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration, Types::FontType::Small);
+			return ptr;
+		};
+
+	// テキストウィンドウを表示する関数を定義
+	m_pEventControls->showTextWindowFunc = [this](const std::string& id, const Size& size, const Position2& pos, float duration)
+		{
+			// ページ付きのテキストウィンドウを作成
+			auto pages = m_pTextManager->GetAllPageText(id);
+			// テキストウィンドウの内容を初期化(文字は最小サイズにする)
+			auto ptr = m_pUIManager->CreateTextWindowPaged(id, pages, size, pos, duration, Types::FontType::Small);
+			return ptr;
+		};
+
+	// アイテムをドロップする関数を定義
+	m_pEventControls->dropItemFunc = [this](int chestNo, const std::string& itemType)
+		{
+			//Types::ItemType type; // 生成するアイテムが何かを判別する
+			//// 宝箱の番号を取得
+			//if (itemType == "coin")
+			//{
+			//	type = Types::ItemType::Coin;
+			//}
+			//if (itemType == "medal")
+			//{
+			//	type = Types::ItemType::UpgradeMedal;
+			//}
+			//if (itemType == "toitem")
+			//{
+			//	type = Types::ItemType::ChangeToCoin;
+			//	// 通常のアイテム(コイン)をまず生成
+			//	m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), Types::ItemType::Coin);
+			//}
+
+			//m_pGameManager->DropItem(m_pPositionRegistry->GetChestPos(chestNo), type);
+		};
+
+	// 敵を指定座標にスポーンさせる関数を定義
+	m_pEventControls->spawnEnemiesFunc = [this](const std::vector<Position2>& pos, int formNo)
+		{
+			for (const auto& enemyPos : pos)
+			{
+				m_pGameManager->SpawnEnemy(enemyPos, formNo);
+			}
+		};
+
+	// プレイヤーのフリーズ状態を変更する関数を定義
+	m_pEventControls->changePlayerFreezeFunc = [this]()
+		{
+			m_pGameManager->ChangeFreezePlayer();
+		};
+
+	// カメラが見るターゲットを変更する関数を定義
+	m_pEventControls->lookCameraFunc = [this](const std::string& key)
+		{
+			/*if (key == "spawnPos")
+			{
+				m_pCamera->SetTarget(m_pPositionRegistry->GetCameraPos(kSpawnPosChipNo));
+			}
+			else if (key == "goalPos")
+			{
+				m_pCamera->SetTarget(m_pPositionRegistry->GetCameraPos(kGoalPosChipNo));
+			}*/
+		};
+
+	// カメラが見るターゲットをプレイヤーに戻す関数を定義
+	m_pEventControls->returnCameraFunc = [this]()
+		{
+			m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
+		};
+
+	// ゴールをアクティブにする関数を定義
+	m_pEventControls->activeGoalFunc = [this]()
+		{
+			m_pMap->SetGoalMapChipOpen();
+		};
+
 }
