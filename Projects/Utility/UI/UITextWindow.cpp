@@ -100,6 +100,24 @@ void UITextWindow::Update()
 		}
 	}
 
+
+	// この処理をどこに入れるのか考え中
+	//auto text = StringFunction::WStringFromString(m_text);
+	//int textWidth = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
+	//if (textWidth > m_size.width)
+	//{
+
+	//}
+	//else
+	//{
+	//	// オフセットは不要なので0にしておく
+	//	m_scrollOffset = 0;
+
+	//	// テキストを中央ぞろえにする
+	//	m_isCenter = true;
+	//}
+
+
 	if (m_state == TextWindowState::Visible)
 	{
 		if (m_isAutoPageMode)
@@ -211,7 +229,8 @@ void UITextWindow::Draw() const
 		else
 		{
 			int drawX = left - m_scrollOffset;
-			DrawStringToHandle(drawX, top, text.c_str(), 0xffffff, m_fontHandle);
+			int fontSize = GetFontSizeToHandle(m_fontHandle);
+			DrawStringToHandle(drawX, static_cast<int>(m_pos.y) - fontSize / 2, text.c_str(), 0xffffff, m_fontHandle);
 		}
 	}
 	else
