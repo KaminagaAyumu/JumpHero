@@ -11,6 +11,12 @@ public:
 	UIImage();
 	virtual ~UIImage();
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="handle">画像のハンドル</param>
+	/// <param name="size">表示したいサイズ</param>
+	/// <param name="pos">表示左上座標</param>
 	void Init(int handle, const Size& size, const Position2& pos);
 
 	void Update()override;
