@@ -13,6 +13,7 @@ class UIText;
 class UIFormatText;
 class UISelectList;
 class UIGauge;
+class UIImage;
 
 /// <summary>
 /// UI関連の管理用クラス
@@ -81,6 +82,15 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	std::weak_ptr<UIGauge> CreateGauge(const Size& size, const Position2& pos);
+
+	/// <summary>
+	/// 画像を作成する関数
+	/// </summary>
+	/// <param name="handle"></param>
+	/// <param name="size"></param>
+	/// <param name="pos"></param>
+	/// <returns></returns>
+	std::weak_ptr<UIImage> CreateImage(int handle, const Size& size, const Position2& pos);
 
 private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列

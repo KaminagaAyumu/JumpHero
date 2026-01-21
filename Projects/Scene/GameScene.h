@@ -52,6 +52,8 @@ private:
 
 	int m_stageNo; // ステージの番号を保持しておく
 
+	int m_changeToCoinIconHandle; // 敵をコインに変えるアイテムのアイコンの画像ハンドル
+
 	bool m_isInputOK; // OKボタンで進むイベントを指定するためのもの
 
 	// 更新処理用関数群

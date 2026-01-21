@@ -5,6 +5,7 @@
 #include "UIFormatText.h"
 #include "UISelectList.h"
 #include "UIGauge.h"
+#include "UIImage.h"
 #include "DxLib.h"
 
 namespace
@@ -128,6 +129,14 @@ std::weak_ptr<UIGauge> UIManager::CreateGauge(const Size& size, const Position2&
 	auto ptr = std::make_shared<UIGauge>();
 	ptr->Init(size, pos);
 	ptr->SetHandle(m_gaugeFrameHandle, m_gaugeFillHandle);
+	m_pUIElements.push_back(ptr);
+	return ptr;
+}
+
+std::weak_ptr<UIImage> UIManager::CreateImage(int handle, const Size& size, const Position2& pos)
+{
+	auto ptr = std::make_shared<UIImage>();
+	ptr->Init(handle, size, pos);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }

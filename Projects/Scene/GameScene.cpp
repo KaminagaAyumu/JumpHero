@@ -59,6 +59,8 @@ m_fadeColor(0x000000)
 	m_chestOpenNum = 0;
 	m_stageNo = stageNo;
 
+	m_changeToCoinIconHandle = LoadGraph(L"data/img/change_to_coin_icon.png");
+
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
 	m_pMap = std::make_shared<Map>(stageNo,false);
@@ -84,6 +86,8 @@ m_fadeColor(0x000000)
 		});
 
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
+
+	m_pUIManager->CreateImage(m_changeToCoinIconHandle, { 60,60 }, { 500,500 });
 
 	m_pTextManager = std::make_unique<TextManager>();
 	
@@ -116,6 +120,7 @@ m_fadeColor(0x000000)
 
 GameScene::~GameScene()
 {
+	DeleteGraph(m_changeToCoinIconHandle);
 }
 
 void GameScene::Update(Input& input)
