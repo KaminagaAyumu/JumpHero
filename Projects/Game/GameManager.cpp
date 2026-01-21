@@ -358,6 +358,11 @@ const Position2& GameManager::GetPlayerPos() const
 	return m_pPlayer->GetPos();
 }
 
+float GameManager::GetBalloonCounterRate() const
+{
+	return static_cast<float>(m_balloonCounter) / kBalloonForChangeToCoin;
+}
+
 void GameManager::NotifyItemEvent(Types::ItemType type)
 {
 	m_itemPickEvent.push_back({ type, m_frameCount });

@@ -190,6 +190,12 @@ public:
 	const int GetTotalBalloonNum()const { return m_totalBalloonNum; }
 
 	/// <summary>
+	/// 風船をどれだけ取得したかの割合を返す
+	/// </summary>
+	/// <returns>0.0f~1.0fの割合</returns>
+	float GetBalloonCounterRate()const;
+
+	/// <summary>
 	/// 残機を1減らす(仮)
 	/// </summary>
 	void LifeDown() { m_life--; }
