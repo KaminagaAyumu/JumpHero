@@ -2,6 +2,7 @@
 #include "../Utility/Camera.h"
 #include "GameManager.h"
 #include "../Utility/GameType.h"
+#include "../Utility/Map.h"
 #include "DxLib.h"
 
 namespace
@@ -19,12 +20,15 @@ namespace
 	constexpr float kDropSpeed = 2.0f; // 宝箱から出たときの落下速度
 
 	constexpr float kScale = 3.0f; // 拡大率
+
+	constexpr float kMoveSpeed = 1.0f; // 動くときのスピード
 }
 
 ChangeToCoin::ChangeToCoin(const Position2& pos, int handle)
 {
 	m_pos = pos;
 	m_startY = pos.y;
+	m_velocity = { kMoveSpeed ,kMoveSpeed }; // 1.0,1.0で初期化
 	m_colRect = { {m_pos},kChangeToCoinDefaultWidth,kChangeToCoinDefaultHeight };
 	m_colCircle = { {m_pos},kChangeToCoinDefaultWidth / 2 };
 	m_graphHandle = handle;
@@ -42,8 +46,6 @@ void ChangeToCoin::Init()
 
 void ChangeToCoin::Update(Input&)
 {
-	m_colRect.pos = m_pos;
-	m_colCircle.pos = m_pos;
 	m_currentAnim.Update();
 	(this->*m_updateFunc)();
 }
@@ -65,6 +67,7 @@ void ChangeToCoin::Draw()
 
 void ChangeToCoin::SetFloating(std::weak_ptr<Map> map)
 {
+	m_pMap = map;
 	m_updateFunc = &ChangeToCoin::FloatingUpdate;
 }
 
@@ -96,10 +99,50 @@ void ChangeToCoin::DropUpdate()
 	{
 		m_pos.y = endY; // 位置を調整
 	}
+	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
 }
 
 void ChangeToCoin::FloatingUpdate()
 {
+	// マップを使えるようにlockしておく
+	auto pMap = m_pMap.lock();
+
+	// X座標の補正
+	Position2 nextX = m_pos;
+	nextX.x += m_velocity.x;
+
+	Rect2D rectX(nextX, kChangeToCoinDefaultWidth, kChangeToCoinDefaultHeight);
+	Rect2D rangeX = pMap->GetCanMoveRange(rectX);
+
+	if (rectX.GetLeft() <= rangeX.GetLeft() || rectX.GetRight() >= rangeX.GetRight())
+	{
+		m_velocity.x *= -1; // Xのスピードを反転
+	}
+	else
+	{
+		m_pos.x = nextX.x;
+	}
+
+	// Y座標の補正
+	Position2 nextY = m_pos;
+	nextY.y += m_velocity.y;
+
+	Rect2D rectY(nextY, kChangeToCoinDefaultWidth, kChangeToCoinDefaultHeight);
+	Rect2D rangeY = pMap->GetCanMoveRange(rectY);
+
+	if (rectY.GetTop() <= rangeY.GetTop() || rectY.GetBottom() >= rangeY.GetBottom())
+	{
+		m_velocity.y *= -1; // Xのスピードを反転
+	}
+	else
+	{
+		m_pos.y = nextY.y;
+	}
+
+	m_colRect.pos = m_pos;
+	m_colCircle.pos = m_pos;
+
 }
 
 void ChangeToCoin::IsCollision(const Types::CollisionInfo& info)

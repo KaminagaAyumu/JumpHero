@@ -37,6 +37,8 @@ private:
 
 	std::weak_ptr<Map> m_pMap; // 浮遊状態の更新処理を行うために取得する
 
+	Vector2 m_velocity;
+
 	/// <summary>
 	/// 出現中かどうか
 	/// </summary>
