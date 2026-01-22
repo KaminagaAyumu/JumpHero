@@ -48,6 +48,8 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 {
 	m_frameCount = kFadeInterval;
 
+	m_stageNo = stageNo;
+
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
 	// マップの初期化方法模索中
@@ -196,7 +198,7 @@ void MiniGameScene::FadeOutUpdate(Input&)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller,m_pGameManager));
+		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller,m_pGameManager,m_stageNo));
 		return; // 念のため処理を抜ける
 	}
 }

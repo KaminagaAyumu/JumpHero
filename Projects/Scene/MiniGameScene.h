@@ -41,6 +41,8 @@ public:
 private:
 	unsigned int m_fadeColor; // 単色フェード用の色
 
+	int m_stageNo; // ステージの番号を取得
+
 	bool m_isInputOK; // OKボタンが押されたかどうかの関数
 
 	// 更新処理用関数群

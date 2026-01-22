@@ -14,7 +14,7 @@ class UIFormatText;
 class ClearScene : public SceneBase
 {
 public:
-	ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager);
+	ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo);
 	virtual ~ClearScene();
 
 	/// <summary>
@@ -29,6 +29,8 @@ public:
 
 private:
 	unsigned int m_fadeColor; // 単色フェード用の色
+
+	int m_stageNo; // クリアしたステージの番号
 
 	// 更新処理用関数群
 	void FadeInUpdate(Input& input); // フェードイン中の更新処理

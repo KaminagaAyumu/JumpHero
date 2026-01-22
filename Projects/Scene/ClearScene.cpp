@@ -2,6 +2,7 @@
 #include "ClearScene.h"
 #include "SceneController.h"
 #include "TitleScene.h"
+#include "GameScene.h"
 #include "SelectScene.h"
 #include "../Game/GameManager.h"
 #include "../Utility/UI/UIManager.h"
@@ -25,9 +26,17 @@ namespace
 	constexpr int kClearDispMargin = 50;
 	constexpr int kScoreDispMargin = -60;
 
+	constexpr int kStageMaxNum = 2; // ステージの合計数
+
+	const Size kNormalListSize = { 200,300 };
+	const Position2 kNormalListPos = { Game::kScreenWidth / 2, 750 };
+
+	const Size kLastStageListSize = { 200,200 };
+	const Position2 kLastStageListPos = { Game::kScreenWidth / 2, 500 };
+
 }
 
-ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager) :
+ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo) :
 	SceneBase(controller),
 	m_pGameManager(gameManager),
 	m_updateFunc(&ClearScene::FadeInUpdate),
@@ -38,18 +47,44 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 {
 	m_frameCount = kFadeInterval;
 
+	m_stageNo = stageNo;
+
 	m_pUIManager = std::make_shared<UIManager>();
 
-	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, { 200,200 }, { Game::kScreenWidth / 2, 500 });
-	auto list = m_pSelectList.lock();
-	list->AddOption("ステージセレクトへ", [this]()
+	// ステージ番号をチェック
+	// 最後のステージだった場合は次のステージへ遷移しないようにする
+	if (m_stageNo >= kStageMaxNum)
+	{
+		m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, kLastStageListSize, kLastStageListPos);
+		auto list = m_pSelectList.lock();
+		list->AddOption("ステージセレクトへ", [this]()
 		{
 			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
 		});
-	list->AddOption("タイトルへ", [this]()
+		list->AddOption("タイトルへ", [this]()
+			{
+					m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+			});
+	}
+	else
+	{
+		m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, kNormalListSize, kNormalListPos);
+		auto list = m_pSelectList.lock();
+		// 次のステージへ遷移するリストを追加
+		list->AddOption("次のステージへ", [this]()
+			{
+				m_stageNo++; // 次のステージへ遷移するように加算
+				m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_stageNo));
+			});
+		list->AddOption("ステージセレクトへ", [this]()
 		{
-			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+			m_controller.ChangeScene(std::make_shared<SelectScene>(m_controller));
 		});
+		list->AddOption("タイトルへ", [this]()
+			{
+					m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+			});
+	}	
 
 	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { Game::kScreenWidth / 2 + kScoreDispMargin, Game::kScreenHeight / 2 + kScoreDispMargin });
 	auto score = m_pScoreText.lock();
