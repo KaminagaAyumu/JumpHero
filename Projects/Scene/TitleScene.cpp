@@ -25,7 +25,7 @@ namespace
 
 	constexpr int kStartTextMargin = 50; // スタート方法を示すテキストの表示位置調整
 
-	const Size kTitleLogoSize = { 1280,720 };
+	const Size kTitleLogoSize = { 1280, 720 };
 	const Position2 kTitleLogoPos = { 0, 0 };
 }
 
@@ -138,19 +138,8 @@ void TitleScene::FadeOutUpdate(Input& input)
 
 void TitleScene::NormalDraw()
 {
-	
-
 	m_bg->Draw(m_pCamera);
 	m_pMap->Draw(m_pCamera);
-
-	DrawRotaGraph(
-		Game::kScreenWidth,
-		Game::kScreenHeight,
-		1.0f,
-		0.0f,
-		m_titleImageHandle,
-		TRUE
-	);
 
 	m_pTitlePlayer->Draw();
 
@@ -161,13 +150,8 @@ void TitleScene::NormalDraw()
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"TitleScene: NormalDraw", 0xFFFFFF);
-	//DrawString(Game::kScreenWidth / 2 - 20,
-		//Game::kScreenHeight / 2 + 50, L"※違います", 0xFFFFFF);
-	DrawString(Game::kScreenWidth / 2 - 60,
-		Game::kScreenHeight / 2, L"JumpHero", 0xFFFFFF);
 #endif
-	DrawString(Game::kScreenWidth / 2 - 100,
-		Game::kScreenHeight / 2 + 100, L"STARTかAボタンでスタート", 0xFFFFFF);
+	
 
 }
 
@@ -175,14 +159,6 @@ void TitleScene::FadeDraw()
 {
 	m_bg->Draw(m_pCamera);
 	m_pMap->Draw(m_pCamera);
-	/*DrawRotaGraph(
-		Game::kScreenWidth / 2,
-		Game::kScreenHeight / 2,
-		1.0f,
-		0.0f,
-		m_titleImageHandle,
-		TRUE
-	);*/
 
 	m_pTitlePlayer->Draw();
 
