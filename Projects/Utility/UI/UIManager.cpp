@@ -10,6 +10,9 @@
 
 namespace
 {
+	//----------------
+	// フォントデータ関連
+	//----------------
 	const wchar_t* kMainFontName = L"クラフト明朝"; // メインで使うフォント名
 
 	// 小サイズのフォントハンドルの設定
@@ -23,7 +26,6 @@ namespace
 	// 大サイズのフォントハンドルの設定
 	constexpr int kLargeFontSize		= 60;	// 文字の大きさ
 	constexpr int kLargeFontEdgeSize	= 2; 	// 文字の縁取りの大きさ
-
 }
 
 UIManager::UIManager()
