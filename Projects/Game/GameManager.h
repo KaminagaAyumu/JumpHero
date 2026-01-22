@@ -183,6 +183,12 @@ public:
 	const int GetScore()const { return m_score; }
 
 	/// <summary>
+	/// 残機を取得(描画用)
+	/// </summary>
+	/// <returns>残機</returns>
+	const int GetLife()const { return m_life; }
+
+	/// <summary>
 	/// 現在のスコアを取得する
 	/// リザルト用
 	/// </summary>

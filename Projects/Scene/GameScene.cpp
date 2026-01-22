@@ -43,8 +43,7 @@ namespace
 	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
 	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
 
-	constexpr float kScoreTextPos = 20.0f;
-	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
+	const Position2 kScoreTextPos = { 20.0f,20.0f };
 
 	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kBalloonGaugePos = { 20.0f,60.0f }; // 風船のゲージの座標
@@ -53,7 +52,9 @@ namespace
 	const Position2 kCoinIconPos = { 20.0f, 60.0f };
 
 	const Size kPlayerIconSize = { 30,30 };
-	const Position2 kPlayerIconPos = { 20.0f, 100.0f };
+	const Position2 kPlayerIconPos = { 20.0f, 110.0f };
+
+	const Position2 kLifeTextPos = { 45.0f, 110.0f };
 }
 
 GameScene::GameScene(SceneController& controller, int stageNo) : SceneBase(controller),
@@ -83,11 +84,18 @@ m_fadeColor(0x000000)
 
 	m_pUIManager = std::make_unique<UIManager>();
 
-	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { kScoreTextPos, kScoreTextPos });
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "",kScoreTextPos);
 	auto score = m_pScoreText.lock();
 	score->SetProvider([this]()
 		{
 			return std::string("スコア:") + std::to_string(m_pGameManager->GetScore());
+		});
+
+	m_pLifeText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", kLifeTextPos);
+	auto life = m_pLifeText.lock();
+	life->SetProvider([this]()
+		{
+			return std::string("×") + std::to_string(m_pGameManager->GetLife());
 		});
 
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);

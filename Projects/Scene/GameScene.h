@@ -87,11 +87,17 @@ private:
 
 	std::vector<std::weak_ptr<Actor>> m_pActors; // ゲームシーン内に存在するオブジェクトを管理するコンテナ
 	
+
+	// UI関連
 	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
 
 	std::weak_ptr<UIFormatText> m_pScoreText; // スコアを表示するときに使用
 
+	std::weak_ptr<UIFormatText> m_pLifeText; // 残機を表示するときに使用
+
 	std::weak_ptr<UIGauge> m_pDropItemGauge; // 敵をコインに変えるアイテムが出るかわかるようにするUI
+
+
 
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを管理するために取得
 
