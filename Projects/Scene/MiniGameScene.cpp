@@ -86,6 +86,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pGameManager->MiniGameInit(m_pMap,m_pCamera,m_pEffectManager);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
+	m_pCamera->Init();
 
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 

@@ -22,9 +22,15 @@ Camera::~Camera()
 {
 }
 
-void Camera::Init(const Size& size)
+void Camera::Init()
 {
-	m_mapSize = size;
+	const Position2 target = GetCurrentTarget(); // 現在のターゲットを取得
+
+	// カメラの座標を初期化
+	if (!IsLerpEnd()) // 補正が終わっていたら
+	{
+		m_pos = target; // カメラの座標をターゲットに固定
+	}
 }
 
 void Camera::Update()

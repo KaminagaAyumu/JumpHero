@@ -78,6 +78,7 @@ m_fadeColor(0x000000)
 	m_pGameManager->Init(m_pMap, m_pCamera, m_pEffectManager, m_pActors, isTutorial);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
+	m_pCamera->Init();
 
 	m_pUIManager = std::make_unique<UIManager>();
 
@@ -139,6 +140,10 @@ void GameScene::Draw()
 void GameScene::FadeInUpdate(Input& input)
 {
 	m_frameCount--;
+
+	// カメラの更新
+	m_pCamera->Update();
+
 	if (m_frameCount <= 0)
 	{
 		// フェードイン完了
