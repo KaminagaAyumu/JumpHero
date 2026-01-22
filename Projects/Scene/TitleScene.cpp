@@ -7,6 +7,7 @@
 #include "../Utility/Game.h"
 #include "../Utility/GameType.h"
 #include "../Utility/Bg.h"
+#include "../Utility/Map.h"
 #include "../Utility/Sound/SoundManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Game/Effect/EffectManager.h"
@@ -31,6 +32,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 {
 	m_titleImageHandle = LoadGraph(L"data/logo.png");
 	m_bg = std::make_shared<Bg>();
+	m_pMap = std::make_shared<Map>(-1, false);
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("test", L"data/sound/testBGM.mp3",SoundBus::BGM,1.0f,true);
 	m_soundManager->LoadSoundClip("select", L"data/sound/selectBGM.wav", SoundBus::BGM, 1.0f, true);

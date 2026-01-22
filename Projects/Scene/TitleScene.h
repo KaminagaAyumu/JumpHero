@@ -3,6 +3,7 @@
 
 // プロトタイプ宣言
 class Bg;
+class Map;
 class SoundManager;
 class UIManager;
 class EffectManager;
@@ -47,6 +48,7 @@ private:
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
 	std::shared_ptr<Bg> m_bg;
+	std::shared_ptr<Map> m_pMap; // タイトル用のマップを準備
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャークラス
 	std::shared_ptr<UIManager> m_pUIManager; // UIマネージャークラス
 	std::shared_ptr<EffectManager> m_pEffectManager; 

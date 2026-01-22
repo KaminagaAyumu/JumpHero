@@ -8,6 +8,9 @@
 
 namespace
 {
+	constexpr int kTitleStageNo = -1; // タイトルのステージの番号
+	constexpr int kTutorialStageNo = 0; // チュートリアルのステージの番号
+
 	constexpr int kIdentifierSize = 4; // ファイル識別子の文字数
 
 	constexpr int kMapData = 0; // マップデータのレイヤー番号
@@ -535,7 +538,7 @@ bool Map::LoadStageData(int stageNo, bool isMiniGame)
 	// 読み込むステージデータのパスを取得するための変数
 	wchar_t filePath[kFilePathSize];
 	// ステージの番号に対応したパスを取得する
-	if (isMiniGame)
+	if (isMiniGame) // ミニゲームシーンのマップをロードする
 	{
 		if (stageNo == 0)
 		{
@@ -548,9 +551,14 @@ bool Map::LoadStageData(int stageNo, bool isMiniGame)
 			std::swprintf(filePath, kFilePathSize, L"data/minigame%d.fmf", stageNo);
 		}
 	}
-	else
+	else // 通常のゲームシーンのマップをロードする
 	{
-		if (stageNo == 0)
+		if (stageNo == kTitleStageNo)
+		{
+			// タイトルの場合
+			std::swprintf(filePath, kFilePathSize, L"data/titleData.fmf");
+		}
+		else if (stageNo == kTutorialStageNo)
 		{
 			// チュートリアルの場合
 			std::swprintf(filePath, kFilePathSize, L"data/tutorialData.fmf");
