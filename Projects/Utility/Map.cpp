@@ -132,11 +132,12 @@ void Map::Update()
 
 }
 
-void Map::Draw(Camera* camera)
+void Map::Draw(std::weak_ptr<Camera> camera)
 {
+	auto pCamera = camera.lock();
 	// 画面のスクロール量
-	float scrollX = camera->scroll.x;
-	float scrollY = camera->scroll.y;
+	float scrollX = pCamera->scroll.x;
+	float scrollY = pCamera->scroll.y;
 
 	// 1マスの描画サイズ
 	float tileSize = kChipSize * kChipScale;

@@ -1,4 +1,5 @@
 ﻿#include <vector>
+#include <memory>
 #include "Bg.h"
 #include "Game.h"
 #include "Camera.h"
@@ -58,19 +59,20 @@ void Bg::Draw()
 }
 
 
-void Bg::Draw(Camera* camera)
+void Bg::Draw(std::weak_ptr<Camera> camera)
 {
 	Size bgSize = {};
 	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
 
 	Position2 scrollPos = {};
+	auto pCamera = camera.lock();
 
 	// ↓の場合、さらにfloatにキャストしないといけないのでfmodfを使う
 	//scrollPos.x = static_cast<int>(camera->scroll.x) % bgSize.width;
-	scrollPos.x = fmodf(camera->scroll.x, static_cast<float>(bgSize.width));
+	scrollPos.x = fmodf(pCamera->scroll.x, static_cast<float>(bgSize.width));
 	// 縦もスクロールする場合は↓を使う
 	// scrollPos.y = static_cast<int>(camera->scroll.y) % bgSize.y;
-	scrollPos.y = camera->scroll.y / bgSize.height;
+	scrollPos.y = pCamera->scroll.y / bgSize.height;
 
 	DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
 

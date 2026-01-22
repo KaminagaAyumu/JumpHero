@@ -19,7 +19,7 @@ public:
 
 	void Draw();
 
-	void Draw(Camera* camera);
+	void Draw(std::weak_ptr<Camera> camera);
 
 private:
 	int m_bgHandle;

@@ -211,8 +211,8 @@ void MiniGameScene::FadeOutUpdate(Input&)
 
 void MiniGameScene::NormalDraw()
 {
-	m_bg->Draw(m_pCamera.get());
-	m_pMap->Draw(m_pCamera.get());
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
 
 	for (auto& actor : m_pActors)
 	{
@@ -236,8 +236,8 @@ void MiniGameScene::NormalDraw()
 
 void MiniGameScene::FadeDraw()
 {
-	m_bg->Draw(m_pCamera.get());
-	m_pMap->Draw(m_pCamera.get());
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);

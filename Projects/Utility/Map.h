@@ -21,7 +21,7 @@ public:
 	/// マップを描画する
 	/// </summary>
 	/// <param name="">スクロール用カメラの情報</param>
-	void Draw(Camera*);
+	void Draw(std::weak_ptr<Camera>);
 
 	/// <summary>
 	/// 矩形とマップとの当たり判定

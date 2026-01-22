@@ -244,8 +244,8 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalDraw()
 {
-	m_bg->Draw(m_pCamera.get());
-	m_pMap->Draw(m_pCamera.get());
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
 
 	for (auto& actor : m_pActors)
 	{
@@ -270,8 +270,8 @@ void GameScene::NormalDraw()
 
 void GameScene::FadeDraw()
 {
-	m_bg->Draw(m_pCamera.get());
-	m_pMap->Draw(m_pCamera.get());
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
 	m_pGameManager->Draw();
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
