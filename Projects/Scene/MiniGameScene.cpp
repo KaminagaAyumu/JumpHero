@@ -8,6 +8,7 @@
 #include "../Game/Effect/EffectManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UIFormatText.h"
+#include "../Utility/UI/UIGauge.h"
 #include "../Game/TextManager.h"
 #include "../Game/Event/EventManager.h"
 #include "../Utility/Bg.h"
@@ -30,6 +31,9 @@ namespace
 	constexpr int kHeaderMargin = 60; // ヘッダー(見出し)の余白
 
 	constexpr float kScoreTextPosY = 20.0f;
+
+	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
+	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
 
 	const Position2 kSpawnFlotingItemPos{ 200.0f,200.0f };
 }
@@ -64,6 +68,8 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 		{
 			return std::string("スコア:") + std::to_string(m_pGameManager->GetScore());
 		});
+
+	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
 
 	m_pTextManager = std::make_unique<TextManager>();
 
@@ -128,6 +134,11 @@ void MiniGameScene::NormalUpdate(Input& input)
 		// ポーズシーンをプッシュする(このシーンに戻ることも可能にする)
 		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 		return;
+	}
+
+	if (auto gauge = m_pDropItemGauge.lock())
+	{
+		gauge->SetValue(m_pGameManager->GetBalloonCounterRate());
 	}
 
 	// OKボタンが押されたかどうかを判定する

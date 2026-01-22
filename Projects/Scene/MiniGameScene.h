@@ -8,6 +8,7 @@ class GameManager;
 class EffectManager;
 class UIManager;
 class UIFormatText;
+class UIGauge;
 class TextManager;
 class Map;
 class Camera;
@@ -75,6 +76,8 @@ private:
 	std::unique_ptr<UIManager> m_pUIManager;
 
 	std::weak_ptr<UIFormatText> m_pScoreText;
+
+	std::weak_ptr<UIGauge> m_pDropItemGauge; // 敵をコインに変えるアイテムが出るかわかるようにするUI
 
 	std::unique_ptr<TextManager> m_pTextManager;
 
