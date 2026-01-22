@@ -12,6 +12,8 @@ namespace
 	constexpr int kDefaultAliveTime = 660; // デフォルトの表示時間（フレーム数）
 
 	constexpr int kScrollWaitFrame = 60; // スクロールを止める時間
+
+	constexpr int kWindowWidthMargin = 30; // ウィンドウの端からのマージン
 }
 
 UITextWindow::UITextWindow() :
@@ -200,6 +202,8 @@ void UITextWindow::Draw() const
 	auto text = StringFunction::WStringFromString(m_text);
 	int width = 0; // 文字を中央ぞろえで表示するための変数
 
+	auto lines = StringFunction::WrapTextToWidth(text, m_fontHandle, m_size.width);
+
 	// 文字をスクロールさせるとき
 	if (m_isScrollMode)
 	{
@@ -222,9 +226,15 @@ void UITextWindow::Draw() const
 	{
 		if (m_fontHandle != -1) // フォントのハンドルがある場合
 		{
-			width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", text.c_str());
-			DrawStringToHandle(static_cast<int>(m_pos.x) - width / 2, static_cast<int>(m_pos.y),
-			text.c_str(), GetColor(255, 255, 255), m_fontHandle);
+			int fontSize = GetFontSizeToHandle(m_fontHandle);
+			int dy = 0;
+			for (const auto& line : lines)
+			{
+				width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", line.c_str());
+				DrawStringToHandle(static_cast<int>(m_pos.x) - width / 2, static_cast<int>(m_pos.y) + dy,
+					line.c_str(), GetColor(255, 255, 255), m_fontHandle);
+				dy += fontSize;
+			}
 		}
 		else // フォントのハンドルがない場合
 		{
