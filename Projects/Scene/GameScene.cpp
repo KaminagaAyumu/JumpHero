@@ -43,14 +43,17 @@ namespace
 	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
 	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
 
-	constexpr float kScoreTextPosY = 20.0f;
+	constexpr float kScoreTextPos = 20.0f;
 	//constexpr Vector2 kScrollPos = { 100.0f,0.0f }; // スクロール加算用
 
 	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
-	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
+	const Position2 kBalloonGaugePos = { 20.0f,60.0f }; // 風船のゲージの座標
 
 	const Size kCoinIconSize = { 40,40 };
-	const Position2 kCoinIconPos = { 35.0f, 50.0f };
+	const Position2 kCoinIconPos = { 20.0f, 60.0f };
+
+	const Size kPlayerIconSize = { 30,30 };
+	const Position2 kPlayerIconPos = { 20.0f, 100.0f };
 }
 
 GameScene::GameScene(SceneController& controller, int stageNo) : SceneBase(controller),
@@ -61,8 +64,6 @@ m_fadeColor(0x000000)
 	m_frameCount = kFadeInterval;
 	m_chestOpenNum = 0;
 	m_stageNo = stageNo;
-
-	m_changeToCoinIconHandle = LoadGraph(L"data/img/change_to_coin_icon.png");
 
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
@@ -82,7 +83,7 @@ m_fadeColor(0x000000)
 
 	m_pUIManager = std::make_unique<UIManager>();
 
-	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { 0, kScoreTextPosY });
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { kScoreTextPos, kScoreTextPos });
 	auto score = m_pScoreText.lock();
 	score->SetProvider([this]()
 		{
@@ -92,6 +93,7 @@ m_fadeColor(0x000000)
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
 
 	m_pUIManager->CreateImage(Types::ImageType::ChangeCoinIcon, kCoinIconSize, kCoinIconPos);
+	m_pUIManager->CreateImage(Types::ImageType::PlayerIcon, kPlayerIconSize, kPlayerIconPos);
 
 	m_pTextManager = std::make_unique<TextManager>();
 	
@@ -124,7 +126,6 @@ m_fadeColor(0x000000)
 
 GameScene::~GameScene()
 {
-	DeleteGraph(m_changeToCoinIconHandle);
 }
 
 void GameScene::Update(Input& input)
