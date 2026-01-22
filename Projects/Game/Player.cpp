@@ -49,7 +49,7 @@ namespace
 
 	constexpr float kEntryEndXOffset = 100.0f;			// プレイヤー登場終了位置のXオフセット
 
-	constexpr int	kAutoWaitFrame = 180;			// プレイヤーが自動で動くときに待つ時間
+	constexpr int	kAutoWaitFrame = 300;			// プレイヤーが自動で動くときに待つ時間
 }
 
 Player::Player(std::weak_ptr<Map> map, GameManager* gameManager) :
