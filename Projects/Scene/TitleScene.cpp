@@ -8,6 +8,7 @@
 #include "../Utility/GameType.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Map.h"
+#include "../Utility/Camera.h"
 #include "../Utility/Sound/SoundManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Game/Effect/EffectManager.h"
@@ -33,6 +34,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_titleImageHandle = LoadGraph(L"data/logo.png");
 	m_bg = std::make_shared<Bg>();
 	m_pMap = std::make_shared<Map>(-1, false);
+	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("test", L"data/sound/testBGM.mp3",SoundBus::BGM,1.0f,true);
 	m_soundManager->LoadSoundClip("select", L"data/sound/selectBGM.wav", SoundBus::BGM, 1.0f, true);
@@ -74,9 +76,15 @@ void TitleScene::FadeInUpdate(Input& input)
 
 void TitleScene::NormalUpdate(Input& input)
 {
+	// カメラの更新
+	m_pCamera->Update();
+
 	m_soundManager->Update();
 	m_pUIManager->Update();
 	m_pEffectManager->Update();
+
+	m_bg->Update();
+	m_pMap->Update();
 
 	// STARTボタンもしくはAボタンが押されたら
 	if (input.IsTriggered("OK"))
@@ -109,7 +117,6 @@ void TitleScene::FadeOutUpdate(Input& input)
 
 void TitleScene::NormalDraw()
 {
-	m_bg->Draw();
 	DrawRotaGraph(
 		Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2,
@@ -118,6 +125,9 @@ void TitleScene::NormalDraw()
 		m_titleImageHandle,
 		TRUE
 	);
+
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
 
 	m_pUIManager->Draw();
 
@@ -138,7 +148,8 @@ void TitleScene::NormalDraw()
 
 void TitleScene::FadeDraw()
 {
-	m_bg->Draw();
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
 	/*DrawRotaGraph(
 		Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2,

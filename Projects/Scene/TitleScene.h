@@ -4,6 +4,7 @@
 // プロトタイプ宣言
 class Bg;
 class Map;
+class Camera;
 class SoundManager;
 class UIManager;
 class EffectManager;
@@ -49,6 +50,7 @@ private:
 
 	std::shared_ptr<Bg> m_bg;
 	std::shared_ptr<Map> m_pMap; // タイトル用のマップを準備
+	std::shared_ptr<Camera> m_pCamera; // スクロール用のカメラを準備
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャークラス
 	std::shared_ptr<UIManager> m_pUIManager; // UIマネージャークラス
 	std::shared_ptr<EffectManager> m_pEffectManager; 
