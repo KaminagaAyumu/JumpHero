@@ -49,10 +49,7 @@ namespace
 
 	constexpr float kEntryEndXOffset = 100.0f;			// プレイヤー登場終了位置のXオフセット
 
-	// アニメーション関連
-	constexpr int kAnimGroundNum = 18;				// 地上アニメーションの枚数
-	constexpr int kAnimGroundFrame = 5;				// 地上アニメーションのフレーム数
-	//constexpr int kAnimJumpFrame = 4;					// ジャンプアニメーションのフレーム数
+	constexpr int	kAutoWaitFrame = 180;			// プレイヤーが自動で動くときに待つ時間
 }
 
 Player::Player(std::weak_ptr<Map> map, GameManager* gameManager) :
@@ -65,6 +62,7 @@ Player::Player(std::weak_ptr<Map> map, GameManager* gameManager) :
 	m_frameCount(0),
 	m_jumpCount(0),
 	m_attackCount(0),
+	m_autoTimeCount(0),
 	m_level(0),
 	m_prevPosY(0.0f),
 	m_isGround(false),
@@ -93,6 +91,7 @@ Player::Player(std::weak_ptr<Map> map) :
 	m_frameCount(0),
 	m_jumpCount(0),
 	m_attackCount(0),
+	m_autoTimeCount(0),
 	m_level(0),
 	m_prevPosY(0.0f),
 	m_isGround(false),
@@ -130,6 +129,7 @@ void Player::Init()
 	m_frameCount = 0;
 	m_jumpCount = 0;
 	m_attackCount = 0;
+	m_autoTimeCount = 0;
 	m_level = 0;
 	m_isGround = false;
 	m_isHover = false;
@@ -169,6 +169,7 @@ void Player::InitAuto()
 	m_frameCount = 0;
 	m_jumpCount = 0;
 	m_attackCount = 0;
+	m_autoTimeCount = 0;
 	m_level = 0;
 	m_isGround = false;
 	m_isHover = false;
@@ -665,6 +666,14 @@ void Player::MissUpdate(Input&)
 
 void Player::AutoMoveUpdate(Input&)
 {
+	m_autoTimeCount++;
+
+	if (m_autoTimeCount >= kAutoWaitFrame)
+	{
+		// 歩いているフラグをtrueに変更
+		m_isWalk = true;
+	}
+
 	//if (ジャンプの条件)
 	//{
 	//	m_direction = { 0.0f,1.0f }; // ジャンプの方向を上向きにする
@@ -674,29 +683,19 @@ void Player::AutoMoveUpdate(Input&)
 	//	m_isJumpStart = true; // ジャンプ開始フラグをtrueにする
 	//	m_frameCount = 0; // 時間経過をリセット
 	//}
-	
 
 	float dx = 0.0f; // X軸の未来の移動量
-	// 左右移動の処理
-	const bool movingLeft = false;
-	const bool movingRight = true;
 
-	if (movingLeft || movingRight)
+	if (m_isWalk)
 	{
-		m_isWalk = true;
-	}
-	else
-	{
-		m_isWalk = false;
-	}
-
-	if (m_isTurn)
-	{
-		dx -= kNormalMoveSpeed; // 左に移動
-	}
-	else
-	{
-		dx += kNormalMoveSpeed; // 右に移動
+		if (m_isTurn)
+		{
+			dx -= kNormalMoveSpeed; // 左に移動
+		}
+		else
+		{
+			dx += kNormalMoveSpeed; // 右に移動
+		}
 	}
 
 	// 重力の処理

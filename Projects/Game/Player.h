@@ -115,6 +115,7 @@ private:
 	int m_frameCount; // フレームカウンタ
 	int m_jumpCount; // ジャンプカウンタ(プレイヤーの強化状態で使用)
 	int m_attackCount; // 攻撃カウンタ(プレイヤーの強化状態で使用)
+	int m_autoTimeCount; // 自動で動いているときに使うタイムカウンタ
 	int m_level; // プレイヤーの強化状態
 	float m_prevPosY; // 前フレームのY座標
 	bool m_isGround; // 地面についているか
