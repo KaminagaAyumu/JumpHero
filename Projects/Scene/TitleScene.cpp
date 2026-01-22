@@ -26,7 +26,7 @@ namespace
 	constexpr int kStartTextMargin = 50; // スタート方法を示すテキストの表示位置調整
 
 	const Size kTitleLogoSize = { 1280, 720 };
-	const Position2 kTitleLogoPos = { 0, 0 };
+	const Position2 kTitleLogoPos = { 0, -150 };
 }
 
 
@@ -161,6 +161,8 @@ void TitleScene::FadeDraw()
 	m_pMap->Draw(m_pCamera);
 
 	m_pTitlePlayer->Draw();
+
+	m_pUIManager->Draw();
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
