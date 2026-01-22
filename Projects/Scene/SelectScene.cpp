@@ -7,8 +7,10 @@
 #include "../Utility/GameType.h"
 #include "../Utility/Application.h"
 #include "../Utility/Sound/SoundManager.h"
+#include "../Game/TextManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UISelectList.h"
+#include "../Utility/UI/UITextWindow.h"
 #include "DxLib.h"
 
 namespace
@@ -35,6 +37,8 @@ SelectScene::SelectScene(SceneController& controller) :
 
 	m_pUIManager = std::make_unique<UIManager>();
 
+	m_pTextManager = std::make_unique<TextManager>();
+
 	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, kSelectListSize, kSelectListPos);
 	auto list = m_pSelectList.lock();
 	list->AddOption("チュートリアル",[this]()
@@ -49,6 +53,8 @@ SelectScene::SelectScene(SceneController& controller) :
 		{
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 2));
 		});
+
+	
 }
 
 SelectScene::~SelectScene()
@@ -142,4 +148,19 @@ void SelectScene::FadeDraw()
 #ifdef _DEBUG
 	DrawString(0, 0, L"SelectScene: FadeDraw", 0xffffff);
 #endif
+}
+
+void SelectScene::CheckCursor()
+{
+	// カーソルの状態を取得するためにlock
+	auto list = m_pSelectList.lock();
+	// カーソルの場所を取得する
+	int cursor = list->GetCursor();
+	// カーソルの場所によって説明ウィンドウのテキスト内容を変えるようにしたい
+	/*if (cursor == 0)
+	{
+		auto window = m_pDescriptionWindow.lock();
+
+		
+	}*/
 }

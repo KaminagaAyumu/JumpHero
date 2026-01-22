@@ -3,8 +3,10 @@
 
 // 前方宣言
 class SoundManager;
+class TextManager;
 class UIManager;
 class UISelectList;
+class UITextWindow;
 
 /// <summary>
 /// セレクトシーン
@@ -42,11 +44,20 @@ private:
 	using DrawFunc_t = void (SelectScene::*)(); // 描画処理用関数ポインタの型定義
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
+	/// <summary>
+	/// 現在のカーソルの位置を探す
+	/// </summary>
+	void CheckCursor();
+
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャーへのポインタ
+
+	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを使用するためのポインタ
 
 	std::unique_ptr<UIManager> m_pUIManager; // UIを使用するためのポインタ
 
 	std::weak_ptr<UISelectList> m_pSelectList; // 選択できるリストを管理するためのポインタ
+
+	std::weak_ptr<UITextWindow> m_pDescriptionWindow; // ステージの説明を表示するためのポインタ
 
 };
 
