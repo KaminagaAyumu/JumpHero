@@ -29,7 +29,7 @@ namespace
 	constexpr int kStageMaxNum = 2; // ステージの合計数
 
 	const Size kNormalListSize = { 200,300 };
-	const Position2 kNormalListPos = { Game::kScreenWidth / 2, 750 };
+	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 150 };
 
 	const Size kLastStageListSize = { 200,200 };
 	const Position2 kLastStageListPos = { Game::kScreenWidth / 2, 500 };
