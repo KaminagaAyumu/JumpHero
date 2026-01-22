@@ -253,7 +253,7 @@ void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) cons
 int SoundManager::ToDxLibVolume(float rate) const
 {
 	// 割合から音量を設定
-	int volume = static_cast<int>(rate) * kMaxVolume;
+	int volume = static_cast<int>(std::round(std::clamp(rate, 0.0f, 1.0f)) * kMaxVolume);
 	// 0~255の間に収まるようにする
 	return std::clamp(volume, 0, kMaxVolume);
 }
