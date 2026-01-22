@@ -14,14 +14,25 @@ class GameManager;
 class Player : public Actor
 {
 public:
-	// コンストラクタ
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="map">マップのデータ</param>
+	/// <param name="gameManager">ゲームマネージャーのデータ</param>
 	Player(std::weak_ptr<Map> map, GameManager* gameManager);
+
+	/// <summary>
+	/// 自動で動くときに呼ぶコンストラクタ
+	/// </summary>
+	/// <param name="map">マップのデータ</param>
+	Player(std::weak_ptr<Map> map);
 
 	// デストラクタ
 	virtual ~Player();
 
 	void Init() override;
 	void InitMap(std::weak_ptr<Map> map);
+	void InitAuto(); // 自動で動くときの初期化
 	void Update(Input&) override;
 	void Draw() override;
 
@@ -160,6 +171,7 @@ private:
 	void JumpUpdate(Input&); // ジャンプ状態の時
 	void GroundUpdate(Input&); // 床についている時
 	void MissUpdate(Input&); // ミス処理の時
+	void AutoMoveUpdate(Input&); // 自動で動く時
 	// 更新処理用関数ポインタの型定義
 	using UpdateFunc_t = void(Player::*)(Input&);
 	UpdateFunc_t m_update;
@@ -169,6 +181,7 @@ private:
 	void JumpDraw(); // ジャンプ状態の時
 	void GroundDraw(); // 床についている時
 	void MissDraw(); // ミス処理の時
+	void AutoMoveDraw(); // 自動で動く時
 	// 描画処理用関数ポインタの型定義
 	using DrawFunc_t = void(Player::*)();
 	DrawFunc_t m_draw;

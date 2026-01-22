@@ -18,6 +18,7 @@ namespace Types
 
 	enum class ImageType : int
 	{
+		TitleLogo,
 		PlayerIcon,
 		ChangeCoinIcon,
 		ImageNum,

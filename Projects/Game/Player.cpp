@@ -83,6 +83,34 @@ Player::Player(std::weak_ptr<Map> map, GameManager* gameManager) :
 {
 }
 
+Player::Player(std::weak_ptr<Map> map) : 
+	Actor(Types::ActorType::Player),
+	m_direction{},
+	m_velocity{1.0f,1.0f},
+	m_entryEndPos{},
+	m_barrierPos{},
+	m_graphHandle(-1),
+	m_frameCount(0),
+	m_jumpCount(0),
+	m_attackCount(0),
+	m_level(0),
+	m_prevPosY(0.0f),
+	m_isGround(false),
+	m_isHover(false),
+	m_isMiss(false),
+	m_isLevelDown(false),
+	m_isJumpStart(false),
+	m_isFreeze(false),
+	m_isAttackable(false),
+	m_isWalk(false),
+	m_isTurn(false),
+	m_pMap(map),
+	m_pGameManager{},
+	m_update(&Player::AutoMoveUpdate),
+	m_draw(&Player::AutoMoveDraw)
+{
+}
+
 Player::~Player()
 {
 	DeleteGraph(m_graphHandle);
@@ -125,6 +153,40 @@ void Player::Init()
 void Player::InitMap(std::weak_ptr<Map> map)
 {
 	m_pMap = map;
+}
+
+void Player::InitAuto()
+{
+	auto pMap = m_pMap.lock();
+	m_pos = pMap->GetStartPosToMap();
+	m_entryEndPos = m_pos + Vector2{ kEntryEndXOffset,0.0f };
+	m_direction = {};
+	m_velocity = {};
+	m_barrierPos = {};
+	m_graphHandle = LoadGraph(L"data/img/player.png");
+	m_colCircle = { m_pos,kPlayerWidth * 0.5f };
+	m_colRect = { m_pos,kPlayerWidth,kPlayerHeight };
+	m_frameCount = 0;
+	m_jumpCount = 0;
+	m_attackCount = 0;
+	m_level = 0;
+	m_isGround = false;
+	m_isHover = false;
+	m_isMiss = false;
+	m_isLevelDown = false;
+	m_isJumpStart = false;
+	m_isFreeze = false;
+	m_isAttackable = false;
+	m_update = &Player::AutoMoveUpdate;
+	m_draw = &Player::AutoMoveDraw;
+	AnimationLoader::LoadAnimationData(L"data/animation/player.csv", m_graphHandle, m_animations);
+
+	m_animations["Idle"].SetScale(kGraphScale);
+	m_animations["Jump"].SetScale(kGraphScale);
+	m_animations["Walk"].SetScale(kGraphScale);
+	m_animations["Fall"].SetScale(kGraphScale);
+
+	ChangeAnimation(m_animations["Idle"]);
 }
 
 void Player::Update(Input& input)
@@ -601,6 +663,192 @@ void Player::MissUpdate(Input&)
 	m_colCircle.pos = m_pos; // 円の座標更新
 }
 
+void Player::AutoMoveUpdate(Input&)
+{
+	float dx = 0.0f; // X軸の未来の移動量
+	// 左右移動の処理
+	const bool movingLeft = false;
+	const bool movingRight = true;
+
+	if (movingLeft || movingRight)
+	{
+		m_isWalk = true;
+	}
+	else
+	{
+		m_isWalk = false;
+	}
+
+	if (movingLeft) // 左ボタンが押されている時
+	{
+		dx -= kNormalMoveSpeed; // 左に移動
+		m_isTurn = true;
+	}
+	if (movingRight) // 右ボタンが押されている時
+	{
+		dx += kNormalMoveSpeed; // 右に移動
+		m_isTurn = false;
+	}
+
+	// 重力の処理
+	float gravity = kGravity; // 基本の重力
+
+	if (m_velocity.y < 0.0f) // 上に移動している時
+	{
+		//if (input.IsPressed("Down")) // 下ボタンが押されたとき
+		//{
+		//	gravity *= kUpGravityScale; // 重力を強くする
+		//}
+		//if (input.IsPressed("Up")) // 上ボタンが押されたとき
+		//{
+		//	gravity *= kDownGravityScale; // 重力を弱くする
+		//}
+	}
+
+	// 重力を速度に加える
+	m_velocity.y += gravity;
+
+
+	float dy = m_velocity.y; // Y軸の未来の移動量
+	ContactFrags frags; // 当たり判定の結果を格納する構造体
+
+	// X軸の当たり判定
+	Position2 tryPosX = m_pos;
+	// 未来の位置を計算
+	tryPosX.x += dx;
+
+	// マップを使えるようにlockする
+	auto pMap = m_pMap.lock();
+
+	// 当たり判定用の矩形を作成して移動可能範囲を取得
+	Rect2D rectX(tryPosX, kPlayerWidth, kPlayerHeight - kMapColMargin);
+	Rect2D rangeX = pMap->GetCanMoveRange(rectX);
+
+	// プレイヤーの左右端の座標を取得
+	float leftX = tryPosX.x - kPlayerWidth * 0.5f;
+	float rightX = tryPosX.x + kPlayerWidth * 0.5f;
+
+	if (leftX < rangeX.GetLeft()) // 左端が移動可能範囲を超えた場合
+	{
+		// 位置を移動可能範囲内に修正
+		tryPosX.x = rangeX.GetLeft() + kPlayerWidth * 0.5f + kMapColMargin;
+		frags.isHitLeft = true; // 左に当たったフラグを立てる
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+	else if (rightX > rangeX.GetRight()) // 右端が移動可能範囲を超えた場合
+	{
+		// 位置を移動可能範囲内に修正
+		tryPosX.x = rangeX.GetRight() - kPlayerWidth * 0.5f - kMapColMargin;
+		frags.isHitRight = true; // 右に当たったフラグを立てる
+		// 速度を抑える(問題があれば0にする)
+		dx = tryPosX.x - m_pos.x;
+	}
+
+	// 修正した座標を実際の座標に反映
+	m_pos.x = tryPosX.x;
+
+	// Y軸の当たり判定
+	Position2 tryPosY = m_pos;
+	// 未来の位置を計算
+	tryPosY.y += dy;
+
+	// 当たり判定用の矩形を作成して移動可能範囲を取得
+	Rect2D rectY(tryPosY, kPlayerWidth, kPlayerHeight);
+	Rect2D rangeY = pMap->GetCanMoveRange(rectY);
+
+	// プレイヤーの上下端の座標を取得
+	float topY = tryPosY.y - kPlayerHeight * 0.5f;
+	float bottomY = tryPosY.y + kPlayerHeight * 0.5f;
+
+	// 貫通しない床に当たったかどうか
+	bool isHitNormalFloor = false;
+	float margin = 0.1f; // マージン
+
+	// 落下している時に床に当たった場合
+	if (dy > 0.0f && bottomY > rangeY.GetBottom())
+	{
+		// 位置を移動可能範囲内に修正
+		tryPosY.y = rangeY.GetBottom() - kPlayerHeight * 0.5f;
+		frags.isHitGround = true; // 床に当たったフラグを立てる
+		isHitNormalFloor = true; // 貫通しない床に当たったとする
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+		m_frameCount = 0; // 時間経過をリセット
+	}
+	else if (dy < 0.0f && topY < rangeY.GetTop()) // 上昇している時に天井に当たった場合
+	{
+		// 位置を移動可能範囲内に修正
+		tryPosY.y = rangeY.GetTop() + kPlayerHeight * 0.5f;
+		frags.isHitCeil = true; // 天井に当たったフラグを立てる
+		m_velocity.y = 0.0f; // Y方向の速度を0にする
+		dy = tryPosY.y - m_pos.y; // 移動量を修正
+		// 再びジャンプボタンを押した際と同じ処理をする
+		m_isHover = true;
+		m_frameCount = 0;
+	}
+
+	// 下からのみ貫通できる床との判定
+	if (!isHitNormalFloor && dy > 0.0f) // 地面との判定を行わなかった際に落下中なら
+	{
+		const float oldBottom = m_prevPosY + kPlayerHeight * 0.5f; // 前回の下端のY座標
+
+		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
+		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
+		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
+		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+
+		bool hitOneWay = false; // 片面通行の床に当たったかどうか
+		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
+
+		for (int x = leftTileX; x <= rightTileX; x++) // プレイヤーの幅が大きい時を考慮
+		{
+			int chipNo = pMap->GetMapChipNum(x, footTileY);
+			if (pMap->IsOnlyTopTile(chipNo))
+			{
+				float tileTop = footTileY * tileSize; // タイルの上端のY座標
+
+				if (oldBottom <= tileTop) // 前回の下端が床の上にあった場合
+				{
+					if (tileTop < candidateTop)
+					{
+						candidateTop = min(candidateTop, tileTop);
+						// 一方通行床に当たったフラグを立てる
+						hitOneWay = true;
+					}
+				}
+			}
+		}
+		if (hitOneWay)
+		{
+			tryPosY.y = candidateTop - kPlayerHeight * 0.5f;
+			frags.isHitGround = true; // 床に当たったフラグを立てる
+			m_velocity.y = 0.0f; // Y方向の速度を0にする
+			dy = tryPosY.y - m_pos.y; // 移動量を修正
+			m_frameCount = 0; // 時間経過をリセット
+		}
+	}
+	
+
+	// 実際の座標に反映
+	m_pos.y = tryPosY.y;
+
+	// 状態の更新
+	m_isGround = frags.isHitGround;
+
+	if (m_barrierPos.isActive)
+	{
+		if (m_pos.x >= m_barrierPos.pos.x)
+		{
+			m_pos.x = m_barrierPos.pos.x;
+		}
+	}
+
+	m_colCircle.pos = m_pos; // 円の座標更新
+	m_colRect.pos = m_pos; // 矩形の座標更新
+	m_prevPosY = m_pos.y; // 前回のY座標を更新
+}
+
 void Player::EntryDraw()
 {
 	// 経過時間が登場時間を超えたら
@@ -665,6 +913,19 @@ void Player::MissDraw()
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 
 	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Miss!", 0xffffff);
+#ifdef _DEBUG
+	m_colCircle.Draw(drawX, drawY);
+	m_colRect.Draw(drawX, drawY);
+#endif
+}
+
+void Player::AutoMoveDraw()
+{
+	auto camera = m_pCamera.lock();
+	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
+	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
+	
+	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);

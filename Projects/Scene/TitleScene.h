@@ -5,6 +5,7 @@
 class Bg;
 class Map;
 class Camera;
+class Player;
 class SoundManager;
 class UIManager;
 class EffectManager;
@@ -54,6 +55,7 @@ private:
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャークラス
 	std::shared_ptr<UIManager> m_pUIManager; // UIマネージャークラス
 	std::shared_ptr<EffectManager> m_pEffectManager; 
+	std::shared_ptr<Player> m_pTitlePlayer; // タイトル画面専用のプレイヤー
 
 };
 

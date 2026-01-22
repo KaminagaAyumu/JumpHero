@@ -12,6 +12,7 @@
 #include "../Utility/Sound/SoundManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Game/Effect/EffectManager.h"
+#include "../Game/Player.h"
 #include "../Utility/Application.h"
 #include <string>
 #include "DxLib.h"
@@ -23,6 +24,9 @@ namespace
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
 	constexpr int kStartTextMargin = 50; // スタート方法を示すテキストの表示位置調整
+
+	const Size kTitleLogoSize = { 1280,720 };
+	const Position2 kTitleLogoPos = { 0, 0 };
 }
 
 
@@ -44,7 +48,16 @@ m_drawFunc(&TitleScene::FadeDraw)
 	auto test = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2 + kStartTextMargin});
 
+	m_pUIManager->CreateImage(Types::ImageType::TitleLogo, kTitleLogoSize, kTitleLogoPos);
+
 	m_pEffectManager = std::make_shared<EffectManager>();
+
+	m_pTitlePlayer = std::make_shared<Player>(m_pMap);
+	m_pTitlePlayer->SetCamera(m_pCamera);
+	m_pTitlePlayer->InitAuto();
+	
+	m_pCamera->SetTargetProvider([this]() {return m_pTitlePlayer->GetPos(); });
+	m_pCamera->Init();
 }
 
 TitleScene::~TitleScene()
@@ -64,7 +77,13 @@ void TitleScene::Draw()
 
 void TitleScene::FadeInUpdate(Input& input)
 {
+	// カメラの更新
+	m_pCamera->Update();
+
+	m_pTitlePlayer->Update(input);
+
 	m_frameCount--;
+
 	if (m_frameCount <= 0)
 	{
 		// フェードイン完了
@@ -85,6 +104,8 @@ void TitleScene::NormalUpdate(Input& input)
 
 	m_bg->Update();
 	m_pMap->Update();
+
+	m_pTitlePlayer->Update(input);
 
 	// STARTボタンもしくはAボタンが押されたら
 	if (input.IsTriggered("OK"))
@@ -117,17 +138,21 @@ void TitleScene::FadeOutUpdate(Input& input)
 
 void TitleScene::NormalDraw()
 {
+	
+
+	m_bg->Draw(m_pCamera);
+	m_pMap->Draw(m_pCamera);
+
 	DrawRotaGraph(
-		Game::kScreenWidth / 2,
-		Game::kScreenHeight / 2,
+		Game::kScreenWidth,
+		Game::kScreenHeight,
 		1.0f,
 		0.0f,
 		m_titleImageHandle,
 		TRUE
 	);
 
-	m_bg->Draw(m_pCamera);
-	m_pMap->Draw(m_pCamera);
+	m_pTitlePlayer->Draw();
 
 	m_pUIManager->Draw();
 
@@ -158,6 +183,9 @@ void TitleScene::FadeDraw()
 		m_titleImageHandle,
 		TRUE
 	);*/
+
+	m_pTitlePlayer->Draw();
+
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * rate));

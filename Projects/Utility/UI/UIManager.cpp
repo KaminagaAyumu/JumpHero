@@ -35,6 +35,7 @@ namespace
 	// 画像ファイル名の配列
 	const std::wstring kImageFileName[] =
 	{
+		L"data/img/title_logo.png", // タイトルロゴ
 		L"data/img/player_icon.png", // プレイヤーのアイコン
 		L"data/img/change_to_coin_icon.png", // 敵をコインに変えるアイテムのアイコン
 	};
