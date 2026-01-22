@@ -32,8 +32,8 @@ SelectScene::SelectScene(SceneController& controller) :
 {
 	m_frameCount = kFadeInterval;
 	m_soundManager = Application::GetInstance().GetSoundManager();
-	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/cursorSE.mp3", SoundBus::SE, 1.0f, false);
-	m_soundManager->LoadSoundClip("ok_se", L"data/sound/okSE.mp3", SoundBus::SE, 1.0f, false);
+	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
+	m_soundManager->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
 
 	m_pUIManager = std::make_unique<UIManager>();
 

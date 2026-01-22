@@ -108,7 +108,7 @@ m_fadeColor(0x000000)
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
 	m_pSoundManager = Application::GetInstance().GetSoundManager();
-	m_pSoundManager->LoadSoundClip("game", L"data/sound/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
+	m_pSoundManager->LoadSoundClip("game", L"data/sound/BGM/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
 	m_pSoundManager->CrossFadeBGM("game", 120.0f);
 
 	m_pPositionRegistry = std::make_unique<PositionRegistry>();
