@@ -35,7 +35,7 @@ namespace
 
 	// 演出関連
 	constexpr float	kItemWarningRate		= 0.20f;	// アイテム化が終わりそうなことを示す時間の割合
-	constexpr float kWarningFrashCycle		= 0.15f;	// 点滅の周期
+	constexpr float kWarningFrashCycle		= 0.20f;	// 点滅の周期
 	constexpr int	kMaxFadeRate			= 255;		// フェード率の最大値
 
 	// アニメーション関連
@@ -113,6 +113,7 @@ void TransformEnemy::ChangeToItem(int time)
 	m_drawFunc = &TransformEnemy::ItemDraw;
 	m_itemFormTime = time;
 	m_maxItemFormTime = time;
+	m_lastAnim = m_currentAnim; // 前のフォームのアニメーションを保存
 	return; // 念のためreturn
 }
 
@@ -275,6 +276,8 @@ void TransformEnemy::SkullUpdate(Input&)
 
 void TransformEnemy::ItemUpdate(Input&)
 {
+	// 前回のフォームのアニメーションを更新
+	m_lastAnim.Update();
 	// アイテム化時間を減らしていって、時間に達したら
 	if (--m_itemFormTime <= 0)
 	{
@@ -413,7 +416,12 @@ void TransformEnemy::ItemDraw()
 	{
 		// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 		auto sinRate = 1.0f - sinf(m_itemFormTime / (m_maxItemFormTime * kItemWarningRate * kWarningFrashCycle) * DX_PI_F * 2);
-		auto rate = static_cast<float>(m_itemFormTime) / (m_maxItemFormTime * kItemWarningRate) / 2;
+		//auto rate = static_cast<float>(m_itemFormTime) / (m_maxItemFormTime * kItemWarningRate) / 2;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * sinRate));
+		m_lastAnim.Draw({ drawX, drawY }, m_isRightDirection);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		sinRate = sinf(m_itemFormTime / (m_maxItemFormTime * kItemWarningRate * kWarningFrashCycle) * DX_PI_F * 2);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(kMaxFadeRate * sinRate));
 		m_currentAnim.Draw({ drawX, drawY }, m_isRightDirection);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

@@ -133,6 +133,8 @@ private:
 	EnemyForm m_currentForm; // 現在の敵の姿
 	EnemyForm m_nextForm; // 変わる姿
 
+	Animation m_lastAnim; // 1つ前の状態のアニメーションを保存する
+
 	// 時間カウンタ(状態が変わるごとにリセットする)
 	int m_frameCount;
 
