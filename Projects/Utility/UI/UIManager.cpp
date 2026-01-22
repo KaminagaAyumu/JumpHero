@@ -7,6 +7,7 @@
 #include "UIGauge.h"
 #include "UIImage.h"
 #include "DxLib.h"
+#include <cassert>
 
 namespace
 {
@@ -26,15 +27,35 @@ namespace
 	// 大サイズのフォントハンドルの設定
 	constexpr int kLargeFontSize		= 60;	// 文字の大きさ
 	constexpr int kLargeFontEdgeSize	= 2; 	// 文字の縁取りの大きさ
+
+	//----------------
+	// 画像データ関連
+	//----------------
+
+	// 画像ファイル名の配列
+	const std::wstring kImageFileName[] =
+	{
+		L"data/img/player_icon.png", // プレイヤーのアイコン
+		L"data/img/change_to_coin_icon.png", // 敵をコインに変えるアイテムのアイコン
+	};
+
+	// 画像枚数が違うときにエラーを出せるようにする
+	static_assert(static_cast<int>(Types::ImageType::ImageNum) == _countof(kImageFileName), "画像枚数の定義が間違っています");
 }
+
+
 
 UIManager::UIManager()
 {
 	// UIコンテナを初期化
 	m_pUIElements.clear();
+	m_imageHandles.clear();
 
 	// フォントデータを読み込んで設定
 	LoadFonts();
+
+	// 画像データを読み込んで設定
+	LoadImages();
 
 	m_windowGraphHandle = LoadGraph(L"data/frame.png");
 
@@ -44,10 +65,18 @@ UIManager::UIManager()
 
 UIManager::~UIManager()
 {
+	// フォントのハンドルを開放
 	for (auto& handle : m_fontHandles)
 	{
 		DeleteFontToHandle(handle);
 	}
+
+	// imageのハンドルを解放
+	for (auto& image : m_imageHandles)
+	{
+		DeleteGraph(image);
+	}
+
 	DeleteGraph(m_windowGraphHandle);
 	DeleteGraph(m_gaugeFrameHandle);
 	DeleteGraph(m_gaugeFillHandle);
@@ -135,10 +164,10 @@ std::weak_ptr<UIGauge> UIManager::CreateGauge(const Size& size, const Position2&
 	return ptr;
 }
 
-std::weak_ptr<UIImage> UIManager::CreateImage(int handle, const Size& size, const Position2& pos)
+std::weak_ptr<UIImage> UIManager::CreateImage(Types::ImageType type, const Size& size, const Position2& pos)
 {
 	auto ptr = std::make_shared<UIImage>();
-	ptr->Init(handle, size, pos);
+	ptr->Init(m_imageHandles[static_cast<int>(type)], size, pos);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }
@@ -183,4 +212,14 @@ void UIManager::LoadFonts()
 	);
 	// ハンドルを格納
 	m_fontHandles.push_back(handle);
+}
+
+void UIManager::LoadImages()
+{
+	for (int i = 0; i < static_cast<int>(Types::ImageType::ImageNum); i++)
+	{
+		int graphHandle = LoadGraph(kImageFileName[i].c_str());
+		assert(graphHandle != -1 && "UI画像の読み込みに失敗しました");
+		m_imageHandles.push_back(graphHandle);
+	}
 }

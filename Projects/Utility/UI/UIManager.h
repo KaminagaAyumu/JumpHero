@@ -86,14 +86,15 @@ public:
 	/// <summary>
 	/// 画像を作成する関数
 	/// </summary>
-	/// <param name="handle"></param>
+	/// <param name="type"></param>
 	/// <param name="size"></param>
 	/// <param name="pos"></param>
 	/// <returns></returns>
-	std::weak_ptr<UIImage> CreateImage(int handle, const Size& size, const Position2& pos);
+	std::weak_ptr<UIImage> CreateImage(Types::ImageType type, const Size& size, const Position2& pos);
 
 private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列
+	std::vector<int> m_imageHandles; // イメージ画像データを格納する配列
 	int m_windowGraphHandle; // ウィンドウの画像ハンドル
 
 	int m_gaugeFrameHandle; // ゲージの枠ハンドル
@@ -105,6 +106,11 @@ private:
 	/// フォントをロードする関数(初期化時に呼ぶ)
 	/// </summary>
 	void LoadFonts();
+
+	/// <summary>
+	/// 画像データをロードする(初期化時に呼ぶ)
+	/// </summary>
+	void LoadImages();
 
 };
 

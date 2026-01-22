@@ -35,6 +35,9 @@ namespace
 	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
 
+	const Size kCoinIconSize = { 40,40 };
+	const Position2 kCoinIconPos = { 35.0f, 50.0f };
+
 	const Position2 kSpawnFlotingItemPos{ 200.0f,200.0f };
 }
 
@@ -72,6 +75,8 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 		});
 
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
+
+	m_pUIManager->CreateImage(Types::ImageType::ChangeCoinIcon, kCoinIconSize, kCoinIconPos);
 
 	m_pTextManager = std::make_unique<TextManager>();
 

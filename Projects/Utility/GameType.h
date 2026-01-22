@@ -5,12 +5,22 @@ class Actor;
 // オブジェクト(Actor)の区別をつける列挙体など
 namespace Types
 {
+	/// <summary>
+	/// フォントのサイズなどをまとめる列挙体
+	/// </summary>
 	enum class FontType : int
 	{
 		Small,
 		Midium,
 		Large,
 		Default
+	};
+
+	enum class ImageType : int
+	{
+		PlayerIcon,
+		ChangeCoinIcon,
+		ImageNum,
 	};
 
 	/// <summary>

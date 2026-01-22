@@ -90,7 +90,7 @@ m_fadeColor(0x000000)
 
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
 
-	m_pUIManager->CreateImage(m_changeToCoinIconHandle, kCoinIconSize, kCoinIconPos);
+	m_pUIManager->CreateImage(Types::ImageType::ChangeCoinIcon, kCoinIconSize, kCoinIconPos);
 
 	m_pTextManager = std::make_unique<TextManager>();
 	
