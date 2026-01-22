@@ -665,6 +665,17 @@ void Player::MissUpdate(Input&)
 
 void Player::AutoMoveUpdate(Input&)
 {
+	//if (ジャンプの条件)
+	//{
+	//	m_direction = { 0.0f,1.0f }; // ジャンプの方向を上向きにする
+	//	m_velocity = { 0.0f, kJumpPower }; // ジャンプの力を加える
+	//	m_isHover = false; // 空中で浮いたかどうかをリセット
+	//	m_isGround = false; // ジャンプしたので地面についていないとする
+	//	m_isJumpStart = true; // ジャンプ開始フラグをtrueにする
+	//	m_frameCount = 0; // 時間経過をリセット
+	//}
+	
+
 	float dx = 0.0f; // X軸の未来の移動量
 	// 左右移動の処理
 	const bool movingLeft = false;
@@ -679,15 +690,13 @@ void Player::AutoMoveUpdate(Input&)
 		m_isWalk = false;
 	}
 
-	if (movingLeft) // 左ボタンが押されている時
+	if (m_isTurn)
 	{
 		dx -= kNormalMoveSpeed; // 左に移動
-		m_isTurn = true;
 	}
-	if (movingRight) // 右ボタンが押されている時
+	else
 	{
 		dx += kNormalMoveSpeed; // 右に移動
-		m_isTurn = false;
 	}
 
 	// 重力の処理
@@ -835,6 +844,15 @@ void Player::AutoMoveUpdate(Input&)
 
 	// 状態の更新
 	m_isGround = frags.isHitGround;
+
+	if (frags.isHitLeft)
+	{
+		m_isTurn = false;
+	}
+	if (frags.isHitRight)
+	{
+		m_isTurn = true;
+	}
 
 	if (m_barrierPos.isActive)
 	{
