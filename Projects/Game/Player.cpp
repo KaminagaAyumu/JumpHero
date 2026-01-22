@@ -138,6 +138,8 @@ void Player::Init()
 	m_isJumpStart = false;
 	m_isFreeze = false;
 	m_isAttackable = false;
+	m_isWalk = false;
+	m_isTurn = false;
 	m_update = &Player::EntryUpdate;
 	m_draw = &Player::EntryDraw;
 	AnimationLoader::LoadAnimationData(L"data/animation/player.csv", m_graphHandle, m_animations);
@@ -178,6 +180,8 @@ void Player::InitAuto()
 	m_isJumpStart = false;
 	m_isFreeze = false;
 	m_isAttackable = false;
+	m_isWalk = false;
+	m_isTurn = false;
 	m_update = &Player::AutoMoveUpdate;
 	m_draw = &Player::AutoMoveDraw;
 	AnimationLoader::LoadAnimationData(L"data/animation/player.csv", m_graphHandle, m_animations);
@@ -643,7 +647,9 @@ void Player::MissUpdate(Input&)
 	}
 
 	// 重力とジャンプの速度を加える
-	m_pos.y += m_velocity.y * m_direction.y + kGravity * m_frameCount * 0.5f;
+	m_velocity.y += kGravity;
+
+	m_pos.y += m_velocity.y;
 
 	// プレイヤーの中心Y座標が画面下を超えたら
 	if (m_pos.y >= Game::kScreenHeight)
