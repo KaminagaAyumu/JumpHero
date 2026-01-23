@@ -31,11 +31,19 @@ public:
 	virtual ~GameManager();
 
 	/// <summary>
-	/// 初期化処理
+	/// ゲーム開始時の初期化処理
 	/// </summary>
 	/// <param name="isTutorial">チュートリアルかどうかを判別する(trueならチュートリアル)</param>
 	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager,  std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial);
-	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager); // 一旦マップを取得するだけで使う
+	
+	/// <summary>
+	/// ミニゲーム開始時の初期化処理
+	/// </summary>
+	/// <param name="map">現在のシーンのマップ</param>
+	/// <param name="camera">現在のシーンのカメラ</param>
+	/// <param name="effectManager">現在のシーンのエフェクトマネージャー</param>
+	/// <param name="actors">現在のシーンのアクターコンテナ</param>
+	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::vector<std::weak_ptr<Actor>>& actors);
 	void Update(Input& input);
 	void Draw() const;
 

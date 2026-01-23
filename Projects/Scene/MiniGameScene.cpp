@@ -83,7 +83,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 	m_pEffectManager->SetCamera(m_pCamera);
 
-	m_pGameManager->MiniGameInit(m_pMap,m_pCamera,m_pEffectManager);
+	m_pGameManager->MiniGameInit(m_pMap,m_pCamera,m_pEffectManager,m_pActors);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 	m_pCamera->Init();

@@ -118,7 +118,7 @@ void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std
 	m_isTutorial = isTutorial;
 }
 
-void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager)
+void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::vector<std::weak_ptr<Actor>>& actors)
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
@@ -130,6 +130,8 @@ void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> cam
 	m_pChestManager->Init(camera);
 	m_pItemManager->Init(camera);
 	m_pItemManager->FirstSpawnItem(map);
+	m_pItemManager->PushActors(actors);
+
 	m_balloonNum = 0; // 取得した風船の数をリセット
 	m_balloonCounter = 0; // 風船カウンタをリセット
 	m_totalBalloonNum = m_pItemManager->GetFirstBalloonNum(); // 風船の総数を改めて取得
