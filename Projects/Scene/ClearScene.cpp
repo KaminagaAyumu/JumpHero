@@ -42,12 +42,13 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 	m_updateFunc(&ClearScene::FadeInUpdate),
 	m_drawFunc(&ClearScene::FadeDraw),
 	m_fadeColor(0xffffff),
-	m_resultScore(0),
-	m_gameScore(0)
+	m_resultScore(0)
 {
 	m_frameCount = kFadeInterval;
 
 	m_stageNo = stageNo;
+
+	m_gameScore = m_pGameManager->GetCurrentScore();
 
 	m_pUIManager = std::make_shared<UIManager>();
 
@@ -126,7 +127,7 @@ void ClearScene::NormalUpdate(Input& input)
 {
 	m_pUIManager->Update();
 
-	m_gameScore = m_pGameManager->GetCurrentScore();
+	
 
 	// スコアの更新処理
 	if (m_resultScore < m_gameScore) // リザルト表示スコアがゲームで獲得したスコアより小さい場合
