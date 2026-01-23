@@ -15,9 +15,10 @@ namespace
 	enum
 	{
 		kEffectCoinGet, // コイン取得
-		kEffectImpact,
-		kEffectStar,
-		kEffectPowerUp,
+		kEffectImpact, // 強化メダル
+		kEffectStar, // コイン化アイテム
+		kEffectPowerUp, // パワーアップ
+		kEffectJump, // ジャンプ
 		kEffectNum
 	};
 
@@ -28,6 +29,7 @@ namespace
 		L"data/effect/impact.efk", // 強化メダル
 		L"data/effect/star.efk", // 強化メダル
 		L"data/effect/powerup.efk", // パワーアップ
+		L"data/effect/jump.efk", // ジャンプ
 	};
 
 	// エフェクトデータの数が違うときにエラーを出せるようにする

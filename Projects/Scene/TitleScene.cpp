@@ -120,7 +120,7 @@ void TitleScene::NormalUpdate(Input& input)
 	}
 	if (input.IsTriggered("Up"))
 	{
-		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::CoinGet, { 400,400 });
+		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::Jump, { 400,400 });
 	}
 	
 }

@@ -73,5 +73,6 @@ namespace Types
 		Impact, // 爆発エフェクト
 		Star, // 星エフェクト
 		PowerUp, // パワーアップ時のエフェクト
+		Jump, // ジャンプ時のエフェクト
 	};
 }
