@@ -49,10 +49,18 @@ private:
 	bool m_isAlive; // 存在フラグ
 	bool m_isCenter; // 中央ぞろえでテキストを表示するかどうか
 
+	std::wstring m_wText; // 文字数を数えやすいようにワイド文字列にする
+	int m_visibleTextNum; // 1文字ずつ表示する際に使う(現在の文字数)
+	int m_typeFrame; // タイプ表示のフレーム数
+
 	/// <summary>
 	/// プロバイダからテキストデータを変更する
 	/// </summary>
 	void CheckProvider();
 
+	/// <summary>
+	/// 1文字ずつ出す文字を更新する
+	/// </summary>
+	void UpdateTypewriter();
 };
 

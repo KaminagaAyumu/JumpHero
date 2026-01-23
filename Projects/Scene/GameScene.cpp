@@ -114,6 +114,7 @@ m_fadeColor(0x000000)
 	start->SetProvider([this]() {
 		return "Ready...Go!";
 		});
+	start->ShowTypewriter(5,false);
 
 	m_pTextManager = std::make_unique<TextManager>();
 	
