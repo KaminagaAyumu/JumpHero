@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	/// <param name="map">マップのデータ</param>
 	/// <param name="gameManager">ゲームマネージャーのデータ</param>
-	Player(std::weak_ptr<Map> map, GameManager* gameManager);
+	Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager);
 
 	/// <summary>
 	/// 自動で動くときに呼ぶコンストラクタ
@@ -133,8 +133,8 @@ private:
 	// マップのポインタ
 	std::weak_ptr<Map> m_pMap;
 
-	// ゲームマネージャーの生ポインタ
-	GameManager* m_pGameManager;
+	// ゲームマネージャーのポインタ
+	std::weak_ptr<GameManager> m_pGameManager;
 
 	/// <summary>
 	/// 当たっているかどうか

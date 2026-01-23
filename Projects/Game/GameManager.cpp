@@ -98,7 +98,7 @@ void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
 	m_pEffectManager = effectManager;
-	m_pPlayer = std::make_shared<Player>(map, this);
+	m_pPlayer = std::make_shared<Player>(map, weak_from_this());
 	m_pPlayer->SetCamera(camera);
 	m_pPlayer->Init();
 	m_pChestManager = std::make_unique<ChestManager>(camera, this);

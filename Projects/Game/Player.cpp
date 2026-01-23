@@ -52,7 +52,7 @@ namespace
 	constexpr int	kAutoWaitFrame = 300;			// プレイヤーが自動で動くときに待つ時間
 }
 
-Player::Player(std::weak_ptr<Map> map, GameManager* gameManager) :
+Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 	Actor(Types::ActorType::Player),
 	m_direction{},
 	m_velocity{},
@@ -512,8 +512,9 @@ void Player::CheckHitToChest(Input& input)
 			chestY = y;
 			if(IsOpenChestX()) // 宝箱が横から開けられる時
 			{
+				auto gameManager = m_pGameManager.lock();
 				// 宝箱を開ける
-				m_pGameManager->OpenChestToPosition(chestX, chestY);
+				gameManager->OpenChestToPosition(chestX, chestY);
 			}
 			break;
 		}
@@ -541,8 +542,9 @@ void Player::CheckHitToChest(Input& input)
 #endif 
 			if (IsOpenChestX()) // 宝箱が横から開けられる時
 			{
+				auto gameManager = m_pGameManager.lock();
 				// 宝箱を開ける
-				m_pGameManager->OpenChestToPosition(chestX, chestY);
+				gameManager->OpenChestToPosition(chestX, chestY);
 			}
 			break;
 		}
@@ -597,8 +599,9 @@ void Player::JumpUpdate(Input& input)
 
 	if (input.IsTriggered("PowerUp")) // パワーアップボタンが押されたとき
 	{
+		auto gameManager = m_pGameManager.lock();
 		// パワーアップ処理を行う
-		m_pGameManager->PowerUpPlayer();
+		gameManager->PowerUpPlayer();
 	}
 
 	if (input.IsTriggered("Jump")) // 再びジャンプボタンが押されたら
@@ -615,8 +618,9 @@ void Player::GroundUpdate(Input& input)
 {
 	if (input.IsTriggered("PowerUp")) // パワーアップボタンが押されたとき
 	{
+		auto gameManager = m_pGameManager.lock();
 		// パワーアップ処理を行う
-		m_pGameManager->PowerUpPlayer();
+		gameManager->PowerUpPlayer();
 	}
 	if (input.IsTriggered("Jump") && m_isGround) // ジャンプボタンが押されたとき
 	{
@@ -624,8 +628,9 @@ void Player::GroundUpdate(Input& input)
 		Position2Int chestPos;
 		if (IsOnChestTop(chestPos)) // 宝箱の上にいる時
 		{
+			auto gameManager = m_pGameManager.lock();
 			// 宝箱を開ける
-			m_pGameManager->OpenChestToPosition(chestPos.x, chestPos.y);
+			gameManager->OpenChestToPosition(chestPos.x, chestPos.y);
 		}
 		return;
 	}
@@ -1037,7 +1042,8 @@ void Player::JumpStart()
 	m_isJumpStart = true; // ジャンプ開始フラグをtrueにする
 	m_frameCount = 0; // 時間経過をリセット
 	m_jumpCount--; // ジャンプ回数を減らす
-	m_pGameManager->AddScore(kJumpAddScore); // スコアを加算
+	auto gameManager = m_pGameManager.lock();
+	gameManager->AddScore(kJumpAddScore); // スコアを加算
 	m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 }
@@ -1056,7 +1062,8 @@ void Player::MissStart()
 	m_isGround = false; // 一応ジャンプするので地面についていないとする
 	m_isMiss = true; // ミスフラグをtrueにする
 	m_frameCount = 0; // 時間経過をリセット
-	m_pGameManager->LifeDown(); // 残機を減らす処理を呼ぶ
+	auto gameManager = m_pGameManager.lock();
+	gameManager->LifeDown(); // 残機を減らす処理を呼ぶ
 	m_update = &Player::MissUpdate; // 更新処理をミス状態に
 	m_draw = &Player::MissDraw;// 描画処理をミス状態に
 }
@@ -1082,7 +1089,8 @@ bool Player::PowerUp()
 	else if (m_level == kPowerUpLevelMax) // 2段階目なら
 	{
 		m_jumpCount = kJumpLimitNumLevelMax; // 25回ジャンプするまでパワーアップ継続
-		m_pGameManager->ChangeEnemyToCoin(); // 敵をアイテムに変える処理を呼ぶ
+		auto gameManager = m_pGameManager.lock();
+		gameManager->ChangeEnemyToCoin(); // 敵をアイテムに変える処理を呼ぶ
 	}
 	m_isLevelDown = false; // レベルが下がったかどうかの判定を可能にする
 
