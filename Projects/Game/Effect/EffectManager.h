@@ -12,7 +12,6 @@ class Camera;
 class EffectManager
 {
 public:
-	EffectManager();
 	EffectManager(std::shared_ptr<EffekseerResourceManager> effectResourceManager);
 	virtual ~EffectManager();
 
