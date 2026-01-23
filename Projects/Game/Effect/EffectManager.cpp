@@ -10,8 +10,6 @@
 
 namespace
 {
-	constexpr int kBallonChipNo = 33; // 風船のマップチップ番号
-
 	// エフェクトデータを識別するためのenum
 	enum
 	{
