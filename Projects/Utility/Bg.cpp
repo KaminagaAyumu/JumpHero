@@ -29,7 +29,7 @@ Bg::Bg() :
 	handle = LoadGraph(L"data/background_6.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
-	handle = LoadGraph(L"data/bg_underground.png");
+	handle = LoadGraph(L"data/img/bg_underground.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
 
