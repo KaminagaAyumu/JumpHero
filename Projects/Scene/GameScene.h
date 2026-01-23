@@ -99,7 +99,7 @@ private:
 	
 	std::weak_ptr<UIGauge> m_pPowerUpTimeGauge; // 敵をコインに変える制限時間をわかるようにするUI
 
-
+	std::weak_ptr<UIFormatText> m_pStartText; // ゲーム開始時に表示するテキスト
 
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを管理するために取得
 
