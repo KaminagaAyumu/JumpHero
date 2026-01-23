@@ -7,6 +7,7 @@ class TextManager;
 class UIManager;
 class UISelectList;
 class UITextWindow;
+class EffectManager;
 
 /// <summary>
 /// セレクトシーン
@@ -54,6 +55,8 @@ private:
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを使用するためのポインタ
 
 	std::unique_ptr<UIManager> m_pUIManager; // UIを使用するためのポインタ
+
+	std::shared_ptr<EffectManager> m_pEffectManager; // エフェクトを管理するためのポインタ
 
 	std::weak_ptr<UISelectList> m_pSelectList; // 選択できるリストを管理するためのポインタ
 

@@ -1,5 +1,12 @@
 ﻿#include "SceneController.h"
 #include "SceneBase.h"
+#include "../Game/Effect/EffekseerResourceManager.h"
+#include "EffekseerForDxLib.h"
+
+SceneController::SceneController()
+{
+	m_pEffekseerResourceManager = std::make_shared<EffekseerResourceManager>();
+}
 
 void SceneController::ChangeScene(std::shared_ptr<SceneBase> scene)
 {
@@ -41,6 +48,7 @@ void SceneController::Update(Input& input)
 {
 	// 最後に追加されたシーンの更新処理のみ行う
 	m_scenes.back()->Update(input);
+	UpdateEffekseer2D();
 }
 
 void SceneController::Draw()
@@ -50,4 +58,10 @@ void SceneController::Draw()
 	{
 		scene->Draw();
 	}
+	DrawEffekseer2D();
+}
+
+std::shared_ptr<EffekseerResourceManager> SceneController::GetEffekseerResourceManager() const
+{
+	return m_pEffekseerResourceManager;
 }

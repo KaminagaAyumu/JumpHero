@@ -8,18 +8,30 @@ class Camera;
 class EffekseerEffect
 {
 public:
-	EffekseerEffect(int handle, const Position2& pos);
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	EffekseerEffect();
 	~EffekseerEffect();
+
+	/// <summary>
+	/// カメラが存在しない場合の初期化処理
+	/// </summary>
+	/// <param name="handle">エフェクトのリソースハンドル</param>
+	/// <param name="pos">エフェクトを表示する座標</param>
+	void Init(int handle, const Position2& pos);
+
+	/// <summary>
+	/// カメラが存在する場合の初期化処理
+	/// </summary>
+	/// <param name="handle">エフェクトのリソースハンドル</param>
+	/// <param name="pos">エフェクトを表示する座標</param>
+	/// <param name="camera">カメラのポインタ</param>
+	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera);
 
 	void Update();
 
 	bool IsAlive()const;
-
-	/// <summary>
-	/// カメラをセットする
-	/// </summary>
-	/// <param name="camera"></param>
-	void SetCamera(std::weak_ptr<Camera> camera) { m_pCamera = camera; }
 
 private:
 	int m_effect; // 実際に表示するエフェクト
@@ -27,5 +39,10 @@ private:
 	Position2 m_pos; // 表示する座標
 
 	std::weak_ptr<Camera> m_pCamera; // カメラがある際に使う
+
+	/// <summary>
+	/// 座標を初期化する
+	/// </summary>
+	void InitPos();
 };
 

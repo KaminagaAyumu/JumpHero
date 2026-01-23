@@ -80,7 +80,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 
 	m_pTextManager = std::make_unique<TextManager>();
 
-	m_pEffectManager = std::make_shared<EffectManager>();
+	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 	m_pEffectManager->SetCamera(m_pCamera);
 
 	m_pGameManager->MiniGameInit(m_pMap,m_pCamera,m_pEffectManager);

@@ -1,6 +1,4 @@
-﻿#include <map>
-#include <string>
-#include "EffekseerResourceManager.h"
+﻿#include "EffekseerResourceManager.h"
 #include "EffekseerForDXLib.h"
 #include <cassert>
 
@@ -14,16 +12,15 @@ int EffekseerResourceManager::LoadEffect(const std::wstring& path)
 	// エフェクトのパスがすでにロード済みの場合
 	if (m_effekseerResources.contains(path))
 	{
-		auto ref = m_effekseerResources[path];
-		ref.refCounter++; // 参照カウンタを増やす
-		return ref.handle;
+		m_effekseerResources[path].refCounter++;
+		return m_effekseerResources[path].handle;
 	}
 	else
 	{
-		int handle = LoadEffekseerEffect(path.c_str()); // ハンドルを作成
-		m_effekseerResources[path].handle = handle; // ハンドルを設定
-		m_effekseerResources[path].refCounter = kResourceExist; // 参照カウンタを追加
-		return handle;
+		m_effekseerResources[path].refCounter = kResourceExist;
+		m_effekseerResources[path].handle = LoadEffekseerEffect(path.c_str());
+		assert(m_effekseerResources[path].handle >= 0 && "エフェクトのパスが存在しません");
+		return m_effekseerResources[path].handle;
 	}
 }
 

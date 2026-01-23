@@ -49,6 +49,10 @@ bool Application::Init()
 	// 画面のサイズ変更
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum);
 
+	// DirectX11を使用するようにする。
+		// Effekseerを使用するには必ず設定する。
+	SetUseDirect3DVersion(DX_DIRECT3D_11);
+
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
 		return false;			// エラーが起きたら直ちに終了
@@ -61,10 +65,6 @@ bool Application::Init()
 	//------------------------------//
 	// エフェクト関連の初期化
 	//------------------------------//
-
-	// DirectX11を使用するようにする。
-		// Effekseerを使用するには必ず設定する。
-	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
 	// Effekseerを初期化する。
 	// 引数には画面に表示する最大パーティクル数を設定する。
@@ -86,6 +86,9 @@ bool Application::Init()
 
 	// Effekseerに2D描画の設定をする。
 	Effekseer_Set2DSetting(Game::kScreenWidth, Game::kScreenHeight);
+
+	// Effekseerの歪み機能を有効にする。
+	Effekseer_InitDistortion();
 
 	// Zバッファを有効にする。
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。

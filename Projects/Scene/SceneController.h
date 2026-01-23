@@ -4,6 +4,7 @@
 // プロトタイプ宣言
 class Input; // シーンからUpdateを呼び出すため宣言
 class SceneBase; // シーンの切り替えを行うため宣言
+class EffekseerResourceManager; // エフェクトのリソースデータを取得するために宣言
 
 /// <summary>
 /// シーンを管理するクラス
@@ -11,6 +12,12 @@ class SceneBase; // シーンの切り替えを行うため宣言
 class SceneController
 {
 public:
+
+	/// <summary>
+	/// コンストラクタ
+	/// エフェクトリソースマネージャーを取得する
+	/// </summary>
+	SceneController();
 
 	/// <summary>
 	/// シーンを変更する
@@ -47,8 +54,15 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// エフェクシアエフェクトのリソースマネージャーを取得する
+	/// </summary>
+	/// <returns>リソースマネージャーのポインタ</returns>
+	std::shared_ptr<EffekseerResourceManager> GetEffekseerResourceManager() const;
+
 
 private:
 	std::list<std::shared_ptr<SceneBase>> m_scenes; // スタックに確保する用のシーン
+	std::shared_ptr<EffekseerResourceManager> m_pEffekseerResourceManager; // エフェクトのリソースを取得する際に使用
 };
 

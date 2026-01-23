@@ -72,7 +72,7 @@ m_fadeColor(0x000000)
 	m_pMap->Init();
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
-	m_pEffectManager = std::make_shared<EffectManager>();
+	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 	m_pEffectManager->SetCamera(m_pCamera);
 
 	m_pGameManager = std::make_shared<GameManager>();

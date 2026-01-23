@@ -3,6 +3,7 @@
 #include <memory>
 #include "EffectManager.h"
 #include "EffekseerEffect.h"
+#include "EffekseerResourceManager.h"
 #include <cassert>
 #include <string>
 #include "EffekseerForDxLib.h"
@@ -31,24 +32,27 @@ namespace
 	static_assert(kEffectNum == _countof(kGraphFileName), "エフェクト数の定義が間違っています");
 }
 
-EffectManager::EffectManager()
+EffectManager::EffectManager(std::shared_ptr<EffekseerResourceManager> effectResourceManager) : 
+	m_pEffekseerResourceManager(effectResourceManager)
 {
 	m_effekseerEffects.clear();
 
 	for (int i = 0; i < kEffectNum; i++)
 	{
-		int effectHandle = LoadEffekseerEffect(kGraphFileName[i].c_str());
-		assert(effectHandle != -1 && "エフェクトの読み込みに失敗しました");
-		m_effectHandles.push_back(effectHandle);
+		int handle = m_pEffekseerResourceManager->LoadEffect(kGraphFileName[i]);
+		m_effekseerResourceHandles.push_back(handle);
 	}
 }
 
 EffectManager::~EffectManager()
 {
-	for (auto& handle : m_effectHandles)
+	m_effekseerEffects.clear();
+
+	for (auto& effectHandle : m_effekseerResourceHandles)
 	{
-		DeleteEffekseerEffect(handle);
+		m_pEffekseerResourceManager->DeleteEffect(effectHandle);
 	}
+	m_effekseerResourceHandles.clear();
 }
 
 void EffectManager::Update()
@@ -64,7 +68,7 @@ void EffectManager::Update()
 	}
 
 	// Effekseerにより再生中のエフェクトを更新する。
-	UpdateEffekseer2D();
+	//UpdateEffekseer2D();
 
 	// Effekseerのエフェクトの削除処理
 	m_effekseerEffects.remove_if(
@@ -77,17 +81,20 @@ void EffectManager::Update()
 
 void EffectManager::Draw()
 {
-	// Effekseerにより再生中のエフェクトを描画する。
-	DrawEffekseer2D();
+	
 }
 
 void EffectManager::CreateEffekseerEffect(Types::EffectType type, const Position2& pos)
 {
-	auto effect = std::make_shared<EffekseerEffect>(m_effectHandles[(int)type], pos);
+	auto effect = std::make_shared<EffekseerEffect>();
 	// カメラがセットされている場合
 	if (auto camera = m_pCamera.lock())
 	{
-		effect->SetCamera(camera); // エフェクトにカメラをセットする
+		effect->Init(m_effekseerResourceHandles[(int)type], pos,camera);
+	}
+	else // カメラがセットされていない場合
+	{
+		effect->Init(m_effekseerResourceHandles[(int)type], pos);
 	}
 	m_effekseerEffects.push_back(effect);
 }

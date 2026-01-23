@@ -8,6 +8,7 @@
 #include "../Utility/Application.h"
 #include "../Utility/Sound/SoundManager.h"
 #include "../Game/TextManager.h"
+#include "../Game/Effect/EffectManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UISelectList.h"
 #include "../Utility/UI/UITextWindow.h"
@@ -36,6 +37,8 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_soundManager->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
 
 	m_pUIManager = std::make_unique<UIManager>();
+
+	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 
 	m_pTextManager = std::make_unique<TextManager>();
 
@@ -74,6 +77,7 @@ void SelectScene::Draw()
 void SelectScene::FadeInUpdate(Input&)
 {
 	m_frameCount--;
+	m_pEffectManager->Update();
 	if (m_frameCount <= 0)
 	{
 		// フェードイン完了
@@ -86,6 +90,9 @@ void SelectScene::FadeInUpdate(Input&)
 void SelectScene::NormalUpdate(Input& input)
 {
 	m_pUIManager->Update();
+
+	m_pEffectManager->Update();
+
 	if (input.IsTriggered("Down"))
 	{
 		m_soundManager->Play("cursor_se", 1.0f, true);
@@ -130,6 +137,8 @@ void SelectScene::NormalDraw()
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
 
 	m_pUIManager->Draw();
+
+	m_pEffectManager->Draw();
 
 #ifdef _DEBUG
 	DrawString(0, 0, L"SelectScene: NormalDraw", 0xffffff);

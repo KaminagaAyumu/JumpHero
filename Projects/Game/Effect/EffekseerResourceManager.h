@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <string>
+#include <map>
 
 /// <summary>
 /// Effekseerのデータを管理するクラス

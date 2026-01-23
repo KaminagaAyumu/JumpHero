@@ -50,7 +50,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 
 	m_pUIManager->CreateImage(Types::ImageType::TitleLogo, kTitleLogoSize, kTitleLogoPos);
 
-	m_pEffectManager = std::make_shared<EffectManager>();
+	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 
 	m_pTitlePlayer = std::make_shared<Player>(m_pMap);
 	m_pTitlePlayer->SetCamera(m_pCamera);
@@ -145,7 +145,6 @@ void TitleScene::NormalDraw()
 
 	m_pUIManager->Draw();
 
-	// Effekseerにより再生中のエフェクトを描画する。
 	m_pEffectManager->Draw();
 
 #ifdef _DEBUG

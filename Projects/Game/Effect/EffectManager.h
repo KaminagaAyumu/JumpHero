@@ -2,6 +2,7 @@
 #include "../../Utility/Geometry.h"
 #include "../../Utility/GameType.h"
 
+class EffekseerResourceManager;
 class EffekseerEffect;
 class Camera;
 
@@ -12,6 +13,7 @@ class EffectManager
 {
 public:
 	EffectManager();
+	EffectManager(std::shared_ptr<EffekseerResourceManager> effectResourceManager);
 	virtual ~EffectManager();
 
 	void Update();
@@ -28,7 +30,9 @@ public:
 
 private:
 	std::vector<int> m_effectHandles;
+	std::vector<int> m_effekseerResourceHandles;
 	std::list<std::shared_ptr<EffekseerEffect>> m_effekseerEffects;
+	std::shared_ptr<EffekseerResourceManager> m_pEffekseerResourceManager;
 	std::weak_ptr<Camera> m_pCamera; // 画面がスクロールする際に使う
 
 };
