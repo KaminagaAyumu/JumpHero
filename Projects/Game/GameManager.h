@@ -208,6 +208,12 @@ public:
 	float GetBalloonCounterRate()const;
 
 	/// <summary>
+	/// 敵のコイン化時間の割合を返す
+	/// </summary>
+	/// <returns>0.0f~1.0fの割合</returns>
+	float GetChangeToCoinTimeRate()const;
+
+	/// <summary>
 	/// 残機を1減らす(仮)
 	/// </summary>
 	void LifeDown() { m_life--; }

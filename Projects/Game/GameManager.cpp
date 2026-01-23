@@ -370,6 +370,11 @@ float GameManager::GetBalloonCounterRate() const
 	return static_cast<float>(m_balloonCounter) / kBalloonForChangeToCoin;
 }
 
+float GameManager::GetChangeToCoinTimeRate() const
+{
+	return m_pEnemyManager->GetItemTimeRate();
+}
+
 void GameManager::NotifyItemEvent(Types::ItemType type)
 {
 	m_itemPickEvent.push_back({ type, m_frameCount });

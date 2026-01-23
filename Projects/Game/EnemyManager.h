@@ -32,7 +32,13 @@ public:
 	/// <param name="actors">アクターコンテナの参照</param>
 	void PushActors(std::vector<std::weak_ptr<Actor>>& actors);
 
-	size_t GetEnemyNum();
+	size_t GetEnemyNum()const;
+
+	/// <summary>
+	/// アイテム化している時間の割合を取得する
+	/// </summary>
+	/// <returns></returns>
+	const float GetItemTimeRate()const;
 
 	/// <summary>
 	/// 敵をアイテムに変える処理
@@ -83,7 +89,7 @@ private:
 	/// 敵がアイテム化状態になっているか
 	/// </summary>
 	/// <returns>true : アイテム状態 false : アイテム状態以外</returns>
-	bool IsChangeToItem();
+	bool IsChangeToItem() const;
 };
 
 

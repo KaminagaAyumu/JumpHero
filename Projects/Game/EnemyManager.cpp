@@ -221,7 +221,7 @@ const Position2& EnemyManager::SearchNearestSpawnPosition(const Position2& playe
 	return nearestPos;
 }
 
-bool EnemyManager::IsChangeToItem()
+bool EnemyManager::IsChangeToItem()const
 {
 	// アイテム化状態のカウントが進んでいるときにtrueを返す
 	return m_itemTime > 0;
@@ -235,13 +235,28 @@ void EnemyManager::PushActors(std::vector<std::weak_ptr<Actor>>& actors)
 	}
 }
 
-size_t EnemyManager::GetEnemyNum()
+size_t EnemyManager::GetEnemyNum()const
 {
 	if (m_enemies.empty())
 	{
 		return 0;
 	}
 	return m_enemies.size();
+}
+
+const float EnemyManager::GetItemTimeRate()const
+{
+	// アイテム化している場合
+	if (IsChangeToItem())
+	{
+		// 残り時間の割合を計算して返す
+		return static_cast<float>(m_itemTime) / kChangeToItemTime;
+	}
+	else
+	{
+		// アイテム化していない場合は0にする
+		return 0.0f;
+	}
 }
 
 void EnemyManager::ChangeToItemAll()

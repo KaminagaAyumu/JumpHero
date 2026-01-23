@@ -96,6 +96,8 @@ private:
 	std::weak_ptr<UIFormatText> m_pLifeText; // 残機を表示するときに使用
 
 	std::weak_ptr<UIGauge> m_pDropItemGauge; // 敵をコインに変えるアイテムが出るかわかるようにするUI
+	
+	std::weak_ptr<UIGauge> m_pPowerUpTimeGauge; // 敵をコインに変える制限時間をわかるようにするUI
 
 
 
