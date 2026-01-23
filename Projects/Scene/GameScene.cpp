@@ -280,9 +280,8 @@ void GameScene::NormalDraw()
 
 void GameScene::FadeDraw()
 {
-	m_bg->Draw(m_pCamera);
-	m_pMap->Draw(m_pCamera);
-	m_pGameManager->Draw();
+	// 通常の描画を行う
+	NormalDraw();
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
 	auto rate = static_cast<float>(m_frameCount) / static_cast<float>(kFadeInterval);
