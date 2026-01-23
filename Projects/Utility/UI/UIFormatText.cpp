@@ -77,6 +77,10 @@ void UIFormatText::SetCenter()
 	m_isCenter = true;
 }
 
+void UIFormatText::ShowTypewriter(int typeFrame, bool isFadeOut)
+{
+}
+
 void UIFormatText::CheckProvider()
 {
 	// プロバイダがセットされていない場合処理を抜ける

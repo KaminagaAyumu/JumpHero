@@ -32,6 +32,13 @@ public:
 	/// </summary>
 	void SetCenter();
 
+	/// <summary>
+	/// 文字列を1文字ずつ表示する
+	/// </summary>
+	/// <param name="typeFrame">文字が増えるフレーム</param>
+	/// <param name="isFadeOut">終わった後にフェードアウトするか</param>
+	void ShowTypewriter(int typeFrame, bool isFadeOut);
+
 private:
 	Position2 m_pos; // 表示座標
 	std::string m_text; // 表示するテキスト
