@@ -8,6 +8,8 @@ namespace
 	constexpr int kDefaultColor = 0xffffff; // デフォルトの文字色(白)
 
 	constexpr int kMinTypeFrame = 1;
+
+	constexpr int kMaxFadeAlpha = 255;
 }
 
 UIFormatText::UIFormatText() :
@@ -17,8 +19,14 @@ UIFormatText::UIFormatText() :
 	m_frameCount(0),
 	m_isAlive(true),
 	m_isCenter(false),
+	m_isFadeOut(false),
 	m_visibleTextNum(-1), // 初期状態は-1
-	m_typeFrame(0)
+	m_typeFrame(0),
+	m_fadeWaitFrame(0),
+	m_fadeDuration(0),
+	m_fadeAlpha(kMaxFadeAlpha),
+	m_fadeCount(0),
+	m_fadeState(FadeState::None)
 {
 }
 
@@ -47,6 +55,13 @@ void UIFormatText::Update()
 	// プロバイダをセット
 	CheckProvider();
 	UpdateTypewriter();
+
+	// フェードアウトしない場合これ以下の処理はしない
+	if (m_isFadeOut)
+	{
+		UpdateFade();
+	}
+
 }
 
 void UIFormatText::Draw() const
@@ -61,18 +76,24 @@ void UIFormatText::Draw() const
 	// テキストの幅を取得
 	const int width = GetDrawStringWidthToHandle(visibleText.c_str(), nowTextNum, m_fontHandle);
 
-	// 中央ぞろえかどうかを判定
+	int x = static_cast<int>(m_pos.x);
+	int y = static_cast<int>(m_pos.y);
+	// 中央ぞろえの場合はx座標をテキストの中心にする
 	if (m_isCenter)
 	{
-		// テキストを中央揃えにするためにX座標を調整
-		int adjustedX = static_cast<int>(m_pos.x) - width / 2;
-		// テキストを描画
-		DrawStringToHandle(adjustedX, static_cast<int>(m_pos.y), visibleText.c_str(), m_color, m_fontHandle);
+		x -= width / 2;
 	}
-	else
+
+	// 透明度が最大値でない場合フェードが進んでいるとする
+	if (m_fadeAlpha < kMaxFadeAlpha)
 	{
-		// 左端から表示
-		DrawStringToHandle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), visibleText.c_str(), m_color, m_fontHandle);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+		DrawStringToHandle(x, y, visibleText.c_str(), m_color, m_fontHandle);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+	else // フェードが進んでいない場合通常の表示をする
+	{
+		DrawStringToHandle(x, y, visibleText.c_str(), m_color, m_fontHandle);
 	}
 }
 
@@ -104,6 +125,13 @@ void UIFormatText::ShowTypewriter(int typeFrame, bool isFadeOut)
 
 	m_frameCount = 0; // フレームカウンタをリセット
 
+}
+
+void UIFormatText::SetFadeOut(int fadeWaitFrame, int fadeDuration)
+{
+	m_isFadeOut = true;
+	m_fadeWaitFrame = fadeWaitFrame;
+	m_fadeDuration = fadeDuration;
 }
 
 void UIFormatText::CheckProvider()
@@ -145,4 +173,48 @@ void UIFormatText::UpdateTypewriter()
 		m_visibleTextNum = min(addNum, maxTextNum);
 	}
 
+}
+
+void UIFormatText::UpdateFade()
+{
+	// 最大文字数を取得
+	const int maxTextNum = static_cast<int>(m_wText.size());
+
+	if (m_visibleTextNum >= maxTextNum)
+	{
+		switch (m_fadeState)
+		{
+		case FadeState::None:
+			m_fadeState = (m_fadeWaitFrame > 0) ? FadeState::Waiting : (m_fadeDuration > 0 ? FadeState::Fading : FadeState::Done);
+			m_fadeCount = 0;
+			break;
+		case FadeState::Waiting:
+			if (m_fadeCount++ >= m_fadeWaitFrame)
+			{
+				m_fadeState = (m_fadeDuration > 0) ? FadeState::Fading : FadeState::Done;
+				m_fadeCount = 0;
+			}
+			break;
+		case FadeState::Fading:
+		{
+			m_fadeCount++;
+			const float t = (m_fadeDuration > 0) ? min(1.0f, m_fadeCount / m_fadeDuration) : 1.0f;
+			m_fadeAlpha = static_cast<int>(kMaxFadeAlpha * 1.0f - t);
+			if (m_fadeCount >= m_fadeDuration)
+			{
+				m_fadeAlpha = 0;
+				m_fadeState = FadeState::Done;
+				m_isAlive = false;
+			}
+			break;
+		}
+		case FadeState::Done:
+			m_fadeAlpha = 0;
+			break;
+		}
+	}
+	else
+	{
+		m_fadeAlpha = kMaxFadeAlpha;
+	}
 }

@@ -115,6 +115,7 @@ m_fadeColor(0x000000)
 		return "Ready...Go!";
 		});
 	start->ShowTypewriter(5,false);
+	start->SetFadeOut(30, 60);
 
 	m_pTextManager = std::make_unique<TextManager>();
 	

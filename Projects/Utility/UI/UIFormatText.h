@@ -39,6 +39,13 @@ public:
 	/// <param name="isFadeOut">終わった後にフェードアウトするか</param>
 	void ShowTypewriter(int typeFrame, bool isFadeOut);
 
+	/// <summary>
+	/// 文字の表示が終わった後にフェードアウトする
+	/// </summary>
+	/// <param name="fadeWaitFrame">フェードアウトを行うまでのフレーム数</param>
+	/// <param name="fadeDuration">フェードアウトを行うフレーム数</param>
+	void SetFadeOut(int fadeWaitFrame, int fadeDuration);
+
 private:
 	Position2 m_pos; // 表示座標
 	std::string m_text; // 表示するテキスト
@@ -48,10 +55,26 @@ private:
 	int m_frameCount; // 表示してからのフレーム数
 	bool m_isAlive; // 存在フラグ
 	bool m_isCenter; // 中央ぞろえでテキストを表示するかどうか
+	bool m_isFadeOut; // フェードアウトを行うかどうか
 
 	std::wstring m_wText; // 文字数を数えやすいようにワイド文字列にする
 	int m_visibleTextNum; // 1文字ずつ表示する際に使う(現在の文字数)
 	int m_typeFrame; // タイプ表示のフレーム数
+
+	int m_fadeWaitFrame; // フェードアウトを行うまでの時間
+	int m_fadeDuration; // フェードアウトの時間
+	int m_fadeAlpha; // フェードアウトを行う際のアルファ値
+	int m_fadeCount; // フェードをカウントするフレーム
+
+	enum class FadeState
+	{
+		None,
+		Waiting,
+		Fading,
+		Done
+	};
+
+	FadeState m_fadeState; // フェードの状態
 
 	/// <summary>
 	/// プロバイダからテキストデータを変更する
@@ -62,5 +85,10 @@ private:
 	/// 1文字ずつ出す文字を更新する
 	/// </summary>
 	void UpdateTypewriter();
+
+	/// <summary>
+	/// フェード関連の処理を更新する
+	/// </summary>
+	void UpdateFade();
 };
 
