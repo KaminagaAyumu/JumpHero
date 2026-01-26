@@ -1044,6 +1044,7 @@ void Player::JumpStart()
 	m_jumpCount--; // ジャンプ回数を減らす
 	auto gameManager = m_pGameManager.lock();
 	gameManager->AddScore(kJumpAddScore); // スコアを加算
+	gameManager->RequestCreateEffect(Types::EffectType::Jump, m_pos + Position2{0,kPlayerHeight / 2});
 	m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 }
