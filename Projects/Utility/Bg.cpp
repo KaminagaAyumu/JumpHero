@@ -9,7 +9,7 @@
 Bg::Bg() :
 	m_pos{}
 {
-	m_bgHandle = LoadGraph(L"data/BlockDestroyer_mainVisual.png");
+	m_bgHandle = LoadGraph(L"data/img/logo_back.png");
 	
 	auto handle = LoadGraph(L"data/background_1.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
@@ -50,11 +50,12 @@ void Bg::Init()
 
 void Bg::Update()
 {
+	LoopUpdate();
 }
 
 void Bg::Draw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x448899, true);
+	LoopDraw();
 	//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_bgHandle, true);
 }
 
@@ -118,6 +119,43 @@ void Bg::Draw(std::weak_ptr<Camera> camera)
 				Game::kScreenHeight - size.height,
 				handle, true);
 		}
+	}
+}
+
+void Bg::LoopUpdate()
+{
+	m_pos.x++;
+	m_pos.y++;
+}
+
+void Bg::LoopDraw()
+{
+	Size bgSize = {};
+	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
+
+	DrawGraph(static_cast<int>(-m_pos.x), static_cast<int>(-m_pos.y), m_bgHandle, true);
+
+	// 上下左右に表示する時
+	if (bgSize.width - m_pos.x < Game::kScreenWidth)
+	{
+		DrawGraph(static_cast<int>(-m_pos.x) + static_cast<int>(bgSize.width),
+			static_cast<int>(-m_pos.y),
+			m_bgHandle, true);
+	}
+
+	if (bgSize.height - m_pos.y < Game::kScreenHeight)
+	{
+		DrawGraph(static_cast<int>(-m_pos.x),
+			static_cast<int>(-m_pos.y) + static_cast<int>(bgSize.height),
+			m_bgHandle, true);
+	}
+
+	if (bgSize.width - m_pos.x < Game::kScreenWidth &&
+		bgSize.height - m_pos.y < Game::kScreenHeight)
+	{
+		DrawGraph(static_cast<int>(-m_pos.x) + static_cast<int>(bgSize.width),
+			static_cast<int>(-m_pos.y) + static_cast<int>(bgSize.height),
+			m_bgHandle, true);
 	}
 }
 

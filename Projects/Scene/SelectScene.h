@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 // 前方宣言
+class Bg;
 class SoundManager;
 class TextManager;
 class UIManager;
@@ -49,6 +50,8 @@ private:
 	/// 現在のカーソルの位置を探す
 	/// </summary>
 	void CheckCursor();
+
+	std::shared_ptr<Bg> m_pBg; // 背景管理クラスへのポインタ
 
 	std::shared_ptr<SoundManager> m_soundManager; // サウンドマネージャーへのポインタ
 

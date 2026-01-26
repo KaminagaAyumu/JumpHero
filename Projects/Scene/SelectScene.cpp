@@ -3,6 +3,7 @@
 #include "SceneController.h"
 #include "GameScene.h"
 #include "../Utility/Input.h"
+#include "../Utility/Bg.h"
 #include "../Utility/Game.h"
 #include "../Utility/GameType.h"
 #include "../Utility/Application.h"
@@ -32,6 +33,9 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_fadeColor(0x000000)
 {
 	m_frameCount = kFadeInterval;
+
+	m_pBg = std::make_shared<Bg>();
+
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
@@ -89,6 +93,8 @@ void SelectScene::FadeInUpdate(Input&)
 
 void SelectScene::NormalUpdate(Input& input)
 {
+	m_pBg->Update();
+
 	m_pUIManager->Update();
 
 	m_pEffectManager->Update();
@@ -135,6 +141,8 @@ void SelectScene::FadeOutUpdate(Input&)
 void SelectScene::NormalDraw()
 {
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
+
+	m_pBg->Draw();
 
 	m_pUIManager->Draw();
 
