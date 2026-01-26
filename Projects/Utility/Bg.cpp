@@ -1,5 +1,6 @@
 ﻿#include <vector>
 #include <memory>
+#include <functional>
 #include "Bg.h"
 #include "Game.h"
 #include "Camera.h"
@@ -50,18 +51,21 @@ void Bg::Init()
 
 void Bg::Update()
 {
+	m_update();
 	LoopUpdate();
 }
 
 void Bg::Draw()
 {
-	LoopDraw();
+	
 	//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_bgHandle, true);
 }
 
 
 void Bg::Draw(std::weak_ptr<Camera> camera)
 {
+	m_draw(camera.lock());
+
 	Size bgSize = {};
 	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
 
@@ -73,7 +77,7 @@ void Bg::Draw(std::weak_ptr<Camera> camera)
 	scrollPos.x = fmodf(pCamera->scroll.x, static_cast<float>(bgSize.width));
 	// 縦もスクロールする場合は↓を使う
 	// scrollPos.y = static_cast<int>(camera->scroll.y) % bgSize.y;
-	scrollPos.y = pCamera->scroll.y / bgSize.height;
+	scrollPos.y = fmodf(pCamera->scroll.y, static_cast<float>(bgSize.height));
 
 	DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
 
@@ -128,7 +132,11 @@ void Bg::LoopUpdate()
 	m_pos.y++;
 }
 
-void Bg::LoopDraw()
+void Bg::ScrollXUpdate()
+{
+}
+
+void Bg::LoopDraw(std::shared_ptr<Camera>)
 {
 	Size bgSize = {};
 	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
@@ -157,6 +165,10 @@ void Bg::LoopDraw()
 			static_cast<int>(-m_pos.y) + static_cast<int>(bgSize.height),
 			m_bgHandle, true);
 	}
+}
+
+void Bg::ScrollXDraw(std::shared_ptr<Camera> camera)
+{
 }
 
 
