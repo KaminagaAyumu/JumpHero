@@ -239,3 +239,20 @@ int Geometry::RemainderToNaturalNumber(int left, int right)
     // ここを通ったら正の数の場合なのでそのまま返す
     return ret;
 }
+
+float Geometry::RemainderToNaturalNumberF(float left, float right)
+{
+    if(right <= 0.0f) return 0.0f;
+    
+    // 左辺と右辺の余りを求める
+    float ret = std::fmod(left, right);
+
+    // 余りが負の数だったら右辺の値を足した数を返す
+    if (ret < 0)
+    {
+        return ret + right;
+    }
+
+    // ここを通ったら正の数の場合なのでそのまま返す
+    return ret;
+}

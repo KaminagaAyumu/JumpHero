@@ -190,4 +190,12 @@ namespace Geometry
 	/// <param name="right">右辺</param>
 	/// <returns>余りの数(正の数)</returns>
 	int RemainderToNaturalNumber(int left, int right);
+
+	/// <summary>
+	/// 余りを正の数にして返す(浮動小数点版)
+	/// </summary>
+	/// <param name="left">左辺</param>
+	/// <param name="right">右辺</param>
+	/// <returns>余りの数(正の数)</returns>
+	float RemainderToNaturalNumberF(float left, float right);
 };
