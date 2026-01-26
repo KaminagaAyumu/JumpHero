@@ -12,6 +12,7 @@ UIGauge::UIGauge() :
 	m_fillSrcW(0),
 	m_fillSrcH(0),
 	m_value(0.0f),
+	m_visualValue(0.0f),
 	m_pos{},
 	m_size{}
 {
