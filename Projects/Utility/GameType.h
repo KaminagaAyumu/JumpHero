@@ -68,6 +68,9 @@ namespace Types
 		AttackItem, // 攻撃アイテム
 	};
 
+	/// <summary>
+	/// エフェクトの種類
+	/// </summary>
 	enum class EffectType : int
 	{
 		CoinGet, // コイン取得時のエフェクト
@@ -75,5 +78,15 @@ namespace Types
 		Star, // 星エフェクト
 		PowerUp, // パワーアップ時のエフェクト
 		Jump, // ジャンプ時のエフェクト
+	};
+
+	/// <summary>
+	/// 背景の種類
+	/// </summary>
+	enum class BgType : int
+	{
+		Loop, // 自動でループする背景
+		ScrollXY, // カメラのXY座標のスクロールをする背景
+		ScrollX, // カメラのX座標のスクロールをする背景
 	};
 }

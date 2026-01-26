@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "Geometry.h"
+#include "GameType.h"
 #include <functional>
 
 // プロトタイプ宣言
@@ -21,6 +22,12 @@ public:
 	void Draw();
 
 	void Draw(std::weak_ptr<Camera> camera);
+
+	/// <summary>
+	/// 背景の描画の仕方を設定する
+	/// </summary>
+	/// <param name="type">背景タイプ</param>
+	void SetBgType(Types::BgType type);
 
 private:
 
@@ -58,6 +65,7 @@ private:
 	Position2 m_pos;
 	std::vector<int> m_bgHandles;
 
+	std::vector<BgLayer> m_layers;
 
 	using UpdateFunc_t = void (Bg::*)();
 	UpdateFunc_t m_updateFunc;
@@ -71,7 +79,12 @@ private:
 	void LoopUpdate();
 
 	/// <summary>
-	/// Xのみ無限にスクロールする更新処理
+	/// カメラを基準にスクロールして背景を表示する更新処理
+	/// </summary>
+	void ScrollUpdate();
+
+	/// <summary>
+	/// カメラを基準にX座標のみスクロールして背景を表示する更新処理
 	/// </summary>
 	void ScrollXUpdate();
 
@@ -84,7 +97,7 @@ private:
 	/// カメラのスクロールから背景を表示する描画処理
 	/// </summary>
 	/// <param name="camera">カメラのポインタ</param>
-	void ScrollDraw(std::shared_ptr<Camera> camera, const BgLayer& layer);
+	void ScrollDraw(std::shared_ptr<Camera> camera);
 
 	/// <summary>
 	/// カメラのX座標のスクロールを行う描画処理
@@ -99,6 +112,20 @@ private:
 	/// <param name="size"></param>
 	/// <param name="pos"></param>
 	void DrawTile(int handle, const Size& size, const Position2Int& pos);
+
+	/// <summary>
+	/// スクロールする背景をレイヤーで分けずに描画する処理
+	/// </summary>
+	/// <param name="camera"></param>
+	void DrawScrollSingle(std::shared_ptr<Camera> camera);
+	
+	/// <summary>
+	/// X座標のみスクロールする背景をレイヤーで分けずに描画する処理
+	/// </summary>
+	/// <param name="camera"></param>
+	void DrawScrollSingleX(std::shared_ptr<Camera> camera);
+
+
 
 };
 

@@ -33,8 +33,7 @@ Bg::Bg() :
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
 
-	
-
+	SetBgType(Types::BgType::Loop);
 }
 
 Bg::~Bg()
@@ -52,35 +51,34 @@ void Bg::Init()
 
 void Bg::Update()
 {
-	//m_update();
-	LoopUpdate();
+	(this->*m_updateFunc)();
 }
 
 void Bg::Draw()
 {
-
+	(this->*m_drawFunc)(nullptr);
 	//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_bgHandle, true);
 }
 
 
 void Bg::Draw(std::weak_ptr<Camera> camera)
 {
-	//m_draw(camera.lock());
+	(this->*m_drawFunc)(camera.lock());
 
-	Size bgSize = {};
-	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
+	//Size bgSize = {};
+	//GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
 
-	Position2 scrollPos = {};
-	auto pCamera = camera.lock();
+	//Position2 scrollPos = {};
+	//auto pCamera = camera.lock();
 
-	// ↓の場合、さらにfloatにキャストしないといけないのでfmodfを使う
-	//scrollPos.x = static_cast<int>(camera->scroll.x) % bgSize.width;
-	scrollPos.x = fmodf(pCamera->scroll.x, static_cast<float>(bgSize.width));
-	// 縦もスクロールする場合は↓を使う
-	// scrollPos.y = static_cast<int>(camera->scroll.y) % bgSize.y;
-	scrollPos.y = fmodf(pCamera->scroll.y, static_cast<float>(bgSize.height));
+	//// ↓の場合、さらにfloatにキャストしないといけないのでfmodfを使う
+	////scrollPos.x = static_cast<int>(camera->scroll.x) % bgSize.width;
+	//scrollPos.x = fmodf(pCamera->scroll.x, static_cast<float>(bgSize.width));
+	//// 縦もスクロールする場合は↓を使う
+	//// scrollPos.y = static_cast<int>(camera->scroll.y) % bgSize.y;
+	//scrollPos.y = fmodf(pCamera->scroll.y, static_cast<float>(bgSize.height));
 
-	DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
+	//DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), m_bgHandle, true);
 
 	// 横にのみ表示する時
 	/*if (scrollPos.x > 0)
@@ -113,7 +111,7 @@ void Bg::Draw(std::weak_ptr<Camera> camera)
 			m_bgHandle, true);
 	}*/
 
-	for (int handle : m_bgHandles)
+	/*for (int handle : m_bgHandles)
 	{
 		DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), handle, true);
 		if (scrollPos.x > 0)
@@ -124,6 +122,25 @@ void Bg::Draw(std::weak_ptr<Camera> camera)
 				Game::kScreenHeight - size.height,
 				handle, true);
 		}
+	}*/
+}
+
+void Bg::SetBgType(Types::BgType type)
+{
+	switch (type)
+	{
+	case Types::BgType::Loop:
+			m_updateFunc = &Bg::LoopUpdate;
+			m_drawFunc = &Bg::LoopDraw;
+			break;
+	case Types::BgType::ScrollX:
+		m_updateFunc = &Bg::ScrollXUpdate;
+		m_drawFunc = &Bg::ScrollXDraw;
+		break;
+	case Types::BgType::ScrollXY:
+		m_updateFunc = &Bg::ScrollUpdate;
+		m_drawFunc = &Bg::ScrollDraw;
+		break;
 	}
 }
 
@@ -131,6 +148,10 @@ void Bg::LoopUpdate()
 {
 	m_pos.x++;
 	m_pos.y++;
+}
+
+void Bg::ScrollUpdate()
+{
 }
 
 void Bg::ScrollXUpdate()
@@ -142,63 +163,100 @@ void Bg::LoopDraw(std::shared_ptr<Camera>)
 	Size bgSize = {};
 	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
 
-	DrawGraph(static_cast<int>(-m_pos.x), static_cast<int>(-m_pos.y), m_bgHandle, true);
+	Position2Int pos = { 
+		-Geometry::RemainderToNaturalNumber(static_cast<int>(m_pos.x), bgSize.width),
+		-Geometry::RemainderToNaturalNumber(static_cast<int>(m_pos.y), bgSize.height) };
 
-	// 上下左右に表示する時
-	if (bgSize.width - m_pos.x < Game::kScreenWidth)
-	{
-		DrawGraph(static_cast<int>(-m_pos.x) + static_cast<int>(bgSize.width),
-			static_cast<int>(-m_pos.y),
-			m_bgHandle, true);
-	}
-
-	if (bgSize.height - m_pos.y < Game::kScreenHeight)
-	{
-		DrawGraph(static_cast<int>(-m_pos.x),
-			static_cast<int>(-m_pos.y) + static_cast<int>(bgSize.height),
-			m_bgHandle, true);
-	}
-
-	if (bgSize.width - m_pos.x < Game::kScreenWidth &&
-		bgSize.height - m_pos.y < Game::kScreenHeight)
-	{
-		DrawGraph(static_cast<int>(-m_pos.x) + static_cast<int>(bgSize.width),
-			static_cast<int>(-m_pos.y) + static_cast<int>(bgSize.height),
-			m_bgHandle, true);
-	}
+	DrawTile(m_bgHandle, bgSize, pos);
 }
 
-void Bg::ScrollDraw(std::shared_ptr<Camera> camera, const BgLayer& layer)
+void Bg::ScrollDraw(std::shared_ptr<Camera> camera)
 {
-	Position2Int pos;
-
-	if (camera)
+	// レイヤーが複数ある場合
+	if (!m_layers.empty())
 	{
-		pos.x = Geometry::RemainderToNaturalNumber(
-			static_cast<int>(camera->scroll.x * layer.parallax.x),
-			layer.size.width);
-		pos.y = Geometry::RemainderToNaturalNumber(
-			static_cast<int>(camera->scroll.y * layer.parallax.y),
-			layer.size.height);
+		// カメラのスクロールを取得
+		Position2 scroll = { 0.0f,0.0f };
+
+		// カメラが取得できている場合、スクロールを使う
+		if (camera)
+		{
+			scroll.x = camera->scroll.x;
+			scroll.y = camera->scroll.y;
+		}
+
+		// レイヤーの分背景を描画
+		for (auto& layer : m_layers)
+		{
+			// スクロール量を調節
+			Position2 offset = {
+			scroll.x * layer.parallax.x + layer.offset.x,
+			scroll.y * layer.parallax.y + layer.offset.y,
+			};
+
+			// 開始位置を調整する値
+			Position2Int pos = {
+				Geometry::RemainderToNaturalNumber(static_cast<int>(offset.x),layer.size.width),
+				Geometry::RemainderToNaturalNumber(static_cast<int>(offset.y),layer.size.height)
+			};
+
+			// 実際の開始位置
+			Position2Int basePos{
+			static_cast<int>(layer.basePos.x) - pos.x,
+			static_cast<int>(layer.basePos.y) - pos.y
+			};
+
+			DrawTile(layer.handle, layer.size, basePos);
+		}
 	}
-	else
+	else // レイヤーが存在しない場合1枚の背景描画処理を行う
 	{
-		pos.x = Geometry::RemainderToNaturalNumber(
-					static_cast<int>(layer.offset.x),
-					layer.size.width);
-		pos.y = Geometry::RemainderToNaturalNumber(
-			static_cast<int>(layer.offset.y),
-			layer.size.height);
+		DrawScrollSingle(camera);
 	}
-
-	const Position2Int basePos = { static_cast<int>(layer.basePos.x) - pos.x,  static_cast<int>(layer.basePos.y) - pos.y };
-
-	DrawTile(layer.handle, layer.size, basePos);
-
 }
 
 void Bg::ScrollXDraw(std::shared_ptr<Camera> camera)
 {
+	// レイヤーが複数ある場合
+	if (!m_layers.empty())
+	{
+		// カメラのスクロールを取得
+		Position2 scroll = { 0.0f,0.0f };
+
+		// カメラが取得できている場合、スクロールを使う
+		if (camera)
+		{
+			scroll.x = camera->scroll.x;
+		}
+
+		// レイヤーの分背景を描画
+		for (auto& layer : m_layers)
+		{
+			// スクロール量を調節
+			Position2 offset = {
+			scroll.x * layer.parallax.x + layer.offset.x,
+			0.0f,
+			};
+
+			// 開始位置を調整する値
+			Position2Int pos = {
+				Geometry::RemainderToNaturalNumber(static_cast<int>(offset.x),layer.size.width),
+				0
+			};
+
+			// 実際の開始位置
+			Position2Int basePos{
+			static_cast<int>(layer.basePos.x) - pos.x,
+			0
+			};
+
+			DrawTile(layer.handle, layer.size, basePos);
+		}
+	}
+	else // レイヤーが存在しない場合1枚の背景描画処理を行う
+	{
+		DrawScrollSingleX(camera);
+	}
 }
 
 void Bg::DrawTile(int handle, const Size& size, const Position2Int& pos)
@@ -223,6 +281,52 @@ void Bg::DrawTile(int handle, const Size& size, const Position2Int& pos)
 		DrawGraph(pos.x + size.width, pos.y + size.height, handle, true);
 	}
 
+}
+
+void Bg::DrawScrollSingle(std::shared_ptr<Camera> camera)
+{
+	Size bgSize = {};
+	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
+
+	Position2 scroll = {0.0f,0.0f};
+	
+	// カメラが取得できている場合、スクロールを使う
+	if (camera)
+	{
+		scroll.x = camera->scroll.x;
+		scroll.y = camera->scroll.y;
+	}
+
+	scroll.x = Geometry::RemainderToNaturalNumberF(scroll.x, static_cast<float>(bgSize.width));
+	scroll.y = Geometry::RemainderToNaturalNumberF(scroll.y, static_cast<float>(bgSize.height));
+
+	Position2Int pos = {
+		-static_cast<int>(scroll.x),
+		-static_cast<int>(scroll.y) };
+
+	DrawTile(m_bgHandle, bgSize, pos);
+}
+
+void Bg::DrawScrollSingleX(std::shared_ptr<Camera> camera)
+{
+	Size bgSize = {};
+	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
+
+	Position2 scroll = { 0.0f,0.0f };
+
+	// カメラが取得できている場合、スクロールを使う
+	if (camera)
+	{
+		scroll.x = camera->scroll.x;
+	}
+
+	scroll.x = Geometry::RemainderToNaturalNumberF(scroll.x, static_cast<float>(bgSize.width));
+
+	Position2Int pos = {
+		-static_cast<int>(scroll.x),
+		0 };
+
+	DrawTile(m_bgHandle, bgSize, pos);
 }
 
 void Bg::BgLayer::Init(int _handle, const Position2& _speed, const Position2& _parallax, Position2 _base)
