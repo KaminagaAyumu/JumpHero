@@ -1,17 +1,16 @@
 ﻿#include <vector>
 #include <memory>
-#include <functional>
 #include "Bg.h"
 #include "Game.h"
 #include "Camera.h"
-#include "DxLib.h"
 #include <cassert>
+#include "DxLib.h"
 
 Bg::Bg() :
 	m_pos{}
 {
 	m_bgHandle = LoadGraph(L"data/img/logo_back.png");
-	
+
 	auto handle = LoadGraph(L"data/background_1.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
@@ -34,6 +33,8 @@ Bg::Bg() :
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
 
+	
+
 }
 
 Bg::~Bg()
@@ -51,20 +52,20 @@ void Bg::Init()
 
 void Bg::Update()
 {
-	m_update();
+	//m_update();
 	LoopUpdate();
 }
 
 void Bg::Draw()
 {
-	
+
 	//DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_bgHandle, true);
 }
 
 
 void Bg::Draw(std::weak_ptr<Camera> camera)
 {
-	m_draw(camera.lock());
+	//m_draw(camera.lock());
 
 	Size bgSize = {};
 	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
@@ -92,27 +93,27 @@ void Bg::Draw(std::weak_ptr<Camera> camera)
 	// 上下左右に表示する時
 	/*if(bgSize.x - scrollPos.x < Game::kScreenWidth)
 	{
-		DrawGraph(static_cast<int>(-scrollPos.x) + static_cast<int>(bgSize.x), 
-			static_cast<int>(-scrollPos.y), 
+		DrawGraph(static_cast<int>(-scrollPos.x) + static_cast<int>(bgSize.x),
+			static_cast<int>(-scrollPos.y),
 			m_bgHandle, true);
 	}
 
 	if(bgSize.y - scrollPos.y < Game::kScreenHeight)
 	{
-		DrawGraph(static_cast<int>(-scrollPos.x), 
-			static_cast<int>(-scrollPos.y) + static_cast<int>(bgSize.y), 
+		DrawGraph(static_cast<int>(-scrollPos.x),
+			static_cast<int>(-scrollPos.y) + static_cast<int>(bgSize.y),
 			m_bgHandle, true);
 	}
 
 	if(bgSize.x - scrollPos.x < Game::kScreenWidth &&
 		bgSize.y - scrollPos.y < Game::kScreenHeight)
 	{
-		DrawGraph(static_cast<int>(-scrollPos.x) + static_cast<int>(bgSize.x), 
-			static_cast<int>(-scrollPos.y) + static_cast<int>(bgSize.y), 
+		DrawGraph(static_cast<int>(-scrollPos.x) + static_cast<int>(bgSize.x),
+			static_cast<int>(-scrollPos.y) + static_cast<int>(bgSize.y),
 			m_bgHandle, true);
 	}*/
 
-	for(int handle : m_bgHandles)
+	for (int handle : m_bgHandles)
 	{
 		DrawGraph(static_cast<int>(-scrollPos.x), static_cast<int>(-scrollPos.y), handle, true);
 		if (scrollPos.x > 0)
@@ -167,8 +168,69 @@ void Bg::LoopDraw(std::shared_ptr<Camera>)
 	}
 }
 
+void Bg::ScrollDraw(std::shared_ptr<Camera> camera, const BgLayer& layer)
+{
+	Position2Int pos;
+
+	if (camera)
+	{
+		pos.x = Geometry::RemainderToNaturalNumber(
+			static_cast<int>(camera->scroll.x * layer.parallax.x),
+			layer.size.width);
+		pos.y = Geometry::RemainderToNaturalNumber(
+			static_cast<int>(camera->scroll.y * layer.parallax.y),
+			layer.size.height);
+	}
+	else
+	{
+		pos.x = Geometry::RemainderToNaturalNumber(
+					static_cast<int>(layer.offset.x),
+					layer.size.width);
+		pos.y = Geometry::RemainderToNaturalNumber(
+			static_cast<int>(layer.offset.y),
+			layer.size.height);
+	}
+
+	const Position2Int basePos = { static_cast<int>(layer.basePos.x) - pos.x,  static_cast<int>(layer.basePos.y) - pos.y };
+
+	DrawTile(layer.handle, layer.size, basePos);
+
+}
+
 void Bg::ScrollXDraw(std::shared_ptr<Camera> camera)
 {
 }
 
+void Bg::DrawTile(int handle, const Size& size, const Position2Int& pos)
+{
+	DrawGraph(static_cast<int>(pos.x), static_cast<int>(pos.y), handle, true);
 
+	const bool needX = (pos.x + size.width < Game::kScreenWidth);
+	const bool needY = (pos.y + size.height < Game::kScreenHeight);
+
+	if (needX)
+	{
+		DrawGraph(pos.x + size.width, pos.y, handle, true);
+	}
+
+	if (needY)
+	{
+		DrawGraph(pos.x, pos.y + size.height, handle, true);
+	}
+
+	if (needX && needY)
+	{
+		DrawGraph(pos.x + size.width, pos.y + size.height, handle, true);
+	}
+
+}
+
+void Bg::BgLayer::Init(int _handle, const Position2& _speed, const Position2& _parallax, Position2 _base)
+{
+	handle = _handle;
+	GetGraphSize(handle, &size.width, &size.height);
+	speed = _speed;
+	parallax = _parallax;
+	basePos = _base;
+	offset = { 0.0f,0.0f };
+}
