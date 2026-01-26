@@ -89,7 +89,7 @@ private:
 	
 
 	// UI関連
-	std::unique_ptr<UIManager> m_pUIManager; // UIを管理するために取得
+	std::shared_ptr<UIManager> m_pUIManager; // UIを管理するために取得
 
 	std::weak_ptr<UIFormatText> m_pScoreText; // スコアを表示するときに使用
 

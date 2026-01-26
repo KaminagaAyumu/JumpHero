@@ -18,6 +18,7 @@ class EnemyManager;
 class Input;
 class Map;
 class EffectManager;
+class UIManager;
 
 
 /// <summary>
@@ -34,7 +35,7 @@ public:
 	/// ゲーム開始時の初期化処理
 	/// </summary>
 	/// <param name="isTutorial">チュートリアルかどうかを判別する(trueならチュートリアル)</param>
-	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager,  std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial);
+	void Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::weak_ptr<UIManager> uiManager, std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial);
 	
 	/// <summary>
 	/// ミニゲーム開始時の初期化処理
@@ -43,7 +44,7 @@ public:
 	/// <param name="camera">現在のシーンのカメラ</param>
 	/// <param name="effectManager">現在のシーンのエフェクトマネージャー</param>
 	/// <param name="actors">現在のシーンのアクターコンテナ</param>
-	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::vector<std::weak_ptr<Actor>>& actors);
+	void MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::weak_ptr<UIManager> uiManager, std::vector<std::weak_ptr<Actor>>& actors);
 	void Update(Input& input);
 	void Draw() const;
 
@@ -283,6 +284,7 @@ private:
 	// 各オブジェクト管理クラスの参照用
 	std::weak_ptr<Map> m_pMap; // マップはゲームシーンにshared_ptrで持たせるのでweak_ptr
 	std::weak_ptr<EffectManager> m_pEffectManager;
+	std::weak_ptr<UIManager> m_pUIManager;
 	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;

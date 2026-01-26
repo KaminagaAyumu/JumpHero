@@ -60,7 +60,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 
-	m_pUIManager = std::make_unique<UIManager>();
+	m_pUIManager = std::make_shared<UIManager>();
 
 	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { 0, kScoreTextPosY });
 	auto score = m_pScoreText.lock();
@@ -78,7 +78,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 	m_pEffectManager->SetCamera(m_pCamera);
 
-	m_pGameManager->MiniGameInit(m_pMap,m_pCamera,m_pEffectManager,m_pActors);
+	m_pGameManager->MiniGameInit(m_pMap,m_pCamera,m_pEffectManager,m_pUIManager, m_pActors);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 	m_pCamera->Init();

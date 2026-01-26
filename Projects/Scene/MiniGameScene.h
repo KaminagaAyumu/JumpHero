@@ -75,7 +75,7 @@ private:
 
 	std::shared_ptr<EffectManager> m_pEffectManager;
 
-	std::unique_ptr<UIManager> m_pUIManager;
+	std::shared_ptr<UIManager> m_pUIManager;
 
 	std::weak_ptr<UIFormatText> m_pScoreText;
 

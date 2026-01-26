@@ -81,14 +81,15 @@ m_fadeColor(0x000000)
 	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 	m_pEffectManager->SetCamera(m_pCamera);
 
+	m_pUIManager = std::make_shared<UIManager>();
+
 	m_pGameManager = std::make_shared<GameManager>();
 	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
-	m_pGameManager->Init(m_pMap, m_pCamera, m_pEffectManager, m_pActors, isTutorial);
+	m_pGameManager->Init(m_pMap, m_pCamera, m_pEffectManager, m_pUIManager, m_pActors, isTutorial);
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 	m_pCamera->Init();
 
-	m_pUIManager = std::make_unique<UIManager>();
 
 	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "",kScoreTextPos);
 	auto score = m_pScoreText.lock();

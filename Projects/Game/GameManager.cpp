@@ -93,11 +93,12 @@ GameManager::~GameManager()
 {
 }
 
-void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial)
+void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::weak_ptr<UIManager> uiManager, std::vector<std::weak_ptr<Actor>>& actors, bool isTutorial)
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
 	m_pEffectManager = effectManager;
+	m_pUIManager = uiManager;
 	m_pPlayer = std::make_shared<Player>(map, weak_from_this());
 	m_pPlayer->SetCamera(camera);
 	m_pPlayer->Init();
@@ -118,11 +119,12 @@ void GameManager::Init(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std
 	m_isTutorial = isTutorial;
 }
 
-void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::vector<std::weak_ptr<Actor>>& actors)
+void GameManager::MiniGameInit(std::weak_ptr<Map> map, std::weak_ptr<Camera> camera, std::weak_ptr<EffectManager> effectManager, std::weak_ptr<UIManager> uiManager, std::vector<std::weak_ptr<Actor>>& actors)
 {
 	m_pMap = map;
 	auto pMap = m_pMap.lock();
 	m_pEffectManager = effectManager;
+	m_pUIManager = uiManager;
 	m_pPlayer->InitMap(pMap);
 	m_pPlayer->SetCamera(camera);
 	m_pPlayer->Init();
