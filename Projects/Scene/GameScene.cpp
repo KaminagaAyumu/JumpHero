@@ -74,6 +74,7 @@ m_fadeColor(0x000000)
 
 	m_bg = std::make_shared<Bg>();
 	m_bg->Init();
+	m_bg->SetBgType(Types::BgType::ScrollXY);
 	m_pMap = std::make_shared<Map>(stageNo,false);
 	m_pMap->Init();
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());

@@ -9,7 +9,8 @@
 Bg::Bg() :
 	m_pos{}
 {
-	m_bgHandle = LoadGraph(L"data/img/logo_back.png");
+	//m_bgHandle = LoadGraph(L"data/img/logo_back.png");
+	m_bgHandle = LoadGraph(L"data/img/bg_underground.png");
 
 	auto handle = LoadGraph(L"data/background_1.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
