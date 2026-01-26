@@ -28,6 +28,10 @@ namespace
 
 	constexpr int kCoinAddScore = 1000; // コイン取得時のスコア
 
+	constexpr int kReadyGoTextTypeFrame = 5; // プレイヤーの登場する際の文字が出るスピード
+	constexpr int kReadyGoTextWaitFrame = 60; // プレイヤーの登場する際の文字が完全に出てからフェードするまでの時間
+	constexpr int kReadyGoTextFadeFrame = 60; // プレイヤーの登場する際の文字がフェードする時間
+
 	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
 }
 
@@ -420,8 +424,8 @@ void GameManager::CreateReadyGoText()
 	start->SetProvider([this]() {
 		return "Ready...Go!";
 		});
-	start->ShowTypewriter(5, false);
-	start->SetFadeOut(30, 60);
+	start->ShowTypewriter(kReadyGoTextTypeFrame, false);
+	start->SetFadeOut(kReadyGoTextWaitFrame, kReadyGoTextFadeFrame);
 }
 
 bool GameManager::IsDropChangeToCoin()

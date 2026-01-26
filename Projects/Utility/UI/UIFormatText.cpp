@@ -56,7 +56,7 @@ void UIFormatText::Update()
 	CheckProvider();
 	UpdateTypewriter();
 
-	// フェードアウトしない場合これ以下の処理はしない
+	// フェードアウトする場合のみフェードの更新を行う
 	if (m_isFadeOut)
 	{
 		UpdateFade();
@@ -198,8 +198,8 @@ void UIFormatText::UpdateFade()
 		case FadeState::Fading:
 		{
 			m_fadeCount++;
-			const float t = (m_fadeDuration > 0) ? min(1.0f, m_fadeCount / m_fadeDuration) : 1.0f;
-			m_fadeAlpha = static_cast<int>(kMaxFadeAlpha * 1.0f - t);
+			const float t = (m_fadeDuration > 0) ? min(1.0f, static_cast<float>(m_fadeCount) / static_cast<float>(m_fadeDuration)) : 1.0f;
+			m_fadeAlpha = static_cast<int>(kMaxFadeAlpha * (1.0f - t));
 			if (m_fadeCount >= m_fadeDuration)
 			{
 				m_fadeAlpha = 0;
