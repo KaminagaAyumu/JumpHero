@@ -70,6 +70,7 @@ Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 	m_isMiss(false),
 	m_isLevelDown(false),
 	m_isJumpStart(false),
+	m_isEntryStart(false),
 	m_isFreeze(false),
 	m_isAttackable(false),
 	m_isWalk(false),
@@ -99,6 +100,7 @@ Player::Player(std::weak_ptr<Map> map) :
 	m_isMiss(false),
 	m_isLevelDown(false),
 	m_isJumpStart(false),
+	m_isEntryStart(false),
 	m_isFreeze(false),
 	m_isAttackable(false),
 	m_isWalk(false),
@@ -117,8 +119,6 @@ Player::~Player()
 
 void Player::Init()
 {
-	auto manager = m_pGameManager.lock();
-	manager->CreateReadyGoText();
 	auto pMap = m_pMap.lock();
 	m_pos = pMap->GetStartPosToMap();
 	m_entryEndPos = m_pos + Vector2{ kEntryEndXOffset,0.0f };
@@ -138,6 +138,7 @@ void Player::Init()
 	m_isMiss = false;
 	m_isLevelDown = false;
 	m_isJumpStart = false;
+	m_isEntryStart = false;
 	m_isFreeze = false;
 	m_isAttackable = false;
 	m_isWalk = false;
@@ -180,6 +181,7 @@ void Player::InitAuto()
 	m_isMiss = false;
 	m_isLevelDown = false;
 	m_isJumpStart = false;
+	m_isEntryStart = false;
 	m_isFreeze = false;
 	m_isAttackable = false;
 	m_isWalk = false;
@@ -575,6 +577,13 @@ void Player::CheckAnimation()
 void Player::EntryUpdate(Input&)
 {
 	m_frameCount++;
+	if (!m_isEntryStart)
+	{
+		auto manager = m_pGameManager.lock();
+		manager->CreateReadyGoText();
+		m_isEntryStart = true;
+	}
+
 	if (m_frameCount < kEntryTextDispTime) // テキストを表示している間は動かない
 	{
 		return;
@@ -881,18 +890,6 @@ void Player::AutoMoveUpdate(Input&)
 
 void Player::EntryDraw()
 {
-	// 経過時間が登場時間を超えたら
-	if (m_frameCount >= kEntryTextDispTime)
-	{
-		// ReadyとGOを表示する
-		DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Ready、GO!", 0xff0000);
-	}
-	else // 登場準備中なら
-	{
-		// Readyを表示する
-		DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Ready、", 0xff0000);
-	}
-
 	auto camera = m_pCamera.lock();
 	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);

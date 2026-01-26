@@ -123,6 +123,7 @@ private:
 	bool m_isMiss; // ミスになったかどうか
 	bool m_isLevelDown; // レベルダウンしたかどうか
 	bool m_isJumpStart; // ジャンプ開始したかどうか
+	bool m_isEntryStart; // 登場開始したかどうか
 	bool m_isFreeze; // 止まっているかどうか
 	bool m_isAttackable; // 攻撃可能かどうか
 	bool m_isWalk; // 歩いているかどうか
