@@ -117,6 +117,8 @@ Player::~Player()
 
 void Player::Init()
 {
+	auto manager = m_pGameManager.lock();
+	manager->CreateReadyGoText();
 	auto pMap = m_pMap.lock();
 	m_pos = pMap->GetStartPosToMap();
 	m_entryEndPos = m_pos + Vector2{ kEntryEndXOffset,0.0f };

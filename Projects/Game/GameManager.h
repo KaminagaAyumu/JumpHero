@@ -253,6 +253,11 @@ public:
 	/// <param name="pos">表示する座標</param>
 	void RequestCreateEffect(Types::EffectType effectType, const Position2& pos);
 
+	/// <summary>
+	/// プレイヤーが登場する際のテキストを出す
+	/// </summary>
+	void CreateReadyGoText();
+
 private:
 	int m_frameCount; // フレームカウンタ
 

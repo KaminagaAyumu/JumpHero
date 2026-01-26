@@ -5,9 +5,12 @@
 #include "ItemManager.h"
 #include "EnemyManager.h"
 #include "Effect/EffectManager.h"
+#include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIFormatText.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Input.h"
 #include "../Utility/Map.h"
+#include "../Utility/Game.h"
 #include "DxLib.h"
 #include <cassert>
 
@@ -403,6 +406,22 @@ void GameManager::RequestCreateEffect(Types::EffectType effectType, const Positi
 	{
 		manager->CreateEffekseerEffect(effectType, pos);
 	}
+}
+
+void GameManager::CreateReadyGoText()
+{
+	auto manager = m_pUIManager.lock();
+
+
+	auto weakStart = manager->CreateFormatText(Types::FontType::Large, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 });
+	
+	auto start = weakStart.lock();
+	start->SetCenter();
+	start->SetProvider([this]() {
+		return "Ready...Go!";
+		});
+	start->ShowTypewriter(5, false);
+	start->SetFadeOut(30, 60);
 }
 
 bool GameManager::IsDropChangeToCoin()

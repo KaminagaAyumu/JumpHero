@@ -120,15 +120,6 @@ m_fadeColor(0x000000)
 	m_pUIManager->CreateImage(Types::ImageType::PlayerIcon, kPlayerIconSize, kPlayerIconPos);
 	m_pUIManager->CreateImage(Types::ImageType::MedalIcon, kMedalIconSize, kMedalIconPos);
 
-	m_pStartText = m_pUIManager->CreateFormatText(Types::FontType::Large, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 });
-	auto start = m_pStartText.lock();
-	start->SetCenter();
-	start->SetProvider([this]() {
-		return "Ready...Go!";
-		});
-	start->ShowTypewriter(5,false);
-	start->SetFadeOut(30, 60);
-
 	m_pTextManager = std::make_unique<TextManager>();
 	
 	m_pCollisionManager = std::make_unique<CollisionManager>();
