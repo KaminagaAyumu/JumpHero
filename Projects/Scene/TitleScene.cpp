@@ -37,6 +37,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 {
 	m_titleImageHandle = LoadGraph(L"data/logo.png");
 	m_bg = std::make_shared<Bg>();
+	m_bg->SetBgType(Types::BgType::ScrollXY);
 	m_pMap = std::make_shared<Map>(-1, false);
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 	m_soundManager = Application::GetInstance().GetSoundManager();
