@@ -4,7 +4,8 @@
 UIImage::UIImage() : 
 	m_handle(-1),
 	m_size{},
-	m_pos{}
+	m_pos{},
+	m_isAlive(true)
 {
 
 }
@@ -37,5 +38,10 @@ void UIImage::Draw() const
 
 bool UIImage::IsAlive()const
 {
-	return true;
+	return m_isAlive;
+}
+
+void UIImage::Close()
+{
+	m_isAlive = false;
 }

@@ -25,10 +25,17 @@ public:
 
 	bool IsAlive()const override;
 
+	/// <summary>
+	/// 画像を閉じる
+	/// </summary>
+	void Close();
+
 private:
 	int m_handle; // 画像ハンドル
 	Size m_size; // 画像のサイズ
 	Position2 m_pos; // 画像を表示する座標
+
+	bool m_isAlive; // 画像が表示されているかどうか
 
 };
 
