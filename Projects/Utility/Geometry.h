@@ -182,4 +182,12 @@ namespace Geometry
 	/// <param name="to">終点の位置</param>
 	/// <returns>2つの位置間の距離の大きさ</returns>
 	float GetDistance(const Position2& from, const Position2& to);
+
+	/// <summary>
+	/// 余りを正の数にして返す
+	/// </summary>
+	/// <param name="left">左辺</param>
+	/// <param name="right">右辺</param>
+	/// <returns>余りの数(正の数)</returns>
+	int RemainderToNaturalNumber(int left, int right);
 };

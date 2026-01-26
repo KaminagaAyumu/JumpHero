@@ -223,3 +223,19 @@ float Geometry::GetDistance(const Position2& from, const Position2& to)
 {
 	return hypotf(to.x - from.x, to.y - from.y);
 }
+
+int Geometry::RemainderToNaturalNumber(int left, int right)
+{
+    if (right <= 0) return 0;
+    // 左辺と右辺の余りを求める
+    int ret = left % right;
+
+    // 余りが負の数だったら右辺の値を足した数を返す
+    if (ret < 0)
+    {
+        return ret + right;
+    }
+
+    // ここを通ったら正の数の場合なのでそのまま返す
+    return ret;
+}
