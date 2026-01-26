@@ -210,6 +210,12 @@ public:
 	const int GetTotalBalloonNum()const { return m_totalBalloonNum; }
 
 	/// <summary>
+	/// 持っているメダルの数を取得する
+	/// </summary>
+	/// <returns>持っているメダルの数</returns>
+	const int GetMedalNum()const { return m_medalNum; }
+
+	/// <summary>
 	/// 風船をどれだけ取得したかの割合を返す
 	/// </summary>
 	/// <returns>0.0f~1.0fの割合</returns>

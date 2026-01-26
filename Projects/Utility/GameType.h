@@ -21,6 +21,7 @@ namespace Types
 		TitleLogo,
 		PlayerIcon,
 		ChangeCoinIcon,
+		MedalIcon,
 		ImageNum,
 	};
 

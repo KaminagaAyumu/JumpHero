@@ -38,6 +38,7 @@ namespace
 		L"data/img/title_logo.png", // タイトルロゴ
 		L"data/img/player_icon.png", // プレイヤーのアイコン
 		L"data/img/change_to_coin_icon.png", // 敵をコインに変えるアイテムのアイコン
+		L"data/img/upgrade_medal_icon.png", // 強化メダルのアイコン
 	};
 
 	// 画像枚数が違うときにエラーを出せるようにする
