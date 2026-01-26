@@ -28,6 +28,9 @@ namespace
 	const Size kThumbnailSize = { 500,300 };
 	const Position2 kThumbnailPos = { 700, 100 };
 
+	const Size kDescriptionWindowSize = { 500, 250 };
+	const Position2 kDescriptionWindowPos = { 950, 520 };
+
 }
 
 SelectScene::SelectScene(SceneController& controller) :
@@ -67,7 +70,9 @@ SelectScene::SelectScene(SceneController& controller) :
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 2));
 		});
 
-	
+	m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_tuto"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
+	auto window = m_pDescriptionWindow.lock();
+	window->AppearFromCenter(1.0f);
 }
 
 SelectScene::~SelectScene()
