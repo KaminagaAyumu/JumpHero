@@ -6,6 +6,7 @@ class Bg;
 class SoundManager;
 class TextManager;
 class UIManager;
+class UIImage;
 class UISelectList;
 class UITextWindow;
 class EffectManager;
@@ -58,6 +59,8 @@ private:
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを使用するためのポインタ
 
 	std::unique_ptr<UIManager> m_pUIManager; // UIを使用するためのポインタ
+
+	std::weak_ptr<UIImage> m_pThumbnail; // ステージのサムネイル画像
 
 	std::shared_ptr<EffectManager> m_pEffectManager; // エフェクトを管理するためのポインタ
 

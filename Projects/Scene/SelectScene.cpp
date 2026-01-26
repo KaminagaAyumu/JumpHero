@@ -11,6 +11,7 @@
 #include "../Game/TextManager.h"
 #include "../Game/Effect/EffectManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIImage.h"
 #include "../Utility/UI/UISelectList.h"
 #include "../Utility/UI/UITextWindow.h"
 #include "DxLib.h"
@@ -23,6 +24,9 @@ namespace
 
 	const Size kSelectListSize = { 400, 700 };
 	const Position2 kSelectListPos = { 300, 350 };
+
+	const Size kThumbnailSize = { 500,300 };
+	const Position2 kThumbnailPos = { 700, 100 };
 
 }
 
@@ -41,6 +45,8 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_soundManager->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
 
 	m_pUIManager = std::make_unique<UIManager>();
+
+	m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage1Icon, kThumbnailSize, kThumbnailPos);
 
 	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 
@@ -133,7 +139,6 @@ void SelectScene::FadeOutUpdate(Input&)
 	{
 		auto list = m_pSelectList.lock();
 		list->TriggerSelect();
-		//m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_selectIndex));
 		return; // 念のため処理を抜ける
 	}
 }
@@ -181,7 +186,11 @@ void SelectScene::CheckCursor()
 	/*if (cursor == 0)
 	{
 		auto window = m_pDescriptionWindow.lock();
-
+		if (auto thumbnail = m_pThumbnail.lock())
+		{
+			thumbnail->Close();
+		}
 		
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage1Icon, kThumbnailSize, kThumbnailPos);
 	}*/
 }
