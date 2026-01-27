@@ -30,6 +30,9 @@ namespace
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
 
 	constexpr int kCoinAddScore = 1000; // コイン取得時のスコア
+	constexpr int kBalloonAddScore = 100; // 風船取得時のスコア
+	constexpr int kChangeToCoinAddScore = 100; // 敵をコインに変えるアイテム取得時のスコア
+	constexpr int kUpgradeMedalAddScore = 100; // 強化アイテム取得時のスコア
 
 	constexpr int kReadyGoTextTypeFrame = 5; // プレイヤーの登場する際の文字が出るスピード
 	constexpr int kReadyGoTextWaitFrame = 60; // プレイヤーの登場する際の文字が完全に出てからフェードするまでの時間
@@ -74,6 +77,7 @@ GameManager::GameManager() :
 		{
 			m_balloonNum++; // 風船の数を加算
 			m_balloonCounter++; // 風船取得カウンターを加算
+			AddScore(kBalloonAddScore);
 			Application::GetInstance().GetSoundManager()->Play("balloonSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
 			manager->CreateEffekseerEffect(Types::EffectType::Impact, pos,true);
@@ -82,6 +86,7 @@ GameManager::GameManager() :
 	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this](const Position2& pos)
 		{
 			m_medalNum++; // メダルの数を加算
+			AddScore(kUpgradeMedalAddScore);
 			Application::GetInstance().GetSoundManager()->Play("medalSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
 			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos, true);
@@ -104,6 +109,7 @@ GameManager::GameManager() :
 	// 敵をコインに変えるアイテムを取った時
 	m_itemCollectFunc[Types::ItemType::ChangeToCoin] = [this](const Position2& pos)
 		{
+			AddScore(kChangeToCoinAddScore);
 			ChangeEnemyToCoin(); // 敵をすべてアイテム化
 			Application::GetInstance().GetSoundManager()->Play("changeToCoinSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
