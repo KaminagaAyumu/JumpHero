@@ -24,6 +24,8 @@ namespace
 
 	constexpr int kPauseTextOffsetY = -300; // ポーズの見出しテキストのオフセット(画面中心からどれだけずらすか)
 
+	const Size kSelectListSize = { 400,300 };
+	const Position2 kSelectListPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2};
 }
 
 PauseScene::PauseScene(SceneController& controller) :
@@ -39,7 +41,7 @@ PauseScene::PauseScene(SceneController& controller) :
 
 	m_pUIManager->CreateText(Types::FontType::Large, "ポーズ", {Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kPauseTextOffsetY});
 
-	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, { 300,300 }, {Game::kScreenWidth / 2, Game::kScreenHeight / 2});
+	m_pSelectList = m_pUIManager->CreateSelectList(Types::FontType::Small, kSelectListSize, kSelectListPos);
 	auto list = m_pSelectList.lock();
 	list->AddOption("ポーズを解除", [this]() 
 		{

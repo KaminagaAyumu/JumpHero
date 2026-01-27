@@ -34,10 +34,10 @@ namespace
 	constexpr int kClearBgNo = 1; // ゲームクリアの際の背景の番号
 	constexpr int kStageMaxNum = 2; // ステージの合計数
 
-	const Size kNormalListSize = { 200,300 };
+	const Size kNormalListSize = { 300,300 };
 	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 150 };
 
-	const Size kLastStageListSize = { 200,200 };
+	const Size kLastStageListSize = { 300,200 };
 	const Position2 kLastStageListPos = { Game::kScreenWidth / 2, 500 };
 
 }

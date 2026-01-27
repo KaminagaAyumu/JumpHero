@@ -88,6 +88,19 @@ private:
 
 	int m_cursor; // カーソルがどこにいるか
 
+	/// <summary>
+	/// 文字の描画オフセットを判別するための列挙体
+	/// </summary>
+	enum class OffsetPolicy
+	{
+		Left, // 左詰め
+		Center, // 中央ぞろえ
+	};
+
+	int m_paddingX; // 左右の余白を設定する際に使う
+	OffsetPolicy m_policy; // 描画オフセットを判別するために使う
+
+
 	std::string m_dialogTitle; // ダイアログの見出しのテキスト
 
 	bool m_isDialogMode; // ダイアログとして使うかどうか

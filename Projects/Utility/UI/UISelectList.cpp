@@ -4,10 +4,17 @@
 
 namespace
 {
+	constexpr int kDefaultPaddingX = 16; // リストの左右端からテキストまでの余白の初期値
 	constexpr int kDefaultPaddingY = 10; // リストの上下端からテキストまでの余白の初期値
 	constexpr int kDefaultItemSpacing = 100; // テキストとテキストの間の余白の初期値
 
 	constexpr int kWindowAlpha = 128; // テキストを表示する範囲の透明度
+
+	constexpr int kOutlineMargin = 2; // 影として使うテキストのずらす値
+	
+	constexpr float kTextWaveSpeed = 0.15f; // テキストの動く速さ(フレームカウンタを参照)
+	constexpr float kTextWaveSize = 4.0f; // テキストを動かす際の動く範囲
+	constexpr int kStringOneSize = 1; // 1文字のサイズを示す
 }
 
 UISelectList::UISelectList() : 
@@ -18,6 +25,8 @@ UISelectList::UISelectList() :
 	m_itemSpacing(kDefaultItemSpacing),
 	m_frameCount(0),
 	m_cursor(0),
+	m_paddingX(0),
+	m_policy(OffsetPolicy::Left),
 	m_isDialogMode(false)
 {
 	m_items.clear();
@@ -74,33 +83,79 @@ void UISelectList::Draw() const
 		DrawBox(left, top, right, bottom, 0xff2200, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+		// ここはデフォルトから変えられるようにするかもしれない
+		const int paddingX = kDefaultPaddingX;
+
+		// テキストを描画する範囲
+		const int areaW = m_size.width - paddingX * 2;
+		
+		// フォントのサイズを取得
+		const int fontSize = GetFontSizeToHandle(m_fontHandle);
+		
+		// 項目を並べるY座標
 		int y = top + kDefaultPaddingY;
 
+		// 項目の数だけ並べていく処理
 		for (int i = 0; i < static_cast<int>(m_items.size()); i++)
 		{
+			// カーソルがこの項目にあっているか
 			const bool isSelected = (i == m_cursor);
+			// テキストをワイド文字列に変換しておく
+			const std::wstring wText = StringFunction::WStringFromString(m_items[i].text);
+			// テキストの幅を取得
+			const int lineW = GetDrawStringWidthToHandle(wText.c_str(), static_cast<int>(wText.size()), m_fontHandle);
 
-			if (isSelected)
+			// 表示するX座標を確認
+			int x = left + paddingX;
+
+			// 文字の幅がテキストを描画する範囲内に収まっているとき
+			if (lineW <= areaW)
 			{
-				int offsetY = static_cast<int>(std::sin(m_frameCount * 0.12f) * 3.5f);
-				DrawBox(left + kDefaultPaddingY,
-					y - 4 + offsetY,
-					right - kDefaultPaddingY,
-					y + m_itemSpacing - 4 + offsetY,
-					0x444444, true);
+				// X座標は中央ぞろえにする
+				x = left + paddingX + (areaW - lineW) / 2;
 			}
 
-			const auto& text = m_items[i].text;
-			auto wText = StringFunction::WStringFromString(text); // ワイド文字列に変換
-			auto width = GetDrawStringWidthToHandle(wText.c_str(), static_cast<int>(m_items[i].text.length()), m_fontHandle);
-			auto height = GetFontSizeToHandle(m_fontHandle);
-			DrawStringToHandle(left + kDefaultPaddingY, y + height / 2, wText.c_str(), isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
-			y += m_itemSpacing;
-			// y座標がサイズを超えたらループを抜ける
-			if (y > bottom - kDefaultPaddingY)
+			// 垂直位置の基準Y座標
+			int baselineY = y + (kDefaultItemSpacing - fontSize) / 2;
+
+			// 文字を1文字ずつ動かす際に進めるための値
+			int advance = 0;
+			// 文字が波打つスピードを調整
+			float t = m_frameCount * kTextWaveSpeed;
+
+			// 文字の数分ループ
+			for (int c = 0; c < static_cast<int>(wText.size()); c++)
 			{
-				break;
+				// 文字の内容を取得
+				wchar_t ch = wText[c];
+				// ワイド文字列にする
+				std::wstring one(kStringOneSize, ch);
+				// この文字の幅を取得
+				int cw = GetDrawStringWidthToHandle(one.c_str(), kStringOneSize, m_fontHandle);
+
+				// テキストが波打つためのオフセット
+				int yOffset = 0;
+				// 選択中の場合
+				if (isSelected)
+				{
+					// オフセットが波打つ感じにする
+					yOffset = static_cast<int>(std::sin(t - c * 0.5f) * kTextWaveSize);
+				}
+
+				// 影にするテキストを描画
+				DrawStringToHandle(x + advance + kOutlineMargin, baselineY + kOutlineMargin + yOffset, one.c_str(), GetColor(0, 0, 0), m_fontHandle);
+				// 実際のテキストを描画
+				// 選択中の場合は色を変える
+				DrawStringToHandle(x + advance, baselineY + yOffset, one.c_str(), isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
+
+				// 文字の描画X座標をこの文字の幅分進める
+				advance += cw;
 			}
+			
+			// 次の項目のy座標に進める
+			y += kDefaultItemSpacing;
+			// y座標がこれ以上進めない場合処理を抜ける
+			if (y > bottom - kDefaultPaddingY) break;
 		}
 	}
 
