@@ -16,6 +16,8 @@ namespace
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
 	constexpr int kPopInterval = 30; // フェード処理を行う時間
 
+	constexpr int kBackAlpha = 128; // 背景の透明度
+
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
 	constexpr int kPauseTextOffsetY = -300; // ポーズの見出しテキストのオフセット(画面中心からどれだけずらすか)
@@ -134,7 +136,7 @@ void PauseScene::FadeOutUpdate(Input&)
 void PauseScene::NormalDraw()
 {
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kBackAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -147,7 +149,7 @@ void PauseScene::NormalDraw()
 
 void PauseScene::FadeDraw()
 {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kBackAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
