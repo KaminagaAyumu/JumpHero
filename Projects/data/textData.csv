@@ -40,4 +40,4 @@ stage1_test,3,終わります
 select_tuto,1,このゲームの基本操作や遊び方を説明します。
 select_stage1,1,始まりのステージです。
 select_stage2,1,上に上がっていくステージです。
-select_option,1,ゲームの設定を行います。ゲームをやめることもできます。
+select_option,1,ゲームを終了します。
