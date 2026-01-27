@@ -229,9 +229,10 @@ public:
 	float GetChangeToCoinTimeRate()const;
 
 	/// <summary>
-	/// 残機を1減らす(仮)
+	/// プレイヤーがミスしたときに行う処理
+	/// 残機を減らしてミスのテキストを表示する
 	/// </summary>
-	void LifeDown() { m_life--; }
+	void MissStart();
 
 	/// <summary>
 	/// アイテムを取得するイベントを設定

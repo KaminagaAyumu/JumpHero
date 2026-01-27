@@ -34,6 +34,10 @@ namespace
 	constexpr int kReadyGoTextWaitFrame = 60; // プレイヤーの登場する際の文字が完全に出てからフェードするまでの時間
 	constexpr int kReadyGoTextFadeFrame = 60; // プレイヤーの登場する際の文字がフェードする時間
 
+	constexpr int kMissTextTypeFrame = 3; // プレイヤーがミスになった際の文字が出るスピード
+	constexpr int kMissTextWaitFrame = 120; // プレイヤーがミスになった際の文字が完全に出てからフェードするまでの時間
+	constexpr int kMissTextFadeFrame = 30; // プレイヤーがミスになった際の文字がフェードする時間
+
 	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
 }
 
@@ -390,6 +394,27 @@ float GameManager::GetBalloonCounterRate() const
 float GameManager::GetChangeToCoinTimeRate() const
 {
 	return m_pEnemyManager->GetItemTimeRate();
+}
+
+void GameManager::MissStart()
+{
+	// 残機を減らす
+	m_life--;
+
+	// ミスのテキストを出すためにlock
+	auto manager = m_pUIManager.lock();
+
+	// ミスのテキストのweak_ptrを取得
+	auto weakMiss = manager->CreateFormatText(Types::FontType::Large, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 });
+
+	// lockしてミス時に表示するテキストの内容を設定
+	auto miss = weakMiss.lock();
+	miss->SetCenter();
+	miss->SetProvider([this]() {
+		return "Miss...";
+		});
+	miss->ShowTypewriter(kMissTextTypeFrame, false);
+	miss->SetFadeOut(kMissTextWaitFrame, kMissTextFadeFrame);
 }
 
 void GameManager::NotifyItemEvent(Types::ItemType type)

@@ -933,9 +933,9 @@ void Player::JumpDraw()
 	auto camera = m_pCamera.lock();
 	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
-	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xaaffff, true);
-	//DrawRectRotaGraph(drawX, drawY, kGraphWidth * 3, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+	
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
+
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -947,8 +947,7 @@ void Player::GroundDraw()
 	auto camera = m_pCamera.lock();
 	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
-	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0x22ff00, true);
-	//DrawRectRotaGraph(drawX, drawY, 0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+	
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 
 #ifdef _DEBUG
@@ -962,11 +961,9 @@ void Player::MissDraw()
 	auto camera = m_pCamera.lock();
 	int drawX = static_cast<int>(m_pos.x - camera->scroll.x);
 	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
-	//DrawBox(static_cast<int>(drawX - kPlayerWidth * 0.5f), static_cast<int>(drawY - kPlayerHeight * 0.5f), static_cast<int>(drawX + kPlayerWidth * 0.5f), static_cast<int>(drawY + kPlayerHeight * 0.5f), 0xff00aa, true);
-	//DrawRectRotaGraph(drawX, drawY, kGraphWidth, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_graphHandle, true, false);
+	
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
 
-	DrawString(Game::kScreenWidth / 2, Game::kScreenHeight / 2, L"Miss!", 0xffffff);
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -980,6 +977,7 @@ void Player::AutoMoveDraw()
 	int drawY = static_cast<int>(m_pos.y - camera->scroll.y);
 	
 	m_currentAnim.Draw({ drawX, drawY }, m_isTurn);
+
 #ifdef _DEBUG
 	m_colCircle.Draw(drawX, drawY);
 	m_colRect.Draw(drawX, drawY);
@@ -1091,7 +1089,7 @@ void Player::MissStart()
 	m_isMiss = true; // ミスフラグをtrueにする
 	m_frameCount = 0; // 時間経過をリセット
 	auto gameManager = m_pGameManager.lock();
-	gameManager->LifeDown(); // 残機を減らす処理を呼ぶ
+	gameManager->MissStart(); // 残機を減らす処理を呼ぶ
 	Application::GetInstance().GetSoundManager()->Play("missSE", 1.0f, true);
 	m_update = &Player::MissUpdate; // 更新処理をミス状態に
 	m_draw = &Player::MissDraw;// 描画処理をミス状態に
