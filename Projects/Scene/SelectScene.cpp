@@ -51,7 +51,7 @@ SelectScene::SelectScene(SceneController& controller) :
 
 	m_pUIManager = std::make_unique<UIManager>();
 
-	m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage1Icon, kThumbnailSize, kThumbnailPos);
+	m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::TutorialIcon, kThumbnailSize, kThumbnailPos);
 
 	m_pEffectManager = std::make_shared<EffectManager>(controller.GetEffekseerResourceManager());
 
@@ -212,7 +212,7 @@ void SelectScene::CheckCursor()
 		auto justWindow = m_pDescriptionWindow.lock();
 		justWindow->AppearFromCenter(kWindowAppearDuration);
 
-		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage1Icon, kThumbnailSize, kThumbnailPos);
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::TutorialIcon, kThumbnailSize, kThumbnailPos);
 	}
 	else if (cursor == 1)
 	{

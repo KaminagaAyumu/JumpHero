@@ -36,6 +36,7 @@ namespace
 	const std::wstring kImageFileName[] =
 	{
 		L"data/img/title_logo.png", // タイトルロゴ
+		L"data/img/tutorial_icon.png", // タイトルロゴ
 		L"data/img/stage1_icon.png", // ステージ1のアイコン
 		L"data/img/stage2_icon.png", // ステージ2のアイコン
 		L"data/img/player_icon.png", // プレイヤーのアイコン
