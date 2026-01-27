@@ -9,6 +9,8 @@
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UIFormatText.h"
 #include "../Utility/UI/UIGauge.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "../Game/TextManager.h"
 #include "../Game/Event/EventManager.h"
 #include "../Utility/Bg.h"
@@ -117,6 +119,8 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pEventSensors = std::make_shared<EventSensors>();
 	m_pEventControls = std::make_shared<EventControls>();
 
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("pauseSE", L"data/sound/SE/pauseSE.mp3", SoundBus::SE, 1.0f, false);
+
 	// イベントの内容を格納
 	SetEventFunc();
 
@@ -162,6 +166,7 @@ void MiniGameScene::NormalUpdate(Input& input)
 	// ポーズボタンが押されたら
 	if (input.IsTriggered("Pause"))
 	{
+		Application::GetInstance().GetSoundManager()->Play("pauseSE", 1.0f, true);
 		// ポーズシーンをプッシュする(このシーンに戻ることも可能にする)
 		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 		return;

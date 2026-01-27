@@ -129,6 +129,7 @@ m_fadeColor(0x000000)
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
 	m_pSoundManager = Application::GetInstance().GetSoundManager();
+	m_pSoundManager->LoadSoundClip("pauseSE", L"data/sound/SE/pauseSE.mp3", SoundBus::SE, 1.0f, false);
 
 	if (m_stageNo == 0)
 	{
@@ -202,6 +203,7 @@ void GameScene::NormalUpdate(Input& input)
 	// ポーズボタンが押されたら
 	if (input.IsTriggered("Pause"))
 	{
+		m_pSoundManager->Play("pauseSE", 1.0f, true);
 		// ポーズシーンをプッシュする(このシーンに戻ることも可能にする)
 		m_controller.PushScene(std::make_shared<PauseScene>(m_controller));
 		return;

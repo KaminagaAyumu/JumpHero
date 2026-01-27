@@ -6,6 +6,8 @@
 #include "../Utility/Input.h"
 #include "../Utility/Game.h"
 #include "../Utility/GameType.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UISelectList.h"
 
@@ -55,6 +57,10 @@ PauseScene::PauseScene(SceneController& controller) :
 			m_controller.ResetScene(std::make_shared<TitleScene>(m_controller));
 		});
 
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("select", L"data/sound/BGM/selectBGM.wav", SoundBus::BGM, 1.0f, true);
+
 }
 
 PauseScene::~PauseScene()
@@ -88,14 +94,14 @@ void PauseScene::NormalUpdate(Input& input)
 	m_pUIManager->Update();
 	if (input.IsTriggered("Down"))
 	{
-		//m_soundManager->Play("cursor_se", 1.0f, true);
+		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 
 		auto list = m_pSelectList.lock();
 		list->MoveCursor(1);
 	}
 	if (input.IsTriggered("Up"))
 	{
-		//m_soundManager->Play("cursor_se", 1.0f, true);
+		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 
 		auto list = m_pSelectList.lock();
 		list->MoveCursor(-1);
@@ -114,6 +120,7 @@ void PauseScene::NormalUpdate(Input& input)
 		{
 			m_transitionInterval = kFadeInterval;
 		}
+		Application::GetInstance().GetSoundManager()->Play("ok_se", 1.0f, true);
 		m_updateFunc = &PauseScene::FadeOutUpdate;
 		m_drawFunc = &PauseScene::FadeDraw;
 		return; // 念のため処理を抜ける
