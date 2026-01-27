@@ -277,4 +277,22 @@ void SelectScene::CheckCursor()
 
 		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage2Icon, kThumbnailSize, kThumbnailPos);
 	}
+	else
+	{
+		if (auto window = m_pDescriptionWindow.lock())
+		{
+			window->CloseWindow(kWindowAppearDuration);
+		}
+
+		if (auto thumbnail = m_pThumbnail.lock())
+		{
+			thumbnail->Close();
+		}
+
+		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_end"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
+		auto justWindow = m_pDescriptionWindow.lock();
+		justWindow->AppearFromCenter(kWindowAppearDuration);
+
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage2Icon, kThumbnailSize, kThumbnailPos);
+	}
 }
