@@ -26,6 +26,7 @@ namespace Types
 		PlayerIcon,
 		ChangeCoinIcon,
 		MedalIcon,
+		AButtonIcon,
 		ImageNum,
 	};
 

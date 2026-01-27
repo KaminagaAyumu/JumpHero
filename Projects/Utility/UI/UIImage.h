@@ -2,6 +2,9 @@
 #include "UIBase.h"
 #include "../Geometry.h"
 
+
+class Animation;
+
 /// <summary>
 /// 画像を表示するクラス
 /// </summary>
@@ -26,6 +29,14 @@ public:
 	bool IsAlive()const override;
 
 	/// <summary>
+	/// アニメーションをセットする
+	/// </summary>
+	/// <param name="animNum">アニメーション枚数</param>
+	/// <param name="animFrame">アニメーションの更新を行うフレーム</param>
+	/// <param name="isLoop">ループするかどうか(基本true)</param>
+	void SetAnimation(int animNum, int animFrame, bool isLoop);
+
+	/// <summary>
 	/// 画像を閉じる
 	/// </summary>
 	void Close();
@@ -36,6 +47,8 @@ private:
 	Position2 m_pos; // 画像を表示する座標
 
 	bool m_isAlive; // 画像が表示されているかどうか
+
+	std::shared_ptr<Animation> m_pAnimation; // アニメーションがある際に使用する
 
 };
 

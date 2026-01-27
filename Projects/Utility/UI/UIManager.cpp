@@ -36,6 +36,9 @@ namespace
 	// 画像データ関連
 	//----------------
 
+	constexpr int kButtonAnimNum = 4;
+	constexpr int kButtonAnimFrame = 4;
+
 	// 画像ファイル名の配列
 	const std::wstring kImageFileName[] =
 	{
@@ -46,6 +49,7 @@ namespace
 		L"data/img/player_icon.png", // プレイヤーのアイコン
 		L"data/img/change_to_coin_icon.png", // 敵をコインに変えるアイテムのアイコン
 		L"data/img/upgrade_medal_icon.png", // 強化メダルのアイコン
+		L"data/img/button_a.png", // Aボタンのアイコン
 	};
 
 	// 画像枚数が違うときにエラーを出せるようにする
@@ -193,6 +197,12 @@ std::weak_ptr<UIImage> UIManager::CreateImage(Types::ImageType type, const Size&
 {
 	auto ptr = std::make_shared<UIImage>();
 	ptr->Init(m_imageHandles[static_cast<int>(type)], size, pos);
+	// アニメーションがある画像の場合
+	if (type == Types::ImageType::AButtonIcon)
+	{
+		// アニメーションを設定
+		ptr->SetAnimation(kButtonAnimNum, kButtonAnimFrame, true);
+	}
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }
