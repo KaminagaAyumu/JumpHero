@@ -45,7 +45,7 @@ namespace
 	const Size kCoinTimeGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kCoinTimeGaugePos = { 20.0f,180.0f }; // 風船のゲージの座標
 
-	const Position2 kCenterPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 };
+	const Position2 kCoinGaugeIconPos = { 40.0f,80.0f }; // 風船の取得数アイコンの中心座標
 }
 
 GameManager::GameManager() :
@@ -213,7 +213,7 @@ void GameManager::Update(Input& input)
 		Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
 		if (auto manager = m_pEffectManager.lock())
 		{
-			manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCenterPos, false);
+			manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCoinGaugeIconPos, false);
 		}
 		m_isItemGaugeMax = true;
 		
