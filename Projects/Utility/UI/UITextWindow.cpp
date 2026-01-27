@@ -15,7 +15,7 @@ namespace
 
 	constexpr int kWindowWidthMargin = 30; // ウィンドウの端からのマージン
 
-	constexpr int kWindowBackAlpha = 128; // テキストを表示する範囲の透明度
+	constexpr int kWindowBackAlpha = 200; // テキストを表示するウィンドウ背景の透明度
 }
 
 UITextWindow::UITextWindow() :
@@ -188,11 +188,11 @@ void UITextWindow::Draw() const
 	// ウィンドウの画像ハンドルを取得していれば
 	if (m_windowGraphHandle != -1)
 	{
-		//SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowBackAlpha);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowBackAlpha);
 		DrawExtendGraph(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
 			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
 			m_windowGraphHandle, true); // ウィンドウの背景を描画
-		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else // ハンドルを取得していなければ
 	{
