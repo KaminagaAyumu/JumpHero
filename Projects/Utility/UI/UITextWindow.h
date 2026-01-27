@@ -22,6 +22,17 @@ public:
 	/// <param name="fontHandle">フォントのハンドル</param>
 	/// <param name="windowGraphHandle">ウィンドウの画像ハンドル</param>
 	void Init(std::string text, const Size& size, const Position2& target, int fontHandle, int windowGraphHandle);
+	
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="text"></param>
+	/// <param name="size"></param>
+	/// <param name="target"></param>
+	/// <param name="fontHandle"></param>
+	/// <param name="windowFrameHandle"></param>
+	/// <param name="windowGraphHandle"></param>
+	void Init(std::string text, const Size& size, const Position2& target, int fontHandle, int windowFrameHandle, int windowGraphHandle);
 
 	/// <summary>
 	/// 複数ページのテキストデータをセットする
@@ -122,6 +133,7 @@ private:
 
 	int m_fontHandle; // フォントデータを使う際のハンドル
 	int m_windowGraphHandle; // ウィンドウの画像を使う際のハンドル
+	int m_windowFrameHandle; // ウィンドウのフレームを使う際のハンドル
 
 	TextPager m_textPager; // ページ付きのテキストデータを管理するために使う
 

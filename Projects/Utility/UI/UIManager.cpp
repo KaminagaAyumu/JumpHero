@@ -66,7 +66,8 @@ UIManager::UIManager()
 	// 画像データを読み込んで設定
 	LoadImages();
 
-	m_windowGraphHandle = LoadGraph(L"data/frame.png");
+	m_windowGraphHandle = LoadGraph(L"data/img/window_back.png");
+	m_windowFrameHandle = LoadGraph(L"data/img/window_frame.png");
 
 	m_gaugeFrameHandle = LoadGraph(L"data/img/gauge_frame.png");
 	m_gaugeFillHandle = LoadGraph(L"data/img/gauge_fill.png");
@@ -90,6 +91,7 @@ UIManager::~UIManager()
 	}
 
 	DeleteGraph(m_windowGraphHandle);
+	DeleteGraph(m_windowFrameHandle);
 	
 	DeleteGraph(m_gaugeFrameHandle);
 	DeleteGraph(m_gaugeFillHandle);
@@ -132,7 +134,7 @@ void UIManager::Draw()
 std::weak_ptr<UITextWindow> UIManager::CreateTextWindow(const std::string& text, const Size& size, const Position2& pos, Types::FontType fontType)
 {
 	auto ptr = std::make_shared<UITextWindow>();
-	ptr->Init(text, size, pos, m_fontHandles[static_cast<int>(fontType)],m_windowGraphHandle);
+	ptr->Init(text, size, pos, m_fontHandles[static_cast<int>(fontType)], m_windowFrameHandle,m_windowGraphHandle);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }
@@ -140,7 +142,7 @@ std::weak_ptr<UITextWindow> UIManager::CreateTextWindow(const std::string& text,
 std::weak_ptr<UITextWindow> UIManager::CreateTextWindowPaged(const std::string& id, const std::vector<TextData>& pages, const Size& size, const Position2& pos, float appearDuration, Types::FontType fontType)
 {
 	auto ptr = std::make_shared<UITextWindow>();
-	ptr->Init("", size, pos, m_fontHandles[static_cast<int>(fontType)], m_windowGraphHandle);
+	ptr->Init("", size, pos, m_fontHandles[static_cast<int>(fontType)], m_windowFrameHandle, m_windowGraphHandle);
 	ptr->SetPages(id, pages);
 	ptr->ShowPaging(appearDuration);
 	m_pUIElements.push_back(ptr);

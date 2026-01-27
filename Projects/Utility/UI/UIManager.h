@@ -95,7 +95,9 @@ public:
 private:
 	std::vector<int> m_fontHandles; // フォントハンドルを格納する配列
 	std::vector<int> m_imageHandles; // イメージ画像データを格納する配列
+	
 	int m_windowGraphHandle; // ウィンドウの画像ハンドル
+	int m_windowFrameHandle; // ウィンドウの枠ハンドル
 
 	int m_gaugeFrameHandle; // ゲージの枠ハンドル
 	int m_gaugeFillHandle; // ゲージの中身ハンドル

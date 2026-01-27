@@ -14,6 +14,8 @@ namespace
 	constexpr int kScrollWaitFrame = 60; // スクロールを止める時間
 
 	constexpr int kWindowWidthMargin = 30; // ウィンドウの端からのマージン
+
+	constexpr int kWindowBackAlpha = 128; // テキストを表示する範囲の透明度
 }
 
 UITextWindow::UITextWindow() :
@@ -38,6 +40,7 @@ UITextWindow::UITextWindow() :
 	m_scrollWaitTimer(0),
 	m_fontHandle(-1),
 	m_windowGraphHandle(-1),
+	m_windowFrameHandle(-1),
 	m_textPager{}
 {
 }
@@ -54,6 +57,18 @@ void UITextWindow::Init(std::string text, const Size& size, const Position2& tar
 	m_pos = m_startPos; // 初期位置を設定
 	// ハンドルを取得
 	m_fontHandle = fontHandle;
+	m_windowGraphHandle = windowGraphHandle;
+}
+
+void UITextWindow::Init(std::string text, const Size& size, const Position2& target, int fontHandle, int windowFrameHandle, int windowGraphHandle)
+{
+	m_text = text; // テキストの内容を設定
+	m_targetSize = size; // 目標サイズを設定
+	m_targetPos = target; // 目標位置を設定
+	m_pos = m_startPos; // 初期位置を設定
+	// ハンドルを取得
+	m_fontHandle = fontHandle;
+	m_windowFrameHandle = windowFrameHandle;
 	m_windowGraphHandle = windowGraphHandle;
 }
 
@@ -173,22 +188,30 @@ void UITextWindow::Draw() const
 	// ウィンドウの画像ハンドルを取得していれば
 	if (m_windowGraphHandle != -1)
 	{
-		// 黒で背景を描画
-		DrawBox(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
-			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
-			GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
-
+		//SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowBackAlpha);
 		DrawExtendGraph(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
 			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
 			m_windowGraphHandle, true); // ウィンドウの背景を描画
+		//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else // ハンドルを取得していなければ
 	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowBackAlpha);
 		// 黒で背景を描画
 		DrawBox(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
 			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
 			GetColor(0, 0, 0), TRUE); // ウィンドウの背景を描画
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
+	// ウィンドウの枠画像ハンドルを取得していれば
+	if (m_windowFrameHandle != -1)
+	{
+		// 枠の画像を描画
+		DrawExtendGraph(static_cast<int>(m_pos.x) - m_size.width / 2, static_cast<int>(m_pos.y) - m_size.height / 2,
+			static_cast<int>(m_pos.x) + m_size.width / 2, static_cast<int>(m_pos.y) + m_size.height / 2,
+			m_windowFrameHandle, true); // ウィンドウの枠を描画
+	}// 取得していない場合はとりあえず何もしない
 
 	const int halfW = m_size.width / 2;
 	const int halfH = m_size.height / 2;
