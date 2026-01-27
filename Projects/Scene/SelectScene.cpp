@@ -42,6 +42,7 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_frameCount = kFadeInterval;
 
 	m_pBg = std::make_shared<Bg>();
+	m_pBg->Init();
 
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
@@ -92,6 +93,7 @@ void SelectScene::Draw()
 void SelectScene::FadeInUpdate(Input&)
 {
 	m_frameCount--;
+	m_pBg->Update();
 	m_pEffectManager->Update();
 	if (m_frameCount <= 0)
 	{
@@ -140,6 +142,7 @@ void SelectScene::NormalUpdate(Input& input)
 void SelectScene::FadeOutUpdate(Input&)
 {
 	m_frameCount++;
+	m_pBg->Update();
 	if (m_frameCount >= kFadeInterval)
 	{
 		auto list = m_pSelectList.lock();

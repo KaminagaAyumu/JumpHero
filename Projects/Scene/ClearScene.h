@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
+class Bg;
 class GameManager;
 class UIManager;
 class UISelectList;
@@ -46,6 +47,8 @@ private:
 	DrawFunc_t m_drawFunc; // 現在の描画処理用関数ポインタ
 
 	const int GetScore()const { return m_resultScore; };
+
+	std::shared_ptr<Bg> m_pBg; // 背景
 
 	std::shared_ptr<GameManager> m_pGameManager;
 

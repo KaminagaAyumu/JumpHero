@@ -10,7 +10,8 @@ Bg::Bg() :
 	m_pos{}
 {
 	//m_bgHandle = LoadGraph(L"data/img/logo_back.png");
-	m_bgHandle = LoadGraph(L"data/img/bg_underground.png");
+	//m_bgHandle = LoadGraph(L"data/img/bg_underground.png");
+	m_bgHandle = -1;
 
 	auto handle = LoadGraph(L"data/background_1.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
@@ -48,6 +49,14 @@ Bg::~Bg()
 
 void Bg::Init()
 {
+	if (m_updateFunc == &Bg::LoopUpdate)
+	{
+		m_bgHandle = LoadGraph(L"data/img/logo_back.png");
+	}
+	else
+	{
+		m_bgHandle = LoadGraph(L"data/img/bg_underground.png");
+	}
 }
 
 void Bg::Update()

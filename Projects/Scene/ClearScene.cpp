@@ -9,6 +9,7 @@
 #include "../Utility/UI/UISelectList.h"
 #include "../Utility/UI/UIFormatText.h"
 #include "../Utility/Input.h"
+#include "../Utility/Bg.h"
 #include "../Utility/Game.h"
 #include "../Utility/GameType.h"
 #include "DxLib.h"
@@ -49,6 +50,9 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 	m_stageNo = stageNo;
 
 	m_gameScore = m_pGameManager->GetCurrentScore();
+
+	m_pBg = std::make_shared<Bg>();
+	m_pBg->Init();
 
 	m_pUIManager = std::make_shared<UIManager>();
 
@@ -114,6 +118,7 @@ void ClearScene::Draw()
 void ClearScene::FadeInUpdate(Input&)
 {
 	m_frameCount--;
+	m_pBg->Update();
 	if (m_frameCount <= 0)
 	{
 		// フェードイン完了
@@ -125,6 +130,7 @@ void ClearScene::FadeInUpdate(Input&)
 
 void ClearScene::NormalUpdate(Input& input)
 {
+	m_pBg->Update();
 	m_pUIManager->Update();
 
 	
@@ -177,6 +183,7 @@ void ClearScene::NormalUpdate(Input& input)
 void ClearScene::FadeOutUpdate(Input&)
 {
 	m_frameCount++;
+	m_pBg->Update();
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
@@ -188,6 +195,7 @@ void ClearScene::FadeOutUpdate(Input&)
 
 void ClearScene::NormalDraw()
 {
+	m_pBg->Draw();
 	m_pUIManager->Draw();
 #ifdef _DEBUG
 	DrawString(0, 0, L"ClearScene: NormalDraw", 0xffffff);
@@ -196,6 +204,7 @@ void ClearScene::NormalDraw()
 
 void ClearScene::FadeDraw()
 {
+	m_pBg->Draw();
 	m_pUIManager->Draw();
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f

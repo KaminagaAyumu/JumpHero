@@ -54,7 +54,10 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_stageNo = stageNo;
 
 	m_bg = std::make_shared<Bg>();
+	m_bg->SetBgType(Types::BgType::ScrollXY);
 	m_bg->Init();
+
+
 	m_pMap = std::make_shared<Map>(stageNo,true);
 	m_pMap->Init();
 
