@@ -4,6 +4,8 @@
 #include "../Utility/Map.h"
 #include "../Utility/Camera.h"
 #include "../Utility/AnimationLoader.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "GameManager.h"
 #include "Chest.h"
 #include "DxLib.h"
@@ -80,6 +82,7 @@ Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 	m_update(&Player::EntryUpdate),
 	m_draw(&Player::EntryDraw)
 {
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("jumpSE", L"data/sound/SE/jumpSE.wav", SoundBus::SE, 1.0f, false);
 }
 
 Player::Player(std::weak_ptr<Map> map) : 
@@ -110,6 +113,7 @@ Player::Player(std::weak_ptr<Map> map) :
 	m_update(&Player::AutoMoveUpdate),
 	m_draw(&Player::AutoMoveDraw)
 {
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("jumpSE", L"data/sound/SE/jumpSE.wav", SoundBus::SE, 1.0f, false);
 }
 
 Player::~Player()
@@ -1044,6 +1048,7 @@ void Player::JumpStart()
 	auto gameManager = m_pGameManager.lock();
 	gameManager->AddScore(kJumpAddScore); // スコアを加算
 	gameManager->RequestCreateEffect(Types::EffectType::Jump, m_pos + Position2{0,kPlayerHeight / 2});
+	Application::GetInstance().GetSoundManager()->Play("jumpSE", 1.0f, true);
 	m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 }
