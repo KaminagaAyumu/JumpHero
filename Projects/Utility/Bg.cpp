@@ -12,6 +12,7 @@ Bg::Bg() :
 	//m_bgHandle = LoadGraph(L"data/img/logo_back.png");
 	//m_bgHandle = LoadGraph(L"data/img/bg_underground.png");
 	m_bgHandle = -1;
+	m_layers.clear();
 
 	auto handle = LoadGraph(L"data/background_1.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
@@ -29,9 +30,6 @@ Bg::Bg() :
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
 	handle = LoadGraph(L"data/background_6.png");
-	assert(handle != -1 && "画像の読み込みに失敗しました");
-	m_bgHandles.push_back(handle);
-	handle = LoadGraph(L"data/img/bg_underground.png");
 	assert(handle != -1 && "画像の読み込みに失敗しました");
 	m_bgHandles.push_back(handle);
 
@@ -92,6 +90,11 @@ void Bg::SetBgType(Types::BgType type)
 		m_drawFunc = &Bg::ScrollDraw;
 		break;
 	}
+}
+
+void Bg::SetLayer()
+{
+	
 }
 
 void Bg::LoopUpdate()

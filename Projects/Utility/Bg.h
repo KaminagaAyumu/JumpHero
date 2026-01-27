@@ -29,6 +29,11 @@ public:
 	/// <param name="type">背景タイプ</param>
 	void SetBgType(Types::BgType type);
 
+	/// <summary>
+	/// レイヤーを使う場合にこれを呼ぶ
+	/// </summary>
+	void SetLayer();
+
 private:
 
 	struct BgLayer
