@@ -19,6 +19,7 @@ namespace
 		kEffectStar, // コイン化アイテム
 		kEffectPowerUp, // パワーアップ
 		kEffectJump, // ジャンプ
+		kEffectChangeCoin, // 敵をコインに変える
 		kEffectNum
 	};
 
@@ -30,6 +31,7 @@ namespace
 		L"data/effect/star.efk", // 強化メダル
 		L"data/effect/powerup_1.efk", // パワーアップ
 		L"data/effect/jump.efk", // ジャンプ
+		L"data/effect/change_coin.efk", // ジャンプ
 	};
 
 	// エフェクトデータの数が違うときにエラーを出せるようにする
@@ -88,13 +90,13 @@ void EffectManager::Draw()
 	
 }
 
-void EffectManager::CreateEffekseerEffect(Types::EffectType type, const Position2& pos)
+void EffectManager::CreateEffekseerEffect(Types::EffectType type, const Position2& pos, bool isUseCamera)
 {
 	auto effect = std::make_shared<EffekseerEffect>();
 	// カメラがセットされている場合
 	if (auto camera = m_pCamera.lock())
 	{
-		effect->Init(m_effekseerResourceHandles[(int)type], pos,camera);
+		effect->Init(m_effekseerResourceHandles[(int)type], pos,camera,isUseCamera);
 	}
 	else // カメラがセットされていない場合
 	{
@@ -103,13 +105,13 @@ void EffectManager::CreateEffekseerEffect(Types::EffectType type, const Position
 	m_effekseerEffects.push_back(effect);
 }
 
-std::weak_ptr<EffekseerEffect> EffectManager::CreateEffekseerEffectWithProvider(Types::EffectType type, const Position2& pos, std::function<const Position2& ()> provider)
+std::weak_ptr<EffekseerEffect> EffectManager::CreateEffekseerEffectWithProvider(Types::EffectType type, const Position2& pos, std::function<const Position2& ()> provider, bool isUseCamera)
 {
 	auto effect = std::make_shared<EffekseerEffect>();
 	// カメラがセットされている場合
 	if (auto camera = m_pCamera.lock())
 	{
-		effect->Init(m_effekseerResourceHandles[(int)type], pos, camera, provider);
+		effect->Init(m_effekseerResourceHandles[(int)type], pos, camera, provider, isUseCamera);
 	}
 	else // カメラがセットされていない場合
 	{

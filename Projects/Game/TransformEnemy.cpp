@@ -135,7 +135,7 @@ void TransformEnemy::OnCollected(std::weak_ptr<GameManager> gameManager)
 	Application::GetInstance().GetSoundManager()->Play("coinSE", 1.0f, true);
 	auto manager = gameManager.lock();
 	manager->AddScore(kEnemyCoinAddScore);
-	manager->RequestCreateEffect(Types::EffectType::CoinGet, m_pos);
+	manager->RequestCreateEffect(Types::EffectType::CoinGet, m_pos,true);
 }
 
 void TransformEnemy::IsCollision(const Types::CollisionInfo& info)

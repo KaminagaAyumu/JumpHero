@@ -28,7 +28,8 @@ public:
 	/// <param name="handle">エフェクトのリソースハンドル</param>
 	/// <param name="pos">エフェクトを表示する座標</param>
 	/// <param name="camera">カメラのポインタ</param>
-	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera);
+	/// <param name="isUseCamera">カメラを使うかどうか</param>
+	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, bool isUseCamera);
 
 	/// <summary>
 	/// 座標を指定して表示する際の初期化処理
@@ -37,7 +38,8 @@ public:
 	/// <param name="pos">エフェクトを表示する座標</param>
 	/// <param name="camera">カメラのポインタ</param>
 	/// <param name="provider">座標を指定する関数</param>
-	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<const Position2& ()> provider);
+	/// <param name="isUseCamera">カメラを使うかどうか</param>
+	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<const Position2& ()> provider, bool isUseCamera);
 
 	void Update();
 
@@ -56,6 +58,8 @@ private:
 	std::weak_ptr<Camera> m_pCamera; // カメラがある際に使う
 
 	std::function<const Position2& ()> m_pPosProvider; // 座標を指定する際に使う
+
+	bool m_isUseCamera; // カメラを使うかどうか
 
 	/// <summary>
 	/// 座標を初期化する

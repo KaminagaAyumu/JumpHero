@@ -8,7 +8,8 @@
 
 EffekseerEffect::EffekseerEffect() :
 	m_effect(-1),
-	m_pos{}
+	m_pos{},
+	m_isUseCamera(false)
 {
 }
 
@@ -26,24 +27,28 @@ void EffekseerEffect::Init(int handle, const Position2& pos)
 	InitPos();
 }
 
-void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera)
+void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, bool isUseCamera)
 {
 	m_effect = PlayEffekseer2DEffect(handle);
 
 	m_pos = pos;
 
 	m_pCamera = camera;
+
+	m_isUseCamera = isUseCamera;
 
 	InitPos();
 }
 
-void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<const Position2& ()> provider)
+void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<const Position2& ()> provider, bool isUseCamera)
 {
 	m_effect = PlayEffekseer2DEffect(handle);
 
 	m_pos = pos;
 
 	m_pCamera = camera;
+
+	m_isUseCamera = isUseCamera;
 
 	m_pPosProvider = std::move(provider);
 
@@ -62,10 +67,14 @@ void EffekseerEffect::Update()
 	// カメラが存在する場合
 	if (auto camera = m_pCamera.lock())
 	{
-		// スクロールを含めて座標を設定
-		float screenX = m_pos.x - camera->scroll.x;
-		float screenY = m_pos.y - camera->scroll.y;
-		SetPosPlayingEffekseer2DEffect(m_effect, screenX, screenY, 0);
+		// カメラを使う時のみスクロールの座標を設定
+		if (m_isUseCamera)
+		{
+			// スクロールを含めて座標を設定
+			float screenX = m_pos.x - camera->scroll.x;
+			float screenY = m_pos.y - camera->scroll.y;
+			SetPosPlayingEffekseer2DEffect(m_effect, screenX, screenY, 0);
+		}
 	}
 	// カメラが存在しない場合は指定された座標から動かない
 }
@@ -91,10 +100,18 @@ void EffekseerEffect::InitPos()
 			// 座標をプロバイダのものにする
 			m_pos = m_pPosProvider();
 		}
-		// スクロールを含めて座標を設定
-		float screenX = m_pos.x - camera->scroll.x;
-		float screenY = m_pos.y - camera->scroll.y;
-		SetPosPlayingEffekseer2DEffect(m_effect, screenX, screenY, 0);
+
+		if (m_isUseCamera)
+		{
+			// スクロールを含めて座標を設定
+			float screenX = m_pos.x - camera->scroll.x;
+			float screenY = m_pos.y - camera->scroll.y;
+			SetPosPlayingEffekseer2DEffect(m_effect, screenX, screenY, 0);
+		}
+		else
+		{
+			SetPosPlayingEffekseer2DEffect(m_effect, m_pos.x, m_pos.y, 0);
+		}
 	}
 	else // カメラがない場合
 	{

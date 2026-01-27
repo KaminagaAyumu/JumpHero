@@ -44,6 +44,8 @@ namespace
 	constexpr int kCoinTimeGaugeNum = 1; // 風船のゲージの番号
 	const Size kCoinTimeGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kCoinTimeGaugePos = { 20.0f,180.0f }; // 風船のゲージの座標
+
+	const Position2 kCenterPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 };
 }
 
 GameManager::GameManager() :
@@ -73,7 +75,7 @@ GameManager::GameManager() :
 			m_balloonCounter++; // 風船取得カウンターを加算
 			Application::GetInstance().GetSoundManager()->Play("balloonSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::Impact, pos);
+			manager->CreateEffekseerEffect(Types::EffectType::Impact, pos,true);
 		};
 	// 強化メダルを取った時
 	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this](const Position2& pos)
@@ -81,14 +83,14 @@ GameManager::GameManager() :
 			m_medalNum++; // メダルの数を加算
 			Application::GetInstance().GetSoundManager()->Play("medalSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos, true);
 		};
 	// 1UPを取った時
 	m_itemCollectFunc[Types::ItemType::LifeUp] = [this](const Position2& pos)
 		{
 			m_life++; // 残機を加算
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos, true);
 		};
 	// コインを取った時
 	m_itemCollectFunc[Types::ItemType::Coin] = [this](const Position2& pos)
@@ -96,7 +98,7 @@ GameManager::GameManager() :
 			AddScore(kCoinAddScore); // スコアを加算
 			Application::GetInstance().GetSoundManager()->Play("coinSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos, true);
 		};
 	// 敵をコインに変えるアイテムを取った時
 	m_itemCollectFunc[Types::ItemType::ChangeToCoin] = [this](const Position2& pos)
@@ -104,14 +106,14 @@ GameManager::GameManager() :
 			ChangeEnemyToCoin(); // 敵をすべてアイテム化
 			Application::GetInstance().GetSoundManager()->Play("changeToCoinSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::Star, pos);
+			manager->CreateEffekseerEffect(Types::EffectType::Star, pos, true);
 		};
 	m_itemCollectFunc[Types::ItemType::AttackItem] = [this](const Position2& pos)
 		{
 			// 攻撃アイテム取得時の処理
 			m_pPlayer->AttackableStart();
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
+			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos, true);
 		};
 
 
@@ -209,6 +211,10 @@ void GameManager::Update(Input& input)
 	if (!m_isItemGaugeMax && GetBalloonCounterRate() >= 1.0f)
 	{
 		Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
+		if (auto manager = m_pEffectManager.lock())
+		{
+			manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCenterPos, false);
+		}
 		m_isItemGaugeMax = true;
 		
 	}
@@ -485,19 +491,19 @@ bool GameManager::IsItemPicked(Types::ItemType itemType)
 	return false;
 }
 
-void GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos)
+void GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos, bool isUseCamera)
 {
 	if (auto manager = m_pEffectManager.lock())
 	{
-		manager->CreateEffekseerEffect(effectType, pos);
+		manager->CreateEffekseerEffect(effectType, pos, isUseCamera);
 	}
 }
 
-std::weak_ptr<EffekseerEffect> GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider)
+std::weak_ptr<EffekseerEffect> GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider, bool isUseCamera)
 {
 	if (auto manager = m_pEffectManager.lock())
 	{
-		return manager->CreateEffekseerEffectWithProvider(effectType, pos, provider);
+		return manager->CreateEffekseerEffectWithProvider(effectType, pos, provider, isUseCamera);
 	}
 }
 

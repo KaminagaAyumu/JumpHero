@@ -81,6 +81,7 @@ namespace Types
 		Star, // 星エフェクト
 		PowerUp, // パワーアップ時のエフェクト
 		Jump, // ジャンプ時のエフェクト
+		ChangeCoin, // 敵をコインに変えた際のエフェクト
 	};
 
 	/// <summary>

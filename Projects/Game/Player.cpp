@@ -1080,7 +1080,7 @@ void Player::JumpStart()
 	m_jumpCount--; // ジャンプ回数を減らす
 	auto gameManager = m_pGameManager.lock();
 	gameManager->AddScore(kJumpAddScore); // スコアを加算
-	gameManager->RequestCreateEffect(Types::EffectType::Jump, m_pos + Position2{0,kPlayerHeight / 2});
+	gameManager->RequestCreateEffect(Types::EffectType::Jump, m_pos + Position2{0,kPlayerHeight / 2},true);
 	Application::GetInstance().GetSoundManager()->Play("jumpSE", 1.0f, true);
 	m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
@@ -1131,7 +1131,7 @@ bool Player::PowerUp()
 		}
 		else
 		{
-			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp, m_pos, [this]() {return GetPos(); });
+			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp, m_pos, [this]() {return GetPos(); },true);
 		}
 		m_jumpCount = kJumpLimitNumLevelOne; // 20回ジャンプするまでパワーアップ継続
 	}
