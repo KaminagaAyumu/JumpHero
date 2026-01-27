@@ -4,7 +4,7 @@
 #include "PauseScene.h"
 #include "ClearScene.h"
 #include "MiniGameScene.h"
-#include "MissScene.h"
+#include "GameoverScene.h"
 #include "../Utility/Game.h"
 #include "../Utility/Application.h"
 #include "../Utility/Sound/SoundManager.h"
@@ -263,6 +263,15 @@ void GameScene::NormalUpdate(Input& input)
 		return;
 	}
 
+	if (m_pGameManager->IsGameOver()) // ゲームオーバーと判定したら
+	{
+		// このシーンの終了処理
+		m_fadeColor = 0xffffff; // フェードを白フェードにする
+		m_updateFunc = &GameScene::FadeOutUpdate;
+		m_drawFunc = &GameScene::FadeDraw;
+		return;
+	}
+
 }
 
 void GameScene::MissUpdate(Input&)
@@ -275,7 +284,16 @@ void GameScene::FadeOutUpdate(Input& input)
 	if (m_frameCount >= kFadeInterval)
 	{
 		// フェードアウト完了
-		m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller,m_pGameManager, m_stageNo));
+		// ゲームオーバーだったら
+		if (m_pGameManager->IsGameOver())
+		{
+			m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller, m_pGameManager, m_stageNo));
+		}
+		else // ゲームクリアだったらここに入る(今のところ条件がそれ以外ないのでゲームオーバーでない場合とする)
+		{
+			m_controller.ChangeScene(std::make_shared<MiniGameScene>(m_controller, m_pGameManager, m_stageNo));
+		}
+
 		return; // 念のため処理を抜ける
 	}
 }

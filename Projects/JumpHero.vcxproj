@@ -159,6 +159,7 @@
     <ClCompile Include="Game\LifeUp.cpp" />
     <ClCompile Include="Game\PositionRegistry.cpp" />
     <ClCompile Include="Game\UpgradeMedal.cpp" />
+    <ClCompile Include="Scene\GameoverScene.cpp" />
     <ClCompile Include="Scene\MiniGameScene.cpp" />
     <ClCompile Include="Scene\OptionScene.cpp" />
     <ClCompile Include="Scene\PauseScene.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Game\LifeUp.h" />
     <ClInclude Include="Game\PositionRegistry.h" />
     <ClInclude Include="Game\UpgradeMedal.h" />
+    <ClInclude Include="Scene\GameoverScene.h" />
     <ClInclude Include="Scene\MiniGameScene.h" />
     <ClInclude Include="Scene\OptionScene.h" />
     <ClInclude Include="Scene\PauseScene.h" />
