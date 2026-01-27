@@ -202,6 +202,9 @@ void UITextWindow::Draw() const
 	auto text = StringFunction::WStringFromString(m_text);
 	int width = 0; // 文字を中央ぞろえで表示するための変数
 
+	// テキストを表示できる幅を取得(0以下にはならないようにする)
+	const int textAreaWidth = max(0, m_size.width - kWindowWidthMargin * 2);
+
 	auto lines = StringFunction::WrapTextToWidth(text, m_fontHandle, m_size.width);
 
 	// 文字をスクロールさせるとき
@@ -227,13 +230,26 @@ void UITextWindow::Draw() const
 		if (m_fontHandle != -1) // フォントのハンドルがある場合
 		{
 			int fontSize = GetFontSizeToHandle(m_fontHandle);
-			int dy = 0;
-			for (const auto& line : lines)
+			int lineGap = 4; // 改行の際の行間
+			int lineH = fontSize + lineGap;
+			const int lineCount = static_cast<int>(lines.size());
+
+			// 念のため行がある場合のみ描画
+			if (lineCount > 0)
 			{
-				width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", line.c_str());
-				DrawStringToHandle(static_cast<int>(m_pos.x) - width / 2, static_cast<int>(m_pos.y) + dy,
-					line.c_str(), GetColor(255, 255, 255), m_fontHandle);
-				dy += fontSize;
+				const int totalHeight = lineCount * lineH - lineGap;
+				int y = static_cast<int>(m_pos.y) - totalHeight / 2; // 最初の行のY座標
+
+				for (const auto& line : lines)
+				{
+					width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", line.c_str());
+					const int x = static_cast<int>(m_pos.x) - width / 2; // X座標も中央ぞろえにする
+
+					DrawStringToHandle(x, y, line.c_str(), 0xffffff,m_fontHandle);
+
+					y += lineH; // 描画するy座標を改行
+				}
+
 			}
 		}
 		else // フォントのハンドルがない場合
