@@ -51,6 +51,7 @@ GameManager::GameManager() :
 	m_isOpenGoal(false)
 {
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("medalSE", L"data/sound/SE/medalSE.wav", SoundBus::SE, 1.0f, false);
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
 	m_itemCollectFunc[Types::ItemType::Balloon] = [this](const Position2& pos)
@@ -64,6 +65,7 @@ GameManager::GameManager() :
 	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this](const Position2& pos)
 		{
 			m_medalNum++; // メダルの数を加算
+			Application::GetInstance().GetSoundManager()->Play("medalSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
 			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
 		};

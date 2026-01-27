@@ -2,6 +2,8 @@
 #include "TransformEnemy.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Map.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "GameManager.h"
 #include "Player.h"
 #include <algorithm>
@@ -74,6 +76,15 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, std::weak_p
 
 	ChangeAnimation(m_animations["Appear"]);
 
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("entrySE", L"data/sound/SE/enemyEntry.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("appearSE", L"data/sound/SE/enemyAppear.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("seekerSE", L"data/sound/SE/enemySeeker.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("fireBallSE", L"data/sound/SE/enemyFireBall.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("skullSE", L"data/sound/SE/enemySkull.wav", SoundBus::SE, 1.0f, false);
+
+	// 登場時のSEを鳴らす
+	Application::GetInstance().GetSoundManager()->Play("entrySE", 1.0f, true);
 }
 
 void TransformEnemy::Init()
@@ -119,6 +130,8 @@ void TransformEnemy::ChangeToItem(int time)
 
 void TransformEnemy::OnCollected(std::weak_ptr<GameManager> gameManager)
 {
+	// コイン取得時のSEを鳴らす
+	Application::GetInstance().GetSoundManager()->Play("coinSE", 1.0f, true);
 	auto manager = gameManager.lock();
 	manager->AddScore(kEnemyCoinAddScore);
 	manager->RequestCreateEffect(Types::EffectType::CoinGet, m_pos);
@@ -153,6 +166,8 @@ void TransformEnemy::AppearUpdate(Input&)
 	// 一定時間たったら出現するようにする
 	if (m_frameCount >= kAppearTime)
 	{
+		// 出現時のSEに変更
+		Application::GetInstance().GetSoundManager()->Play("appearSE", 1.0f, true);
 		// 敵の最初の状態の処理に変更
 		m_updateFunc = &TransformEnemy::NormalUpdate;
 		m_drawFunc = &TransformEnemy::NormalDraw;
@@ -166,6 +181,8 @@ void TransformEnemy::NormalUpdate(Input&)
 	// 時間経過で敵の姿が変わる(今後別の条件を増やす予定あり)
 	if (m_frameCount >= kFormChangeWaitTime)
 	{
+		// 変身時のSEを鳴らす(登場時と同じ)
+		Application::GetInstance().GetSoundManager()->Play("entrySE", 1.0f, true);
 		// 敵の姿を変える間の処理に変更
 		m_updateFunc = &TransformEnemy::TransformUpdate;
 		m_drawFunc = &TransformEnemy::TransformDraw;
@@ -186,16 +203,22 @@ void TransformEnemy::TransformUpdate(Input&)
 		switch (m_nextForm)
 		{
 		case EnemyForm::PlayerSeeker:
+			// 変身時のSEを鳴らす
+			Application::GetInstance().GetSoundManager()->Play("seekerSE", 1.0f, true);
 			m_updateFunc = &TransformEnemy::SeekerUpdate;
 			m_drawFunc = &TransformEnemy::SeekerDraw;
 			m_currentForm = m_nextForm; // 現在の状態を更新
 			break;
 		case EnemyForm::FireBall:
+			// 変身時のSEを鳴らす
+			Application::GetInstance().GetSoundManager()->Play("fireBallSE", 1.0f, true);
 			m_updateFunc = &TransformEnemy::FireBallUpdate;
 			m_drawFunc = &TransformEnemy::FireBallDraw;
 			m_currentForm = m_nextForm; // 現在の状態を更新
 			break;
 		case EnemyForm::Skull:
+			// 変身時のSEを鳴らす
+			Application::GetInstance().GetSoundManager()->Play("skullSE", 1.0f, true);
 			m_updateFunc = &TransformEnemy::SkullUpdate;
 			m_drawFunc = &TransformEnemy::SkullDraw;
 			m_currentForm = m_nextForm; // 現在の状態を更新
