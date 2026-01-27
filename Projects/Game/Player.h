@@ -119,6 +119,7 @@ private:
 	int m_autoTimeCount; // 自動で動いているときに使うタイムカウンタ
 	int m_level; // プレイヤーの強化状態
 	float m_prevPosY; // 前フレームのY座標
+	float m_missStartY; // ミスになった際のY座標
 	bool m_isGround; // 地面についているか
 	bool m_isHover; // ジャンプ中にボタンを押したかどうか
 	bool m_isMiss; // ミスになったかどうか

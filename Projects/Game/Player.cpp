@@ -68,6 +68,7 @@ Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 	m_autoTimeCount(0),
 	m_level(0),
 	m_prevPosY(0.0f),
+	m_missStartY(0.0f),
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
@@ -100,6 +101,7 @@ Player::Player(std::weak_ptr<Map> map) :
 	m_autoTimeCount(0),
 	m_level(0),
 	m_prevPosY(0.0f),
+	m_missStartY(0.0f),
 	m_isGround(false),
 	m_isHover(false),
 	m_isMiss(false),
@@ -706,11 +708,9 @@ void Player::MissUpdate(Input&)
 
 	m_pos.y += m_velocity.y;
 
-	// プレイヤーの中心Y座標が画面下を超えたら
-	if (m_pos.y >= Game::kScreenHeight)
+	// プレイヤーの中心Y座標がミス開始座標から画面の高さ分下に落ちたら
+	if (m_pos.y >= m_missStartY + Game::kScreenHeight)
 	{
-		// Y座標を画面下+プレイヤーの大きさの半分の場所に固定
-		m_pos.y = Game::kScreenHeight + kPlayerHeight / 2;
 		// 床にいるフラグをtrueにする
 		m_isGround = true;
 	}
@@ -1100,6 +1100,7 @@ void Player::MissStart()
 	m_isGround = false; // 一応ジャンプするので地面についていないとする
 	m_isMiss = true; // ミスフラグをtrueにする
 	m_frameCount = 0; // 時間経過をリセット
+	m_missStartY = m_pos.y; // ミスした際の座標を取得
 	auto gameManager = m_pGameManager.lock();
 	gameManager->MissStart(); // 残機を減らす処理を呼ぶ
 	Application::GetInstance().GetSoundManager()->Play("missSE", 1.0f, true);
