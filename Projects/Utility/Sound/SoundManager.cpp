@@ -17,7 +17,7 @@ SoundManager::SoundManager()
 	m_busVolume =
 	{
 		// デフォルトの音量を設定
-		{SoundBus::BGM, 0.25f},
+		{SoundBus::BGM, 0.5f},
 		{SoundBus::SE, 0.75f}
 	};
 

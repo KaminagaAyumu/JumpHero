@@ -81,6 +81,7 @@ SelectScene::SelectScene(SceneController& controller) :
 		});
 	list->AddOption("ゲームをやめる", [this]() 
 		{
+			Application::GetInstance().RequestGameEnd();
 			m_updateFunc = &SelectScene::DialogUpdate;
 			m_drawFunc = &SelectScene::DialogDraw;
 			m_pDialogList = m_pUIManager->CreateSelectList(Types::FontType::Small, kSelectListSize, kSelectListPos);

@@ -34,10 +34,18 @@ namespace
 
 	constexpr int kBalloonGaugeNo = 0; // 風船のゲージの番号
 	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
-	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
+	const Position2 kBalloonGaugePos = { 20.0f,60.0f }; // 風船のゲージの座標
 
 	const Size kCoinIconSize = { 40,40 };
-	const Position2 kCoinIconPos = { 35.0f, 50.0f };
+	const Position2 kCoinIconPos = { 20.0f, 60.0f };
+
+	const Size kPlayerIconSize = { 30,30 };
+	const Position2 kPlayerIconPos = { 20.0f, 110.0f };
+	const Position2 kLifeTextPos = { 45.0f, 110.0f };
+
+	const Size kMedalIconSize = { 32,32 };
+	const Position2 kMedalIconPos = { 20.0f,145.0f };
+	const Position2 kMedalTextPos = { 45.0f,145.0f };
 
 	const Position2 kSpawnFlotingItemPos{ 200.0f,200.0f };
 }
@@ -73,9 +81,25 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 			return std::string("スコア:") + std::to_string(m_pGameManager->GetScore());
 		});
 
+	m_pLifeText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", kLifeTextPos);
+	auto life = m_pLifeText.lock();
+	life->SetProvider([this]()
+		{
+			return std::string("×") + std::to_string(m_pGameManager->GetLife());
+		});
+
+	m_pMedalText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", kMedalTextPos);
+	auto medal = m_pMedalText.lock();
+	medal->SetProvider([this]()
+		{
+			return std::string("×") + std::to_string(m_pGameManager->GetMedalNum());
+		});
+
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos, kBalloonGaugeNo);
 
 	m_pUIManager->CreateImage(Types::ImageType::ChangeCoinIcon, kCoinIconSize, kCoinIconPos);
+	m_pUIManager->CreateImage(Types::ImageType::PlayerIcon, kPlayerIconSize, kPlayerIconPos);
+	m_pUIManager->CreateImage(Types::ImageType::MedalIcon, kMedalIconSize, kMedalIconPos);
 
 	m_pTextManager = std::make_unique<TextManager>();
 
