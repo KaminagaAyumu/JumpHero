@@ -27,6 +27,7 @@ namespace
 	constexpr int kClearDispMargin = 50;
 	constexpr int kScoreDispMargin = -60;
 
+	constexpr int kClearBgNo = 1; // ゲームクリアの際の背景の番号
 	constexpr int kStageMaxNum = 2; // ステージの合計数
 
 	const Size kNormalListSize = { 200,300 };
@@ -53,6 +54,7 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 
 	m_pBg = std::make_shared<Bg>();
 	m_pBg->Init();
+	m_pBg->LoadNormalBg(kClearBgNo);
 
 	m_pUIManager = std::make_shared<UIManager>();
 
