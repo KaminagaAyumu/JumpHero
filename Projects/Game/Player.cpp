@@ -6,6 +6,7 @@
 #include "../Utility/AnimationLoader.h"
 #include "../Utility/Application.h"
 #include "../Utility/Sound/SoundManager.h"
+#include "Effect/EffekseerEffect.h"
 #include "GameManager.h"
 #include "Chest.h"
 #include "DxLib.h"
@@ -272,6 +273,17 @@ void Player::CheckPowerDown()
 		}
 		else // レベルが0になったら
 		{
+			auto gameManager = m_pGameManager.lock();
+			// エフェクトが存在している場合は
+			if (auto effect = m_pPowerUpEffect.lock())
+			{
+				// エフェクトを消す
+				effect->StopEffect();
+			}
+			else
+			{
+				// 何もしない(通常起こらない現象)
+			}
 			m_jumpCount = 0; // ジャンプカウンタをそれ以上下がらないようにする
 			m_isLevelDown = true; // レベルが0になったのでここを通らないようにする
 		}
@@ -1108,9 +1120,19 @@ bool Player::PowerUp()
 #ifdef _DEBUG
 	printfDx(L"プレイヤーの強化に成功\n");
 #endif
+
 	m_level++; // レベルを1増やす
 	if (m_level == kPowerUpLevelOne) // 1段階目なら
 	{
+		auto gameManager = m_pGameManager.lock();
+		if (auto effect = m_pPowerUpEffect.lock())
+		{
+			// 何もしない(通常起こらない現象)
+		}
+		else
+		{
+			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp, m_pos, [this]() {return GetPos(); });
+		}
 		m_jumpCount = kJumpLimitNumLevelOne; // 20回ジャンプするまでパワーアップ継続
 	}
 	else if (m_level == kPowerUpLevelMax) // 2段階目なら
@@ -1118,7 +1140,6 @@ bool Player::PowerUp()
 		m_jumpCount = kJumpLimitNumLevelMax; // 25回ジャンプするまでパワーアップ継続
 		auto gameManager = m_pGameManager.lock();
 		gameManager->ChangeEnemyToCoin(); // 敵をアイテムに変える処理を呼ぶ
-		gameManager->RequestCreateEffect(Types::EffectType::PowerUp, m_pos, [this]() { return GetPos(); });
 	}
 	m_isLevelDown = false; // レベルが下がったかどうかの判定を可能にする
 

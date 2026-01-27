@@ -43,6 +43,11 @@ public:
 
 	bool IsAlive()const;
 
+	/// <summary>
+	/// エフェクトを外部から止める処理
+	/// </summary>
+	void StopEffect()const;
+
 private:
 	int m_effect; // 実際に表示するエフェクト
 

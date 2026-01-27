@@ -7,6 +7,7 @@
 class Input;
 class Map;
 class GameManager;
+class EffekseerEffect;
 
 /// <summary>
 /// プレイヤークラス
@@ -137,6 +138,8 @@ private:
 
 	// ゲームマネージャーのポインタ
 	std::weak_ptr<GameManager> m_pGameManager;
+
+	std::weak_ptr<EffekseerEffect> m_pPowerUpEffect; // パワーアップ時のみエフェクトを表示できるように取得
 
 	/// <summary>
 	/// 当たっているかどうか

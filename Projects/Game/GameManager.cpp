@@ -493,11 +493,11 @@ void GameManager::RequestCreateEffect(Types::EffectType effectType, const Positi
 	}
 }
 
-void GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider)
+std::weak_ptr<EffekseerEffect> GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider)
 {
 	if (auto manager = m_pEffectManager.lock())
 	{
-		manager->CreateEffekseerEffectWithProvider(effectType, pos, provider);
+		return manager->CreateEffekseerEffectWithProvider(effectType, pos, provider);
 	}
 }
 

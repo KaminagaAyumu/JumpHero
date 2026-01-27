@@ -18,6 +18,7 @@ class EnemyManager;
 class Input;
 class Map;
 class EffectManager;
+class EffekseerEffect;
 class UIManager;
 class UIGauge;
 
@@ -261,7 +262,7 @@ public:
 	/// <param name="effectType">エフェクトの内容</param>
 	/// <param name="pos">表示する座標</param>
 	/// <param name="provider">座標を返すプロバイダ</param>
-	void RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider);
+	std::weak_ptr<EffekseerEffect> RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider);
 
 	/// <summary>
 	/// プレイヤーが登場する際のテキストを出す

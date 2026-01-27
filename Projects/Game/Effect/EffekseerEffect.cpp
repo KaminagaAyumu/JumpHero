@@ -75,6 +75,11 @@ bool EffekseerEffect::IsAlive()const
 	return IsEffekseer2DEffectPlaying(m_effect) == 0;
 }
 
+void EffekseerEffect::StopEffect() const
+{
+	StopEffekseer2DEffect(m_effect);
+}
+
 void EffekseerEffect::InitPos()
 {
 	// カメラが存在する場合
