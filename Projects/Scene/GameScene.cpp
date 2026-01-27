@@ -60,10 +60,6 @@ namespace
 	const Size kMedalIconSize = { 32,32 };
 	const Position2 kMedalIconPos = { 20.0f,145.0f };
 	const Position2 kMedalTextPos = { 45.0f,145.0f };
-
-	constexpr int kCoinTimeGaugeNum = 1; // 風船のゲージの番号
-	const Size kCoinTimeGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
-	const Position2 kCoinTimeGaugePos = { 20.0f,200.0f }; // 風船のゲージの座標
 }
 
 GameScene::GameScene(SceneController& controller, int stageNo) : SceneBase(controller),
@@ -123,8 +119,6 @@ m_fadeColor(0x000000)
 		});
 
 	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos, kBalloonGaugeNo);
-
-	m_pPowerUpTimeGauge = m_pUIManager->CreateGauge(kCoinTimeGaugeSize, kCoinTimeGaugePos, kCoinTimeGaugeNum);
 
 	m_pUIManager->CreateImage(Types::ImageType::ChangeCoinIcon, kCoinIconSize, kCoinIconPos);
 	m_pUIManager->CreateImage(Types::ImageType::PlayerIcon, kPlayerIconSize, kPlayerIconPos);
@@ -217,11 +211,6 @@ void GameScene::NormalUpdate(Input& input)
 	if (auto gauge = m_pDropItemGauge.lock())
 	{
 		gauge->SetValue(m_pGameManager->GetBalloonCounterRate());
-	}
-
-	if (auto gauge = m_pPowerUpTimeGauge.lock())
-	{
-		gauge->SetValue(m_pGameManager->GetChangeToCoinTimeRate());
 	}
 
 	// OKボタンが押されたかどうかを判定する

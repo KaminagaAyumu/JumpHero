@@ -13,6 +13,7 @@ UIGauge::UIGauge() :
 	m_fillSrcH(0),
 	m_value(0.0f),
 	m_visualValue(0.0f),
+	m_isActive(true),
 	m_pos{},
 	m_size{}
 {
@@ -49,6 +50,9 @@ void UIGauge::Update()
 
 void UIGauge::Draw()const
 {
+	// アクティブ状態でない場合は表示しない
+	if (!m_isActive) return;
+
 	// 枠(空ゲージの中身含む)
 	DrawExtendGraph(static_cast<int>(m_pos.x),
 		static_cast<int>(m_pos.y),

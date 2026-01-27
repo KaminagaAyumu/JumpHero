@@ -38,6 +38,12 @@ public:
 	/// <param name="value">ゲージの割合</param>
 	void SetValue(float value);
 
+	/// <summary>
+	/// 枠画像のアクティブ状態を変更する
+	/// </summary>
+	/// <param name="isActive">true : 表示 false : 非表示</param>
+	void SetActive(bool isActive) { m_isActive = isActive; }
+
 private:
 
 	int m_frameHandle; // 枠画像ハンドル
@@ -48,6 +54,8 @@ private:
 
 	int m_fillSrcW;
 	int m_fillSrcH;
+
+	bool m_isActive;
 
 	Position2 m_pos; // 表示座標(左上座標)
 	Size m_size; // ゲージの大きさ

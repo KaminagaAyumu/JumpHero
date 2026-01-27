@@ -19,6 +19,7 @@ class Input;
 class Map;
 class EffectManager;
 class UIManager;
+class UIGauge;
 
 
 /// <summary>
@@ -292,6 +293,7 @@ private:
 	std::weak_ptr<Map> m_pMap; // マップはゲームシーンにshared_ptrで持たせるのでweak_ptr
 	std::weak_ptr<EffectManager> m_pEffectManager;
 	std::weak_ptr<UIManager> m_pUIManager;
+	std::weak_ptr<UIGauge> m_pCoinGauge; // 敵をコインに変えている時間を表示するゲージを管理する
 	std::shared_ptr<Player> m_pPlayer;
 	std::unique_ptr<ChestManager> m_pChestManager;
 	std::unique_ptr<ItemManager> m_pItemManager;

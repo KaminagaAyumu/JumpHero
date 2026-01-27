@@ -6,6 +6,7 @@
 #include "EnemyManager.h"
 #include "Effect/EffectManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIGauge.h"
 #include "../Utility/UI/UIFormatText.h"
 #include "../Utility/Camera.h"
 #include "../Utility/Input.h"
@@ -39,6 +40,10 @@ namespace
 	constexpr int kMissTextFadeFrame = 30; // プレイヤーがミスになった際の文字がフェードする時間
 
 	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
+
+	constexpr int kCoinTimeGaugeNum = 1; // 風船のゲージの番号
+	const Size kCoinTimeGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
+	const Position2 kCoinTimeGaugePos = { 20.0f,180.0f }; // 風船のゲージの座標
 }
 
 GameManager::GameManager() :
@@ -193,11 +198,42 @@ void GameManager::Update(Input& input)
 		}
 	}
 
+	// ゲージが取得出来たら
+	if (auto gauge = m_pCoinGauge.lock())
+	{
+		// 敵をコインに変えている時間をゲージで表示する
+		gauge->SetValue(GetChangeToCoinTimeRate());
+	}
+
 	// アイテムゲージがマックスになった瞬間を計測
 	if (!m_isItemGaugeMax && GetBalloonCounterRate() >= 1.0f)
 	{
 		Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
 		m_isItemGaugeMax = true;
+		
+	}
+
+	// アイテム化時間の時
+	if (m_pEnemyManager->GetItemTimeRate() > 0.0f)
+	{
+		// ゲージがあればゲージを表示する
+		if (auto gauge = m_pCoinGauge.lock())
+		{
+			gauge->SetActive(true);
+		}
+		else // なければ新しく作る
+		{
+			auto manager = m_pUIManager.lock();
+			m_pCoinGauge = manager->CreateGauge(kCoinTimeGaugeSize, kCoinTimeGaugePos, kCoinTimeGaugeNum);
+		}
+	}
+	else // そうでないとき
+	{
+		// ゲージがあればゲージを非表示にする
+		if (auto gauge = m_pCoinGauge.lock())
+		{
+			gauge->SetActive(false);
+		}
 	}
 
 	if(IsGameOver()) // ゲームオーバー状態なら更新処理を行わない

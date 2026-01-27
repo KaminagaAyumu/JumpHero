@@ -99,8 +99,6 @@ private:
 
 	std::weak_ptr<UIGauge> m_pDropItemGauge; // 敵をコインに変えるアイテムが出るかわかるようにするUI
 	
-	std::weak_ptr<UIGauge> m_pPowerUpTimeGauge; // 敵をコインに変える制限時間をわかるようにするUI
-
 	std::unique_ptr<TextManager> m_pTextManager; // テキストデータを管理するために取得
 
 	std::unique_ptr<CollisionManager> m_pCollisionManager; // 当たり判定管理クラス
