@@ -24,6 +24,8 @@ namespace
 
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
+	constexpr int kSelectBgNo = 0;
+
 	constexpr int kTutorialListNo = 0;
 	constexpr int kStage1ListNo = 1;
 	constexpr int kStage2ListNo = 2;
@@ -50,6 +52,7 @@ SelectScene::SelectScene(SceneController& controller) :
 
 	m_pBg = std::make_shared<Bg>();
 	m_pBg->Init();
+	m_pBg->LoadNormalBg(kSelectBgNo);
 
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
@@ -178,7 +181,6 @@ void SelectScene::FadeOutUpdate(Input&)
 
 void SelectScene::NormalDraw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
 
 	m_pBg->Draw();
 
@@ -199,7 +201,6 @@ void SelectScene::DialogDraw()
 
 void SelectScene::FadeDraw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x116611, TRUE);
 
 	m_pBg->Draw();
 

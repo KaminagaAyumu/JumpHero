@@ -1,5 +1,6 @@
 ﻿#include <vector>
 #include <memory>
+#include <string>
 #include "Bg.h"
 #include "Game.h"
 #include "Camera.h"
@@ -8,6 +9,9 @@
 
 namespace
 {
+	constexpr int kStageSelectBgNo = 0;
+	constexpr int kStageClearBgNo = 1;
+
 	const Position2 kDefaultSpeed = { 1.0f,1.0f };
 	const Position2 kDefaultParallax = { 0.0f,0.0f };
 	const Position2 kParallaxStep = { 0.2f,0.2f };
@@ -20,6 +24,7 @@ Bg::Bg() :
 	//m_bgHandle = LoadGraph(L"data/img/logo_back.png");
 	//m_bgHandle = LoadGraph(L"data/img/bg_underground.png");
 	m_bgHandle = -1;
+	m_normalBgHandle = -1;
 	m_layers.clear();
 
 	auto handle = LoadGraph(L"data/background_1.png");
@@ -47,6 +52,7 @@ Bg::Bg() :
 Bg::~Bg()
 {
 	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_normalBgHandle);
 	for (auto handle : m_bgHandles)
 	{
 		DeleteGraph(handle);
@@ -72,6 +78,11 @@ void Bg::Update()
 
 void Bg::Draw()
 {
+	// 動かない背景画像のデータが入っていたらそれを描画する
+	if (m_normalBgHandle != -1)
+	{
+		DrawGraph(0, 0, m_normalBgHandle, true);
+	}
 	(this->*m_drawFunc)(nullptr);
 }
 
@@ -123,6 +134,22 @@ void Bg::SetLayer()
 		BgLayer layer;
 		layer.Init(handle, kDefaultSpeed, parallax, kDefaultBasePos);
 		m_layers.emplace_back(std::move(layer));
+	}
+}
+
+void Bg::LoadNormalBg(int pathNo)
+{
+	if (pathNo == kStageSelectBgNo)
+	{
+		m_normalBgHandle = LoadGraph(L"data/img/bg_select.png");
+	}
+	else if (pathNo == kStageClearBgNo)
+	{
+		m_normalBgHandle = LoadGraph(L"data/img/bg_gameClear.png");
+	}
+	else
+	{
+		m_normalBgHandle = LoadGraph(L"data/img/bg_gameOver.png");
 	}
 }
 

@@ -34,6 +34,12 @@ public:
 	/// </summary>
 	void SetLayer();
 
+	/// <summary>
+	/// 動かない背景を表示する際に呼ぶ
+	/// </summary>
+	/// <param name="pathNo">背景の番号</param>
+	void LoadNormalBg(int pathNo);
+
 private:
 
 	struct BgLayer
@@ -67,6 +73,7 @@ private:
 	};
 
 	int m_bgHandle;
+	int m_normalBgHandle; // スクロールしない背景画像のハンドル
 	Position2 m_pos;
 	std::vector<int> m_bgHandles;
 
