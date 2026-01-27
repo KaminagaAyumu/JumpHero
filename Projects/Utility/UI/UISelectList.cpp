@@ -82,7 +82,8 @@ void UISelectList::Draw() const
 		const auto& text = m_items[i].text;
 		auto wText = StringFunction::WStringFromString(text); // ワイド文字列に変換
 		auto width = GetDrawStringWidthToHandle(wText.c_str(), static_cast<int>(m_items[i].text.length()), m_fontHandle);
-		DrawStringToHandle(left + kDefaultPaddingY, y, wText.c_str(),isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
+		auto height = GetFontSizeToHandle(m_fontHandle);
+		DrawStringToHandle(left + kDefaultPaddingY, y + height / 2, wText.c_str(),isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
 		y += m_itemSpacing;
 		// y座標がサイズを超えたらループを抜ける
 		if (y > bottom - kDefaultPaddingY)
