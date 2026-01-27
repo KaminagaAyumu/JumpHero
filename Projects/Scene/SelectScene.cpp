@@ -26,7 +26,7 @@ namespace
 	const Position2 kSelectListPos = { 300, 350 };
 
 	const Size kThumbnailSize = { 500,300 };
-	const Position2 kThumbnailPos = { 700, 100 };
+	const Position2 kThumbnailPos = { 700, 50 };
 
 	constexpr float kWindowAppearDuration = 1.5f; // ウィンドウを表示、非表示するときの割合
 	const Size kDescriptionWindowSize = { 500, 250 };
@@ -227,6 +227,24 @@ void SelectScene::CheckCursor()
 		}
 
 		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_stage1"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
+		auto justWindow = m_pDescriptionWindow.lock();
+		justWindow->AppearFromCenter(kWindowAppearDuration);
+
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage1Icon, kThumbnailSize, kThumbnailPos);
+	}
+	else if (cursor == 2)
+	{
+		if (auto window = m_pDescriptionWindow.lock())
+		{
+			window->CloseWindow(kWindowAppearDuration);
+		}
+
+		if (auto thumbnail = m_pThumbnail.lock())
+		{
+			thumbnail->Close();
+		}
+
+		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_stage2"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 		auto justWindow = m_pDescriptionWindow.lock();
 		justWindow->AppearFromCenter(kWindowAppearDuration);
 
