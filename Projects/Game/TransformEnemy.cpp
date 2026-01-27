@@ -76,6 +76,7 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, std::weak_p
 
 	ChangeAnimation(m_animations["Appear"]);
 
+	// 敵が使うSEをロード確認
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("entrySE", L"data/sound/SE/enemyEntry.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("appearSE", L"data/sound/SE/enemyAppear.wav", SoundBus::SE, 1.0f, false);
