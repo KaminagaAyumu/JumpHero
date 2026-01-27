@@ -66,6 +66,9 @@ UIManager::UIManager()
 
 	m_gaugeFrameHandle = LoadGraph(L"data/img/gauge_frame.png");
 	m_gaugeFillHandle = LoadGraph(L"data/img/gauge_fill.png");
+
+	m_gaugeYellowFrameHandle = LoadGraph(L"data/img/yellow_gauge_frame.png");
+	m_gaugeYellowFillHandle = LoadGraph(L"data/img/yellow_gauge_fill.png");
 }
 
 UIManager::~UIManager()
@@ -83,8 +86,12 @@ UIManager::~UIManager()
 	}
 
 	DeleteGraph(m_windowGraphHandle);
+	
 	DeleteGraph(m_gaugeFrameHandle);
 	DeleteGraph(m_gaugeFillHandle);
+
+	DeleteGraph(m_gaugeYellowFrameHandle);
+	DeleteGraph(m_gaugeYellowFillHandle);
 }
 
 void UIManager::Init()
@@ -160,11 +167,18 @@ std::weak_ptr<UISelectList> UIManager::CreateSelectList(Types::FontType fontType
 	return ptr;
 }
 
-std::weak_ptr<UIGauge> UIManager::CreateGauge(const Size& size, const Position2& pos)
+std::weak_ptr<UIGauge> UIManager::CreateGauge(const Size& size, const Position2& pos, int gaugeNo)
 {
 	auto ptr = std::make_shared<UIGauge>();
 	ptr->Init(size, pos);
-	ptr->SetHandle(m_gaugeFrameHandle, m_gaugeFillHandle);
+	if (gaugeNo == 0)
+	{
+		ptr->SetHandle(m_gaugeFrameHandle, m_gaugeFillHandle);
+	}
+	else
+	{
+		ptr->SetHandle(m_gaugeYellowFrameHandle, m_gaugeYellowFillHandle);
+	}
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }

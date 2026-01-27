@@ -32,6 +32,7 @@ namespace
 
 	constexpr float kScoreTextPosY = 20.0f;
 
+	constexpr int kBalloonGaugeNo = 0; // 風船のゲージの番号
 	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kBalloonGaugePos = { 40.0f,50.0f }; // 風船のゲージの座標
 
@@ -72,7 +73,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 			return std::string("スコア:") + std::to_string(m_pGameManager->GetScore());
 		});
 
-	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
+	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos, kBalloonGaugeNo);
 
 	m_pUIManager->CreateImage(Types::ImageType::ChangeCoinIcon, kCoinIconSize, kCoinIconPos);
 

@@ -46,6 +46,7 @@ namespace
 
 	const Position2 kScoreTextPos = { 20.0f,20.0f };
 
+	constexpr int kBalloonGaugeNo = 0; // 風船のゲージの番号
 	const Size kBalloonGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kBalloonGaugePos = { 20.0f,60.0f }; // 風船のゲージの座標
 
@@ -60,6 +61,7 @@ namespace
 	const Position2 kMedalIconPos = { 20.0f,145.0f };
 	const Position2 kMedalTextPos = { 45.0f,145.0f };
 
+	constexpr int kCoinTimeGaugeNum = 1; // 風船のゲージの番号
 	const Size kCoinTimeGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
 	const Position2 kCoinTimeGaugePos = { 20.0f,200.0f }; // 風船のゲージの座標
 }
@@ -120,9 +122,9 @@ m_fadeColor(0x000000)
 			return std::string("×") + std::to_string(m_pGameManager->GetMedalNum());
 		});
 
-	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos);
+	m_pDropItemGauge = m_pUIManager->CreateGauge(kBalloonGaugeSize, kBalloonGaugePos, kBalloonGaugeNo);
 
-	m_pPowerUpTimeGauge = m_pUIManager->CreateGauge(kCoinTimeGaugeSize, kCoinTimeGaugePos);
+	m_pPowerUpTimeGauge = m_pUIManager->CreateGauge(kCoinTimeGaugeSize, kCoinTimeGaugePos, kCoinTimeGaugeNum);
 
 	m_pUIManager->CreateImage(Types::ImageType::ChangeCoinIcon, kCoinIconSize, kCoinIconPos);
 	m_pUIManager->CreateImage(Types::ImageType::PlayerIcon, kPlayerIconSize, kPlayerIconPos);

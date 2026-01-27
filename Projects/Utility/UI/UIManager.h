@@ -81,7 +81,7 @@ public:
 	/// ゲージを作成する関数
 	/// </summary>
 	/// <returns></returns>
-	std::weak_ptr<UIGauge> CreateGauge(const Size& size, const Position2& pos);
+	std::weak_ptr<UIGauge> CreateGauge(const Size& size, const Position2& pos, int gaugeNo);
 
 	/// <summary>
 	/// 画像を作成する関数
@@ -99,6 +99,10 @@ private:
 
 	int m_gaugeFrameHandle; // ゲージの枠ハンドル
 	int m_gaugeFillHandle; // ゲージの中身ハンドル
+
+	int m_gaugeYellowFrameHandle; // 黄色ゲージの枠ハンドル
+	int m_gaugeYellowFillHandle; // 黄色ゲージの中身ハンドル
+
 
 	std::list<std::shared_ptr<UIBase>> m_pUIElements; // UIの要素を格納するコンテナ
 
