@@ -67,6 +67,7 @@ GameManager::GameManager() :
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("balloonSE", L"data/sound/SE/balloonSE.mp3", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinSE", L"data/sound/SE/changeToCoinSE.mp3", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinGaugeMaxSE", L"data/sound/SE/coinGaugeMax.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinBGM", L"data/sound/BGM/changeToCoinBGM.mp3", SoundBus::BGM, 1.0f, true);
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
 	m_itemCollectFunc[Types::ItemType::Balloon] = [this](const Position2& pos)
@@ -286,6 +287,7 @@ void GameManager::AddScore(int score)
 
 void GameManager::ChangeEnemyToCoin()
 {
+	Application::GetInstance().GetSoundManager()->PlayBGM("changeToCoinBGM", 0.0f);
 	m_pEnemyManager->ChangeToItemAll();
 }
 
