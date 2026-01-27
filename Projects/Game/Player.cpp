@@ -73,6 +73,7 @@ Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 	m_isLevelDown(false),
 	m_isJumpStart(false),
 	m_isEntryStart(false),
+	m_isPlayAppearSE(false),
 	m_isFreeze(false),
 	m_isAttackable(false),
 	m_isWalk(false),
@@ -82,7 +83,7 @@ Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 	m_update(&Player::EntryUpdate),
 	m_draw(&Player::EntryDraw)
 {
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("jumpSE", L"data/sound/SE/jumpSE.wav", SoundBus::SE, 1.0f, false);
+	LoadSounds();
 }
 
 Player::Player(std::weak_ptr<Map> map) : 
@@ -104,6 +105,7 @@ Player::Player(std::weak_ptr<Map> map) :
 	m_isLevelDown(false),
 	m_isJumpStart(false),
 	m_isEntryStart(false),
+	m_isPlayAppearSE(false),
 	m_isFreeze(false),
 	m_isAttackable(false),
 	m_isWalk(false),
@@ -113,7 +115,7 @@ Player::Player(std::weak_ptr<Map> map) :
 	m_update(&Player::AutoMoveUpdate),
 	m_draw(&Player::AutoMoveDraw)
 {
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("jumpSE", L"data/sound/SE/jumpSE.wav", SoundBus::SE, 1.0f, false);
+	LoadSounds();
 }
 
 Player::~Player()
@@ -143,6 +145,7 @@ void Player::Init()
 	m_isLevelDown = false;
 	m_isJumpStart = false;
 	m_isEntryStart = false;
+	m_isPlayAppearSE = false;
 	m_isFreeze = false;
 	m_isAttackable = false;
 	m_isWalk = false;
@@ -578,6 +581,17 @@ void Player::CheckAnimation()
 	}
 }
 
+void Player::LoadSounds()
+{
+	// サウンドマネージャーを取得
+	auto soundManager = Application::GetInstance().GetSoundManager();
+	soundManager->LoadSoundClip("jumpSE", L"data/sound/SE/jumpSE.wav", SoundBus::SE, 1.0f, false);
+	soundManager->LoadSoundClip("appearSE", L"data/sound/SE/playerAppear.mp3", SoundBus::SE, 1.0f, false);
+	soundManager->LoadSoundClip("entrySE", L"data/sound/SE/playerEntry.mp3", SoundBus::SE, 1.0f, false);
+	soundManager->LoadSoundClip("playerFloatSE", L"data/sound/SE/playerFloat.wav", SoundBus::SE, 1.0f, false);
+	soundManager->LoadSoundClip("missSE", L"data/sound/SE/missSE.wav", SoundBus::SE, 1.0f, false);
+}
+
 void Player::EntryUpdate(Input&)
 {
 	m_frameCount++;
@@ -585,6 +599,7 @@ void Player::EntryUpdate(Input&)
 	{
 		auto manager = m_pGameManager.lock();
 		manager->CreateReadyGoText();
+		Application::GetInstance().GetSoundManager()->Play("entrySE", 1.0f, true);
 		m_isEntryStart = true;
 	}
 
@@ -592,6 +607,13 @@ void Player::EntryUpdate(Input&)
 	{
 		return;
 	}
+
+	if (!m_isPlayAppearSE)
+	{
+		Application::GetInstance().GetSoundManager()->Play("appearSE", 1.0f, true);
+		m_isPlayAppearSE = true;
+	}
+
 	// 位置を初期位置から登場終了位置まで線形補完で動かす
 	m_pos = Geometry::LerpVec2(m_pos, m_entryEndPos, kEntryMoveSpeed);
 
@@ -621,6 +643,7 @@ void Player::JumpUpdate(Input& input)
 
 	if (input.IsTriggered("Jump")) // 再びジャンプボタンが押されたら
 	{
+		Application::GetInstance().GetSoundManager()->Play("playerFloatSE", 1.0f, true);
 		m_isHover = true;
 		m_velocity.y = 0.0f;
 		m_frameCount = 0;
@@ -1069,6 +1092,7 @@ void Player::MissStart()
 	m_frameCount = 0; // 時間経過をリセット
 	auto gameManager = m_pGameManager.lock();
 	gameManager->LifeDown(); // 残機を減らす処理を呼ぶ
+	Application::GetInstance().GetSoundManager()->Play("missSE", 1.0f, true);
 	m_update = &Player::MissUpdate; // 更新処理をミス状態に
 	m_draw = &Player::MissDraw;// 描画処理をミス状態に
 }

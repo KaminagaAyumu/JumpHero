@@ -124,6 +124,7 @@ private:
 	bool m_isLevelDown; // レベルダウンしたかどうか
 	bool m_isJumpStart; // ジャンプ開始したかどうか
 	bool m_isEntryStart; // 登場開始したかどうか
+	bool m_isPlayAppearSE; // 登場時のSEを鳴らしたかどうか
 	bool m_isFreeze; // 止まっているかどうか
 	bool m_isAttackable; // 攻撃可能かどうか
 	bool m_isWalk; // 歩いているかどうか
@@ -167,6 +168,11 @@ private:
 	/// プレイヤーの状態をチェックしてアニメーションを変更する
 	/// </summary>
 	void CheckAnimation();
+
+	/// <summary>
+	/// サウンドをロード確認する
+	/// </summary>
+	void LoadSounds();
 
 	// 更新処理用関数群
 	void EntryUpdate(Input&); // 登場状態の時

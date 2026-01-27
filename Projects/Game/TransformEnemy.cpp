@@ -78,14 +78,14 @@ TransformEnemy::TransformEnemy(const Position2& pos, Player* player, std::weak_p
 
 	// 敵が使うSEをロード確認
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("entrySE", L"data/sound/SE/enemyEntry.wav", SoundBus::SE, 1.0f, false);
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("appearSE", L"data/sound/SE/enemyAppear.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("enemyEntrySE", L"data/sound/SE/enemyEntry.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("enemyAppearSE", L"data/sound/SE/enemyAppear.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("seekerSE", L"data/sound/SE/enemySeeker.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("fireBallSE", L"data/sound/SE/enemyFireBall.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("skullSE", L"data/sound/SE/enemySkull.wav", SoundBus::SE, 1.0f, false);
 
 	// 登場時のSEを鳴らす
-	Application::GetInstance().GetSoundManager()->Play("entrySE", 1.0f, true);
+	Application::GetInstance().GetSoundManager()->Play("enemyEntrySE", 1.0f, true);
 }
 
 void TransformEnemy::Init()
@@ -168,7 +168,7 @@ void TransformEnemy::AppearUpdate(Input&)
 	if (m_frameCount >= kAppearTime)
 	{
 		// 出現時のSEに変更
-		Application::GetInstance().GetSoundManager()->Play("appearSE", 1.0f, true);
+		Application::GetInstance().GetSoundManager()->Play("enemyAppearSE", 1.0f, true);
 		// 敵の最初の状態の処理に変更
 		m_updateFunc = &TransformEnemy::NormalUpdate;
 		m_drawFunc = &TransformEnemy::NormalDraw;
@@ -183,7 +183,7 @@ void TransformEnemy::NormalUpdate(Input&)
 	if (m_frameCount >= kFormChangeWaitTime)
 	{
 		// 変身時のSEを鳴らす(登場時と同じ)
-		Application::GetInstance().GetSoundManager()->Play("entrySE", 1.0f, true);
+		Application::GetInstance().GetSoundManager()->Play("enemyEntrySE", 1.0f, true);
 		// 敵の姿を変える間の処理に変更
 		m_updateFunc = &TransformEnemy::TransformUpdate;
 		m_drawFunc = &TransformEnemy::TransformDraw;
