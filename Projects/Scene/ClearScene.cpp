@@ -91,12 +91,14 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 			});
 	}	
 
-	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", { Game::kScreenWidth / 2 + kScoreDispMargin, Game::kScreenHeight / 2 + kScoreDispMargin });
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Midium, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin });
 	auto score = m_pScoreText.lock();
 	score->SetProvider([this]() 
 		{
 			return std::string("スコア:") + std::to_string(GetScore());
 		});
+	score->SetCenter();
+
 
 	m_pClearText = m_pUIManager->CreateText(Types::FontType::Large, "クリア！", { Game::kScreenWidth / 2, kClearDispMargin });
 }
