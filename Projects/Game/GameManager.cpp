@@ -11,6 +11,8 @@
 #include "../Utility/Input.h"
 #include "../Utility/Map.h"
 #include "../Utility/Game.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "DxLib.h"
 #include <cassert>
 
@@ -48,6 +50,7 @@ GameManager::GameManager() :
 	m_isTutorial(false),
 	m_isOpenGoal(false)
 {
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
 	m_itemCollectFunc[Types::ItemType::Balloon] = [this](const Position2& pos)
@@ -75,6 +78,7 @@ GameManager::GameManager() :
 	m_itemCollectFunc[Types::ItemType::Coin] = [this](const Position2& pos)
 		{
 			AddScore(kCoinAddScore); // スコアを加算
+			Application::GetInstance().GetSoundManager()->Play("coinSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
 			manager->CreateEffekseerEffect(Types::EffectType::CoinGet, pos);
 		};
