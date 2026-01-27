@@ -8,6 +8,8 @@
 #include "../Utility/UI/UIManager.h"
 #include "../Utility/UI/UISelectList.h"
 #include "../Utility/UI/UIFormatText.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "../Utility/Input.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Game.h"
@@ -23,6 +25,8 @@ namespace
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
+
+	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
 	constexpr int kClearDispMargin = 50;
 	constexpr int kScoreDispMargin = -60;
@@ -100,7 +104,14 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 			return std::string("スコア:") + std::to_string(GetScore());
 		});
 	score->SetCenter();
-
+	
+	// カーソル選択SEをロード(念のため)
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
+	
+	// ステージクリアのBGMをロード
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("clearBGM", L"data/sound/BGM/clearBGM.mp3", SoundBus::BGM, 1.0f, true);
+	Application::GetInstance().GetSoundManager()->CrossFadeBGM("clearBGM", kCrossFadeTime);
 
 	m_pClearText = m_pUIManager->CreateText(Types::FontType::Large, "クリア！", { Game::kScreenWidth / 2, kClearDispMargin });
 }
@@ -164,11 +175,13 @@ void ClearScene::NormalUpdate(Input& input)
 
 	if (input.IsTriggered("Up"))
 	{
+		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 		auto list = m_pSelectList.lock();
 		list->MoveCursor(-1);
 	}
 	if (input.IsTriggered("Down"))
 	{
+		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 		auto list = m_pSelectList.lock();
 		list->MoveCursor(1);
 	}
@@ -180,6 +193,7 @@ void ClearScene::NormalUpdate(Input& input)
 		m_fadeColor = 0x000000;
 		m_updateFunc = &ClearScene::FadeOutUpdate;
 		m_drawFunc = &ClearScene::FadeDraw;
+		Application::GetInstance().GetSoundManager()->Play("ok_se", 1.0f, true);
 		return; // 念のため処理を抜ける
 	}
 }

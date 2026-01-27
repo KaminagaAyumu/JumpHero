@@ -59,7 +59,6 @@ PauseScene::PauseScene(SceneController& controller) :
 
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("select", L"data/sound/BGM/selectBGM.wav", SoundBus::BGM, 1.0f, true);
 
 }
 
