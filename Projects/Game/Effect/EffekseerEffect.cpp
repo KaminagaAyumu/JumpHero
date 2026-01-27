@@ -6,7 +6,7 @@
 
 
 
-EffekseerEffect::EffekseerEffect():
+EffekseerEffect::EffekseerEffect() :
 	m_effect(-1),
 	m_pos{}
 {
@@ -37,8 +37,28 @@ void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camer
 	InitPos();
 }
 
+void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<const Position2& ()> provider)
+{
+	m_effect = PlayEffekseer2DEffect(handle);
+
+	m_pos = pos;
+
+	m_pCamera = camera;
+
+	m_pPosProvider = std::move(provider);
+
+	InitPos();
+}
+
 void EffekseerEffect::Update()
 {
+	// 座標を指定するプロバイダが存在する場合
+	if (m_pPosProvider)
+	{
+		// 座標をプロバイダのものにする
+		m_pos = m_pPosProvider();
+	}
+
 	// カメラが存在する場合
 	if (auto camera = m_pCamera.lock())
 	{
@@ -60,6 +80,12 @@ void EffekseerEffect::InitPos()
 	// カメラが存在する場合
 	if (auto camera = m_pCamera.lock())
 	{
+		// 座標を指定するプロバイダが存在する場合
+		if (m_pPosProvider)
+		{
+			// 座標をプロバイダのものにする
+			m_pos = m_pPosProvider();
+		}
 		// スクロールを含めて座標を設定
 		float screenX = m_pos.x - camera->scroll.x;
 		float screenY = m_pos.y - camera->scroll.y;
