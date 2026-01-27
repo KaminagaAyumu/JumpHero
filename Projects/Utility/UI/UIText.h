@@ -22,12 +22,20 @@ public:
 	void Draw()const override;
 	bool IsAlive()const override;
 
+	/// <summary>
+	/// テキストを点滅させて表示するように設定する
+	/// </summary>
+	void SetBlinking();
+
 private:
 	Position2 m_pos; // 表示座標
 	std::string m_text; // 表示するテキスト
 	int m_fontHandle; // フォントのハンドル
 	int m_color; // 文字の色
 	int m_frameCount; // 表示してからのフレーム数
+	int m_alpha; // 文字の透明度
 	bool m_isAlive; // 存在フラグ
+	bool m_isBlinking; // 点滅するかどうか
+
 };
 

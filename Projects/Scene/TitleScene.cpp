@@ -11,6 +11,7 @@
 #include "../Utility/Camera.h"
 #include "../Utility/Sound/SoundManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIText.h"
 #include "../Game/Effect/EffectManager.h"
 #include "../Game/Player.h"
 #include "../Utility/Application.h"
@@ -47,8 +48,10 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/SE/testSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->PlayBGM("test",0.0f);
 	m_pUIManager = std::make_shared<UIManager>();
-	auto test = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
+	auto text = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2 + kStartTextMargin});
+	auto pText = text.lock();
+	pText->SetBlinking();
 
 	m_pUIManager->CreateImage(Types::ImageType::TitleLogo, kTitleLogoSize, kTitleLogoPos);
 
