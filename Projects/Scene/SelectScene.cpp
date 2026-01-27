@@ -28,6 +28,7 @@ namespace
 	const Size kThumbnailSize = { 500,300 };
 	const Position2 kThumbnailPos = { 700, 100 };
 
+	constexpr float kWindowAppearDuration = 1.5f; // ウィンドウを表示、非表示するときの割合
 	const Size kDescriptionWindowSize = { 500, 250 };
 	const Position2 kDescriptionWindowPos = { 950, 520 };
 
@@ -74,6 +75,8 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_tuto"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 	auto window = m_pDescriptionWindow.lock();
 	window->AppearFromCenter(1.0f);
+
+	CheckCursor();
 }
 
 SelectScene::~SelectScene()
@@ -118,6 +121,7 @@ void SelectScene::NormalUpdate(Input& input)
 		
 		auto list = m_pSelectList.lock();
 		list->MoveCursor(1);
+		CheckCursor();
 	}
 	if (input.IsTriggered("Up"))
 	{
@@ -125,6 +129,7 @@ void SelectScene::NormalUpdate(Input& input)
 		
 		auto list = m_pSelectList.lock();
 		list->MoveCursor(-1);
+		CheckCursor();
 	}
 
 	if (input.IsTriggered("OK"))
@@ -191,14 +196,40 @@ void SelectScene::CheckCursor()
 	// カーソルの場所を取得する
 	int cursor = list->GetCursor();
 	// カーソルの場所によって説明ウィンドウのテキスト内容を変えるようにしたい
-	/*if (cursor == 0)
+	if (cursor == 0)
 	{
-		auto window = m_pDescriptionWindow.lock();
+		if (auto window = m_pDescriptionWindow.lock())
+		{
+			window->CloseWindow(kWindowAppearDuration);
+		}
+
 		if (auto thumbnail = m_pThumbnail.lock())
 		{
 			thumbnail->Close();
 		}
 		
+		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_tuto"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
+		auto justWindow = m_pDescriptionWindow.lock();
+		justWindow->AppearFromCenter(kWindowAppearDuration);
+
 		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage1Icon, kThumbnailSize, kThumbnailPos);
-	}*/
+	}
+	else if (cursor == 1)
+	{
+		if (auto window = m_pDescriptionWindow.lock())
+		{
+			window->CloseWindow(kWindowAppearDuration);
+		}
+
+		if (auto thumbnail = m_pThumbnail.lock())
+		{
+			thumbnail->Close();
+		}
+
+		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_stage1"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
+		auto justWindow = m_pDescriptionWindow.lock();
+		justWindow->AppearFromCenter(kWindowAppearDuration);
+
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage2Icon, kThumbnailSize, kThumbnailPos);
+	}
 }
