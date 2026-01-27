@@ -67,14 +67,21 @@ void UIFormatText::Update()
 void UIFormatText::Draw() const
 {
 	const int nowTextNum = std::clamp(m_visibleTextNum, 0, static_cast<int>(m_wText.size()));
-	std::wstring visibleText(m_wText.begin(), m_wText.begin() + nowTextNum);
+	std::wstring visibleText; // 描画するテキスト(現在見えているテキスト)
+	int drawLength = 0; // 現在のテキストの大きさ
 	if (m_visibleTextNum < 0)
 	{
 		visibleText = m_wText;
+		drawLength = static_cast<int>(m_wText.size());
+	}
+	else
+	{
+		visibleText = std::wstring(m_wText.begin(), m_wText.begin() + nowTextNum);
+		drawLength = nowTextNum;
 	}
 
 	// テキストの幅を取得
-	const int width = GetDrawStringWidthToHandle(visibleText.c_str(), nowTextNum, m_fontHandle);
+	const int width = GetDrawStringWidthToHandle(visibleText.c_str(), drawLength, m_fontHandle);
 
 	int x = static_cast<int>(m_pos.x);
 	int y = static_cast<int>(m_pos.y);
