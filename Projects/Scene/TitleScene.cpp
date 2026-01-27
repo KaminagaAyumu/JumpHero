@@ -24,7 +24,7 @@ namespace
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
-	constexpr int kStartTextMargin = 50; // スタート方法を示すテキストの表示位置調整
+	constexpr int kStartTextMargin = 100; // スタート方法を示すテキストの表示位置調整
 
 	const Size kTitleLogoSize = { 1280, 720 };
 	const Position2 kTitleLogoPos = { 0, -150 };
@@ -84,6 +84,8 @@ void TitleScene::FadeInUpdate(Input& input)
 {
 	// カメラの更新
 	m_pCamera->Update();
+
+	m_pUIManager->Update();
 
 	m_pTitlePlayer->Update(input);
 
