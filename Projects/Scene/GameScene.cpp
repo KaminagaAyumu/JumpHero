@@ -39,9 +39,10 @@ namespace
 
 	constexpr int kMiniGameStageNo = 1; // ミニゲーム用ステージ番号
 
-
 	constexpr int kSpawnPosChipNo = 7; // 敵のスポーン時にカメラが見る位置のマップチップ番号
 	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
+
+	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
 	const Position2 kScoreTextPos = { 20.0f,20.0f };
 
@@ -127,8 +128,22 @@ m_fadeColor(0x000000)
 	m_pCollisionManager = std::make_unique<CollisionManager>();
 
 	m_pSoundManager = Application::GetInstance().GetSoundManager();
-	m_pSoundManager->LoadSoundClip("game", L"data/sound/BGM/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
-	m_pSoundManager->CrossFadeBGM("game", 120.0f);
+
+	if (m_stageNo == 0)
+	{
+		m_pSoundManager->LoadSoundClip("tutorial", L"data/sound/BGM/tutorialBGM.mp3", SoundBus::BGM, 1.0f, true);
+		m_pSoundManager->CrossFadeBGM("tutorial", kCrossFadeTime);
+	}
+	else if(m_stageNo == 1)
+	{
+		m_pSoundManager->LoadSoundClip("stage1", L"data/sound/BGM/stage1BGM.wav", SoundBus::BGM, 1.0f, true);
+		m_pSoundManager->CrossFadeBGM("stage1", kCrossFadeTime);
+	}
+	else
+	{
+		m_pSoundManager->LoadSoundClip("stage2", L"data/sound/BGM/stage2BGM.wav", SoundBus::BGM, 1.0f, true);
+		m_pSoundManager->CrossFadeBGM("stage2", kCrossFadeTime);
+	}
 
 	m_pPositionRegistry = std::make_unique<PositionRegistry>();
 	m_pPositionRegistry->InitPositions(m_pMap); // マップのデータから座標情報を取得

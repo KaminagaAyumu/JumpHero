@@ -22,6 +22,12 @@ namespace
 
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
+	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
+
+	constexpr int kTutorialListNo = 0;
+	constexpr int kStage1ListNo = 1;
+	constexpr int kStage2ListNo = 2;
+
 	const Size kSelectListSize = { 400, 700 };
 	const Position2 kSelectListPos = { 300, 350 };
 
@@ -48,6 +54,8 @@ SelectScene::SelectScene(SceneController& controller) :
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
 	m_soundManager->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
+	m_soundManager->LoadSoundClip("select", L"data/sound/BGM/selectBGM.wav", SoundBus::BGM, 1.0f, true);
+	m_soundManager->CrossFadeBGM("select", kCrossFadeTime);
 
 	m_pUIManager = std::make_unique<UIManager>();
 
@@ -61,15 +69,15 @@ SelectScene::SelectScene(SceneController& controller) :
 	auto list = m_pSelectList.lock();
 	list->AddOption("チュートリアル",[this]()
 		{
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 0));
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, kTutorialListNo));
 		});
 	list->AddOption("ステージ1", [this]()
 		{
-			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 1));
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, kStage1ListNo));
 		});
 	list->AddOption("ステージ2", [this]()
 		{
-			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, 2));
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, kStage2ListNo));
 		});
 
 	m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_tuto"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
@@ -196,7 +204,7 @@ void SelectScene::CheckCursor()
 	// カーソルの場所を取得する
 	int cursor = list->GetCursor();
 	// カーソルの場所によって説明ウィンドウのテキスト内容を変えるようにしたい
-	if (cursor == 0)
+	if (cursor == kTutorialListNo)
 	{
 		if (auto window = m_pDescriptionWindow.lock())
 		{
@@ -214,7 +222,7 @@ void SelectScene::CheckCursor()
 
 		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::TutorialIcon, kThumbnailSize, kThumbnailPos);
 	}
-	else if (cursor == 1)
+	else if (cursor == kStage1ListNo)
 	{
 		if (auto window = m_pDescriptionWindow.lock())
 		{
@@ -232,7 +240,7 @@ void SelectScene::CheckCursor()
 
 		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage1Icon, kThumbnailSize, kThumbnailPos);
 	}
-	else if (cursor == 2)
+	else if (cursor == kStage2ListNo)
 	{
 		if (auto window = m_pDescriptionWindow.lock())
 		{

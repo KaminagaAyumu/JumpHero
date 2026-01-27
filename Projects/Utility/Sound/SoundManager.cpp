@@ -17,8 +17,8 @@ SoundManager::SoundManager()
 	m_busVolume =
 	{
 		// デフォルトの音量を設定
-		{SoundBus::BGM, 0.05f},
-		{SoundBus::SE, 0.05f}
+		{SoundBus::BGM, 0.5f},
+		{SoundBus::SE, 0.75f}
 	};
 
 	m_bgmPhase = BGMPhase::Idle; // 現在のBGMフェーズ
