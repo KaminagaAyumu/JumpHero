@@ -28,7 +28,7 @@ namespace
 		L"data/effect/coin_get.efk", // コイン取得
 		L"data/effect/impact.efk", // 強化メダル
 		L"data/effect/star.efk", // 強化メダル
-		L"data/effect/powerup.efk", // パワーアップ
+		L"data/effect/powerup_1.efk", // パワーアップ
 		L"data/effect/jump.efk", // ジャンプ
 	};
 
