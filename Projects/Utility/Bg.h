@@ -42,19 +42,19 @@ private:
 		int handle = -1;
 
 		// 画像のサイズ
-		Size size;
+		Size size = {};
 
 		// 初期位置
-		Position2 basePos;
+		Position2 basePos = {};
 
 		// カメラのオフセット
-		Position2 offset;
+		Position2 offset = {};
 
 		// スクロールスピード
-		Position2 speed;
+		Position2 speed = {};
 
 		// 視差→背景のスクロール率
-		Position2 parallax;
+		Position2 parallax = {};
 
 		/// <summary>
 		/// 初期化処理(※引数と変数の名前が一致したため引数には_を付けている)
