@@ -79,6 +79,12 @@ SelectScene::SelectScene(SceneController& controller) :
 		{
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, kStage2ListNo));
 		});
+	list->AddOption("ゲームをやめる", [this]() 
+		{
+			m_updateFunc = &SelectScene::DialogUpdate;
+			m_drawFunc = &SelectScene::DialogDraw;
+			m_pDialogList = m_pUIManager->CreateSelectList(Types::FontType::Small, kSelectListSize, kSelectListPos);
+		});
 
 	m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_tuto"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 	auto window = m_pDescriptionWindow.lock();
@@ -152,6 +158,11 @@ void SelectScene::NormalUpdate(Input& input)
 
 }
 
+void SelectScene::DialogUpdate(Input& input)
+{
+
+}
+
 void SelectScene::FadeOutUpdate(Input&)
 {
 	m_frameCount++;
@@ -177,6 +188,12 @@ void SelectScene::NormalDraw()
 #ifdef _DEBUG
 	DrawString(0, 0, L"SelectScene: NormalDraw", 0xffffff);
 #endif
+}
+
+void SelectScene::DialogDraw()
+{
+	NormalDraw();
+
 }
 
 void SelectScene::FadeDraw()

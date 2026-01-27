@@ -17,7 +17,8 @@ UISelectList::UISelectList() :
 	m_color(0),
 	m_itemSpacing(kDefaultItemSpacing),
 	m_frameCount(0),
-	m_cursor(0)
+	m_cursor(0),
+	m_isDialogMode(false)
 {
 	m_items.clear();
 }
@@ -51,48 +52,55 @@ void UISelectList::Update()
 
 void UISelectList::Draw() const
 {
-	// テキストとカーソルをサイズの範囲内に描画する
+	if (m_isDialogMode)
+	{
+		// はいといいえを表示する
+	}
+	else
+	{
+		// テキストとカーソルをサイズの範囲内に描画する
 	// テキストは左詰め
 	// 上から順に均等に項目を並べる
 	// 選択している項目が分かるようにするが、やり方(大きくしたり少し右寄りにするなど)は未定
 
-	const int halfW = m_size.width / 2;
-	const int halfH = m_size.height / 2;
-	const int top = static_cast<int>(m_pos.y) - halfH;
-	const int bottom = static_cast<int>(m_pos.y) + halfH;
-	const int left = static_cast<int>(m_pos.x) - halfW;
-	const int right = static_cast<int>(m_pos.x) + halfW;
+		const int halfW = m_size.width / 2;
+		const int halfH = m_size.height / 2;
+		const int top = static_cast<int>(m_pos.y) - halfH;
+		const int bottom = static_cast<int>(m_pos.y) + halfH;
+		const int left = static_cast<int>(m_pos.x) - halfW;
+		const int right = static_cast<int>(m_pos.x) + halfW;
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowAlpha);
-	DrawBox(left, top, right, bottom, 0xff2200, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowAlpha);
+		DrawBox(left, top, right, bottom, 0xff2200, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	int y = top + kDefaultPaddingY;
+		int y = top + kDefaultPaddingY;
 
-	for (int i = 0; i < static_cast<int>(m_items.size()); i++)
-	{
-		const bool isSelected = (i == m_cursor);
-
-		if (isSelected)
+		for (int i = 0; i < static_cast<int>(m_items.size()); i++)
 		{
-			int offsetY = static_cast<int>(std::sin(m_frameCount * 0.12f) * 3.5f);
-			DrawBox(left + kDefaultPaddingY,
-				y - 4 + offsetY,
-				right - kDefaultPaddingY,
-				y + m_itemSpacing - 4 + offsetY,
-				0x444444, true);
-		}
+			const bool isSelected = (i == m_cursor);
 
-		const auto& text = m_items[i].text;
-		auto wText = StringFunction::WStringFromString(text); // ワイド文字列に変換
-		auto width = GetDrawStringWidthToHandle(wText.c_str(), static_cast<int>(m_items[i].text.length()), m_fontHandle);
-		auto height = GetFontSizeToHandle(m_fontHandle);
-		DrawStringToHandle(left + kDefaultPaddingY, y + height / 2, wText.c_str(),isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
-		y += m_itemSpacing;
-		// y座標がサイズを超えたらループを抜ける
-		if (y > bottom - kDefaultPaddingY)
-		{
-			break;
+			if (isSelected)
+			{
+				int offsetY = static_cast<int>(std::sin(m_frameCount * 0.12f) * 3.5f);
+				DrawBox(left + kDefaultPaddingY,
+					y - 4 + offsetY,
+					right - kDefaultPaddingY,
+					y + m_itemSpacing - 4 + offsetY,
+					0x444444, true);
+			}
+
+			const auto& text = m_items[i].text;
+			auto wText = StringFunction::WStringFromString(text); // ワイド文字列に変換
+			auto width = GetDrawStringWidthToHandle(wText.c_str(), static_cast<int>(m_items[i].text.length()), m_fontHandle);
+			auto height = GetFontSizeToHandle(m_fontHandle);
+			DrawStringToHandle(left + kDefaultPaddingY, y + height / 2, wText.c_str(), isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
+			y += m_itemSpacing;
+			// y座標がサイズを超えたらループを抜ける
+			if (y > bottom - kDefaultPaddingY)
+			{
+				break;
+			}
 		}
 	}
 
@@ -137,4 +145,10 @@ void UISelectList::TriggerSelect()
 			m_items[m_cursor].onSelect();
 		}
 	}
+}
+
+void UISelectList::SetDialogMode(const std::string& text)
+{
+	m_dialogTitle = text;
+	m_isDialogMode = true;
 }

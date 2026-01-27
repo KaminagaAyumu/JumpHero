@@ -70,6 +70,12 @@ public:
 	/// <returns>カーソルの位置</returns>
 	int GetCursor() const { return m_cursor; }
 
+	/// <summary>
+	/// ダイアログモードでセレクトリストを使用する
+	/// </summary>
+	/// <param name="text">見出しの内容</param>
+	void SetDialogMode(const std::string& text);
+
 private:
 	Position2 m_pos; // 表示座標(リスト全体の中心)
 	Size m_size; // リスト全体のサイズ
@@ -81,5 +87,9 @@ private:
 	int m_frameCount; // 表示してからのフレーム数
 
 	int m_cursor; // カーソルがどこにいるか
+
+	std::string m_dialogTitle; // ダイアログの見出しのテキスト
+
+	bool m_isDialogMode; // ダイアログとして使うかどうか
 };
 
