@@ -10,9 +10,10 @@ namespace Types
 	/// </summary>
 	enum class FontType : int
 	{
-		Small,
-		Midium,
-		Large,
+		Small, // 小サイズ
+		Midium, // 中サイズ
+		Large, // 大きいサイズ
+		Header, // 見出しサイズ
 		Default
 	};
 

@@ -97,7 +97,7 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 			});
 	}	
 
-	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Midium, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin });
+	m_pScoreText = m_pUIManager->CreateFormatText(Types::FontType::Large, "", { Game::kScreenWidth / 2, Game::kScreenHeight / 2 + kScoreDispMargin });
 	auto score = m_pScoreText.lock();
 	score->SetProvider([this]() 
 		{
@@ -113,7 +113,7 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("clearBGM", L"data/sound/BGM/clearBGM.mp3", SoundBus::BGM, 1.0f, true);
 	Application::GetInstance().GetSoundManager()->CrossFadeBGM("clearBGM", kCrossFadeTime);
 
-	m_pClearText = m_pUIManager->CreateText(Types::FontType::Large, "クリア！", { Game::kScreenWidth / 2, kClearDispMargin });
+	m_pClearText = m_pUIManager->CreateText(Types::FontType::Header, "クリア！", { Game::kScreenWidth / 2, kClearDispMargin });
 }
 
 ClearScene::~ClearScene()

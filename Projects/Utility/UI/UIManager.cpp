@@ -27,6 +27,10 @@ namespace
 	// 大サイズのフォントハンドルの設定
 	constexpr int kLargeFontSize		= 60;	// 文字の大きさ
 	constexpr int kLargeFontEdgeSize	= 2; 	// 文字の縁取りの大きさ
+	
+	// 見出しサイズのフォントハンドルの設定
+	constexpr int kHeaderFontSize		= 100;	// 文字の大きさ
+	constexpr int kHeaderFontEdgeSize	= 4; 	// 文字の縁取りの大きさ
 
 	//----------------
 	// 画像データ関連
@@ -227,6 +231,19 @@ void UIManager::LoadFonts()
 		DX_FONTTYPE_ANTIALIASING_EDGE_8X8,
 		-1,
 		kLargeFontEdgeSize,
+		FALSE
+	);
+	// ハンドルを格納
+	m_fontHandles.push_back(handle);
+	
+	// フォントハンドル(見出しサイズ)を作成
+	handle = CreateFontToHandle(
+		kMainFontName,
+		kHeaderFontSize,
+		-1,
+		DX_FONTTYPE_ANTIALIASING_EDGE_8X8,
+		-1,
+		kHeaderFontEdgeSize,
 		FALSE
 	);
 	// ハンドルを格納
