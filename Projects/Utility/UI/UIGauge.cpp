@@ -65,9 +65,9 @@ void UIGauge::Draw()const
 	{
 		DrawRectExtendGraph(static_cast<int>(m_pos.x),
 			static_cast<int>(m_pos.y),
-			static_cast<int>(m_pos.x) + m_size.width * m_visualValue,
+			static_cast<int>(m_pos.x) + static_cast<int>(m_size.width * m_visualValue),
 			static_cast<int>(m_pos.y) + m_size.height,
-			0, 0, m_fillSrcW * m_visualValue, m_fillSrcH, m_fillHandle, true);
+			0, 0, cutW, m_fillSrcH, m_fillHandle, true);
 	}
 	
 }

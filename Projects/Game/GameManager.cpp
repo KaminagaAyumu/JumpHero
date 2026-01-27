@@ -505,6 +505,7 @@ std::weak_ptr<EffekseerEffect> GameManager::RequestCreateEffect(Types::EffectTyp
 	{
 		return manager->CreateEffekseerEffectWithProvider(effectType, pos, provider, isUseCamera);
 	}
+	return {};
 }
 
 void GameManager::CreateReadyGoText()
