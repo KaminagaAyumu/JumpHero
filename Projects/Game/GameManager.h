@@ -273,6 +273,7 @@ private:
 	bool m_isMiniGame; // ミニゲーム中かどうか
 	bool m_isTutorial; // チュートリアルかどうか
 	bool m_isOpenGoal; // クリアしたかどうか
+	bool m_isItemGaugeMax; // 敵をコインに変えるアイテムを落とすゲージがマックスになったかどうか
 
 	std::unordered_map<Types::ItemType, std::function<void(const Position2& pos)>> m_itemCollectFunc;
 

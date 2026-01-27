@@ -206,6 +206,7 @@ void GameScene::NormalUpdate(Input& input)
 		return;
 	}
 
+	// 敵をコインに変えるアイテムを落とすゲージの値を設定
 	if (auto gauge = m_pDropItemGauge.lock())
 	{
 		gauge->SetValue(m_pGameManager->GetBalloonCounterRate());

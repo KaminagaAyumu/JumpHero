@@ -52,16 +52,21 @@ GameManager::GameManager() :
 	m_totalBalloonNum(0),
 	m_isMiniGame(false),
 	m_isTutorial(false),
-	m_isOpenGoal(false)
+	m_isOpenGoal(false),
+	m_isItemGaugeMax(false)
 {
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("medalSE", L"data/sound/SE/medalSE.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("balloonSE", L"data/sound/SE/balloonSE.mp3", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinSE", L"data/sound/SE/changeToCoinSE.mp3", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinGaugeMaxSE", L"data/sound/SE/coinGaugeMax.wav", SoundBus::SE, 1.0f, false);
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
 	m_itemCollectFunc[Types::ItemType::Balloon] = [this](const Position2& pos)
 		{
 			m_balloonNum++; // 風船の数を加算
 			m_balloonCounter++; // 風船取得カウンターを加算
+			Application::GetInstance().GetSoundManager()->Play("balloonSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
 			manager->CreateEffekseerEffect(Types::EffectType::Impact, pos);
 		};
@@ -92,6 +97,7 @@ GameManager::GameManager() :
 	m_itemCollectFunc[Types::ItemType::ChangeToCoin] = [this](const Position2& pos)
 		{
 			ChangeEnemyToCoin(); // 敵をすべてアイテム化
+			Application::GetInstance().GetSoundManager()->Play("changeToCoinSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
 			manager->CreateEffekseerEffect(Types::EffectType::Star, pos);
 		};
@@ -185,6 +191,13 @@ void GameManager::Update(Input& input)
 		{
 			m_score = m_currentScore; // スコアを現在のスコアに合わせる
 		}
+	}
+
+	// アイテムゲージがマックスになった瞬間を計測
+	if (!m_isItemGaugeMax && GetBalloonCounterRate() >= 1.0f)
+	{
+		Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
+		m_isItemGaugeMax = true;
 	}
 
 	if(IsGameOver()) // ゲームオーバー状態なら更新処理を行わない
@@ -298,6 +311,7 @@ void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 	// チュートリアルでない場合
 	if (IsDropChangeToCoin() && !m_isTutorial) // 敵をコインに変えるアイテムを落とすか判定
 	{
+		m_isItemGaugeMax = false;
 		m_pItemManager->SpawnItem(pos, Types::ItemType::ChangeToCoin);
 	}
 }
