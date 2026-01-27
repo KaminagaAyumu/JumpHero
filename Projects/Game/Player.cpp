@@ -1118,6 +1118,7 @@ bool Player::PowerUp()
 		m_jumpCount = kJumpLimitNumLevelMax; // 25回ジャンプするまでパワーアップ継続
 		auto gameManager = m_pGameManager.lock();
 		gameManager->ChangeEnemyToCoin(); // 敵をアイテムに変える処理を呼ぶ
+		gameManager->RequestCreateEffect(Types::EffectType::PowerUp, m_pos, [this]() { return GetPos(); });
 	}
 	m_isLevelDown = false; // レベルが下がったかどうかの判定を可能にする
 

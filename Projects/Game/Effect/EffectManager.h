@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../../Utility/Geometry.h"
 #include "../../Utility/GameType.h"
+#include <functional>
 
 class EffekseerResourceManager;
 class EffekseerEffect;
@@ -19,7 +20,20 @@ public:
 
 	void Draw();
 
+	/// <summary>
+	/// エフェクシアのエフェクトを生成する(指定座標から動かない)
+	/// </summary>
+	/// <param name="type">エフェクトの種類</param>
+	/// <param name="pos">エフェクトの座標</param>
 	void CreateEffekseerEffect(Types::EffectType type, const Position2& pos);
+
+	/// <summary>
+	/// エフェクシアのエフェクトを生成する(指定座標から動かせる)
+	/// </summary>
+	/// <param name="type">エフェクトの種類</param>
+	/// <param name="pos">エフェクトの座標</param>
+	/// <param name="provider">エフェクトの座標を示す関数プロバイダ</param>
+	void CreateEffekseerEffectWithProvider(Types::EffectType type, const Position2& pos, std::function<const Position2& ()> provider);
 
 	/// <summary>
 	/// カメラをセットする

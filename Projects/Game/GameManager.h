@@ -256,6 +256,14 @@ public:
 	void RequestCreateEffect(Types::EffectType effectType, const Position2& pos);
 
 	/// <summary>
+	/// エフェクトマネージャーにエフェクトの生成を指示する(座標を返すプロバイダ付き)
+	/// </summary>
+	/// <param name="effectType">エフェクトの内容</param>
+	/// <param name="pos">表示する座標</param>
+	/// <param name="provider">座標を返すプロバイダ</param>
+	void RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider);
+
+	/// <summary>
 	/// プレイヤーが登場する際のテキストを出す
 	/// </summary>
 	void CreateReadyGoText();
