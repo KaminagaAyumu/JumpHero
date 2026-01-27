@@ -6,6 +6,14 @@
 #include <cassert>
 #include "DxLib.h"
 
+namespace
+{
+	const Position2 kDefaultSpeed = { 1.0f,1.0f };
+	const Position2 kDefaultParallax = { 0.0f,0.0f };
+	const Position2 kParallaxStep = { 0.2f,0.2f };
+	const Position2 kDefaultBasePos = { 0.0f,0.0f };
+}
+
 Bg::Bg() :
 	m_pos{}
 {
@@ -94,7 +102,28 @@ void Bg::SetBgType(Types::BgType type)
 
 void Bg::SetLayer()
 {
-	
+	const size_t layerSize = m_bgHandles.size();
+	m_layers.reserve(layerSize);
+
+	for (size_t i = 0; i < layerSize; i++)
+	{
+		const int handle = m_bgHandles[i];
+		
+		// ハンドルが見つからなかった場合はレイヤーに追加しない
+		if (handle == -1)
+		{
+			continue;
+		}
+
+		// カメラのスクロールを変える値をレイヤーごとに設定
+		Position2 parallax = { kDefaultParallax.x + kParallaxStep.x * static_cast<float>(i),
+			kDefaultParallax.y + kParallaxStep.y * static_cast<float>(i)
+		};
+
+		BgLayer layer;
+		layer.Init(handle, kDefaultSpeed, parallax, kDefaultBasePos);
+		m_layers.emplace_back(std::move(layer));
+	}
 }
 
 void Bg::LoopUpdate()

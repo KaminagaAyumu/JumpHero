@@ -76,6 +76,11 @@ m_fadeColor(0x000000)
 	m_bg = std::make_shared<Bg>();
 	m_bg->SetBgType(Types::BgType::ScrollXY);
 	m_bg->Init();
+	if (m_stageNo == 0)
+	{
+		m_bg->SetLayer();
+		m_bg->SetBgType(Types::BgType::ScrollX);
+	}
 
 	m_pMap = std::make_shared<Map>(stageNo,false);
 	m_pMap->Init();
