@@ -301,7 +301,7 @@ void SelectScene::CheckCursor()
 		auto justWindow = m_pDescriptionWindow.lock();
 		justWindow->AppearFromCenter(kWindowAppearDuration);
 
-		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage2Icon, kThumbnailSize, kThumbnailPos);
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage3Icon, kThumbnailSize, kThumbnailPos);
 	}
 	else
 	{
@@ -319,6 +319,6 @@ void SelectScene::CheckCursor()
 		auto justWindow = m_pDescriptionWindow.lock();
 		justWindow->AppearFromCenter(kWindowAppearDuration);
 
-		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage2Icon, kThumbnailSize, kThumbnailPos);
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::ExitIcon, kThumbnailSize, kThumbnailPos);
 	}
 }

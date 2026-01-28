@@ -46,6 +46,8 @@ namespace
 		L"data/img/tutorial_icon.png", // タイトルロゴ
 		L"data/img/stage1_icon.png", // ステージ1のアイコン
 		L"data/img/stage2_icon.png", // ステージ2のアイコン
+		L"data/img/stage3_icon.png", // ステージ3のアイコン
+		L"data/img/exit_icon.png", // ゲーム終了のアイコン
 		L"data/img/player_icon.png", // プレイヤーのアイコン
 		L"data/img/change_to_coin_icon.png", // 敵をコインに変えるアイテムのアイコン
 		L"data/img/upgrade_medal_icon.png", // 強化メダルのアイコン

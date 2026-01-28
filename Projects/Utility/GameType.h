@@ -23,6 +23,8 @@ namespace Types
 		TutorialIcon,
 		Stage1Icon,
 		Stage2Icon,
+		Stage3Icon,
+		ExitIcon,
 		PlayerIcon,
 		ChangeCoinIcon,
 		MedalIcon,
