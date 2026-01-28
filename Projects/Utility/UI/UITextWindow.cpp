@@ -2,6 +2,8 @@
 #include "UITextWindow.h"
 #include "../StringFunction.h"
 #include "../Game.h"
+#include "../Application.h"
+#include "../Sound/SoundManager.h"
 #include <cmath>
 #include "DxLib.h"
 
@@ -16,6 +18,8 @@ namespace
 	constexpr int kWindowWidthMargin = 30; // ウィンドウの端からのマージン
 
 	constexpr int kWindowBackAlpha = 200; // テキストを表示するウィンドウ背景の透明度
+
+	constexpr int kWindowTextLineGap = 4; // テキストの行間
 }
 
 UITextWindow::UITextWindow() :
@@ -43,6 +47,7 @@ UITextWindow::UITextWindow() :
 	m_windowFrameHandle(-1),
 	m_textPager{}
 {
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("pageSE", L"data/sound/SE/pageSE.mp3", SoundBus::SE, 1.0f, false);
 }
 
 UITextWindow::~UITextWindow()
@@ -252,15 +257,20 @@ void UITextWindow::Draw() const
 	{
 		if (m_fontHandle != -1) // フォントのハンドルがある場合
 		{
+			// フォントのサイズを取得
 			int fontSize = GetFontSizeToHandle(m_fontHandle);
-			int lineGap = 4; // 改行の際の行間
-			int lineH = fontSize + lineGap;
+			// テキストの1行の幅
+			int lineH = fontSize + kWindowTextLineGap;
+			// テキストの行の数
 			const int lineCount = static_cast<int>(lines.size());
 
 			// 念のため行がある場合のみ描画
 			if (lineCount > 0)
 			{
-				const int totalHeight = lineCount * lineH - lineGap;
+				// 行全体の高さを取得
+				const int totalHeight = lineCount * lineH - kWindowTextLineGap;
+
+				// 行を表示するy座標
 				int y = static_cast<int>(m_pos.y) - totalHeight / 2; // 最初の行のY座標
 
 				for (const auto& line : lines)
@@ -268,6 +278,7 @@ void UITextWindow::Draw() const
 					width = GetDrawFormatStringWidthToHandle(m_fontHandle, L"%s", line.c_str());
 					const int x = static_cast<int>(m_pos.x) - width / 2; // X座標も中央ぞろえにする
 
+					// テキストを描画
 					DrawStringToHandle(x, y, line.c_str(), 0xffffff,m_fontHandle);
 
 					y += lineH; // 描画するy座標を改行
@@ -298,6 +309,9 @@ bool UITextWindow::AdvancePages()
 		// 存在はしているがページはめくらない
 		return true;
 	}
+
+	// テキストをめくった時のSEを鳴らす
+	Application::GetInstance().GetSoundManager()->Play("pageSE", 1.0f, true);
 
 	// テキストが最後のページの場合
 	if (m_textPager.index >= m_textPager.pages.size() - 1)

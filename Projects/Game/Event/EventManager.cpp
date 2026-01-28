@@ -3,8 +3,6 @@
 #include "../../Utility/Input.h"
 #include "../../Utility/Game.h"
 #include "../../Utility/UI/UITextWindow.h"
-#include "../../Utility/Application.h"
-#include "../../Utility/Sound/SoundManager.h"
 #include <fstream>
 #include <sstream>
 #include "DxLib.h" // printfDxを出すためだけに使っているので消していい
@@ -43,7 +41,6 @@ EventManager::EventManager() :
 	m_isActionHold(false),
 	m_isFreezeGame(false)
 {
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("pageSE", L"data/sound/SE/pageSE.mp3", SoundBus::SE, 1.0f, false);
 }
 
 EventManager::~EventManager()
@@ -87,7 +84,6 @@ void EventManager::Update()
 			// テキストウィンドウを取得したら
 			if (auto window = m_currentTextWindow.lock())
 			{
-				Application::GetInstance().GetSoundManager()->Play("pageSE", 1.0f, true);
 				// テキストのページがまだ進められるかどうかを判定
 				bool stillOpen = window->AdvancePages();
 				if (!stillOpen)
@@ -95,6 +91,10 @@ void EventManager::Update()
 					m_isWaitingInput = false; // 入力待ち状態を終わる
 					m_currentTextWindow.reset(); // テキストウィンドウの監視を終わる
 					m_eventIndex++; // イベントを進める
+				}
+				else
+				{
+					
 				}
 			}
 			else // テキストウィンドウがない場合は解除
