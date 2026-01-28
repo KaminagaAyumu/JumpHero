@@ -83,7 +83,7 @@ m_fadeColor(0x000000)
 	m_bg = std::make_shared<Bg>();
 	m_bg->SetBgType(Types::BgType::ScrollXY);
 	m_bg->Init();
-	if (m_stageNo == 0)
+	if (m_stageNo == kTutorialNum)
 	{
 		m_bg->SetLayer();
 		m_bg->SetBgType(Types::BgType::ScrollX);
@@ -101,6 +101,12 @@ m_fadeColor(0x000000)
 	m_pGameManager = std::make_shared<GameManager>();
 	bool isTutorial = stageNo == 0 ? true : false; // ステージ番号が0の時はtrue、それ以外はfalse
 	m_pGameManager->Init(m_pMap, m_pCamera, m_pEffectManager, m_pUIManager, m_pActors, isTutorial);
+
+	// ステージ3の場合は最後のステージ専用の処理にする
+	if (m_stageNo == kStage3)
+	{
+		m_pGameManager->SetLastStageMode();
+	}
 
 	m_pCamera->SetTargetProvider([this]() {return m_pGameManager->GetPlayerPos(); });
 	m_pCamera->Init();
