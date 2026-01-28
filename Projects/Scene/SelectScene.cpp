@@ -24,6 +24,9 @@ namespace
 
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
+	constexpr float kSelectBGMVolume = 0.8f; // ステージセレクトBGMの音量(デフォルトだと少し大きいので小さめにする)
+	constexpr float kOKSEVolume = 20.0f; // 決定ボタンのボリューム
+
 	constexpr int kSelectBgNo = 0;
 
 	constexpr int kTutorialListNo = 0;
@@ -56,8 +59,8 @@ SelectScene::SelectScene(SceneController& controller) :
 
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("cursor_se", L"data/sound/SE/cursorSE.mp3", SoundBus::SE, 1.0f, false);
-	m_soundManager->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
-	m_soundManager->LoadSoundClip("select", L"data/sound/BGM/selectBGM.wav", SoundBus::BGM, 1.0f, true);
+	m_soundManager->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, kOKSEVolume, false);
+	m_soundManager->LoadSoundClip("select", L"data/sound/BGM/selectBGM.wav", SoundBus::BGM, kSelectBGMVolume, true);
 	m_soundManager->CrossFadeBGM("select", kCrossFadeTime);
 
 	m_pUIManager = std::make_unique<UIManager>();
