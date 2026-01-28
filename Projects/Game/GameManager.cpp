@@ -84,7 +84,7 @@ GameManager::GameManager() :
 			AddScore(kBalloonAddScore);
 			Application::GetInstance().GetSoundManager()->Play("balloonSE", 1.0f, true);
 			auto manager = m_pEffectManager.lock();
-			manager->CreateEffekseerEffect(Types::EffectType::Impact, pos,true);
+			manager->CreateEffekseerEffect(Types::EffectType::BalloonGet, pos,true);
 		};
 	// 強化メダルを取った時
 	m_itemCollectFunc[Types::ItemType::UpgradeMedal] = [this](const Position2& pos)
@@ -298,6 +298,8 @@ void GameManager::AddScore(int score)
 
 void GameManager::ChangeEnemyToCoin()
 {
+	auto effManager = m_pEffectManager.lock();
+	effManager->CreateEffekseerEffect(Types::EffectType::ChangeCoinStart, { Game::kScreenWidth / 2,Game::kScreenHeight / 2 }, false);
 	// BGMを一時的に変更
 	Application::GetInstance().GetSoundManager()->BeginTemporaryBGM("changeToCoinBGM", kChangeToCoinBGMFadeTime);
 	// 敵をアイテム化する通知を送る

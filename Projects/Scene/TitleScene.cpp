@@ -128,7 +128,7 @@ void TitleScene::NormalUpdate(Input& input)
 	// エフェクトテスト用
 	if (input.IsTriggered("Up"))
 	{
-		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::PowerUp, { 400,400 },false);
+		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::Test, { Game::kScreenWidth / 2,Game::kScreenHeight / 2 },false);
 	}
 	
 }

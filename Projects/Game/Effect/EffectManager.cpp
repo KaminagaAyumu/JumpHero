@@ -11,31 +11,23 @@
 
 namespace
 {
-	// エフェクトデータを識別するためのenum
-	enum
-	{
-		kEffectCoinGet, // コイン取得
-		kEffectImpact, // 強化メダル
-		kEffectStar, // コイン化アイテム
-		kEffectPowerUp, // パワーアップ
-		kEffectJump, // ジャンプ
-		kEffectChangeCoin, // 敵をコインに変える
-		kEffectNum
-	};
-
 	// 画像ファイル名の配列
 	const std::wstring kGraphFileName[] =
 	{
 		L"data/effect/coin_get.efk", // コイン取得
 		L"data/effect/impact.efk", // 強化メダル
 		L"data/effect/star.efk", // 強化メダル
+		L"data/effect/powerup_1.efk", // パワーアップ
 		L"data/effect/powerup_2.efk", // パワーアップ
 		L"data/effect/jump.efk", // ジャンプ
-		L"data/effect/change_coin.efk", // ジャンプ
+		L"data/effect/change_coin.efk", // 敵をアイテム化するゲージがたまった時
+		L"data/effect/change_coin_start.efk", // 敵をアイテム化したとき
+		L"data/effect/balloon_get.efk",
+		L"data/effect/balloon_get.efk",
 	};
 
 	// エフェクトデータの数が違うときにエラーを出せるようにする
-	static_assert(kEffectNum == _countof(kGraphFileName), "エフェクト数の定義が間違っています");
+	static_assert(static_cast<int>(Types::EffectType::EffectNum) == _countof(kGraphFileName), "エフェクト数の定義が間違っています");
 }
 
 EffectManager::EffectManager(std::shared_ptr<EffekseerResourceManager> effectResourceManager) : 
@@ -43,7 +35,7 @@ EffectManager::EffectManager(std::shared_ptr<EffekseerResourceManager> effectRes
 {
 	m_effekseerEffects.clear();
 
-	for (int i = 0; i < kEffectNum; i++)
+	for (int i = 0; i < static_cast<int>(Types::EffectType::EffectNum); i++)
 	{
 		int handle = m_pEffekseerResourceManager->LoadEffect(kGraphFileName[i]);
 		m_effekseerResourceHandles.push_back(handle);

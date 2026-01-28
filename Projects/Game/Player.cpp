@@ -272,6 +272,16 @@ void Player::CheckPowerDown()
 		if (m_level == kPowerUpLevelOne) // レベルダウンした結果レベルが1になったら
 		{
 			m_jumpCount = kJumpLimitNumLevelOne;
+
+			// エフェクトが存在している場合は
+			if (auto effect = m_pPowerUpEffect.lock())
+			{
+				// エフェクトを消す
+				effect->StopEffect();
+			}
+			auto gameManager = m_pGameManager.lock();
+			// エフェクトを1段階目のものにする
+			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp1, m_pos, [this]() {return GetPos(); }, true);
 		}
 		else // レベルが0になったら
 		{
@@ -1132,7 +1142,7 @@ bool Player::PowerUp()
 		}
 		else
 		{
-			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp, m_pos, [this]() {return GetPos(); },true);
+			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp1, m_pos, [this]() {return GetPos(); },true);
 		}
 		m_jumpCount = kJumpLimitNumLevelOne; // 20回ジャンプするまでパワーアップ継続
 	}
@@ -1141,6 +1151,15 @@ bool Player::PowerUp()
 		m_jumpCount = kJumpLimitNumLevelMax; // 25回ジャンプするまでパワーアップ継続
 		auto gameManager = m_pGameManager.lock();
 		gameManager->ChangeEnemyToCoin(); // 敵をアイテムに変える処理を呼ぶ
+
+		if (auto effect = m_pPowerUpEffect.lock())
+		{
+			effect->StopEffect();
+		}
+
+		// エフェクトを2段階目のものにする
+		m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp2, m_pos, [this]() {return GetPos(); }, true);
+
 	}
 	m_isLevelDown = false; // レベルが下がったかどうかの判定を可能にする
 

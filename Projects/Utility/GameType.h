@@ -81,9 +81,15 @@ namespace Types
 		CoinGet, // コイン取得時のエフェクト
 		Impact, // 爆発エフェクト
 		Star, // 星エフェクト
-		PowerUp, // パワーアップ時のエフェクト
+		PowerUp1, // パワーアップ時のエフェクト
+		PowerUp2, // パワーアップ時のエフェクト
 		Jump, // ジャンプ時のエフェクト
 		ChangeCoin, // 敵をコインに変えた際のエフェクト
+		ChangeCoinStart, // 敵をコインに変えた際のエフェクト
+		BalloonGet,
+		Test,
+
+		EffectNum
 	};
 
 	/// <summary>
