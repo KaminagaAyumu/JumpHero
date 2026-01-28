@@ -32,6 +32,7 @@ namespace
 	constexpr int kTutorialListNo = 0;
 	constexpr int kStage1ListNo = 1;
 	constexpr int kStage2ListNo = 2;
+	constexpr int kStage3ListNo = 3;
 
 	const Size kSelectListSize = { 400, 680 };
 	const Position2 kSelectListPos = { 300, 360 };
@@ -84,6 +85,10 @@ SelectScene::SelectScene(SceneController& controller) :
 	list->AddOption("ステージ2", [this]()
 		{
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, kStage2ListNo));
+		});
+	list->AddOption("ステージ3", [this]()
+		{
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, kStage3ListNo));
 		});
 	list->AddOption("ゲームをやめる", [this]() 
 		{
