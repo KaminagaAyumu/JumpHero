@@ -53,6 +53,11 @@ public:
 	/// <param name="spawnNum">スポーンする敵の番号</param>
 	void SpawnEnemy(const Position2& pos, int spawnNum);
 
+	/// <summary>
+	/// 敵のスポーンの速度を早める(基本初期化時に呼ぶ)
+	/// </summary>
+	void SpawnFast();
+
 private:
 
 	/// <summary>
@@ -84,6 +89,8 @@ private:
 
 	int m_frameCount; // フレーム数をカウント
 	int m_itemTime; // アイテム状態の時間
+
+	int m_spawnTime; // 敵を生成する時間 
 
 	/// <summary>
 	/// 敵がアイテム化状態になっているか

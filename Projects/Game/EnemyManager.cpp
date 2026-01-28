@@ -16,11 +16,15 @@
 
 namespace
 {
+	constexpr int kSpawnFireBallNum = 1;
+	constexpr int kSpawnSkullNum = 2;
+
 	constexpr int kEnemyFormNum = 2;	// 敵のフォームの総数
 
 	constexpr int kSpawnChipNo = 2; // マップの敵スポーンチップ番号
 
 	constexpr int kSpawnTime = 600; // 敵生成までの時間
+	constexpr int kSpawnTimeFast = 180; // 敵生成までの時間
 
 	// 敵のアイテム化時間
 	constexpr int kChangeToItemTime = 360;
@@ -33,7 +37,8 @@ EnemyManager::EnemyManager(std::weak_ptr<Camera> camera, Player* player, std::we
 	m_pGameManager(gameManager),
 	m_pMap(map),
 	m_frameCount(0),
-	m_itemTime(0)
+	m_itemTime(0),
+	m_spawnTime(kSpawnTime)
 {
 	m_enemies.clear(); // 敵リストを初期化
 	m_spawnPositions.clear(); // スポーン位置リストを初期化
@@ -78,7 +83,7 @@ void EnemyManager::Update(Input& input)
 	m_itemTime--;
 
 	// 敵の生成処理
-	if (m_frameCount % kSpawnTime == 0) // 敵のスポーン時間になったら
+	if (m_frameCount % m_spawnTime == 0) // 敵のスポーン時間になったら
 	{
 		if (IsChangeToItem()) // アイテム化状態の場合
 		{
@@ -187,11 +192,11 @@ void EnemyManager::SpawnEnemy(const Position2& pos)
 	// とりあえず生成する敵をランダムに
 	auto enemyForm = TransformEnemy::EnemyForm::PlayerSeeker;
 	int rand = GetRand(kEnemyFormNum);
-	if (rand == 1)
+	if (rand == kSpawnFireBallNum)
 	{
 		enemyForm = TransformEnemy::EnemyForm::FireBall;
 	}
-	else if (rand == 2)
+	else if (rand == kSpawnSkullNum)
 	{
 		enemyForm = TransformEnemy::EnemyForm::Skull;
 	}
@@ -275,4 +280,9 @@ void EnemyManager::SpawnEnemy(const Position2& pos, int spawnNum)
 	auto enemy = std::make_shared<TransformEnemy>(pos, m_pPlayer, m_pMap, enemyForm, m_transformAnimations);
 	enemy->SetCamera(m_pCamera);
 	m_enemies.push_back(enemy);
+}
+
+void EnemyManager::SpawnFast()
+{
+	m_spawnTime = kSpawnTimeFast;
 }
