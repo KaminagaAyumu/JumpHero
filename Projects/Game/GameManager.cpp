@@ -79,6 +79,7 @@ GameManager::GameManager() :
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("medalSE", L"data/sound/SE/medalSE.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("balloonSE", L"data/sound/SE/balloonSE.mp3", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinSE", L"data/sound/SE/changeToCoinSE.mp3", SoundBus::SE, kChangeToCoinSEVolume, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("dropChangeToCoinSE", L"data/sound/SE/dropChangeToCoinSE.mp3", SoundBus::SE, kChangeToCoinSEVolume, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinGaugeMaxSE", L"data/sound/SE/coinGaugeMax.mp3", SoundBus::SE, kCoinGaugeMaxSEVolume, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("powerUpSE", L"data/sound/SE/powerUp.mp3", SoundBus::SE, kPowerUpSEVolume, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("notPowerUpSE", L"data/sound/SE/notPowerUp.mp3", SoundBus::SE, kNotPowerUpSEVolume, false);
@@ -366,6 +367,8 @@ void GameManager::DropItem(const Position2& pos)
 	m_pItemManager->SpawnItem(pos,Types::ItemType::UpgradeMedal);
 	if(IsDropChangeToCoin()) // 敵をコインに変えるアイテムを落とすか判定
 	{
+		// アイテムを落としたときのSEを鳴らす
+		Application::GetInstance().GetSoundManager()->Play("dropChangeToCoinSE", 1.0f, true);
 		m_pItemManager->SpawnItem(pos, Types::ItemType::ChangeToCoin);
 	}
 }
@@ -376,6 +379,8 @@ void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 	// チュートリアルでない場合
 	if (IsDropChangeToCoin() && !m_isTutorial) // 敵をコインに変えるアイテムを落とすか判定
 	{
+		// アイテムを落としたときのSEを鳴らす
+		Application::GetInstance().GetSoundManager()->Play("dropChangeToCoinSE", 1.0f, true);
 		m_isItemGaugeMax = false;
 		m_pItemManager->SpawnItem(pos, Types::ItemType::ChangeToCoin);
 	}
@@ -383,6 +388,8 @@ void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 
 void GameManager::SpawnFloatingItem(const Position2& pos)
 {
+	// アイテムを落としたときのSEを鳴らす
+	Application::GetInstance().GetSoundManager()->Play("dropChangeToCoinSE", 1.0f, true);
 	m_balloonCounter = 0;
 	m_pItemManager->SpawnFloatingChangeToCoin(pos, m_pMap);
 }
