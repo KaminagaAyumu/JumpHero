@@ -127,6 +127,7 @@ private:
 	bool m_isJumpStart; // ジャンプ開始したかどうか
 	bool m_isEntryStart; // 登場開始したかどうか
 	bool m_isPlayAppearSE; // 登場時のSEを鳴らしたかどうか
+	bool m_isPlayMissBGM; // ミス時のBGMを鳴らしたかどうか
 	bool m_isFreeze; // 止まっているかどうか
 	bool m_isAttackable; // 攻撃可能かどうか
 	bool m_isWalk; // 歩いているかどうか

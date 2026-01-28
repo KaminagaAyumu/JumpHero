@@ -37,7 +37,7 @@ namespace
 	constexpr int	kEntryTextDispTime = 60;					// 登場テキストを表示する時間
 	constexpr float	kEntryMoveSpeed = 0.05f;				// プレイヤー登場のスピード
 
-	constexpr int	kMissFreezeTime = 10;					// ミスしたときに止まるフレーム数
+	constexpr int	kMissFreezeTime = 40;					// ミスしたときに止まるフレーム数
 	constexpr int	kMissEndTime = 180;					// ミス処理が終わるフレーム数
 
 	constexpr int	kJumpAddScore = 10;					// ジャンプしたときの加算スコア
@@ -56,6 +56,9 @@ namespace
 
 	constexpr float kAppearSEVolume = 100.0f; // プレイヤーが出現するときのSEのボリューム
 	constexpr float kEntrySEVolume = 100.0f; // プレイヤーが登場するときのSEのボリューム
+
+	constexpr float kMissBGMFadeInFrame = 1.0f; // ミスになった時にフェードしながら流すフレーム
+	constexpr float kMissBGMFadeOutFrame = 2.0f; // ミスが終わった時にフェードしながら流すフレーム
 }
 
 Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
@@ -79,6 +82,7 @@ Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 	m_isJumpStart(false),
 	m_isEntryStart(false),
 	m_isPlayAppearSE(false),
+	m_isPlayMissBGM(false),
 	m_isFreeze(false),
 	m_isAttackable(false),
 	m_isWalk(false),
@@ -112,6 +116,7 @@ Player::Player(std::weak_ptr<Map> map) :
 	m_isJumpStart(false),
 	m_isEntryStart(false),
 	m_isPlayAppearSE(false),
+	m_isPlayMissBGM(false),
 	m_isFreeze(false),
 	m_isAttackable(false),
 	m_isWalk(false),
@@ -152,6 +157,7 @@ void Player::Init()
 	m_isJumpStart = false;
 	m_isEntryStart = false;
 	m_isPlayAppearSE = false;
+	m_isPlayMissBGM = false;
 	m_isFreeze = false;
 	m_isAttackable = false;
 	m_isWalk = false;
@@ -195,6 +201,8 @@ void Player::InitAuto()
 	m_isLevelDown = false;
 	m_isJumpStart = false;
 	m_isEntryStart = false;
+	m_isPlayAppearSE = false;
+	m_isPlayMissBGM = false;
 	m_isFreeze = false;
 	m_isAttackable = false;
 	m_isWalk = false;
@@ -617,6 +625,7 @@ void Player::LoadSounds()
 	soundManager->LoadSoundClip("entrySE", L"data/sound/SE/playerEntry.mp3", SoundBus::SE, kEntrySEVolume, false);
 	soundManager->LoadSoundClip("playerFloatSE", L"data/sound/SE/playerFloat.wav", SoundBus::SE, 1.0f, false);
 	soundManager->LoadSoundClip("missSE", L"data/sound/SE/missSE.wav", SoundBus::SE, 1.0f, false);
+	soundManager->LoadSoundClip("missBGM", L"data/sound/BGM/missBGM.wav", SoundBus::BGM, 1.0f, false);
 }
 
 void Player::EntryUpdate(Input&)
@@ -716,6 +725,13 @@ void Player::MissUpdate(Input&)
 		return;
 	}
 
+	// ミス用のBGMを流していないなら流す
+	if (!m_isPlayMissBGM)
+	{
+		Application::GetInstance().GetSoundManager()->BeginTemporaryBGM("missBGM", kMissBGMFadeInFrame);
+		m_isPlayMissBGM = true;
+	}
+
 	// 重力とジャンプの速度を加える
 	m_velocity.y += kGravity;
 
@@ -732,6 +748,7 @@ void Player::MissUpdate(Input&)
 	if (m_frameCount >= kMissEndTime && m_isGround)
 	{
 		Init(); // 初期化処理を行う
+		Application::GetInstance().GetSoundManager()->EndTemporaryBGM(kMissBGMFadeOutFrame); // BGMをもとに戻す
 		return;
 	}
 	m_colRect.pos = m_pos; // 矩形の座標更新
@@ -1112,6 +1129,7 @@ void Player::MissStart()
 	m_isHover = false; // 空中で浮いたかどうかをリセット
 	m_isGround = false; // 一応ジャンプするので地面についていないとする
 	m_isMiss = true; // ミスフラグをtrueにする
+	m_isPlayMissBGM = false; // ミスのBGMを鳴らしたかどうかをリセット
 	m_frameCount = 0; // 時間経過をリセット
 	m_missStartY = m_pos.y; // ミスした際の座標を取得
 	auto gameManager = m_pGameManager.lock();

@@ -73,7 +73,8 @@ GameManager::GameManager() :
 	m_isMiniGame(false),
 	m_isTutorial(false),
 	m_isOpenGoal(false),
-	m_isItemGaugeMax(false)
+	m_isItemGaugeMax(false),
+	m_isChangeToCoin(false)
 {
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("medalSE", L"data/sound/SE/medalSE.wav", SoundBus::SE, 1.0f, false);
@@ -240,7 +241,7 @@ void GameManager::Update(Input& input)
 	}
 
 	// アイテム化時間の時
-	if (m_pEnemyManager->GetItemTimeRate() > 0.0f)
+	if (!m_isChangeToCoin && m_pEnemyManager->GetItemTimeRate() > 0.0f)
 	{
 		// ゲージがあればゲージを表示する
 		if (auto gauge = m_pCoinGauge.lock())
@@ -252,15 +253,20 @@ void GameManager::Update(Input& input)
 			auto manager = m_pUIManager.lock();
 			m_pCoinGauge = manager->CreateGauge(kCoinTimeGaugeSize, kCoinTimeGaugePos, kCoinTimeGaugeNum);
 		}
+		m_isChangeToCoin = true;
 	}
-	else // そうでないとき
+
+	// 敵をコインに変える時間が終わったら
+	if (m_isChangeToCoin && m_pEnemyManager->GetItemTimeRate() <= 0.0f)
 	{
-		Application::GetInstance().GetSoundManager()->EndTemporaryBGM(kChangeToCoinBGMFadeTime);
 		// ゲージがあればゲージを非表示にする
 		if (auto gauge = m_pCoinGauge.lock())
 		{
 			gauge->SetActive(false);
 		}
+		// 上書きしていたBGMを戻す
+		Application::GetInstance().GetSoundManager()->EndTemporaryBGM(kChangeToCoinBGMFadeTime);
+		m_isChangeToCoin = false;
 	}
 
 	if(IsGameOver()) // ゲームオーバー状態なら更新処理を行わない
@@ -309,8 +315,13 @@ void GameManager::ChangeEnemyToCoin()
 {
 	auto effManager = m_pEffectManager.lock();
 	effManager->CreateEffekseerEffect(Types::EffectType::ChangeCoinStart, { Game::kScreenWidth / 2,Game::kScreenHeight / 2 }, false);
-	// BGMを一時的に変更
-	Application::GetInstance().GetSoundManager()->BeginTemporaryBGM("changeToCoinBGM", kChangeToCoinBGMFadeTime);
+	
+	// もともとコインに変える時間でなければ
+	if (!m_isChangeToCoin)
+	{
+		// BGMを一時的に変更
+		Application::GetInstance().GetSoundManager()->BeginTemporaryBGM("changeToCoinBGM", kChangeToCoinBGMFadeTime);
+	}
 	// 敵をアイテム化する通知を送る
 	m_pEnemyManager->ChangeToItemAll();
 }

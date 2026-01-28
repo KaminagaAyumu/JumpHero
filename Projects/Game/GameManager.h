@@ -284,6 +284,7 @@ private:
 	bool m_isTutorial; // チュートリアルかどうか
 	bool m_isOpenGoal; // クリアしたかどうか
 	bool m_isItemGaugeMax; // 敵をコインに変えるアイテムを落とすゲージがマックスになったかどうか
+	bool m_isChangeToCoin; // 現在敵をコインに変えているかどうか
 
 	std::unordered_map<Types::ItemType, std::function<void(const Position2& pos)>> m_itemCollectFunc;
 
