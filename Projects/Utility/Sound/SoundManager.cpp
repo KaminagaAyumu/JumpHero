@@ -1,4 +1,5 @@
 ﻿#include <string>
+#include <list>
 #include "SoundManager.h"
 #include <algorithm>
 #include "DxLib.h"
@@ -298,6 +299,21 @@ void SoundManager::StopBGM(float fadeOutTime)
 
 	m_bgmPhase = BGMPhase::CrossFading;
 
+}
+
+void SoundManager::BeginTemporaryBGM(const std::string& soundID, float fadeTime)
+{
+	const BGMTrack* current = (m_bgmA.isActive ? &m_bgmA : (m_bgmB.isActive ? &m_bgmB : nullptr));
+}
+
+void SoundManager::EndTemporaryBGM(float fadeTime)
+{
+	// 記憶しておいたBGMがない場合
+	if (m_bgmStack.empty())
+	{
+		// 処理をしない
+		return;
+	}
 }
 
 void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) const

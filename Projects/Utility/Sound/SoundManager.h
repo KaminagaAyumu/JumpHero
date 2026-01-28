@@ -50,6 +50,15 @@ struct CrossBGMInfo
 };
 
 /// <summary>
+/// BGMの情報(BGM上書きの際に使う)
+/// </summary>
+struct BGMState
+{
+	std::string soundID;
+	float localVolume;
+};
+
+/// <summary>
 /// サウンドを管理するクラス
 /// </summary>
 class SoundManager
@@ -129,6 +138,19 @@ public:
 	/// <param name="fadeOutTime">フェードアウト時間</param>
 	void StopBGM(float fadeOutTime);
 
+	/// <summary>
+	/// BGMを一時的に上書きする
+	/// </summary>
+	/// <param name="soundID">上書きするBGMのID</param>
+	/// <param name="fadeTime">フェードインの時間</param>
+	void BeginTemporaryBGM(const std::string& soundID, float fadeTime);
+
+	/// <summary>
+	/// 一時的に上書きしていたBGMを元に戻す
+	/// </summary>
+	/// <param name="fadeTime">クロスフェード時間</param>
+	void EndTemporaryBGM(float fadeTime);
+
 private:
 
 	// サウンドクリップのコンテナ
@@ -137,6 +159,9 @@ private:
 	float m_masterVolume;
 	// サウンドの種類ごとのボリューム
 	std::unordered_map<SoundBus, float> m_busVolume;
+
+	// BGMを上書きする際に使うリスト
+	std::list<BGMState> m_bgmStack;
 
 	// BGM関連
 	BGMTrack m_bgmA;
