@@ -21,6 +21,8 @@ namespace
 {
 	constexpr int kFirstLife = 3; // プレイヤーの残機初期化用
 
+	constexpr int kPlayerNum = 1;
+
 	constexpr int kEnemySpawnTime = 600; // 敵がスポーンするまでの時間
 
 	constexpr float kGoalWidth = 40.0f;
@@ -242,6 +244,7 @@ void GameManager::Update(Input& input)
 	}
 	else // そうでないとき
 	{
+		//Application::GetInstance().GetSoundManager()->Stop("changeToCoinBGM");
 		// ゲージがあればゲージを非表示にする
 		if (auto gauge = m_pCoinGauge.lock())
 		{
@@ -304,8 +307,6 @@ bool GameManager::IsSkipCollision() const
 
 bool GameManager::IsClear() const
 {
-	// ここの内容は今後イベントマネージャーに任せます
-
 	// ゴールが開いていない場合判定しない
 	if (!m_isOpenGoal)
 	{
@@ -441,8 +442,8 @@ void GameManager::SetBarrierPlayer(const ActivePosition2& barrier)
 
 const size_t GameManager::GetActorNum() const
 {
-	// +1しているのはプレイヤーの数
-	return 1 + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum() + m_pEnemyManager->GetEnemyNum();
+	// 各マネージャーの管理しているActorの数+プレイヤーの数を加算(+1)
+	return kPlayerNum + m_pChestManager->GetChestNum() + m_pItemManager->GetItemNum() + m_pEnemyManager->GetEnemyNum();
 }
 
 const Position2& GameManager::GetPlayerPos() const
