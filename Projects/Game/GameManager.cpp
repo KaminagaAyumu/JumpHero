@@ -53,6 +53,7 @@ namespace
 	constexpr int kMissTextFadeFrame = 30; // プレイヤーがミスになった際の文字がフェードする時間
 
 	constexpr int kBalloonForChangeToCoin = 5; // 敵をコインに変えるアイテムを落とすために必要な風船の数
+	constexpr int kLastStageBalloonForChangeToCoin = 15; // 最後のステージの敵をコインに変えるアイテムを落とすために必要な風船の数
 
 	constexpr int kCoinTimeGaugeNum = 1; // 風船のゲージの番号
 	const Size kCoinTimeGaugeSize = { 200, 40 }; // UIで使用するゲージのサイズ
@@ -70,6 +71,7 @@ GameManager::GameManager() :
 	m_balloonNum(0),
 	m_balloonCounter(0),
 	m_totalBalloonNum(0),
+	m_changeToCoinDropBalloonNum(kBalloonForChangeToCoin),
 	m_isMiniGame(false),
 	m_isTutorial(false),
 	m_isOpenGoal(false),
@@ -489,7 +491,7 @@ const Position2& GameManager::GetPlayerPos() const
 
 float GameManager::GetBalloonCounterRate() const
 {
-	return static_cast<float>(m_balloonCounter) / kBalloonForChangeToCoin;
+	return static_cast<float>(m_balloonCounter) / m_changeToCoinDropBalloonNum;
 }
 
 float GameManager::GetChangeToCoinTimeRate() const
@@ -569,9 +571,17 @@ void GameManager::CreateReadyGoText()
 	start->SetFadeOut(kReadyGoTextWaitFrame, kReadyGoTextFadeFrame);
 }
 
+void GameManager::SetLastStageMode()
+{
+	// 敵をコインに変えるアイテムを生成するまでの値が多くなる
+	m_changeToCoinDropBalloonNum = kLastStageBalloonForChangeToCoin;
+	// 敵の生成スピードが速くなる
+	m_pEnemyManager->SpawnFast();
+}
+
 bool GameManager::IsDropChangeToCoin()
 {
-	if(m_balloonCounter >= kBalloonForChangeToCoin) // 風船を5個取ったら
+	if(m_balloonCounter >= m_changeToCoinDropBalloonNum) // 風船を5個取ったら
 	{
 		// ここでリセットしているのがよくない
 		m_balloonCounter = 0; // カウンターをリセット

@@ -269,6 +269,11 @@ public:
 	/// </summary>
 	void CreateReadyGoText();
 
+	/// <summary>
+	/// 最後のステージの場合の処理を行う
+	/// </summary>
+	void SetLastStageMode();
+
 private:
 	int m_frameCount; // フレームカウンタ
 
@@ -280,6 +285,7 @@ private:
 	int m_balloonNum; // 風船をどれだけ取ったか
 	int m_balloonCounter; // 風船の数のカウンタ
 	int m_totalBalloonNum; // そのステージに存在する風船の総数
+	int m_changeToCoinDropBalloonNum; // 敵をコインに変えるアイテムを生成する状態かどうかを判別するために使う
 	bool m_isMiniGame; // ミニゲーム中かどうか
 	bool m_isTutorial; // チュートリアルかどうか
 	bool m_isOpenGoal; // クリアしたかどうか
