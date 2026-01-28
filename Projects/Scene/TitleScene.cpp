@@ -126,10 +126,10 @@ void TitleScene::NormalUpdate(Input& input)
 	}
 
 	// エフェクトテスト用
-	/*if (input.IsTriggered("Up"))
+	if (input.IsTriggered("Up"))
 	{
-		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, { 400,400 });
-	}*/
+		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::PowerUp, { 400,400 },false);
+	}
 	
 }
 
