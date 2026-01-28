@@ -90,8 +90,8 @@ GameoverScene::GameoverScene(SceneController& controller, std::shared_ptr<GameMa
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("ok_se", L"data/sound/SE/okSE.mp3", SoundBus::SE, 1.0f, false);
 
 	// ステージクリアのBGMをロード
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("clearBGM", L"data/sound/BGM/clearBGM.mp3", SoundBus::BGM, 1.0f, true);
-	Application::GetInstance().GetSoundManager()->CrossFadeBGM("clearBGM", kCrossFadeTime);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("gameoverBGM", L"data/sound/BGM/gameoverBGM.mp3", SoundBus::BGM, 1.0f, true);
+	Application::GetInstance().GetSoundManager()->CrossFadeBGM("gameoverBGM", kCrossFadeTime);
 
 	m_pClearText = m_pUIManager->CreateText(Types::FontType::Header, "ゲームオーバー...", { Game::kScreenWidth / 2, kHeaderDispMargin });
 }
