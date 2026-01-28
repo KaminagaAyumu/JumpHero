@@ -97,7 +97,7 @@ void EffectManager::CreateEffekseerEffect(Types::EffectType type, const Position
 	m_effekseerEffects.push_back(effect);
 }
 
-std::weak_ptr<EffekseerEffect> EffectManager::CreateEffekseerEffectWithProvider(Types::EffectType type, const Position2& pos, std::function<const Position2& ()> provider, bool isUseCamera)
+std::weak_ptr<EffekseerEffect> EffectManager::CreateEffekseerEffectWithProvider(Types::EffectType type, const Position2& pos, std::function<Position2()> provider, bool isUseCamera)
 {
 	auto effect = std::make_shared<EffekseerEffect>();
 	// カメラがセットされている場合

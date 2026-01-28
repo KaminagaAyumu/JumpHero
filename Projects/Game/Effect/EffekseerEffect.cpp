@@ -40,7 +40,7 @@ void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camer
 	InitPos();
 }
 
-void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<const Position2& ()> provider, bool isUseCamera)
+void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<Position2()> provider, bool isUseCamera)
 {
 	m_effect = PlayEffekseer2DEffect(handle);
 
