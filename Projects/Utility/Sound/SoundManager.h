@@ -35,9 +35,22 @@ struct CrossBGMInfo
 {
 	BGMTrack* fadeOutTrack = nullptr; // フェードアウト中のトラック
 	BGMTrack* fadeInTrack = nullptr; // フェードイン中のトラック
+
+	float durationSec = 0.0f; // フェードにかける合計時間(秒単位)
+	float elapsedSec = 0.0f; // 経過時間(秒単位)
+
+	// フェード開始時と終了時の音量
+	float outStart = 0.0f;
+	float outEnd = 0.0f;
+	float inStart = 0.0f;
+	float inEnd = 0.0f;
+
+	bool isActive = false; // クロスフェード中かどうか
+
+	// 後で消す
 	float fadeTime = 0.0f; // フェードにかける時間
 	float fadeCount = 0.0f; // フェードの経過時間
-	bool isActive = false; // クロスフェード中かどうか
+
 };
 
 /// <summary>

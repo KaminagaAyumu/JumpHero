@@ -44,36 +44,61 @@ void SoundManager::Update()
 		return;
 	}
 
-	m_crossBGMInfo.fadeCount++;
-	float t = std::clamp(m_crossBGMInfo.fadeCount / m_crossBGMInfo.fadeTime, 0.0f, 1.0f);
+	auto& info = m_crossBGMInfo;
 
-	if (m_crossBGMInfo.fadeOutTrack)
+	// フェード値が0以上の場合
+	if (info.durationSec <= 0.0f)
 	{
-		m_crossBGMInfo.fadeOutTrack->volume = std::clamp(1.0f - t, 0.0f, 1.0f);
-	}
-	if (m_crossBGMInfo.fadeInTrack)
-	{
-		m_crossBGMInfo.fadeInTrack->volume = std::clamp(t, 0.0f, 1.0f);
+		if (info.fadeOutTrack)
+		{
+			info.fadeOutTrack->volume = info.outEnd;
+			ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume *
+				GetBusVolume(m_soundClips[info.fadeOutTrack->soundID].bus) *
+				m_soundClips[info.fadeOutTrack->soundID].defaultRate *
+				info.fadeOutTrack->volume),
+				info.fadeOutTrack->handle);
+			StopBGMTrack(*info.fadeOutTrack);
+		}
+		if (info.fadeInTrack)
+		{
+			info.fadeInTrack->volume = info.inEnd;
+			ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume *
+				GetBusVolume(m_soundClips[info.fadeInTrack->soundID].bus) *
+				m_soundClips[info.fadeInTrack->soundID].defaultRate *
+				info.fadeInTrack->volume),
+				info.fadeInTrack->handle);
+		}
+		// クロスフェード情報を初期化
+		info = {};
+		m_bgmPhase = BGMPhase::Idle;
+		return;
 	}
 
+	info.elapsedSec++;
+	float t = std::clamp(info.elapsedSec / info.durationSec, 0.0f, 1.0f);
 
 	// 音量を適用
-	if (m_crossBGMInfo.fadeOutTrack)
+	if (info.fadeOutTrack)
 	{
-		ApplyVolumeToHandle(m_soundClips[m_crossBGMInfo.fadeOutTrack->soundID], m_crossBGMInfo.fadeOutTrack->volume);
+		info.fadeOutTrack->volume = info.outStart + (info.outEnd - info.outStart) * t;
+		const auto& clip = m_soundClips[info.fadeOutTrack->soundID];
+		ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeOutTrack->volume), info.fadeOutTrack->handle);
 	}
-	if (m_crossBGMInfo.fadeInTrack)
+
+	if (info.fadeInTrack)
 	{
-		ApplyVolumeToHandle(m_soundClips[m_crossBGMInfo.fadeInTrack->soundID], m_crossBGMInfo.fadeInTrack->volume);
+		info.fadeInTrack->volume = info.inStart + (info.inEnd - info.inStart) * t;
+		const auto& clip = m_soundClips[info.fadeInTrack->soundID];
+		ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeInTrack->volume), info.fadeInTrack->handle);
 	}
 
 	if (t >= 1.0f)
 	{
-		if (m_crossBGMInfo.fadeOutTrack)
+		if (info.fadeOutTrack)
 		{
-			StopBGMTrack(*m_crossBGMInfo.fadeOutTrack);
+			StopBGMTrack(*info.fadeOutTrack);
 		}
-		m_crossBGMInfo = {};
+		info = {};
 		m_bgmPhase = BGMPhase::Idle;
 	}
 
