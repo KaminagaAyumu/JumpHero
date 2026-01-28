@@ -31,6 +31,8 @@ namespace
 	constexpr float	kScoreAddRate = 0.2f; // スコア加算の割合
 	constexpr float	kScoreThreshold = 0.9f; // スコア加算の閾値
 
+	constexpr float kChangeToCoinBGMFadeTime = 30.0f; // 敵をコインに変えている時間のBGMのフェード値
+
 	constexpr int kCoinAddScore = 1000; // コイン取得時のスコア
 	constexpr int kBalloonAddScore = 100; // 風船取得時のスコア
 	constexpr int kChangeToCoinAddScore = 100; // 敵をコインに変えるアイテム取得時のスコア
@@ -244,7 +246,7 @@ void GameManager::Update(Input& input)
 	}
 	else // そうでないとき
 	{
-		//Application::GetInstance().GetSoundManager()->Stop("changeToCoinBGM");
+		Application::GetInstance().GetSoundManager()->EndTemporaryBGM(kChangeToCoinBGMFadeTime);
 		// ゲージがあればゲージを非表示にする
 		if (auto gauge = m_pCoinGauge.lock())
 		{
@@ -296,7 +298,9 @@ void GameManager::AddScore(int score)
 
 void GameManager::ChangeEnemyToCoin()
 {
-	Application::GetInstance().GetSoundManager()->PlayBGM("changeToCoinBGM", 0.0f);
+	// BGMを一時的に変更
+	Application::GetInstance().GetSoundManager()->BeginTemporaryBGM("changeToCoinBGM", kChangeToCoinBGMFadeTime);
+	// 敵をアイテム化する通知を送る
 	m_pEnemyManager->ChangeToItemAll();
 }
 
