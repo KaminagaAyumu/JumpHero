@@ -29,6 +29,7 @@ struct BGMTrack
 	int handle = -1; // ハンドル(初期状態は-1)
 	float volume = 0.0f; // 音量
 	bool isActive = false; // 再生中かどうか
+	bool isOwnsHandle = false; // 複製したハンドルか
 };
 
 struct CrossBGMInfo
@@ -46,11 +47,6 @@ struct CrossBGMInfo
 	float inEnd = 0.0f;
 
 	bool isActive = false; // クロスフェード中かどうか
-
-	// 後で消す
-	float fadeTime = 0.0f; // フェードにかける時間
-	float fadeCount = 0.0f; // フェードの経過時間
-
 };
 
 /// <summary>
@@ -187,5 +183,9 @@ private:
 	/// </summary>
 	/// <param name="track">BGMトラック(AorB)</param>
 	void StopBGMTrack(BGMTrack& track);
+
+	float EqualPowerOut(float t);
+
+	float EqualPowerIn(float t);
 };
 

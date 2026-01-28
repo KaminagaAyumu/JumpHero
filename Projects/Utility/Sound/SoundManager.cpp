@@ -46,6 +46,7 @@ void SoundManager::Update()
 
 	auto& info = m_crossBGMInfo;
 
+
 	// フェード値が0以上の場合
 	if (info.durationSec <= 0.0f)
 	{
@@ -77,10 +78,14 @@ void SoundManager::Update()
 	info.elapsedSec++;
 	float t = std::clamp(info.elapsedSec / info.durationSec, 0.0f, 1.0f);
 
+	float wOut = EqualPowerOut(t);
+	float wIn = EqualPowerIn(t);
+
 	// 音量を適用
 	if (info.fadeOutTrack)
 	{
 		info.fadeOutTrack->volume = info.outStart + (info.outEnd - info.outStart) * t;
+
 		const auto& clip = m_soundClips[info.fadeOutTrack->soundID];
 		ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeOutTrack->volume), info.fadeOutTrack->handle);
 	}
@@ -88,9 +93,16 @@ void SoundManager::Update()
 	if (info.fadeInTrack)
 	{
 		info.fadeInTrack->volume = info.inStart + (info.inEnd - info.inStart) * t;
+
 		const auto& clip = m_soundClips[info.fadeInTrack->soundID];
 		ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeInTrack->volume), info.fadeInTrack->handle);
 	}
+
+	printfDx(L"time : %f\n", t);
+
+	printfDx(L"Involume : %f\n", info.fadeInTrack->volume);
+	printfDx(L"Outvolume : %f\n", info.fadeOutTrack->volume);
+
 
 	if (t >= 1.0f)
 	{
@@ -177,9 +189,16 @@ void SoundManager::PlayBGM(const std::string& soundID, float fadeTime)
 
 	if (fadeTime > 0.0f)
 	{
+		// BGMの状態を初期設定
+		m_crossBGMInfo = {};
+		m_crossBGMInfo.fadeOutTrack = nullptr;
+		m_crossBGMInfo.fadeInTrack = &m_bgmA;
+		m_crossBGMInfo.durationSec = fadeTime;
+		m_crossBGMInfo.elapsedSec = 0.0f;
+		m_crossBGMInfo.inStart = 0.0f;
+		m_crossBGMInfo.inEnd = 1.0f;
+		m_crossBGMInfo.isActive = true;
 		m_bgmPhase = BGMPhase::CrossFading;
-		m_bgmFadeTime = fadeTime;
-		m_bgmFadeTimer = 0.0f;
 	}
 	else
 	{
@@ -218,11 +237,20 @@ void SoundManager::CrossFadeBGM(const std::string& soundID, float fadeTime)
 
 	m_crossBGMInfo.fadeOutTrack = currentTrack;
 	m_crossBGMInfo.fadeInTrack = newTrack;
-	m_crossBGMInfo.fadeTime = fadeTime;
-	m_crossBGMInfo.fadeCount = 0.0f;
-	m_crossBGMInfo.isActive = true;
+	m_crossBGMInfo.durationSec = fadeTime;
+	m_crossBGMInfo.elapsedSec = 0.0f;
 
-	m_bgmPhase = BGMPhase::CrossFading;
+	// クロスフェードの開始音量、終了音量を設定
+	m_crossBGMInfo.outStart = currentTrack ? currentTrack->volume : 0.0f; // 現在のトラックが存在するかどうかで初期音量が決まる
+	m_crossBGMInfo.outEnd = 0.0f; // 最初は0
+	m_crossBGMInfo.inStart = 0.0f; // StartBGMOnTrackで0にしている
+	m_crossBGMInfo.inEnd = 1.0f;
+
+	// フェード時間があるならtrueとする
+	m_crossBGMInfo.isActive = (fadeTime > 0.0f);
+
+	// クロスフェードするかどうかでBGMのフェーズを変更
+	m_bgmPhase = m_crossBGMInfo.isActive ? BGMPhase::CrossFading : BGMPhase::Idle;
 }
 
 void SoundManager::Stop(const std::string& soundID)
@@ -302,5 +330,15 @@ void SoundManager::StopBGMTrack(BGMTrack& track)
 		StopSoundMem(track.handle);
 	}
 	track = BGMTrack{}; // トラック情報をリセット
+}
+
+float SoundManager::EqualPowerOut(float t)
+{
+	return std::cos(0.5f * DX_PI_F * t);
+}
+
+float SoundManager::EqualPowerIn(float t)
+{
+	return std::sin(0.5f * DX_PI_F * t);
 }
 
