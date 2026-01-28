@@ -35,6 +35,9 @@ namespace
 
 	constexpr float kChangeToCoinSEVolume = 30.0f; // 敵をコインに変えた際のSEのボリューム
 	constexpr float kNotPowerUpSEVolume = 12.0f; // プレイヤーがパワーアップ出来なかった時に鳴らすSEのボリューム
+	constexpr float kPowerUpSEVolume = 40.0f; // プレイヤーがパワーアップした時に鳴らすSEのボリューム
+	constexpr float kCoinGaugeMaxSEVolume = 50.0f; // ゲージがたまった時のSEのボリューム
+
 
 	constexpr int kCoinAddScore = 1000; // コイン取得時のスコア
 	constexpr int kBalloonAddScore = 100; // 風船取得時のスコア
@@ -76,7 +79,8 @@ GameManager::GameManager() :
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("medalSE", L"data/sound/SE/medalSE.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("balloonSE", L"data/sound/SE/balloonSE.mp3", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinSE", L"data/sound/SE/changeToCoinSE.mp3", SoundBus::SE, kChangeToCoinSEVolume, false);
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinGaugeMaxSE", L"data/sound/SE/coinGaugeMax.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinGaugeMaxSE", L"data/sound/SE/coinGaugeMax.mp3", SoundBus::SE, kCoinGaugeMaxSEVolume, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("powerUpSE", L"data/sound/SE/powerUp.mp3", SoundBus::SE, kPowerUpSEVolume, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("notPowerUpSE", L"data/sound/SE/notPowerUp.mp3", SoundBus::SE, kNotPowerUpSEVolume, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinBGM", L"data/sound/BGM/changeToCoinBGM.mp3", SoundBus::BGM, 1.0f, true);
 	// アイテムを取った際のラムダ式定義
@@ -396,6 +400,8 @@ void GameManager::PowerUpPlayer()
 		if (m_pPlayer->PowerUp()) // プレイヤーの強化ができれば
 		{
 			m_medalNum--; // メダルを一つ減らす
+			// プレイヤーを強化したときのSEを鳴らす
+			Application::GetInstance().GetSoundManager()->Play("powerUpSE", 1.0f, true);
 		}
 		else // 強化が出来なければ
 		{
