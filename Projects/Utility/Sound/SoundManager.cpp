@@ -341,6 +341,11 @@ void SoundManager::EndTemporaryBGM(float fadeTime)
 	CrossFadeBGM(state.soundID, fadeTime);
 }
 
+void SoundManager::ClearBGMStack()
+{
+	m_bgmStack.clear();
+}
+
 void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) const
 {
 	// サウンドの音量を取得

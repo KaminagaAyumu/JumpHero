@@ -151,6 +151,11 @@ public:
 	/// <param name="fadeTime">クロスフェード時間</param>
 	void EndTemporaryBGM(float fadeTime);
 
+	/// <summary>
+	/// 上書きしているBGMをすべてリセットする
+	/// </summary>
+	void ClearBGMStack();
+
 private:
 
 	// サウンドクリップのコンテナ
