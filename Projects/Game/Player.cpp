@@ -53,6 +53,9 @@ namespace
 	constexpr float kEntryEndXOffset = 100.0f;			// プレイヤー登場終了位置のXオフセット
 
 	constexpr int	kAutoWaitFrame = 300;			// プレイヤーが自動で動くときに待つ時間
+
+	constexpr float kAppearSEVolume = 100.0f; // プレイヤーが出現するときのSEのボリューム
+	constexpr float kEntrySEVolume = 100.0f; // プレイヤーが登場するときのSEのボリューム
 }
 
 Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
@@ -610,8 +613,8 @@ void Player::LoadSounds()
 	// サウンドマネージャーを取得
 	auto soundManager = Application::GetInstance().GetSoundManager();
 	soundManager->LoadSoundClip("jumpSE", L"data/sound/SE/jumpSE.wav", SoundBus::SE, 1.0f, false);
-	soundManager->LoadSoundClip("appearSE", L"data/sound/SE/playerAppear.mp3", SoundBus::SE, 1.0f, false);
-	soundManager->LoadSoundClip("entrySE", L"data/sound/SE/playerEntry.mp3", SoundBus::SE, 1.0f, false);
+	soundManager->LoadSoundClip("appearSE", L"data/sound/SE/playerAppear.mp3", SoundBus::SE, kAppearSEVolume, false);
+	soundManager->LoadSoundClip("entrySE", L"data/sound/SE/playerEntry.mp3", SoundBus::SE, kEntrySEVolume, false);
 	soundManager->LoadSoundClip("playerFloatSE", L"data/sound/SE/playerFloat.wav", SoundBus::SE, 1.0f, false);
 	soundManager->LoadSoundClip("missSE", L"data/sound/SE/missSE.wav", SoundBus::SE, 1.0f, false);
 }
