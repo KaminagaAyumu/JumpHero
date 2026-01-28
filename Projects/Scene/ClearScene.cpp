@@ -34,6 +34,8 @@ namespace
 	constexpr int kClearBgNo = 1; // ゲームクリアの際の背景の番号
 	constexpr int kStageMaxNum = 2; // ステージの合計数
 
+	constexpr float kClearSEVolume = 30.0f; // クリア時のSEのボリューム
+
 	const Size kNormalListSize = { 300,300 };
 	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 150 };
 
@@ -113,6 +115,9 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("clearBGM", L"data/sound/BGM/clearBGM.mp3", SoundBus::BGM, 1.0f, true);
 	Application::GetInstance().GetSoundManager()->CrossFadeBGM("clearBGM", kCrossFadeTime);
 
+	// ステージクリアのSEをロード
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("clearSE", L"data/sound/SE/clearSE.mp3", SoundBus::SE, kClearSEVolume, false);
+
 	m_pClearText = m_pUIManager->CreateText(Types::FontType::Header, "クリア！", { Game::kScreenWidth / 2, kClearDispMargin });
 }
 
@@ -136,6 +141,7 @@ void ClearScene::FadeInUpdate(Input&)
 	m_pBg->Update();
 	if (m_frameCount <= 0)
 	{
+		Application::GetInstance().GetSoundManager()->Play("clearSE", 1.0f, true);
 		// フェードイン完了
 		m_updateFunc = &ClearScene::NormalUpdate;
 		m_drawFunc = &ClearScene::NormalDraw;
