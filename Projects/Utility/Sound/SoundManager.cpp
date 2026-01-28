@@ -23,6 +23,8 @@ SoundManager::SoundManager()
 	};
 
 	m_bgmPhase = BGMPhase::Idle; // 現在のBGMフェーズ
+
+	m_bgmStack.clear();
 }
 
 SoundManager::~SoundManager()
@@ -303,7 +305,23 @@ void SoundManager::StopBGM(float fadeOutTime)
 
 void SoundManager::BeginTemporaryBGM(const std::string& soundID, float fadeTime)
 {
+	// 現在のBGMを取得
 	const BGMTrack* current = (m_bgmA.isActive ? &m_bgmA : (m_bgmB.isActive ? &m_bgmB : nullptr));
+
+	if (current && !current->soundID.empty())
+	{
+		BGMState state;
+		state.soundID = current->soundID;
+		state.localVolume = current->volume;
+		m_bgmStack.push_back(std::move(state));
+	}
+	else
+	{
+		// BGMがない場合はプッシュしない
+	}
+
+	// 一時的に流すBGMをクロスフェード
+	CrossFadeBGM(soundID, fadeTime);
 }
 
 void SoundManager::EndTemporaryBGM(float fadeTime)
@@ -314,6 +332,13 @@ void SoundManager::EndTemporaryBGM(float fadeTime)
 		// 処理をしない
 		return;
 	}
+
+	// 最後に積まれたスタックのBGM情報を取得
+	BGMState state = std::move(m_bgmStack.back());
+	// スタックから消去
+	m_bgmStack.pop_back();
+
+	CrossFadeBGM(state.soundID, fadeTime);
 }
 
 void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) const
