@@ -54,6 +54,13 @@ public:
 	bool IsAlive()const override;
 
 	/// <summary>
+	/// 画像のハンドルを取得する
+	/// </summary>
+	/// <param name="frameHandle"></param>
+	/// <param name="fillHandle"></param>
+	void SetHandle(int frameHandle, int fillHandle);
+
+	/// <summary>
 	/// 上下方向にカーソルを動かす(値の数分動かす)
 	/// </summary>
 	/// <param name="dir">どの方向に動かすか(正の数で下に移動,負の数で上に移動)</param>
@@ -87,6 +94,9 @@ private:
 	int m_frameCount; // 表示してからのフレーム数
 
 	int m_cursor; // カーソルがどこにいるか
+
+	int m_frameHandle; // 枠画像のハンドル
+	int m_fillHandle; // 背景画像のハンドル
 
 	/// <summary>
 	/// 文字の描画オフセットを判別するための列挙体

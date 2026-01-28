@@ -25,6 +25,8 @@ UISelectList::UISelectList() :
 	m_itemSpacing(kDefaultItemSpacing),
 	m_frameCount(0),
 	m_cursor(0),
+	m_frameHandle(-1),
+	m_fillHandle(-1),
 	m_paddingX(0),
 	m_policy(OffsetPolicy::Left),
 	m_isDialogMode(false)
@@ -79,10 +81,17 @@ void UISelectList::Draw() const
 		const int left = static_cast<int>(m_pos.x) - halfW;
 		const int right = static_cast<int>(m_pos.x) + halfW;
 
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowAlpha);
-		DrawBox(left, top, right, bottom, 0xff2200, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
+		if (m_fillHandle)
+		{
+			
+		}
+		else
+		{
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowAlpha);
+			DrawBox(left, top, right, bottom, 0xff2200, true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
+		
 		// ここはデフォルトから変えられるようにするかもしれない
 		const int paddingX = kDefaultPaddingX;
 
@@ -165,6 +174,12 @@ bool UISelectList::IsAlive() const
 {
 	// 存在判定を変えられるようにしなければならない
 	return true;
+}
+
+void UISelectList::SetHandle(int frameHandle, int fillHandle)
+{
+	m_frameHandle = frameHandle;
+	m_fillHandle = fillHandle;
 }
 
 void UISelectList::MoveCursor(int dir)
