@@ -30,8 +30,8 @@ namespace
 	constexpr int kStage1ListNo = 1;
 	constexpr int kStage2ListNo = 2;
 
-	const Size kSelectListSize = { 400, 700 };
-	const Position2 kSelectListPos = { 300, 350 };
+	const Size kSelectListSize = { 400, 680 };
+	const Position2 kSelectListPos = { 300, 360 };
 
 	const Size kThumbnailSize = { 500,300 };
 	const Position2 kThumbnailPos = { 700, 50 };
