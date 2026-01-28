@@ -33,6 +33,9 @@ namespace
 
 	constexpr float kChangeToCoinBGMFadeTime = 30.0f; // 敵をコインに変えている時間のBGMのフェード値
 
+	constexpr float kChangeToCoinSEVolume = 30.0f; // 敵をコインに変えた際のSEのボリューム
+	constexpr float kNotPowerUpSEVolume = 12.0f; // プレイヤーがパワーアップ出来なかった時に鳴らすSEのボリューム
+
 	constexpr int kCoinAddScore = 1000; // コイン取得時のスコア
 	constexpr int kBalloonAddScore = 100; // 風船取得時のスコア
 	constexpr int kChangeToCoinAddScore = 100; // 敵をコインに変えるアイテム取得時のスコア
@@ -72,8 +75,9 @@ GameManager::GameManager() :
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinSE", L"data/sound/SE/coinSE.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("medalSE", L"data/sound/SE/medalSE.wav", SoundBus::SE, 1.0f, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("balloonSE", L"data/sound/SE/balloonSE.mp3", SoundBus::SE, 1.0f, false);
-	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinSE", L"data/sound/SE/changeToCoinSE.mp3", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinSE", L"data/sound/SE/changeToCoinSE.mp3", SoundBus::SE, kChangeToCoinSEVolume, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("coinGaugeMaxSE", L"data/sound/SE/coinGaugeMax.wav", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("notPowerUpSE", L"data/sound/SE/notPowerUp.mp3", SoundBus::SE, kNotPowerUpSEVolume, false);
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("changeToCoinBGM", L"data/sound/BGM/changeToCoinBGM.mp3", SoundBus::BGM, 1.0f, true);
 	// アイテムを取った際のラムダ式定義
 	// 風船を取った時
@@ -395,12 +399,14 @@ void GameManager::PowerUpPlayer()
 		}
 		else // 強化が出来なければ
 		{
-			// 何もしない
+			// 強化ができなかった時のSEを鳴らす
+			Application::GetInstance().GetSoundManager()->Play("notPowerUpSE", 1.0f, true);
 		}
 	}
 	else // メダルを持っていなければ
 	{
-		// 何もしない
+		// 強化ができなかった時のSEを鳴らす
+		Application::GetInstance().GetSoundManager()->Play("notPowerUpSE", 1.0f, true);
 #ifdef _DEBUG
 		printfDx(L"メダルがないので強化できない\n");
 #endif
