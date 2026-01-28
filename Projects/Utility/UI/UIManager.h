@@ -105,6 +105,8 @@ private:
 	int m_gaugeYellowFrameHandle; // 黄色ゲージの枠ハンドル
 	int m_gaugeYellowFillHandle; // 黄色ゲージの中身ハンドル
 
+	int m_selectListFrameHandle; // セレクトリストの枠ハンドル
+	int m_selectListFillHandle; // セレクトリストの画像ハンドル
 
 	std::list<std::shared_ptr<UIBase>> m_pUIElements; // UIの要素を格納するコンテナ
 

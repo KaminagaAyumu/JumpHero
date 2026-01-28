@@ -78,6 +78,9 @@ UIManager::UIManager()
 
 	m_gaugeYellowFrameHandle = LoadGraph(L"data/img/yellow_gauge_frame.png");
 	m_gaugeYellowFillHandle = LoadGraph(L"data/img/yellow_gauge_fill.png");
+
+	m_selectListFrameHandle = LoadGraph(L"data/img/select_list_frame.png");
+	m_selectListFillHandle = LoadGraph(L"data/img/select_list_fill.png");
 }
 
 UIManager::~UIManager()
@@ -102,6 +105,9 @@ UIManager::~UIManager()
 
 	DeleteGraph(m_gaugeYellowFrameHandle);
 	DeleteGraph(m_gaugeYellowFillHandle);
+
+	DeleteGraph(m_selectListFrameHandle);
+	DeleteGraph(m_selectListFillHandle);
 }
 
 void UIManager::Init()
@@ -173,6 +179,7 @@ std::weak_ptr<UISelectList> UIManager::CreateSelectList(Types::FontType fontType
 {
 	auto ptr = std::make_shared<UISelectList>();
 	ptr->Init(m_fontHandles[static_cast<int>(fontType)], size, pos);
+	ptr->SetHandle(m_selectListFrameHandle, m_selectListFillHandle);
 	m_pUIElements.push_back(ptr);
 	return ptr;
 }

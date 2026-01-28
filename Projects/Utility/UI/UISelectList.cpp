@@ -8,7 +8,7 @@ namespace
 	constexpr int kDefaultPaddingY = 10; // リストの上下端からテキストまでの余白の初期値
 	constexpr int kDefaultItemSpacing = 100; // テキストとテキストの間の余白の初期値
 
-	constexpr int kWindowAlpha = 128; // テキストを表示する範囲の透明度
+	constexpr int kWindowAlpha = 200; // テキストを表示する範囲の透明度
 
 	constexpr int kOutlineMargin = 2; // 影として使うテキストのずらす値
 	
@@ -81,17 +81,25 @@ void UISelectList::Draw() const
 		const int left = static_cast<int>(m_pos.x) - halfW;
 		const int right = static_cast<int>(m_pos.x) + halfW;
 
-		if (m_fillHandle)
+		// 背景を透過する
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowAlpha);
+		// 背景画像があるなら画像で、ないならBoxで背景を描画
+		if (m_fillHandle != -1)
 		{
-			
+			DrawExtendGraph(left, top, right, bottom, m_fillHandle, true); // ウィンドウの背景を描画
 		}
 		else
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, kWindowAlpha);
 			DrawBox(left, top, right, bottom, 0xff2200, true);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
-		
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		// 枠画像があるなら枠を表示
+		if (m_frameHandle != -1)
+		{
+			DrawExtendGraph(left, top, right, bottom, m_frameHandle, true); // ウィンドウの背景を描画
+		}
+
 		// ここはデフォルトから変えられるようにするかもしれない
 		const int paddingX = kDefaultPaddingX;
 
