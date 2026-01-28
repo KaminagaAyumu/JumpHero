@@ -44,6 +44,8 @@ namespace
 
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
+	constexpr float kTemporaryBGMFadeTime = 30.0f; // スタックとして積んだBGMのフェード時間
+
 	const Position2 kScoreTextPos = { 20.0f,20.0f };
 
 	constexpr int kBalloonGaugeNo = 0; // 風船のゲージの番号
@@ -256,6 +258,8 @@ void GameScene::NormalUpdate(Input& input)
 
 	if (m_pGameManager->IsClear()) // ゲームマネージャーがクリアと判定したら
 	{
+		// BGMが変更されている場合があるのでそれをリセットする
+		m_pSoundManager->EndTemporaryBGM(kTemporaryBGMFadeTime);
 		// このシーンの終了処理
 		m_fadeColor = 0xffffff; // フェードを白フェードにする
 		m_updateFunc = &GameScene::FadeOutUpdate;
@@ -265,6 +269,8 @@ void GameScene::NormalUpdate(Input& input)
 
 	if (m_pGameManager->IsGameOver()) // ゲームオーバーと判定したら
 	{
+		// BGMが変更されている場合があるのでそれをリセットする
+		m_pSoundManager->EndTemporaryBGM(kTemporaryBGMFadeTime);
 		// このシーンの終了処理
 		m_fadeColor = 0xffffff; // フェードを白フェードにする
 		m_updateFunc = &GameScene::FadeOutUpdate;
