@@ -55,7 +55,7 @@ struct CrossBGMInfo
 struct BGMState
 {
 	std::string soundID;
-	float localVolume;
+	float localVolume = 0.0f;
 };
 
 /// <summary>
