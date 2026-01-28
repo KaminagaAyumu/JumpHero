@@ -33,6 +33,8 @@ namespace
 
 	constexpr int kHeaderMargin = 60; // ヘッダー(見出し)の余白
 
+	constexpr float kGoalBGMVolume = 20.0f; // ゴール時のBGMのボリューム
+
 	constexpr float kScoreTextPosY = 20.0f;
 
 	constexpr int kBalloonGaugeNo = 0; // 風船のゲージの番号
@@ -121,6 +123,7 @@ MiniGameScene::MiniGameScene(SceneController& controller, std::shared_ptr<GameMa
 	m_pEventControls = std::make_shared<EventControls>();
 
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("pauseSE", L"data/sound/SE/pauseSE.mp3", SoundBus::SE, 1.0f, false);
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("goalSE", L"data/sound/SE/goalSE.mp3", SoundBus::SE, kGoalBGMVolume, false);
 
 	// イベントの内容を格納
 	SetEventFunc();
@@ -219,6 +222,7 @@ void MiniGameScene::NormalUpdate(Input& input)
 
 	if (m_pGameManager->IsClear()) // ゲームマネージャーがクリアと判定したら
 	{
+		Application::GetInstance().GetSoundManager()->Play("goalSE", 1.0f, true);
 		// シーンの終了へ
 		m_fadeColor = 0xffffff; // 白でフェードアウト
 		m_updateFunc = &MiniGameScene::FadeOutUpdate;

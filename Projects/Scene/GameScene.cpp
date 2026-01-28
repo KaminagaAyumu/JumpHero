@@ -43,6 +43,7 @@ namespace
 	constexpr int kGoalPosChipNo = 8; // ゴールを見せる時にカメラが見る位置のマップチップ番号
 
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
+	constexpr float kGoalBGMVolume = 20.0f; // ゴール時のBGMのボリューム
 
 	constexpr float kTemporaryBGMFadeTime = 30.0f; // スタックとして積んだBGMのフェード時間
 
@@ -132,6 +133,7 @@ m_fadeColor(0x000000)
 
 	m_pSoundManager = Application::GetInstance().GetSoundManager();
 	m_pSoundManager->LoadSoundClip("pauseSE", L"data/sound/SE/pauseSE.mp3", SoundBus::SE, 1.0f, false);
+	m_pSoundManager->LoadSoundClip("goalSE", L"data/sound/SE/goalSE.mp3", SoundBus::SE, kGoalBGMVolume, false);
 
 	if (m_stageNo == 0)
 	{
@@ -260,6 +262,8 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		// BGMが変更されている場合があるのでそれをリセットする
 		m_pSoundManager->EndTemporaryBGM(kTemporaryBGMFadeTime);
+
+		m_pSoundManager->Play("goalSE", 1.0f, true);
 		// このシーンの終了処理
 		m_fadeColor = 0xffffff; // フェードを白フェードにする
 		m_updateFunc = &GameScene::FadeOutUpdate;
