@@ -17,13 +17,11 @@ SoundManager::SoundManager()
 	m_busVolume =
 	{
 		// デフォルトの音量を設定
-		{SoundBus::BGM, 0.5f},
+		{SoundBus::BGM, 0.9f},
 		{SoundBus::SE, 0.75f}
 	};
 
 	m_bgmPhase = BGMPhase::Idle; // 現在のBGMフェーズ
-	m_bgmFadeTime = 0.0f; // フェードにかける時間
-	m_bgmFadeTimer = 0.0f; // フェードの経過時間
 }
 
 SoundManager::~SoundManager()
@@ -84,25 +82,27 @@ void SoundManager::Update()
 	// 音量を適用
 	if (info.fadeOutTrack)
 	{
-		info.fadeOutTrack->volume = info.outStart + (info.outEnd - info.outStart) * t;
+		info.fadeOutTrack->volume = info.outStart * (1.0f - t) + info.outEnd * t;
+		info.fadeOutTrack->volume *= wOut;
 
 		const auto& clip = m_soundClips[info.fadeOutTrack->soundID];
-		ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeOutTrack->volume), info.fadeOutTrack->handle);
+		const int outVol255 = ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeOutTrack->volume);
+		ChangeVolumeSoundMem(outVol255, info.fadeOutTrack->handle);
+		//printfDx(L"Out   handle = %d vol255 = %d local= %.3f\n", info.fadeOutTrack->handle, outVol255, info.fadeOutTrack->volume);
 	}
 
 	if (info.fadeInTrack)
 	{
-		info.fadeInTrack->volume = info.inStart + (info.inEnd - info.inStart) * t;
+		info.fadeInTrack->volume = info.inStart * (1.0f - t) + info.inEnd * t;
+		info.fadeInTrack->volume *= wIn;
 
 		const auto& clip = m_soundClips[info.fadeInTrack->soundID];
-		ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeInTrack->volume), info.fadeInTrack->handle);
+		const int inVol255 = ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * info.fadeInTrack->volume);
+		ChangeVolumeSoundMem(inVol255, info.fadeInTrack->handle);
+		//printfDx(L"In    handle = %d vol255 = %d local= %.3f\n", info.fadeInTrack->handle, inVol255, info.fadeInTrack->volume);
 	}
 
-	printfDx(L"time : %f\n", t);
-
-	printfDx(L"Involume : %f\n", info.fadeInTrack->volume);
-	printfDx(L"Outvolume : %f\n", info.fadeOutTrack->volume);
-
+	
 
 	if (t >= 1.0f)
 	{
@@ -185,7 +185,7 @@ void SoundManager::PlayBGM(const std::string& soundID, float fadeTime)
 	StopBGMTrack(m_bgmA);
 	StopBGMTrack(m_bgmB);
 
-	StartBGMOnTrack(m_bgmA, soundID, fadeTime > 0.0f ? 0.0f : 1.0f); // フェードインがある場合は最初は音量0で再生
+	StartBGMOnTrack(m_bgmA, soundID, fadeTime > 0.0f ? 0.0f : 1.0f, nullptr); // フェードインがある場合は最初は音量0で再生
 
 	if (fadeTime > 0.0f)
 	{
@@ -233,7 +233,7 @@ void SoundManager::CrossFadeBGM(const std::string& soundID, float fadeTime)
 
 	// 新しいトラックでBGMを開始
 	StopBGMTrack(*newTrack); // 念のため停止しておく
-	StartBGMOnTrack(*newTrack, soundID, 0.0f); // 最初は音量0で再生
+	StartBGMOnTrack(*newTrack, soundID, 0.0f, currentTrack); // 最初は音量0で再生
 
 	m_crossBGMInfo.fadeOutTrack = currentTrack;
 	m_crossBGMInfo.fadeInTrack = newTrack;
@@ -279,15 +279,24 @@ void SoundManager::StopBGM(float fadeOutTime)
 	}
 
 	// フェードアウト中のトラックとフェードイン中のトラックを切り替える
-	BGMTrack* currentTrack = (m_bgmA.isActive) ? &m_bgmA : &m_bgmB;
-	BGMTrack* newTrack = (currentTrack == &m_bgmA) ? &m_bgmB : &m_bgmA;
-	StopBGMTrack(*newTrack); // 念のため停止しておく
-	newTrack->volume = 0.0f; // 音量0に設定
-	newTrack->isActive = false; // 非アクティブに設定
+	BGMTrack* currentTrack = (m_bgmA.isActive) ? &m_bgmA : (m_bgmB.isActive) ? &m_bgmB : nullptr;
+	
+	if (!currentTrack) return;
+
+	m_crossBGMInfo = {};
+	m_crossBGMInfo.fadeOutTrack = currentTrack;
+	m_crossBGMInfo.fadeInTrack = nullptr;
+
+	m_crossBGMInfo.outStart = currentTrack->volume;
+	m_crossBGMInfo.outEnd = 0.0f;
+	m_crossBGMInfo.inStart = 0.0f;
+	m_crossBGMInfo.inEnd = 0.0f;
+
+	m_crossBGMInfo.durationSec = fadeOutTime;
+	m_crossBGMInfo.elapsedSec = 0.0f;
+	m_crossBGMInfo.isActive = true;
+
 	m_bgmPhase = BGMPhase::CrossFading;
-	// フェード時間を設定
-	m_bgmFadeTime = fadeOutTime;
-	m_bgmFadeTimer = 0.0f;
 
 }
 
@@ -305,29 +314,87 @@ void SoundManager::ApplyVolumeToHandle(const SoundClip& clip, float volume) cons
 
 int SoundManager::ToDxLibVolume(float rate) const
 {
-	// 割合から音量を設定
-	int volume = static_cast<int>(std::round(std::clamp(rate, 0.0f, 1.0f)) * kMaxVolume);
+	// 割合を0~1の間に収める
+	const float clamped = std::clamp(rate, 0.0f, 1.0f);
+
+	const int vol = static_cast<int>(std::lround(clamped * kMaxVolume));
+
 	// 0~255の間に収まるようにする
-	return std::clamp(volume, 0, kMaxVolume);
+	return std::clamp(vol, 0, kMaxVolume);
 }
 
-void SoundManager::StartBGMOnTrack(BGMTrack& track, const std::string& soundID, float volume)
+void SoundManager::StartBGMOnTrack(BGMTrack& track, const std::string& soundID, float volume, const BGMTrack* other)
 {
-	auto& clip = m_soundClips[soundID];
+	
+	auto it = m_soundClips.find(soundID);
+	if (it == m_soundClips.end() || it->second.handle == -1)
+	{
+		track = BGMTrack{};
+		//printfDx(L"StartBGMOnTrack : %hs はロードできなかった", soundID.c_str());
+		return;
+	}
+
+	const auto& clip = it->second;
+	int handleToUse = clip.handle;
+	bool needDuplicate = false;
+
+	if (other && other->isActive && other->soundID == soundID)
+	{
+		needDuplicate = true;
+	}
+
+	if (!needDuplicate && CheckSoundMem(handleToUse) == 1)
+	{
+		needDuplicate = true;
+	}
+
+	if (needDuplicate)
+	{
+		int dup = DuplicateSoundMem(clip.handle);
+		if (dup == -1)
+		{
+			track = BGMTrack{};
+			//printfDx(L"DupricateSoundMem 失敗 '%hs'\n", soundID.c_str());
+			return;
+		}
+		handleToUse = dup;
+		track.isOwnsHandle = true;
+		//printfDx(L"ハンドル複製使用 : base = %d -> dup = %d\n", clip.handle, handleToUse);
+	}
+	else
+	{
+		track.isOwnsHandle = false;
+		//printfDx(L"Baseのハンドル使用 : base = %d\n", handleToUse);
+	}
+
 	track.soundID = soundID;
-	track.handle = clip.handle;
+	track.handle = handleToUse;
 	track.volume = volume;
 	track.isActive = true;
+
+
 	ChangeVolumeSoundMem(ToDxLibVolume(m_masterVolume * GetBusVolume(clip.bus) * clip.defaultRate * track.volume), track.handle);
-	PlaySoundMem(track.handle, DX_PLAYTYPE_LOOP); // ループ前提で再生
+	int r = PlaySoundMem(track.handle, DX_PLAYTYPE_LOOP); // ループ前提で再生
+
+	//printfDx(L"Play Handle = %d ret = %d Check = %d\n", track.handle, r, CheckSoundMem(track.handle));
+
+	if (other)
+	{
+		//printfDx(L"other.handle = %d Check = %d sameID = %d\n", other->handle, CheckSoundMem(other->handle), (int)(other->soundID == soundID));
+	}
+
 }
 
 void SoundManager::StopBGMTrack(BGMTrack& track)
 {
 	// トラックがアクティブかどうかを判定
-	if (track.isActive)
+	if (track.isActive && track.handle != -1)
 	{
 		StopSoundMem(track.handle);
+		if (track.isOwnsHandle)
+		{
+			DeleteSoundMem(track.handle);
+		}
 	}
 	track = BGMTrack{}; // トラック情報をリセット
 }

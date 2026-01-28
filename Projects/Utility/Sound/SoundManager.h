@@ -153,9 +153,6 @@ private:
 	BGMPhase m_bgmPhase; // 現在のBGMフェーズ
 	CrossBGMInfo m_crossBGMInfo; // クロスフェード情報
 
-	float m_bgmFadeTime; // フェードにかける時間
-	float m_bgmFadeTimer; // フェードの経過時間
-
 	/// <summary>
 	/// マスターボリュームを考慮した音量をサウンドクリップに設定する
 	/// </summary>
@@ -176,7 +173,7 @@ private:
 	/// <param name="track">BGMトラック(AorB)</param>
 	/// <param name="soundID">サウンドのID</param>
 	/// <param name="volume">BGMの音量</param>
-	void StartBGMOnTrack(BGMTrack& track, const std::string& soundID, float volume);
+	void StartBGMOnTrack(BGMTrack& track, const std::string& soundID, float volume, const BGMTrack* other);
 
 	/// <summary>
 	/// BGMトラックの再生を停止する

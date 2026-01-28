@@ -45,12 +45,7 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_soundManager = Application::GetInstance().GetSoundManager();
 	m_soundManager->LoadSoundClip("test", L"data/sound/BGM/testBGM.mp3",SoundBus::BGM,1.0f,true);
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/SE/testSE.mp3", SoundBus::SE, 1.0f, false);
-	//m_soundManager->PlayBGM("test",0.0f);
-
-	m_soundManager->LoadSoundClip("select", L"data/sound/BGM/selectBGM.wav", SoundBus::BGM, 1.0f, true);
-	m_soundManager->LoadSoundClip("testOgg1", L"data/sound/BGM/testOgg1.ogg", SoundBus::BGM, 1.0f, true);
-	m_soundManager->LoadSoundClip("testOgg2", L"data/sound/BGM/testOgg2.ogg", SoundBus::BGM, 1.0f, true);
-	m_soundManager->PlayBGM("testOgg1",0.0f);
+	m_soundManager->PlayBGM("test",0.0f);
 
 	m_pUIManager = std::make_shared<UIManager>();
 	auto text = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
@@ -130,12 +125,11 @@ void TitleScene::NormalUpdate(Input& input)
 		return;
 	}
 
-	// エフェクト,サウンドテスト用
-	if (input.IsTriggered("Up"))
+	// エフェクトテスト用
+	/*if (input.IsTriggered("Up"))
 	{
-		//->CrossFadeBGM("select", 120.0f);
-		m_soundManager->CrossFadeBGM("testOgg2", 120.0f);
-	}
+		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, { 400,400 });
+	}*/
 	
 }
 
