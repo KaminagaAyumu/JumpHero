@@ -32,6 +32,12 @@
 
 namespace
 {
+	constexpr int kTutorialNum = 0;
+	constexpr int kStage1 = 1;
+	constexpr int kStage2 = 2;
+	constexpr int kStage3 = 3;
+
+
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
 	constexpr int kEnemyCount = 5; // 敵の数
 
@@ -135,20 +141,25 @@ m_fadeColor(0x000000)
 	m_pSoundManager->LoadSoundClip("pauseSE", L"data/sound/SE/pauseSE.mp3", SoundBus::SE, 1.0f, false);
 	m_pSoundManager->LoadSoundClip("goalSE", L"data/sound/SE/goalSE.mp3", SoundBus::SE, kGoalBGMVolume, false);
 
-	if (m_stageNo == 0)
+	if (m_stageNo == kTutorialNum)
 	{
 		m_pSoundManager->LoadSoundClip("tutorial", L"data/sound/BGM/tutorialBGM.mp3", SoundBus::BGM, 1.0f, true);
 		m_pSoundManager->CrossFadeBGM("tutorial", kCrossFadeTime);
 	}
-	else if(m_stageNo == 1)
+	else if(m_stageNo == kStage1)
 	{
 		m_pSoundManager->LoadSoundClip("stage1", L"data/sound/BGM/stage1BGM.wav", SoundBus::BGM, 1.0f, true);
 		m_pSoundManager->CrossFadeBGM("stage1", kCrossFadeTime);
 	}
-	else
+	else if(m_stageNo == kStage2)
 	{
 		m_pSoundManager->LoadSoundClip("stage2", L"data/sound/BGM/stage2BGM.wav", SoundBus::BGM, 1.0f, true);
 		m_pSoundManager->CrossFadeBGM("stage2", kCrossFadeTime);
+	}
+	else
+	{
+		m_pSoundManager->LoadSoundClip("stage3", L"data/sound/BGM/stage3BGM.mp3", SoundBus::BGM, 1.0f, true);
+		m_pSoundManager->CrossFadeBGM("stage3", kCrossFadeTime);
 	}
 
 	m_pPositionRegistry = std::make_unique<PositionRegistry>();
