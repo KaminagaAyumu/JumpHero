@@ -32,7 +32,7 @@ namespace
 	constexpr int kScoreDispMargin = -60;
 
 	constexpr int kClearBgNo = 1; // ゲームクリアの際の背景の番号
-	constexpr int kStageMaxNum = 2; // ステージの合計数
+	constexpr int kStageMaxNum = 3; // ステージの合計数
 
 	constexpr float kClearSEVolume = 30.0f; // クリア時のSEのボリューム
 
