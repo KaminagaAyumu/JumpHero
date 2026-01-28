@@ -96,7 +96,7 @@ void Camera::SetTargetProvider(std::function<Position2()> provider)
 
 const Rect2D& Camera::GetNowScreenArea() const
 {
-	return { scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenWidth };
+	return { scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenHeight };
 }
 
 bool Camera::IsLerpEnd()
