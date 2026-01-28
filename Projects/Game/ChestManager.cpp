@@ -6,12 +6,16 @@
 #include "Actor.h"
 #include "GameManager.h"
 #include "Player.h"
+#include "../Utility/Application.h"
+#include "../Utility/Sound/SoundManager.h"
 #include "DxLib.h"
 
 namespace
 {
 	constexpr int kChestChipNo = 106;
 	constexpr int kHiddenChestChipNo = 107;
+
+	constexpr float kChestOpenSEVolume = 20.0f; // 宝箱を開けたときのSEのボリューム
 }
 
 
@@ -20,6 +24,7 @@ ChestManager::ChestManager(std::weak_ptr<Camera> camera, GameManager* gameManage
 	m_pGameManager(gameManager)
 {
 	m_chestGraphHandle = LoadGraph(L"data/chest.png");
+	Application::GetInstance().GetSoundManager()->LoadSoundClip("chestOpenSE", L"data/sound/SE/openChest.mp3", SoundBus::SE, kChestOpenSEVolume, false);
 }
 
 ChestManager::~ChestManager()
@@ -40,6 +45,7 @@ void ChestManager::Update(Input& input)
 		chest->Update(input);
 		if (chest->IsOpen())
 		{
+			Application::GetInstance().GetSoundManager()->Play("chestOpenSE", 1.0f, true);
 			//m_pGameManager->DropItem(static_cast<int>(chest->GetPos().x), static_cast<int>(chest->GetPos().y));
 		}
 	}
