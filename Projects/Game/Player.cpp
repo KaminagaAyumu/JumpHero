@@ -98,7 +98,7 @@ Player::Player(std::weak_ptr<Map> map, std::weak_ptr<GameManager> gameManager) :
 Player::Player(std::weak_ptr<Map> map) : 
 	Actor(Types::ActorType::Player),
 	m_direction{},
-	m_velocity{1.0f,1.0f},
+	m_velocity{},
 	m_entryEndPos{},
 	m_barrierPos{},
 	m_graphHandle(-1),
@@ -413,7 +413,6 @@ void Player::MoveOperation(Input& input)
 
 	// 貫通しない床に当たったかどうか
 	bool isHitNormalFloor = false;
-	float margin = 0.1f; // マージン
 
 	// 落下している時に床に当たった場合
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
@@ -446,7 +445,7 @@ void Player::MoveOperation(Input& input)
 		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
 		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
 		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+		int footTileY = pMap->WorldPosToMapPos(bottomY + kMapColMargin, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
 		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
@@ -862,7 +861,6 @@ void Player::AutoMoveUpdate(Input&)
 
 	// 貫通しない床に当たったかどうか
 	bool isHitNormalFloor = false;
-	float margin = 0.1f; // マージン
 
 	// 落下している時に床に当たった場合
 	if (dy > 0.0f && bottomY > rangeY.GetBottom())
@@ -895,7 +893,7 @@ void Player::AutoMoveUpdate(Input&)
 		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
 		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kPlayerWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
 		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kPlayerWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+		int footTileY = pMap->WorldPosToMapPos(bottomY + kMapColMargin, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
 		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
