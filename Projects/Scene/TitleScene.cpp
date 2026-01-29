@@ -21,6 +21,8 @@
 
 namespace
 {
+	constexpr int kRandBgNum = 1; // タイトルの背景描画方法をランダムに決めるときに使う値
+
 	constexpr int kFadeInterval = 60; // フェード処理を行う時間
 	constexpr int kMaxFadeRate = 255; // フェード進行率の最大値
 
@@ -38,7 +40,14 @@ m_drawFunc(&TitleScene::FadeDraw)
 {
 	m_titleImageHandle = LoadGraph(L"data/logo.png");
 	m_bg = std::make_shared<Bg>();
-	m_bg->SetBgType(Types::BgType::ScrollXY);
+	
+	// 背景をランダムで決める(地下か地上かのどちらか)
+	if (GetRand(kRandBgNum) == kRandBgNum)
+	{
+		m_bg->SetLayer();
+	}
+
+	m_bg->SetBgType(Types::BgType::ScrollX);
 	m_bg->Init();
 	m_pMap = std::make_shared<Map>(-1, false);
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
