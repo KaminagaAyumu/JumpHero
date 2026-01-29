@@ -152,7 +152,11 @@ void TransformEnemy::IsCollision(const Types::CollisionInfo& info)
 			}
 			else // プレイヤーが攻撃可能状態でないなら
 			{
-				m_pPlayer->MissStart(); // プレイヤーをミスにさせる
+				// ミス状態にになっていない時
+				if (!m_pPlayer->IsMiss())
+				{
+					m_pPlayer->MissStart(); // プレイヤーをミスにさせる
+				}
 			}
 		}
 		else if (IsItemMode()) // 敵がアイテム化している場合
