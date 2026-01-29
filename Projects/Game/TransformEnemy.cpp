@@ -28,12 +28,17 @@ namespace
 	constexpr int	kAppearTime				= 90;		// 敵の出現までの時間
 	constexpr int	kFormChangeWaitTime		= 180;		// 敵の変身までの時間
 	constexpr int	kFormChangeTime			= 30;		// 敵の変身準備までの時間
-	constexpr int	kDeadTime				= 300;		// 敵がやられて消えるの時間
+	constexpr int	kDeadTime				= 300;		// 敵がやられて消えるまでの時間
+	constexpr float kDeadMoveSpeed			= 2.0f;		// 敵がやられた際の動くスピード
 
 	constexpr float kMaxDirectionValue		= 1.0f;		// 向きの最大値(大きさ)
 	constexpr float kDirectionMagnification = 0.01f;	// 向きの倍率
 
 	constexpr int	kTurnMaxCount			= 2;        // 方向転換できる最大回数
+
+	constexpr float kMapColMargin			= 0.1f;		// マップとの当たり判定の際のマージン
+	constexpr float kFootTileMargin			= 0.5f;		// 自分の足元のタイルを見る際のマージン
+	constexpr float kProbeYDist				= 1.0f;		// Y座標を探す距離
 
 	// 演出関連
 	constexpr float	kItemWarningRate		= 0.20f;	// アイテム化が終わりそうなことを示す時間の割合
@@ -352,7 +357,7 @@ void TransformEnemy::DeadUpdate(Input&)
 		m_isDead = true; // 敵を消す
 		return; // 念のためreturn
 	}
-	m_pos.y -= 2.0f; // 上に飛んでいく
+	m_pos.y -= kDeadMoveSpeed; // 上に飛んでいく
 }
 
 void TransformEnemy::AppearDraw()
@@ -557,7 +562,7 @@ void TransformEnemy::MoveOperation()
 
 	float dy = m_velocity.y; // Y軸の移動量
 	ContactFrags frags;
-	const float margin = 0.1f;
+	const float margin = kMapColMargin;
 
 	// X軸の当たり判定
 	Position2 tryPosX = m_pos;
@@ -630,7 +635,7 @@ void TransformEnemy::MoveOperation()
 		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
 		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
 		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+		int footTileY = pMap->WorldPosToMapPos(bottomY + kFootTileMargin, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
 		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
@@ -680,7 +685,7 @@ void TransformEnemy::MoveOperation()
 		// 前方のX座標を見る
 		const float aheadX = m_isRightDirection ? (m_pos.x + kEnemyWidth * 0.5f) : (m_pos.x - kEnemyWidth * 0.5f);
 		const float aheadY = m_pos.y + kEnemyHeight * 0.5f; // 足元のY座標
-		const float probeY = aheadY + 1.0f; // 足元より少し下のY座標
+		const float probeY = aheadY + kProbeYDist; // 足元より少し下のY座標
 		const float tileSize = pMap->GetTileSize(); // マップチップのサイズ
 		int tx = pMap->WorldPosToMapPos(aheadX, tileSize); // X座標のマップ位置
 		int ty = pMap->WorldPosToMapPos(probeY, tileSize); // Y座標のマップ位置
@@ -712,7 +717,7 @@ void TransformEnemy::TransformMoveOperation(const Position2& steer)
 
 	
 	ContactFrags frags;
-	const float margin = 0.1f;
+	const float margin = kMapColMargin;
 
 	// X軸の当たり判定
 	Position2 tryPosX = m_pos;
@@ -785,7 +790,7 @@ void TransformEnemy::TransformMoveOperation(const Position2& steer)
 		const float tileSize = pMap->GetTileSize(); // マップのタイルサイズを取得
 		int leftTileX = pMap->WorldPosToMapPos(m_pos.x - kEnemyWidth * 0.5f, tileSize); // プレイヤーの左端のマップ座標X
 		int rightTileX = pMap->WorldPosToMapPos(m_pos.x + kEnemyWidth * 0.5f, tileSize); // プレイヤーの右端のマップ座標X
-		int footTileY = pMap->WorldPosToMapPos(bottomY + 0.5f, tileSize); // プレイヤーの下端のマップ座標Y
+		int footTileY = pMap->WorldPosToMapPos(bottomY + kFootTileMargin, tileSize); // プレイヤーの下端のマップ座標Y
 
 		bool hitOneWay = false; // 片面通行の床に当たったかどうか
 		float candidateTop = pMap->GetMapHeight() * tileSize; // 候補となる床の上端のY座標(仮)
