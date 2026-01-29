@@ -24,6 +24,9 @@ namespace
 
 	constexpr int kPauseTextOffsetY = -300; // ポーズの見出しテキストのオフセット(画面中心からどれだけずらすか)
 
+	constexpr int kCursorMoveIndex = 1; // カーソルが動く値
+	constexpr unsigned int kPauseBgColor = 0x111166; // 背景の色
+
 	const Size kSelectListSize = { 400,300 };
 	const Position2 kSelectListPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2};
 }
@@ -98,14 +101,14 @@ void PauseScene::NormalUpdate(Input& input)
 		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(1);
+		list->MoveCursor(kCursorMoveIndex);
 	}
 	if (input.IsTriggered("Up"))
 	{
 		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(-1);
+		list->MoveCursor(-kCursorMoveIndex);
 	}
 
 	if (input.IsTriggered("OK"))
@@ -145,7 +148,7 @@ void PauseScene::NormalDraw()
 {
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kBackAlpha);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kPauseBgColor, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	m_pUIManager->Draw();
@@ -158,7 +161,7 @@ void PauseScene::NormalDraw()
 void PauseScene::FadeDraw()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kBackAlpha);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x111166, TRUE);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, kPauseBgColor, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// フェード率の計算 開始時: 0.0f  終了時: 1.0f
