@@ -2,6 +2,7 @@
 #include <functional>
 
 class Camera;
+class Actor;
 
 /// <summary>
 /// Effekseerのエフェクトを生成するクラス
@@ -39,7 +40,8 @@ public:
 	/// <param name="camera">カメラのポインタ</param>
 	/// <param name="provider">座標を指定する関数</param>
 	/// <param name="isUseCamera">カメラを使うかどうか</param>
-	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<Position2()> provider, bool isUseCamera);
+//	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<Position2()> provider, bool isUseCamera);
+	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::weak_ptr<Actor> provider, bool isUseCamera);
 
 	void Update();
 
@@ -57,7 +59,7 @@ private:
 
 	std::weak_ptr<Camera> m_pCamera; // カメラがある際に使う
 
-	std::function<Position2()> m_pPosProvider; // 座標を指定する際に使う
+	std::weak_ptr<Actor> m_pPosProvider; // 座標を指定する際に使う
 
 	bool m_isUseCamera; // カメラを使うかどうか
 

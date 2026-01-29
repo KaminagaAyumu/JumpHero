@@ -292,7 +292,7 @@ void Player::CheckPowerDown()
 			}
 			auto gameManager = m_pGameManager.lock();
 			// エフェクトを1段階目のものにする
-			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp1, m_pos, [this]() {return GetPos(); }, true);
+			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp1, m_pos, weak_from_this(), true);
 		}
 		else // レベルが0になったら
 		{
@@ -1163,7 +1163,7 @@ bool Player::PowerUp()
 		}
 		else
 		{
-			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp1, m_pos, [this]() {return GetPos(); },true);
+			m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp1, m_pos, weak_from_this(), true);
 		}
 		m_jumpCount = kJumpLimitNumLevelOne; // 20回ジャンプするまでパワーアップ継続
 	}
@@ -1179,7 +1179,7 @@ bool Player::PowerUp()
 		}
 
 		// エフェクトを2段階目のものにする
-		m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp2, m_pos, [this]() {return GetPos(); }, true);
+		m_pPowerUpEffect = gameManager->RequestCreateEffect(Types::EffectType::PowerUp2, m_pos, weak_from_this(), true);
 
 	}
 	m_isLevelDown = false; // レベルが下がったかどうかの判定を可能にする

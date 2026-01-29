@@ -33,7 +33,7 @@ public:
 	/// <param name="type">エフェクトの種類</param>
 	/// <param name="pos">エフェクトの座標</param>
 	/// <param name="provider">エフェクトの座標を示す関数プロバイダ</param>
-	std::weak_ptr<EffekseerEffect> CreateEffekseerEffectWithProvider(Types::EffectType type, const Position2& pos, std::function<Position2()> provider, bool isUseCamera);
+	std::weak_ptr<EffekseerEffect> CreateEffekseerEffectWithProvider(Types::EffectType type, const Position2& pos, std::weak_ptr<Actor> provider, bool isUseCamera);
 
 	/// <summary>
 	/// カメラをセットする

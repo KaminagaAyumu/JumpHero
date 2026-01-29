@@ -546,7 +546,7 @@ void GameManager::RequestCreateEffect(Types::EffectType effectType, const Positi
 	}
 }
 
-std::weak_ptr<EffekseerEffect> GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider, bool isUseCamera)
+std::weak_ptr<EffekseerEffect> GameManager::RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::weak_ptr<Actor> provider, bool isUseCamera)
 {
 	if (auto manager = m_pEffectManager.lock())
 	{

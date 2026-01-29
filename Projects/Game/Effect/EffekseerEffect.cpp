@@ -3,7 +3,7 @@
 #include <memory>
 #include "EffekseerEffect.h"
 #include "EffekseerForDxLib.h"
-
+#include "../Actor.h"
 
 
 EffekseerEffect::EffekseerEffect() :
@@ -40,7 +40,22 @@ void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camer
 	InitPos();
 }
 
-void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<Position2()> provider, bool isUseCamera)
+//void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<Position2()> provider, bool isUseCamera)
+//{
+//	m_effect = PlayEffekseer2DEffect(handle);
+//
+//	m_pos = pos;
+//
+//	m_pCamera = camera;
+//
+//	m_isUseCamera = isUseCamera;
+//
+//	m_pPosProvider = std::move(provider);
+//
+//	InitPos();
+//}
+
+void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::weak_ptr<Actor> provider, bool isUseCamera)
 {
 	m_effect = PlayEffekseer2DEffect(handle);
 
@@ -50,7 +65,7 @@ void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camer
 
 	m_isUseCamera = isUseCamera;
 
-	m_pPosProvider = std::move(provider);
+	m_pPosProvider = provider;
 
 	InitPos();
 }
@@ -58,10 +73,10 @@ void EffekseerEffect::Init(int handle, const Position2& pos, std::weak_ptr<Camer
 void EffekseerEffect::Update()
 {
 	// 座標を指定するプロバイダが存在する場合
-	if (m_pPosProvider)
+	if (auto provider = m_pPosProvider.lock())
 	{
 		// 座標をプロバイダのものにする
-		m_pos = m_pPosProvider();
+		m_pos = provider->GetPos();
 	}
 
 	// カメラが存在する場合
@@ -95,10 +110,10 @@ void EffekseerEffect::InitPos()
 	if (auto camera = m_pCamera.lock())
 	{
 		// 座標を指定するプロバイダが存在する場合
-		if (m_pPosProvider)
+		if (auto provider = m_pPosProvider.lock())
 		{
 			// 座標をプロバイダのものにする
-			m_pos = m_pPosProvider();
+			m_pos = provider->GetPos();
 		}
 
 		if (m_isUseCamera)

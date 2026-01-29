@@ -262,7 +262,7 @@ public:
 	/// <param name="effectType">エフェクトの内容</param>
 	/// <param name="pos">表示する座標</param>
 	/// <param name="provider">座標を返すプロバイダ</param>
-	std::weak_ptr<EffekseerEffect> RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::function<const Position2& ()> provider, bool isUseCamera);
+	std::weak_ptr<EffekseerEffect> RequestCreateEffect(Types::EffectType effectType, const Position2& pos, std::weak_ptr<Actor> provider, bool isUseCamera);
 
 	/// <summary>
 	/// プレイヤーが登場する際のテキストを出す
