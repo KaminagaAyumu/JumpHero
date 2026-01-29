@@ -34,6 +34,8 @@ namespace
 	constexpr int kClearBgNo = 1; // ゲームクリアの際の背景の番号
 	constexpr int kStageMaxNum = 3; // ステージの合計数
 
+	constexpr int kCursorMoveIndex = 1; // カーソルが動く値
+
 	constexpr float kClearSEVolume = 30.0f; // クリア時のSEのボリューム
 
 	const Size kNormalListSize = { 300,300 };
@@ -183,13 +185,13 @@ void ClearScene::NormalUpdate(Input& input)
 	{
 		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(-1);
+		list->MoveCursor(-kCursorMoveIndex);
 	}
 	if (input.IsTriggered("Down"))
 	{
 		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(1);
+		list->MoveCursor(kCursorMoveIndex);
 	}
 
 	// 決定ボタンを押したとき

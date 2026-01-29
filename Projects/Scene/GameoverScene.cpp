@@ -28,6 +28,8 @@ namespace
 
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
+	constexpr int kCursorMoveIndex = 1; // カーソルが動く値
+
 	constexpr int kHeaderDispMargin = 50;
 	constexpr int kScoreDispMargin = -50;
 
@@ -155,13 +157,13 @@ void GameoverScene::NormalUpdate(Input& input)
 	{
 		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(-1);
+		list->MoveCursor(-kCursorMoveIndex);
 	}
 	if (input.IsTriggered("Down"))
 	{
 		Application::GetInstance().GetSoundManager()->Play("cursor_se", 1.0f, true);
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(1);
+		list->MoveCursor(kCursorMoveIndex);
 	}
 
 	// 決定ボタンを押したとき
