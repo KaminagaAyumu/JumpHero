@@ -29,7 +29,7 @@ namespace
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
 	constexpr int kClearDispMargin = 50;
-	constexpr int kScoreDispMargin = -60;
+	constexpr int kScoreDispMargin = -100;
 
 	constexpr int kClearBgNo = 1; // ゲームクリアの際の背景の番号
 	constexpr int kStageMaxNum = 3; // ステージの合計数
@@ -37,7 +37,7 @@ namespace
 	constexpr float kClearSEVolume = 30.0f; // クリア時のSEのボリューム
 
 	const Size kNormalListSize = { 300,300 };
-	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 150 };
+	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 180 };
 
 	const Size kLastStageListSize = { 300,200 };
 	const Position2 kLastStageListPos = { Game::kScreenWidth / 2, 500 };

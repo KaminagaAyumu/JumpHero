@@ -29,13 +29,13 @@ namespace
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
 	constexpr int kHeaderDispMargin = 50;
-	constexpr int kScoreDispMargin = -60;
+	constexpr int kScoreDispMargin = -100;
 
 	constexpr int kGameoverBgNo = 2; // ゲームオーバーの際の背景の番号
 	constexpr int kStageMaxNum = 2; // ステージの合計数
 
 	const Size kNormalListSize = { 300,300 };
-	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 150 };
+	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 180 };
 }
 
 GameoverScene::GameoverScene(SceneController& controller, std::shared_ptr<GameManager> gameManager, int stageNo) :
