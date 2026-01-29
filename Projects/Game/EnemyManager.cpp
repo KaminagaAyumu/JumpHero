@@ -29,6 +29,15 @@ namespace
 	// 敵のアイテム化時間
 	constexpr int kChangeToItemTime = 360;
 	
+#ifdef _DEBUG
+	constexpr int kSpawnPosRadius = 10; // スポーン位置の半径
+
+	constexpr unsigned int kNearSpawnPosColor = 0x00ff00; // プレイヤーから一番近い敵のスポーン位置の色
+	constexpr unsigned int kNormalSpawnPosColor = 0xff0000; // 敵のスポーン位置の色
+
+#endif
+
+
 }
 
 EnemyManager::EnemyManager(std::weak_ptr<Camera> camera, Player* player, std::weak_ptr<GameManager> gameManager, std::weak_ptr<Map> map) :
@@ -153,14 +162,14 @@ void EnemyManager::Draw()
 			int drawX = static_cast<int>(pos.x - camera->scroll.x);
 			int drawY = static_cast<int>(pos.y - camera->scroll.y);
 			// スポーン位置を表示(デバッグ用)
-			DrawCircle(drawX, drawY, 10, GetColor(0, 255, 0), FALSE);
+			DrawCircle(drawX, drawY, kSpawnPosRadius, kNearSpawnPosColor, FALSE);
 			continue;
 		}
 		auto camera = m_pCamera.lock();
 		int drawX = static_cast<int>(pos.x - camera->scroll.x);
 		int drawY = static_cast<int>(pos.y - camera->scroll.y);
 		// スポーン位置を表示(デバッグ用)
-		DrawCircle(drawX, drawY, 10, GetColor(255, 0, 0), FALSE);
+		DrawCircle(drawX, drawY, kSpawnPosRadius, kNormalSpawnPosColor, FALSE);
 	}
 #endif
 
