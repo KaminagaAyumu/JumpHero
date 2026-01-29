@@ -608,7 +608,7 @@ void GameManager::SetLastStageMode()
 
 bool GameManager::IsDropChangeToCoin()
 {
-	if(m_balloonCounter >= m_changeToCoinDropBalloonNum) // 風船を5個取ったら
+	if(m_balloonCounter >= m_changeToCoinDropBalloonNum) // 風船を指定数取ったら
 	{
 		// ここでリセットしているのがよくない
 		m_balloonCounter = 0; // カウンターをリセット
