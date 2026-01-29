@@ -52,6 +52,7 @@ namespace
 
 	constexpr int kSignboardChipNo = 291; // 右を指す看板のマップチップ(当たり判定を行わない)
 
+	constexpr float kRetRectMargin = 0.5f;
 
 	constexpr float kMoveRangeMargin = 0.1f; // マップとの位置の補正用
 
@@ -349,15 +350,15 @@ Rect2D Map::GetCanMoveRange(const Rect2D& rect)
 	if (retRectLeft > retRectRight) {
 		// 左右の距離の中心を取得
 		float centerPos = (retRectLeft + retRectRight) * 0.5f;
-		retRectLeft = centerPos - 0.5f; // 中心から0.5引いた座標
-		retRectRight = centerPos + 0.5f; // 中心から0.5足した座標
+		retRectLeft = centerPos - kRetRectMargin; // 中心から0.5引いた座標
+		retRectRight = centerPos + kRetRectMargin; // 中心から0.5足した座標
 	}
 	// 上の座標が下の座標よりも大きくなっている場合
 	if (retRectTop > retRectBottom) {
 		// 上下の距離の中心を取得
 		float centerPos = (retRectTop + retRectBottom) * 0.5f;
-		retRectTop = centerPos - 0.5f; // 中心から0.5引いた座標
-		retRectBottom = centerPos + 0.5f; // 中心から0.5足した座標
+		retRectTop = centerPos - kRetRectMargin; // 中心から0.5引いた座標
+		retRectBottom = centerPos + kRetRectMargin; // 中心から0.5足した座標
 	}
 
 	// 返す矩形の中心座標を設定
