@@ -82,6 +82,7 @@ void UIFormatText::Draw() const
 
 	// テキストの幅を取得
 	const int width = GetDrawStringWidthToHandle(visibleText.c_str(), drawLength, m_fontHandle);
+	const int fontSize = GetFontSizeToHandle(m_fontHandle);
 
 	int x = static_cast<int>(m_pos.x);
 	int y = static_cast<int>(m_pos.y);
@@ -89,6 +90,7 @@ void UIFormatText::Draw() const
 	if (m_isCenter)
 	{
 		x -= width / 2;
+		y -= fontSize;
 	}
 
 	// 透明度が最大値でない場合フェードが進んでいるとする
