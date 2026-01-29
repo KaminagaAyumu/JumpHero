@@ -8,7 +8,10 @@ namespace
 {
 	constexpr float kMaxMasterVolumeRate = 1.0f; // マスターボリュームの最大音量の割合
 
-	constexpr int kMaxVolume = 255; // DxLibにおける最大音量の大きさ 
+	constexpr int kMaxVolume = 255; // DxLibにおける最大音量の大きさ
+
+	constexpr float kDefaultBGMBusVolume = 0.9f;
+	constexpr float kDefaultSEBusVolume = 0.75f;
 }
 
 SoundManager::SoundManager()
@@ -18,8 +21,8 @@ SoundManager::SoundManager()
 	m_busVolume =
 	{
 		// デフォルトの音量を設定
-		{SoundBus::BGM, 0.9f},
-		{SoundBus::SE, 0.75f}
+		{SoundBus::BGM, kDefaultBGMBusVolume},
+		{SoundBus::SE, kDefaultSEBusVolume}
 	};
 
 	m_bgmPhase = BGMPhase::Idle; // 現在のBGMフェーズ
@@ -397,6 +400,7 @@ void SoundManager::StartBGMOnTrack(BGMTrack& track, const std::string& soundID, 
 	if (needDuplicate)
 	{
 		int dup = DuplicateSoundMem(clip.handle);
+		// ハンドルの取得に失敗したときはトラックを初期化
 		if (dup == -1)
 		{
 			track = BGMTrack{};
