@@ -5,6 +5,17 @@
 #include <fstream>
 #include <sstream>
 
+namespace
+{
+	constexpr int kNameNo = 0;
+	constexpr int kWidthNo = 1;
+	constexpr int kHeightNo = 2;
+	constexpr int kAnimNumNo = 3;
+	constexpr int kAnimFrameNo = 4;
+	constexpr int kAnimIndexNo = 5;
+	constexpr int kIsLoopNo = 6;
+}
+
 bool AnimationLoader::LoadAnimationData(const std::wstring& path, int graphHandle, std::unordered_map<std::string, Animation>& outAnimations)
 {
 	// ファイルを開く
@@ -33,13 +44,13 @@ bool AnimationLoader::LoadAnimationData(const std::wstring& path, int graphHandl
 		}
 
 		// 各データを取得する
-		const std::string name = row[0];
-		const int width = std::stoi(row[1]);
-		const int height = std::stoi(row[2]);
-		const int animNum = std::stoi(row[3]);
-		const int animFrame = std::stoi(row[4]);
-		const int animIndex = std::stoi(row[5]);
-		const bool isLoop = row[6] == "1" ? true : false; // "1"ならtrue、それ以外ならfalseにする
+		const std::string name = row[kNameNo];
+		const int width = std::stoi(row[kWidthNo]);
+		const int height = std::stoi(row[kHeightNo]);
+		const int animNum = std::stoi(row[kAnimNumNo]);
+		const int animFrame = std::stoi(row[kAnimFrameNo]);
+		const int animIndex = std::stoi(row[kAnimIndexNo]);
+		const bool isLoop = row[kIsLoopNo] == "1" ? true : false; // "1"ならtrue、それ以外ならfalseにする
 
 		Animation animation;
 		if (animIndex >= 0)
