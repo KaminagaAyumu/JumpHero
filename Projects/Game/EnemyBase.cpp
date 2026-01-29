@@ -6,18 +6,6 @@
 #include "DxLib.h"
 #include <cmath>
 
-namespace
-{
-	constexpr int kSeekPosY = 600;
-	constexpr int kMaxDirectionChangeCount = 120;
-	constexpr int kGraphWidth = 45;
-	constexpr int kGraphHeight = 45;
-
-	// この定数はマップから取得できるようにするかもしれない
-	constexpr int kChipSize = 32; // マップ1つの大きさ
-	constexpr float kChipScale = 1.40625f; // マップの拡大率
-}
-
 EnemyBase::EnemyBase(Player* player, std::weak_ptr<Map> map) :
 	Actor(Types::ActorType::Enemy),
 	m_pPlayer(player),
