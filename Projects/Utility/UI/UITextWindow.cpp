@@ -20,6 +20,8 @@ namespace
 	constexpr int kWindowBackAlpha = 200; // テキストを表示するウィンドウ背景の透明度
 
 	constexpr int kWindowTextLineGap = 4; // テキストの行間
+
+	constexpr float kAppearRate = 0.1f; // 出現するときの割合
 }
 
 UITextWindow::UITextWindow() :
@@ -105,7 +107,7 @@ void UITextWindow::Update()
 	m_aliveFrame--;
 	if (m_state == TextWindowState::Appearing || m_state == TextWindowState::Disappearing)
 	{
-		m_appearRate += 0.1f / m_appearDuration;
+		m_appearRate += kAppearRate / m_appearDuration;
 		if (m_appearRate >= 1.0f)
 		{
 			m_appearRate = 1.0f;
