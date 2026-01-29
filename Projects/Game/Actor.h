@@ -10,7 +10,7 @@ class Camera;
 /// <summary>
 /// ゲーム中に存在するオブジェクトの基底クラス
 /// </summary>
-class Actor
+class Actor : public std::enable_shared_from_this<Actor>
 {
 public:
 
