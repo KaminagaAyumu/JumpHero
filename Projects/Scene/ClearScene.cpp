@@ -29,7 +29,7 @@ namespace
 	constexpr float kCrossFadeTime = 120.0f; // BGMをクロスフェードさせる際の時間
 
 	constexpr int kClearDispMargin = 50;
-	constexpr int kScoreDispMargin = -100;
+	constexpr int kScoreDispMargin = -50;
 
 	constexpr int kClearBgNo = 1; // ゲームクリアの際の背景の番号
 	constexpr int kStageMaxNum = 3; // ステージの合計数
