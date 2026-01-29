@@ -38,7 +38,7 @@ public:
 	/// <param name="handle">エフェクトのリソースハンドル</param>
 	/// <param name="pos">エフェクトを表示する座標</param>
 	/// <param name="camera">カメラのポインタ</param>
-	/// <param name="provider">座標を指定する関数</param>
+	/// <param name="provider">座標を示すオブジェクト</param>
 	/// <param name="isUseCamera">カメラを使うかどうか</param>
 //	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::function<Position2()> provider, bool isUseCamera);
 	void Init(int handle, const Position2& pos, std::weak_ptr<Camera> camera, std::weak_ptr<Actor> provider, bool isUseCamera);
