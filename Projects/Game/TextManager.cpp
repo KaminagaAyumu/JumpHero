@@ -4,6 +4,15 @@
 #include <fstream>
 #include "DxLib.h"
 
+namespace
+{
+	// データを格納する際に使用する定数
+	constexpr int kIdNo = 0; // IDのデータの場所
+	constexpr int kPageNo = 1; // ページのデータの場所
+	constexpr int kTextDataNo = 2; // テキストのデータの場所
+	constexpr int kDataSize = 3; // データサイズの大きさ
+}
+
 TextManager::TextManager()
 {
 	LoadTextData();
@@ -52,12 +61,12 @@ void TextManager::LoadTextData()
 		{
 			row.push_back(field);
 		}
-		if (row.size() >= 3)
+		if (row.size() >= kDataSize)
 		{
 			TextData data;
-			data.id = row[0];
-			data.page = std::stoi(row[1]);
-			data.textData = row[2];
+			data.id = row[kIdNo];
+			data.page = std::stoi(row[kPageNo]);
+			data.textData = row[kTextDataNo];
 			m_textData[data.id].push_back(data);
 		}
 	}
