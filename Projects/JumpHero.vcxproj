@@ -165,7 +165,6 @@
     <ClCompile Include="Scene\PauseScene.cpp" />
     <ClCompile Include="Scene\SelectScene.cpp" />
     <ClCompile Include="Game\TextManager.cpp" />
-    <ClCompile Include="Game\TutorialManager.cpp" />
     <ClCompile Include="Game\StayEnemy.cpp" />
     <ClCompile Include="Scene\SoundControlScene.cpp" />
     <ClCompile Include="Utility\UI\UIFormatText.cpp" />
@@ -227,7 +226,6 @@
     <ClInclude Include="Scene\PauseScene.h" />
     <ClInclude Include="Scene\SelectScene.h" />
     <ClInclude Include="Game\TextManager.h" />
-    <ClInclude Include="Game\TutorialManager.h" />
     <ClInclude Include="Game\StayEnemy.h" />
     <ClInclude Include="Scene\SoundControlScene.h" />
     <ClInclude Include="Utility\UI\UIFormatText.h" />
