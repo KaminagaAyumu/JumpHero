@@ -237,10 +237,9 @@ void GameManager::Update(Input& input)
 		if (!m_isItemGaugeMax && GetMiniGameBalloonCounterRate() >= 1.0f)
 		{
 			Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
-			if (auto manager = m_pEffectManager.lock())
-			{
-				manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCoinGaugeIconPos, false);
-			}
+
+			// ミニゲーム中にゲージが最大になったエフェクトを表示するのはアイテム生成時
+
 			m_isItemGaugeMax = true;
 		}
 	}
@@ -417,6 +416,11 @@ void GameManager::DropItem(const Position2& pos, const Types::ItemType& type)
 
 void GameManager::SpawnFloatingItem(const Position2& pos)
 {
+	// ゲージがMaxになった時のエフェクトを表示する
+	if (auto manager = m_pEffectManager.lock())
+	{
+		manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCoinGaugeIconPos, false);
+	}
 	// アイテムを落としたときのSEを鳴らす
 	Application::GetInstance().GetSoundManager()->Play("dropChangeToCoinSE", 1.0f, true);
 	m_balloonCounter = 0;
