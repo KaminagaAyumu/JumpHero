@@ -206,7 +206,7 @@ void EnemyManager::SpawnEnemy(const Position2& pos)
 	m_enemies.push_back(enemy);
 }
 
-const Position2& EnemyManager::SearchNearestSpawnPosition(const Position2& playerPos)
+Position2 EnemyManager::SearchNearestSpawnPosition(const Position2& playerPos)
 {
 	if(m_spawnPositions.empty())
 	{

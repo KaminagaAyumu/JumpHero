@@ -73,7 +73,7 @@ private:
 	/// </summary>
 	/// <param name="playerPos">プレイヤーの位置</param>
 	/// <returns>敵スポーン位置</returns>
-	const Position2& SearchNearestSpawnPosition(const Position2& playerPos);
+	Position2 SearchNearestSpawnPosition(const Position2& playerPos);
 
 	std::weak_ptr<Camera> m_pCamera; // 敵が使うカメラを参照
 	Player* m_pPlayer; // 敵が使うプレイヤーを参照
