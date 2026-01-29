@@ -27,6 +27,8 @@ namespace
 	constexpr float kSelectBGMVolume = 0.8f; // ステージセレクトBGMの音量(デフォルトだと少し大きいので小さめにする)
 	constexpr float kOKSEVolume = 20.0f; // 決定ボタンのボリューム
 
+	constexpr int kCursorMoveIndex = 1; // カーソルが動く値
+
 	constexpr int kSelectBgNo = 0;
 
 	constexpr int kTutorialListNo = 0;
@@ -146,7 +148,7 @@ void SelectScene::NormalUpdate(Input& input)
 		m_soundManager->Play("cursor_se", 1.0f, true);
 		
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(1);
+		list->MoveCursor(kCursorMoveIndex);
 		CheckCursor();
 	}
 	if (input.IsTriggered("Up"))
@@ -154,7 +156,7 @@ void SelectScene::NormalUpdate(Input& input)
 		m_soundManager->Play("cursor_se", 1.0f, true);
 		
 		auto list = m_pSelectList.lock();
-		list->MoveCursor(-1);
+		list->MoveCursor(-kCursorMoveIndex);
 		CheckCursor();
 	}
 
