@@ -94,7 +94,7 @@ void Camera::SetTargetProvider(std::function<Position2()> provider)
 	m_targetProvider = std::move(provider); // 関数オブジェクトの内容の所有権を受け取る
 }
 
-const Rect2D& Camera::GetNowScreenArea() const
+Rect2D Camera::GetNowScreenArea() const
 {
 	return { scroll.x,scroll.x + Game::kScreenWidth,scroll.y, scroll.y + Game::kScreenHeight };
 }
