@@ -43,7 +43,7 @@ Application& Application::GetInstance()
 bool Application::Init()
 {
 	// ウインドウモード設定
-	ChangeWindowMode(true);
+	ChangeWindowMode(false);
 	// ウインドウのタイトル変更
 	SetMainWindowText(L"JumpHero");
 	// 画面のサイズ変更
