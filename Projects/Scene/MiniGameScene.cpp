@@ -178,7 +178,7 @@ void MiniGameScene::NormalUpdate(Input& input)
 
 	if (auto gauge = m_pDropItemGauge.lock())
 	{
-		gauge->SetValue(m_pGameManager->GetBalloonCounterRate());
+		gauge->SetValue(m_pGameManager->GetMiniGameBalloonCounterRate());
 	}
 
 	// OKボタンが押されたかどうかを判定する

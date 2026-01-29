@@ -72,6 +72,7 @@ GameManager::GameManager() :
 	m_balloonCounter(0),
 	m_totalBalloonNum(0),
 	m_changeToCoinDropBalloonNum(kBalloonForChangeToCoin),
+	m_miniGameBalloonCounterRate(0.0f),
 	m_isMiniGame(false),
 	m_isTutorial(false),
 	m_isOpenGoal(false),
@@ -231,17 +232,32 @@ void GameManager::Update(Input& input)
 	}
 
 	// アイテムゲージがマックスになった瞬間を計測
-	if (!m_isItemGaugeMax && GetBalloonCounterRate() >= 1.0f)
+	if (m_isMiniGame)
 	{
-		Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
-		if (auto manager = m_pEffectManager.lock())
+		if (!m_isItemGaugeMax && GetMiniGameBalloonCounterRate() >= 1.0f)
 		{
-			manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCoinGaugeIconPos, false);
+			Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
+			if (auto manager = m_pEffectManager.lock())
+			{
+				manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCoinGaugeIconPos, false);
+			}
+			m_isItemGaugeMax = true;
 		}
-		m_isItemGaugeMax = true;
-		
 	}
+	else
+	{
+		if (!m_isItemGaugeMax && GetBalloonCounterRate() >= 1.0f)
+		{
+			Application::GetInstance().GetSoundManager()->Play("coinGaugeMaxSE", 1.0f, true);
+			if (auto manager = m_pEffectManager.lock())
+			{
+				manager->CreateEffekseerEffect(Types::EffectType::ChangeCoin, kCoinGaugeIconPos, false);
+			}
+			m_isItemGaugeMax = true;
 
+		}
+	}
+	
 	// アイテム化時間の時
 	if (!m_isChangeToCoin && m_pEnemyManager->GetItemTimeRate() > 0.0f)
 	{
@@ -468,6 +484,8 @@ bool GameManager::IsGetBalloon(int balloonNum, bool isAll)
 	}
 	else
 	{
+		// ミニゲーム内の風船を取る割合を設定
+		m_miniGameBalloonCounterRate = static_cast<float>(m_balloonCounter) / balloonNum;
 		// リセットありの風船のカウンタから比較
 		return m_balloonCounter >= balloonNum;
 	}
@@ -492,6 +510,11 @@ const Position2& GameManager::GetPlayerPos() const
 float GameManager::GetBalloonCounterRate() const
 {
 	return static_cast<float>(m_balloonCounter) / m_changeToCoinDropBalloonNum;
+}
+
+float GameManager::GetMiniGameBalloonCounterRate() const
+{
+	return m_miniGameBalloonCounterRate;
 }
 
 float GameManager::GetChangeToCoinTimeRate() const

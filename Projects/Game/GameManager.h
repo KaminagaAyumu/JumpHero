@@ -225,6 +225,12 @@ public:
 	float GetBalloonCounterRate()const;
 
 	/// <summary>
+	/// ミニゲーム時の風船をどれだけ取得したかの割合を返す
+	/// </summary>
+	/// <returns>0.0f~1.0fの割合</returns>
+	float GetMiniGameBalloonCounterRate()const;
+
+	/// <summary>
 	/// 敵のコイン化時間の割合を返す
 	/// </summary>
 	/// <returns>0.0f~1.0fの割合</returns>
@@ -286,6 +292,7 @@ private:
 	int m_balloonCounter; // 風船の数のカウンタ
 	int m_totalBalloonNum; // そのステージに存在する風船の総数
 	int m_changeToCoinDropBalloonNum; // 敵をコインに変えるアイテムを生成する状態かどうかを判別するために使う
+	float m_miniGameBalloonCounterRate; // ミニゲーム内の風船を取った割合を保存する
 	bool m_isMiniGame; // ミニゲーム中かどうか
 	bool m_isTutorial; // チュートリアルかどうか
 	bool m_isOpenGoal; // クリアしたかどうか
