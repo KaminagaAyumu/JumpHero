@@ -23,7 +23,7 @@ namespace
 
 	constexpr int kSpawnChipNo = 2; // マップの敵スポーンチップ番号
 
-	constexpr int kSpawnTime = 600; // 敵生成までの時間
+	constexpr int kSpawnTime = 420; // 敵生成までの時間
 	constexpr int kSpawnTimeFast = 180; // 敵生成までの時間
 
 	// 敵のアイテム化時間
