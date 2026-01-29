@@ -4,6 +4,8 @@
 
 namespace
 {
+	constexpr int kFirstCreateList = 1; // リストを生成した際のサイズ
+
 	constexpr int kDefaultPaddingX = 16; // リストの左右端からテキストまでの余白の初期値
 	constexpr int kDefaultPaddingY = 10; // リストの上下端からテキストまでの余白の初期値
 	constexpr int kDefaultItemSpacing = 100; // テキストとテキストの間の余白の初期値
@@ -15,6 +17,9 @@ namespace
 	constexpr float kTextWaveSpeed = 0.15f; // テキストの動く速さ(フレームカウンタを参照)
 	constexpr float kTextWaveSize = 4.0f; // テキストを動かす際の動く範囲
 	constexpr int kStringOneSize = 1; // 1文字のサイズを示す
+
+	constexpr unsigned int kDefaultBgColor = 0xff2200; // 背景をBoxで表示する際の色
+	constexpr unsigned int kSelectTextColor = 0xff00ff; // 選択されている際のテキストの色
 }
 
 UISelectList::UISelectList() : 
@@ -43,7 +48,7 @@ void UISelectList::AddOption(const std::string& text, std::function<void()> onSe
 	m_items.push_back(OptionItem{ text, std::move(onSelect) });
 
 	// 初回追加時にカーソルを0にする
-	if (m_items.size() == 1)
+	if (m_items.size() == kFirstCreateList)
 	{
 		m_cursor = 0;
 	}
@@ -90,7 +95,7 @@ void UISelectList::Draw() const
 		}
 		else
 		{
-			DrawBox(left, top, right, bottom, 0xff2200, true);
+			DrawBox(left, top, right, bottom, kDefaultBgColor, true);
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -163,7 +168,7 @@ void UISelectList::Draw() const
 				DrawStringToHandle(x + advance + kOutlineMargin, baselineY + kOutlineMargin + yOffset, one.c_str(), GetColor(0, 0, 0), m_fontHandle);
 				// 実際のテキストを描画
 				// 選択中の場合は色を変える
-				DrawStringToHandle(x + advance, baselineY + yOffset, one.c_str(), isSelected ? 0xffffff : 0xff00ff, m_fontHandle);
+				DrawStringToHandle(x + advance, baselineY + yOffset, one.c_str(), isSelected ? 0xffffff : kSelectTextColor, m_fontHandle);
 
 				// 文字の描画X座標をこの文字の幅分進める
 				advance += cw;
@@ -199,10 +204,8 @@ void UISelectList::MoveCursor(int dir)
 		return;
 	}
 	
-	// カーソルの処理の説明の仕方が分かりません
+	// 現在のカーソルから値の数分動かす
 	m_cursor = (m_cursor + dir + static_cast<int>(m_items.size())) % static_cast<int>(m_items.size());
-
-
 }
 
 void UISelectList::TriggerSelect()
