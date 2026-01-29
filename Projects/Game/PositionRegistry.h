@@ -26,21 +26,21 @@ public:
 	/// </summary>
 	/// <param name="id">指定ID</param>
 	/// <returns>イベント発火エリアの座標</returns>
-	const Position2& GetAreaPos(int id)const;
+	const Position2 GetAreaPos(int id)const;
 	
 	/// <summary>
 	/// 宝箱の座標を取得する
 	/// </summary>
 	/// <param name="id">指定ID</param>
 	/// <returns>宝箱の座標</returns>
-	const Position2& GetChestPos(int id)const;
+	const Position2 GetChestPos(int id)const;
 	
 	/// <summary>
 	/// バリアの座標を取得する
 	/// </summary>
 	/// <param name="id">指定ID</param>
 	/// <returns>バリアの座標</returns>
-	const ActivePosition2& GetBarrierPos(int id)const;
+	const ActivePosition2 GetBarrierPos(int id)const;
 
 	/// <summary>
 	/// 指定したバリアのアクティブ状態をセットする
@@ -55,7 +55,7 @@ public:
 	/// </summary>
 	/// <param name="id">カメラID</param>
 	/// <returns>ターゲット座標</returns>
-	const Position2& GetCameraPos(int id)const;
+	const Position2 GetCameraPos(int id)const;
 	
 	/// <summary>
 	/// 敵のスポーン座標を取得する

@@ -92,7 +92,7 @@ bool PositionRegistry::InitPositions(std::shared_ptr<Map> map)
 	return true;
 }
 
-const Position2& PositionRegistry::GetAreaPos(int id) const
+const Position2 PositionRegistry::GetAreaPos(int id) const
 {
 	auto it = m_areaPos.find(id);
 	if (it != m_areaPos.end())
@@ -102,7 +102,7 @@ const Position2& PositionRegistry::GetAreaPos(int id) const
 	return{};
 }
 
-const Position2& PositionRegistry::GetChestPos(int id) const
+const Position2 PositionRegistry::GetChestPos(int id) const
 {
 	auto it = m_chestPos.find(id);
 	if (it != m_chestPos.end())
@@ -112,7 +112,7 @@ const Position2& PositionRegistry::GetChestPos(int id) const
 	return{};
 }
 
-const ActivePosition2& PositionRegistry::GetBarrierPos(int id) const
+const ActivePosition2 PositionRegistry::GetBarrierPos(int id) const
 {
 	auto it = m_barrierPos.find(id);
 	if (it != m_barrierPos.end())
@@ -134,7 +134,7 @@ bool PositionRegistry::SetBarrierActive(int id, bool isActive)
 	return true;
 }
 
-const Position2& PositionRegistry::GetCameraPos(int id) const
+const Position2 PositionRegistry::GetCameraPos(int id) const
 {
 	auto it = m_cameraPos.find(id);
 	if (it != m_cameraPos.end())
