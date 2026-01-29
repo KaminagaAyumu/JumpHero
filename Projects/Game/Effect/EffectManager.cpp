@@ -23,7 +23,7 @@ namespace
 		L"data/effect/change_coin.efk", // 敵をアイテム化するゲージがたまった時
 		L"data/effect/change_coin_start.efk", // 敵をアイテム化したとき
 		L"data/effect/balloon_get.efk",
-		L"data/effect/balloon_get.efk",
+		L"data/effect/blur.efk",
 	};
 
 	// エフェクトデータの数が違うときにエラーを出せるようにする

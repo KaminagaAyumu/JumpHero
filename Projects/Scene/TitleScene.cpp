@@ -125,12 +125,13 @@ void TitleScene::NormalUpdate(Input& input)
 		return;
 	}
 
+#ifdef _DEBUG
 	// エフェクトテスト用
 	if (input.IsTriggered("Up"))
 	{
-		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::Test, { Game::kScreenWidth / 2,Game::kScreenHeight / 2 },false);
+		m_pEffectManager->CreateEffekseerEffect(Types::EffectType::Test, { Game::kScreenWidth / 2,Game::kScreenHeight / 2 }, false);
 	}
-	
+#endif
 }
 
 void TitleScene::FadeOutUpdate(Input& input)

@@ -41,7 +41,7 @@ public:
 	/// 画面外処理などに使用
 	/// </summary>
 	/// <returns>画面の表示範囲</returns>
-	const Rect2D& GetNowScreenArea()const;
+	Rect2D GetNowScreenArea()const;
 
 	/// <summary>
 	/// カメラの補正が終わったかどうか
