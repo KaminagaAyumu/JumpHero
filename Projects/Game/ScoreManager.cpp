@@ -35,7 +35,7 @@ void ScoreManager::Load()
 		FileRead_close(handle);
 		return; // データが正しくない場合この処理をする
 	}
-	
+
 	FileRead_read(&m_data, sizeof(m_data), handle);
 
 	FileRead_close(handle);
