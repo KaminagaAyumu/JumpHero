@@ -23,6 +23,12 @@ public:
 	bool IsAlive()const override;
 
 	/// <summary>
+	/// 文字の色を変更する
+	/// </summary>
+	/// <param name="color"></param>
+	void SetColor(int color);
+
+	/// <summary>
 	/// テキストを点滅させて表示するように設定する
 	/// </summary>
 	void SetBlinking();

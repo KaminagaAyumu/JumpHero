@@ -1,5 +1,4 @@
-﻿#include <string>
-#include "StringFunction.h"
+﻿#include "StringFunction.h"
 #include "DxLib.h"
 
 std::wstring StringFunction::WStringFromString(const std::string& str)

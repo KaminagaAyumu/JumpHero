@@ -5,7 +5,9 @@
 #include "GameScene.h"
 #include "SelectScene.h"
 #include "../Game/GameManager.h"
+#include "../Game/ScoreManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIText.h"
 #include "../Utility/UI/UISelectList.h"
 #include "../Utility/UI/UIFormatText.h"
 #include "../Utility/Application.h"
@@ -40,6 +42,9 @@ namespace
 
 	const Size kNormalListSize = { 300,300 };
 	const Position2 kNormalListPos = { Game::kScreenWidth / 2, Game::kScreenHeight - 180 };
+
+	const Position2 kHighScoreTextPos = { Game::kScreenWidth / 2, Game::kScreenHeight / 2 - 180 };
+	constexpr int kHighScoreTextColor = 0xffaaaa;
 
 	const Size kLastStageListSize = { 300,200 };
 	const Position2 kLastStageListPos = { Game::kScreenWidth / 2, 500 };
@@ -119,6 +124,22 @@ ClearScene::ClearScene(SceneController& controller, std::shared_ptr<GameManager>
 
 	// ステージクリアのSEをロード
 	Application::GetInstance().GetSoundManager()->LoadSoundClip("clearSE", L"data/sound/SE/clearSE.mp3", SoundBus::SE, kClearSEVolume, false);
+
+	// 現在のハイスコアを取得
+	m_highScore = Application::GetInstance().GetScoreManager()->GetHighScore(m_stageNo);
+
+	// ハイスコアを更新
+	Application::GetInstance().GetScoreManager()->UpdateHighScore(m_stageNo, m_gameScore);
+
+	// ハイスコアを更新した場合
+	if (m_highScore < Application::GetInstance().GetScoreManager()->GetHighScore(m_stageNo))
+	{
+		// ハイスコア更新のテキストを生成する
+		m_pHighScoreUpdateText = m_pUIManager->CreateText(Types::FontType::Midium, "ハイスコア更新！", kHighScoreTextPos);
+		auto highScore = m_pHighScoreUpdateText.lock();
+		highScore->SetColor(kHighScoreTextColor);
+		highScore->SetBlinking();
+	}
 
 	m_pClearText = m_pUIManager->CreateText(Types::FontType::Header, "クリア！", { Game::kScreenWidth / 2, kClearDispMargin });
 }

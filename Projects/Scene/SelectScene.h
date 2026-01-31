@@ -7,6 +7,7 @@ class SoundManager;
 class TextManager;
 class UIManager;
 class UIImage;
+class UIFormatText;
 class UISelectList;
 class UITextWindow;
 class EffectManager;
@@ -65,6 +66,8 @@ private:
 	std::weak_ptr<UIImage> m_pThumbnail; // ステージのサムネイル画像
 
 	std::shared_ptr<EffectManager> m_pEffectManager; // エフェクトを管理するためのポインタ
+
+	std::weak_ptr<UIFormatText> m_pHighScoreText; // ハイスコアを表示するためのポインタ
 
 	std::weak_ptr<UISelectList> m_pSelectList; // 選択できるリストを管理するためのポインタ
 

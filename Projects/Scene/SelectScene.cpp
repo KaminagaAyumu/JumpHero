@@ -10,8 +10,10 @@
 #include "../Utility/Application.h"
 #include "../Utility/Sound/SoundManager.h"
 #include "../Game/TextManager.h"
+#include "../Game/ScoreManager.h"
 #include "../Game/Effect/EffectManager.h"
 #include "../Utility/UI/UIManager.h"
+#include "../Utility/UI/UIFormatText.h"
 #include "../Utility/UI/UIImage.h"
 #include "../Utility/UI/UISelectList.h"
 #include "../Utility/UI/UITextWindow.h"
@@ -43,6 +45,8 @@ namespace
 
 	const Size kThumbnailSize = { 500,300 };
 	const Position2 kThumbnailPos = { 700, 50 };
+
+	const Position2 kHighScorePos = { 950, 380 };
 
 	constexpr float kWindowAppearDuration = 1.5f; // ウィンドウを表示、非表示するときの割合
 	const Size kDescriptionWindowSize = { 500, 250 };
@@ -250,7 +254,20 @@ void SelectScene::CheckCursor()
 		{
 			thumbnail->Close();
 		}
+
+		if (auto highScore = m_pHighScoreText.lock())
+		{
+			highScore->Close();
+		}
 		
+		m_pHighScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", kHighScorePos);
+		auto justHighScore = m_pHighScoreText.lock();
+		justHighScore->SetProvider([this]()
+		{
+			return std::string("ハイスコア:") + std::to_string(Application::GetInstance().GetScoreManager()->GetHighScore(kTutorialListNo));
+		});
+		justHighScore->SetCenter();
+
 		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_tuto"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 		auto justWindow = m_pDescriptionWindow.lock();
 		justWindow->AppearFromCenter(kWindowAppearDuration);
@@ -268,6 +285,19 @@ void SelectScene::CheckCursor()
 		{
 			thumbnail->Close();
 		}
+
+		if (auto highScore = m_pHighScoreText.lock())
+		{
+			highScore->Close();
+		}
+
+		m_pHighScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", kHighScorePos);
+		auto justHighScore = m_pHighScoreText.lock();
+		justHighScore->SetProvider([this]()
+		{
+			return std::string("ハイスコア:") + std::to_string(Application::GetInstance().GetScoreManager()->GetHighScore(kStage1ListNo));
+		});
+		justHighScore->SetCenter();
 
 		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_stage1"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 		auto justWindow = m_pDescriptionWindow.lock();
@@ -287,6 +317,19 @@ void SelectScene::CheckCursor()
 			thumbnail->Close();
 		}
 
+		if (auto highScore = m_pHighScoreText.lock())
+		{
+			highScore->Close();
+		}
+
+		m_pHighScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", kHighScorePos);
+		auto justHighScore = m_pHighScoreText.lock();
+		justHighScore->SetProvider([this]()
+		{
+			return std::string("ハイスコア:") + std::to_string(Application::GetInstance().GetScoreManager()->GetHighScore(kStage2ListNo));
+		});
+		justHighScore->SetCenter();
+
 		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_stage2"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 		auto justWindow = m_pDescriptionWindow.lock();
 		justWindow->AppearFromCenter(kWindowAppearDuration);
@@ -304,6 +347,19 @@ void SelectScene::CheckCursor()
 		{
 			thumbnail->Close();
 		}
+
+		if (auto highScore = m_pHighScoreText.lock())
+		{
+			highScore->Close();
+		}
+
+		m_pHighScoreText = m_pUIManager->CreateFormatText(Types::FontType::Small, "", kHighScorePos);
+		auto justHighScore = m_pHighScoreText.lock();
+		justHighScore->SetProvider([this]()
+		{
+			return std::string("ハイスコア:") + std::to_string(Application::GetInstance().GetScoreManager()->GetHighScore(kStage3ListNo));
+		});
+		justHighScore->SetCenter();
 
 		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_stage3"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 		auto justWindow = m_pDescriptionWindow.lock();
@@ -323,6 +379,11 @@ void SelectScene::CheckCursor()
 			thumbnail->Close();
 		}
 
+		if (auto highScore = m_pHighScoreText.lock())
+		{
+			highScore->Close();
+		}
+
 		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_title"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
 		auto justWindow = m_pDescriptionWindow.lock();
 		justWindow->AppearFromCenter(kWindowAppearDuration);
@@ -339,6 +400,11 @@ void SelectScene::CheckCursor()
 		if (auto thumbnail = m_pThumbnail.lock())
 		{
 			thumbnail->Close();
+		}
+
+		if (auto highScore = m_pHighScoreText.lock())
+		{
+			highScore->Close();
 		}
 
 		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_end"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);

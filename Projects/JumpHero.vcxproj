@@ -158,6 +158,7 @@
     <ClCompile Include="Game\ItemManager.cpp" />
     <ClCompile Include="Game\LifeUp.cpp" />
     <ClCompile Include="Game\PositionRegistry.cpp" />
+    <ClCompile Include="Game\ScoreManager.cpp" />
     <ClCompile Include="Game\UpgradeMedal.cpp" />
     <ClCompile Include="Scene\GameoverScene.cpp" />
     <ClCompile Include="Scene\MiniGameScene.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="Game\Event\EventStructs.h" />
     <ClInclude Include="Game\LifeUp.h" />
     <ClInclude Include="Game\PositionRegistry.h" />
+    <ClInclude Include="Game\ScoreManager.h" />
     <ClInclude Include="Game\UpgradeMedal.h" />
     <ClInclude Include="Scene\GameoverScene.h" />
     <ClInclude Include="Scene\MiniGameScene.h" />

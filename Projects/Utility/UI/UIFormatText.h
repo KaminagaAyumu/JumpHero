@@ -20,6 +20,11 @@ public:
 	void Update()override;
 	void Draw()const override;
 	bool IsAlive()const override;
+	
+	/// <summary>
+	/// テキストを閉じる(消去)
+	/// </summary>
+	void Close();
 
 	/// <summary>
 	/// 表示するテキストを返すプロバイダをセットする

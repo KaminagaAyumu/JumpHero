@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include <memory>
 
-class SoundManager; // 前方宣言
+// 前方宣言
+class SoundManager;
+class ScoreManager;
 
 /// <summary>
 /// アプリケーションを管理するシングルトンクラス
@@ -22,6 +24,12 @@ public:
 	/// </summary>
 	/// <returns>サウンドマネージャーのポインタ</returns>
 	std::shared_ptr<SoundManager> GetSoundManager() { return m_soundManager; }
+
+	/// <summary>
+	/// スコアマネージャーのスマートポインタを取得する
+	/// </summary>
+	/// <returns>スコアマネージャーのポインタ</returns>
+	std::shared_ptr<ScoreManager> GetScoreManager() { return m_scoreManager; }
 
 	/// <summary>
 	/// ゲームの初期化
@@ -50,6 +58,7 @@ private:
 	void operator=(const Application&) = delete; // 代入演算子も使えないようにする
 
 	std::shared_ptr<SoundManager> m_soundManager; // 多くのクラスで使用するためサウンドマネージャーを保持する
+	std::shared_ptr<ScoreManager> m_scoreManager; // スコアを管理するマネージャーを保持
 
 	bool m_isGameEnd; // ゲームを終了するためのフラグ
 };

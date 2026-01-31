@@ -4,6 +4,7 @@
 #include "../Scene/SceneController.h"
 #include "../Scene/TitleScene.h"
 #include "Game.h"
+#include "../Game/ScoreManager.h"
 #include "DxLib.h"
 #include "EffekseerForDxLib.h"
 
@@ -97,6 +98,11 @@ bool Application::Init()
 	// Zバッファへの書き込みを有効にする。
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
+
+	// スコアマネージャーの生成
+	m_scoreManager = std::make_shared<ScoreManager>();
+	// スコアデータのロード
+	m_scoreManager->Load();
 
 	return true;
 }

@@ -111,6 +111,11 @@ bool UIFormatText::IsAlive() const
 	return m_isAlive;
 }
 
+void UIFormatText::Close()
+{
+	m_isAlive = false;
+}
+
 void UIFormatText::SetProvider(std::function<std::string()> provider)
 {
 	// プロバイダをセット

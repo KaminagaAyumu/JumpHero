@@ -68,6 +68,11 @@ bool UIText::IsAlive() const
 	return m_isAlive;
 }
 
+void UIText::SetColor(int color)
+{
+	m_color = color;
+}
+
 void UIText::SetBlinking()
 {
 	m_isBlinking = true;

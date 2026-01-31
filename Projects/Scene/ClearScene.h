@@ -60,10 +60,15 @@ private:
 
 	std::weak_ptr<UIText> m_pClearText; // クリアという文字を表示するために取得
 
+	std::weak_ptr<UIText> m_pHighScoreUpdateText; // ハイスコア更新時に文字を表示するために取得
+
 	// リザルト表示用スコア
 	int m_resultScore;
 	// ゲーム内のスコア
 	int m_gameScore;
+
+	// ハイスコア
+	int m_highScore;
 
 
 };
