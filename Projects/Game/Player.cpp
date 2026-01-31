@@ -620,6 +620,7 @@ void Player::LoadSounds()
 	// サウンドマネージャーを取得
 	auto soundManager = Application::GetInstance().GetSoundManager();
 	soundManager->LoadSoundClip("jumpSE", L"data/sound/SE/jumpSE.wav", SoundBus::SE, 1.0f, false);
+	soundManager->LoadSoundClip("jumpSE1", L"data/sound/SE/jumpSE_1.wav", SoundBus::SE, 1.0f, false);
 	soundManager->LoadSoundClip("appearSE", L"data/sound/SE/playerAppear.mp3", SoundBus::SE, kAppearSEVolume, false);
 	soundManager->LoadSoundClip("entrySE", L"data/sound/SE/playerEntry.mp3", SoundBus::SE, kEntrySEVolume, false);
 	soundManager->LoadSoundClip("playerFloatSE", L"data/sound/SE/playerFloat.wav", SoundBus::SE, 1.0f, false);
@@ -1110,6 +1111,7 @@ void Player::JumpStart()
 	gameManager->AddScore(kJumpAddScore); // スコアを加算
 	gameManager->RequestCreateEffect(Types::EffectType::Jump, m_pos + Position2{0,kPlayerHeight / 2},true);
 	Application::GetInstance().GetSoundManager()->Play("jumpSE", 1.0f, true);
+	Application::GetInstance().GetSoundManager()->Play("jumpSE1", 1.0f, true);
 	m_update = &Player::JumpUpdate; // 更新処理をジャンプ状態に
 	m_draw = &Player::JumpDraw; // 描画処理をジャンプ状態に
 }
