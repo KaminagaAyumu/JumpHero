@@ -279,6 +279,7 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		// BGMが変更されている場合があるのでそれをリセットする
 		m_pSoundManager->EndTemporaryBGM(kTemporaryBGMFadeTime);
+		m_pSoundManager->ClearBGMStack();
 
 		m_pSoundManager->Play("goalSE", 1.0f, true);
 		// このシーンの終了処理
@@ -292,6 +293,7 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		// BGMが変更されている場合があるのでそれをリセットする
 		m_pSoundManager->EndTemporaryBGM(kTemporaryBGMFadeTime);
+		m_pSoundManager->ClearBGMStack();
 		// このシーンの終了処理
 		m_fadeColor = 0xffffff; // フェードを白フェードにする
 		m_updateFunc = &GameScene::FadeOutUpdate;

@@ -33,6 +33,8 @@ namespace
 
 	constexpr int kHeaderMargin = 60; // ヘッダー(見出し)の余白
 
+	constexpr float kTemporaryBGMFadeTime = 30.0f; // スタックとして積んだBGMのフェード時間
+
 	constexpr float kGoalBGMVolume = 20.0f; // ゴール時のBGMのボリューム
 
 	constexpr float kScoreTextPosY = 20.0f;
@@ -223,6 +225,9 @@ void MiniGameScene::NormalUpdate(Input& input)
 	if (m_pGameManager->IsClear()) // ゲームマネージャーがクリアと判定したら
 	{
 		Application::GetInstance().GetSoundManager()->Play("goalSE", 1.0f, true);
+		// BGMが変更されている場合があるのでそれをリセットする
+		Application::GetInstance().GetSoundManager()->EndTemporaryBGM(kTemporaryBGMFadeTime);
+		Application::GetInstance().GetSoundManager()->ClearBGMStack();
 		// シーンの終了へ
 		m_fadeColor = 0xffffff; // 白でフェードアウト
 		m_updateFunc = &MiniGameScene::FadeOutUpdate;
@@ -232,6 +237,9 @@ void MiniGameScene::NormalUpdate(Input& input)
 
 	if (m_pGameManager->IsGameOver()) // ゲームオーバーと判定したら
 	{
+		// BGMが変更されている場合があるのでそれをリセットする
+		Application::GetInstance().GetSoundManager()->EndTemporaryBGM(kTemporaryBGMFadeTime);
+		Application::GetInstance().GetSoundManager()->ClearBGMStack();
 		// このシーンの終了処理
 		m_fadeColor = 0xffffff; // フェードを白フェードにする
 		m_updateFunc = &MiniGameScene::FadeOutUpdate;
