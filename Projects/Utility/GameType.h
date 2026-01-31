@@ -24,6 +24,7 @@ namespace Types
 		Stage1Icon,
 		Stage2Icon,
 		Stage3Icon,
+		TitleIcon,
 		ExitIcon,
 		PlayerIcon,
 		ChangeCoinIcon,

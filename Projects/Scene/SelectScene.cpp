@@ -2,6 +2,7 @@
 #include "SelectScene.h"
 #include "SceneController.h"
 #include "GameScene.h"
+#include "TitleScene.h"
 #include "../Utility/Input.h"
 #include "../Utility/Bg.h"
 #include "../Utility/Game.h"
@@ -35,6 +36,7 @@ namespace
 	constexpr int kStage1ListNo = 1;
 	constexpr int kStage2ListNo = 2;
 	constexpr int kStage3ListNo = 3;
+	constexpr int kTitleListNo = 4;
 
 	const Size kSelectListSize = { 400, 680 };
 	const Position2 kSelectListPos = { 300, 360 };
@@ -91,6 +93,10 @@ SelectScene::SelectScene(SceneController& controller) :
 	list->AddOption("ステージ3", [this]()
 		{
 			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, kStage3ListNo));
+		});
+	list->AddOption("タイトルへ戻る", [this]()
+		{
+			m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 		});
 	list->AddOption("ゲームをやめる", [this]() 
 		{
@@ -304,6 +310,24 @@ void SelectScene::CheckCursor()
 		justWindow->AppearFromCenter(kWindowAppearDuration);
 
 		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::Stage3Icon, kThumbnailSize, kThumbnailPos);
+	}
+	else if (cursor == kTitleListNo)
+	{
+		if (auto window = m_pDescriptionWindow.lock())
+		{
+			window->CloseWindow(kWindowAppearDuration);
+		}
+
+		if (auto thumbnail = m_pThumbnail.lock())
+		{
+			thumbnail->Close();
+		}
+
+		m_pDescriptionWindow = m_pUIManager->CreateTextWindow(m_pTextManager->GetFirstPageText("select_title"), kDescriptionWindowSize, kDescriptionWindowPos, Types::FontType::Small);
+		auto justWindow = m_pDescriptionWindow.lock();
+		justWindow->AppearFromCenter(kWindowAppearDuration);
+
+		m_pThumbnail = m_pUIManager->CreateImage(Types::ImageType::TitleIcon, kThumbnailSize, kThumbnailPos);
 	}
 	else
 	{
