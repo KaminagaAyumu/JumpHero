@@ -27,8 +27,8 @@ namespace
 
 	constexpr float kGraphScale = 1.40625f;	// 画像の拡大率
 
-	constexpr float kPlayerWidth = 40.0f;				// プレイヤーの実際の幅
-	constexpr float kPlayerHeight = 40.0f;				// プレイヤーの実際の高さ
+	constexpr float kPlayerWidth = 35.0f;				// プレイヤーの実際の幅
+	constexpr float kPlayerHeight = 35.0f;				// プレイヤーの実際の高さ
 
 	constexpr int	kChestChipNo = 1;					// マップの宝箱の番号
 	constexpr float kMapColMargin = 0.5f;				// マップとの当たり判定のマージン
