@@ -53,9 +53,9 @@ m_drawFunc(&TitleScene::FadeDraw)
 	m_pMap = std::make_shared<Map>(kTitleSceneMapNo, false);
 	m_pCamera = std::make_shared<Camera>(m_pMap->GetMapSize());
 	m_soundManager = Application::GetInstance().GetSoundManager();
-	m_soundManager->LoadSoundClip("test", L"data/sound/BGM/testBGM.mp3",SoundBus::BGM,1.0f,true);
+	m_soundManager->LoadSoundClip("title", L"data/sound/BGM/titleBGM.mp3",SoundBus::BGM,1.0f,true);
 	m_soundManager->LoadSoundClip("testSE", L"data/sound/SE/testSE.mp3", SoundBus::SE, 1.0f, false);
-	m_soundManager->PlayBGM("test",0.0f);
+	m_soundManager->PlayBGM("title",0.0f);
 
 	m_pUIManager = std::make_shared<UIManager>();
 	auto text = m_pUIManager->CreateText(Types::FontType::Large, "STARTかAボタンでスタート", { Game::kScreenWidth / 2,
