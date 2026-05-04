@@ -5,7 +5,7 @@
 時期:25年11月～26年2月  
 
 ### 【動作確認】
-OS:Windows
+OS:Windows  
 GPU:NVIDIA GeForce RTX 4060
 
 ### 【動画URL】
